@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 /**
  * Cloudflare Turnstile widget.
@@ -70,7 +70,33 @@ export function TurnstileWidget({
   const id = useId();
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
-  const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
+  const buildSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
+  const [siteKey, setSiteKey] = useState<string | null>(buildSiteKey || null);
+  const [isLoadingConfig, setIsLoadingConfig] = useState(!buildSiteKey);
+
+  useEffect(() => {
+    if (buildSiteKey) return;
+    let cancelled = false;
+
+    fetch("/api/public/turnstile-config", { cache: "no-store" })
+      .then(async (res) => {
+        if (!res.ok) throw new Error("Turnstile não configurado");
+        return (await res.json()) as { siteKey?: string };
+      })
+      .then((config) => {
+        if (!cancelled) setSiteKey(config.siteKey || null);
+      })
+      .catch(() => {
+        if (!cancelled) onError?.();
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoadingConfig(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [buildSiteKey, onError]);
 
   useEffect(() => {
     if (!siteKey || !containerRef.current) return;
@@ -108,7 +134,9 @@ export function TurnstileWidget({
   if (!siteKey) {
     return (
       <div className="text-xs text-muted-foreground">
-        Verificação anti-bot indisponível (configuração ausente).
+        {isLoadingConfig
+          ? "Carregando verificação anti-bot..."
+          : "Verificação anti-bot indisponível (configuração ausente)."}
       </div>
     );
   }
