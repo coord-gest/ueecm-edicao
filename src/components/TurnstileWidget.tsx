@@ -70,9 +70,14 @@ export function TurnstileWidget({
   const id = useId();
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
+  const onErrorRef = useRef(onError);
   const buildSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
   const [siteKey, setSiteKey] = useState<string | null>(buildSiteKey || null);
   const [isLoadingConfig, setIsLoadingConfig] = useState(!buildSiteKey);
+
+  useEffect(() => {
+    onErrorRef.current = onError;
+  }, [onError]);
 
   useEffect(() => {
     if (buildSiteKey) return;
@@ -87,7 +92,7 @@ export function TurnstileWidget({
         if (!cancelled) setSiteKey(config.siteKey || null);
       })
       .catch(() => {
-        if (!cancelled) onError?.();
+        if (!cancelled) onErrorRef.current?.();
       })
       .finally(() => {
         if (!cancelled) setIsLoadingConfig(false);
@@ -96,7 +101,7 @@ export function TurnstileWidget({
     return () => {
       cancelled = true;
     };
-  }, [buildSiteKey, onError]);
+  }, [buildSiteKey]);
 
   useEffect(() => {
     if (!siteKey || !containerRef.current) return;
