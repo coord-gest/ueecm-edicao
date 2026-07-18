@@ -39,23 +39,56 @@ const GEMINI_MODEL_FALLBACK = "gemini-flash-lite-latest";
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 const GEMINI_ENDPOINT_FALLBACK = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL_FALLBACK}:generateContent`;
 
-// Rate limit em memória (best-effort; reseta a cada cold start do Worker).
-const RATE_LIMIT_MAX = 12; // requisições
-const RATE_LIMIT_WINDOW_MS = 60_000; // por minuto, por chave
+// Rate limit em memória em dois níveis (best-effort; reseta a cada cold start do Worker).
+// - Por (IP+session): 12/min → uso legítimo.
+// - Global por IP:    30/min → freio contra rotação de sessionId para burlar o limite.
+// - Global por IP:   200/hora → cap de custo diário mesmo em ataque distribuído lento.
+const RATE_LIMIT_MAX = 12;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const IP_MINUTE_MAX = 30;
+const IP_MINUTE_WINDOW_MS = 60_000;
+const IP_HOUR_MAX = 200;
+const IP_HOUR_WINDOW_MS = 60 * 60_000;
 const rateBuckets = new Map<string, { count: number; resetAt: number }>();
 
-function checkRateLimit(key: string): { ok: boolean; retryAfter: number } {
+function hitBucket(
+  key: string,
+  max: number,
+  windowMs: number,
+): { ok: boolean; retryAfter: number } {
   const now = Date.now();
   const bucket = rateBuckets.get(key);
   if (!bucket || bucket.resetAt < now) {
-    rateBuckets.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    rateBuckets.set(key, { count: 1, resetAt: now + windowMs });
     return { ok: true, retryAfter: 0 };
   }
-  if (bucket.count >= RATE_LIMIT_MAX) {
+  if (bucket.count >= max) {
     return { ok: false, retryAfter: Math.ceil((bucket.resetAt - now) / 1000) };
   }
   bucket.count += 1;
   return { ok: true, retryAfter: 0 };
+}
+
+function checkRateLimit(
+  key: string,
+  ip: string,
+): { ok: boolean; retryAfter: number } {
+  const perSession = hitBucket(`s:${key}`, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW_MS);
+  if (!perSession.ok) return perSession;
+  const perIpMin = hitBucket(`ipm:${ip}`, IP_MINUTE_MAX, IP_MINUTE_WINDOW_MS);
+  if (!perIpMin.ok) return perIpMin;
+  const perIpHour = hitBucket(`iph:${ip}`, IP_HOUR_MAX, IP_HOUR_WINDOW_MS);
+  if (!perIpHour.ok) return perIpHour;
+  return { ok: true, retryAfter: 0 };
+}
+
+function getClientIp(request: Request): string {
+  return (
+    request.headers.get("cf-connecting-ip") ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown"
+  );
 }
 
 function getClientKey(request: Request, sessionId: string | undefined): string {
@@ -1343,8 +1376,8 @@ export const Route = createFileRoute("/api/chat")({
             );
           }
 
-          // Rate limit por IP+sessão
-          const rl = checkRateLimit(getClientKey(request, sessionId));
+          // Rate limit em dois níveis: (IP+sessão) + global por IP (minuto/hora)
+          const rl = checkRateLimit(getClientKey(request, sessionId), getClientIp(request));
           if (!rl.ok) {
             return jsonResponse(
               {
