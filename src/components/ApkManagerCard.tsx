@@ -68,8 +68,7 @@ export function ApkManagerCard() {
   function validateVersion(v: string): string | null {
     const trimmed = v.trim();
     if (!trimmed) return "Informe a versão";
-    if (!VERSION_RE.test(trimmed))
-      return "Use o formato semver, ex: 1.0.0 ou 1.2.3-beta";
+    if (!VERSION_RE.test(trimmed)) return "Use o formato semver, ex: 1.0.0 ou 1.2.3-beta";
     return null;
   }
 
@@ -100,12 +99,10 @@ export function ApkManagerCard() {
     try {
       const cleanVersion = version.trim().replace(/[^a-zA-Z0-9._-]/g, "_");
       const path = `releases/conecta-ueecm-${cleanVersion}-${Date.now()}.apk`;
-      const { error: upErr } = await supabase.storage
-        .from(BUCKET)
-        .upload(path, file!, {
-          contentType: "application/vnd.android.package-archive",
-          upsert: false,
-        });
+      const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file!, {
+        contentType: "application/vnd.android.package-archive",
+        upsert: false,
+      });
       if (upErr) throw upErr;
 
       // desmarca current anterior
@@ -136,7 +133,6 @@ export function ApkManagerCard() {
       setUploading(false);
     }
   }
-
 
   async function handleSetCurrent(row: ApkRow) {
     await db.update({ is_current: false }).eq("is_current", true);
@@ -202,9 +198,7 @@ export function ApkManagerCard() {
               aria-invalid={!!versionError}
               required
             />
-            {versionError && (
-              <p className="mt-1 text-xs text-destructive">{versionError}</p>
-            )}
+            {versionError && <p className="mt-1 text-xs text-destructive">{versionError}</p>}
           </div>
           <div>
             <Label htmlFor="apk-file-input">Arquivo .apk (máx. {MAX_SIZE_MB} MB)</Label>

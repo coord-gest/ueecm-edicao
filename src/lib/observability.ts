@@ -116,7 +116,11 @@ export function installObservability() {
 }
 
 /** Utilitário para medir qualquer promise no cliente. */
-export async function measure<T>(name: string, fn: () => Promise<T>, kind: MetricInput["kind"] = "custom"): Promise<T> {
+export async function measure<T>(
+  name: string,
+  fn: () => Promise<T>,
+  kind: MetricInput["kind"] = "custom",
+): Promise<T> {
   const start = performance.now();
   let status: "ok" | "error" = "ok";
   try {

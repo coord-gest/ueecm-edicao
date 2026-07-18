@@ -31,9 +31,7 @@ export const verifyCaptchaToken = createServerFn({ method: "POST" })
 
     const result = await verifyTurnstile(data.token, ip);
     if (!result.success) {
-      throw new Error(
-        "Verificação anti-bot falhou. Recarregue a página e tente novamente.",
-      );
+      throw new Error("Verificação anti-bot falhou. Recarregue a página e tente novamente.");
     }
     return { ok: true, action: result.action ?? data.action };
   });

@@ -91,7 +91,6 @@ function PainelDesenvolvedor() {
     );
   }
 
-
   const { data: profileData, isLoading: loadingProfile } = useQuery({
     queryKey: ["developer_profile"],
     queryFn: async () => {

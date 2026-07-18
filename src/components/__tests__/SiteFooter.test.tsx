@@ -45,7 +45,6 @@ describe("SiteFooter — navegação institucional consolidada", () => {
     const links = within(nav).getAllByRole("link");
     expect(links.length).toBeLessThanOrEqual(14);
   });
-
 });
 
 describe("Página /privacidade — seção de preferências de cookies", () => {

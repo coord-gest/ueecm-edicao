@@ -44,12 +44,32 @@ const TIPO_META: Record<
   string,
   { icon: React.ComponentType<{ className?: string }>; color: string; bg: string; label: string }
 > = {
-  comunicado: { icon: Megaphone, color: "text-blue-500", bg: "bg-blue-500/10", label: "Comunicado" },
+  comunicado: {
+    icon: Megaphone,
+    color: "text-blue-500",
+    bg: "bg-blue-500/10",
+    label: "Comunicado",
+  },
   alerta: { icon: AlertTriangle, color: "text-amber-500", bg: "bg-amber-500/10", label: "Alerta" },
-  agendamento: { icon: CalendarClock, color: "text-emerald-500", bg: "bg-emerald-500/10", label: "Agendamento" },
+  agendamento: {
+    icon: CalendarClock,
+    color: "text-emerald-500",
+    bg: "bg-emerald-500/10",
+    label: "Agendamento",
+  },
   nota: { icon: BookOpen, color: "text-violet-500", bg: "bg-violet-500/10", label: "Nota" },
-  frequencia: { icon: UserCheck, color: "text-cyan-500", bg: "bg-cyan-500/10", label: "Frequência" },
-  comentario: { icon: MessageCircle, color: "text-pink-500", bg: "bg-pink-500/10", label: "Comentário" },
+  frequencia: {
+    icon: UserCheck,
+    color: "text-cyan-500",
+    bg: "bg-cyan-500/10",
+    label: "Frequência",
+  },
+  comentario: {
+    icon: MessageCircle,
+    color: "text-pink-500",
+    bg: "bg-pink-500/10",
+    label: "Comentário",
+  },
   evento: { icon: Sparkles, color: "text-rose-500", bg: "bg-rose-500/10", label: "Evento" },
   sistema: { icon: Info, color: "text-muted-foreground", bg: "bg-muted", label: "Sistema" },
 };
@@ -337,7 +357,10 @@ function NotificacoesPage() {
                         title={n.lida ? "Marcar como não lida" : "Marcar como lida"}
                       >
                         <CheckCheck
-                          className={cn("size-4", n.lida ? "text-muted-foreground" : "text-primary")}
+                          className={cn(
+                            "size-4",
+                            n.lida ? "text-muted-foreground" : "text-primary",
+                          )}
                         />
                       </Button>
                     )}

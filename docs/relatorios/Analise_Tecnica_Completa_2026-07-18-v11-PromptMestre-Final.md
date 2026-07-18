@@ -9,12 +9,12 @@
 
 ## Sumário Executivo
 
-| Dimensão | Status | Observação |
-|---|---|---|
-| Qualidade de código | ✅ Aprovado | 325 arquivos TS/TSX, ~73k LOC, lint limpo, 13 suítes de teste passando |
-| Segurança | ⚠️ Aprovado com ressalvas | 1 finding `error` do linter documentado como exceção intencional + 1 `warn` de política de auth |
-| Funcionalidade e Escopo | ✅ Cumprido | 82 rotas cobrindo escola, família, painéis, dev, PWA/APK, notificações |
-| Prontidão Operacional | ✅ Apto para produção | CI gated no deploy, cron autenticado, dispatcher de push endurecido |
+| Dimensão                | Status                    | Observação                                                                                      |
+| ----------------------- | ------------------------- | ----------------------------------------------------------------------------------------------- |
+| Qualidade de código     | ✅ Aprovado               | 325 arquivos TS/TSX, ~73k LOC, lint limpo, 13 suítes de teste passando                          |
+| Segurança               | ⚠️ Aprovado com ressalvas | 1 finding `error` do linter documentado como exceção intencional + 1 `warn` de política de auth |
+| Funcionalidade e Escopo | ✅ Cumprido               | 82 rotas cobrindo escola, família, painéis, dev, PWA/APK, notificações                          |
+| Prontidão Operacional   | ✅ Apto para produção     | CI gated no deploy, cron autenticado, dispatcher de push endurecido                             |
 
 **Veredito consolidado:** **APTO PARA PRODUÇÃO** — com 2 recomendações abertas (Seção 6.4).
 
@@ -72,17 +72,17 @@ Nenhum bug em aberto identificado. Áreas historicamente sensíveis (push, servi
 
 ### 3. OWASP Top 10 (Web/API)
 
-| Categoria | Estado |
-|---|---|
-| A01 Broken Access Control | Mitigado (RLS + guards) |
-| A02 Cryptographic Failures | Mitigado (TLS gerenciado, sem segredos em código; tokens em `sb_secret_*`) |
-| A03 Injection | Mitigado (queries parametrizadas via `supabase-js`; sem SQL string-concat) |
-| A04 Insecure Design | Mitigado (server/client isolation, secrets fora do bundle) |
-| A05 Security Misconfiguration | Mitigado (CSP no `__root.tsx`, MIME correto para SW) |
-| A07 Auth Failures | Mitigado (Supabase Auth + rate limiting nativo) — ver ressalva `warn` abaixo |
-| A08 Software/Data Integrity | Mitigado (webhooks com HMAC constante-time) |
-| A09 Logging/Monitoring | Mitigado (`fcm_diagnostics`, painel `/painel-runtime`, `/painel-erros`) |
-| A10 SSRF | Não aplicável — sem fetch server-side de URLs supplied by user |
+| Categoria                     | Estado                                                                       |
+| ----------------------------- | ---------------------------------------------------------------------------- |
+| A01 Broken Access Control     | Mitigado (RLS + guards)                                                      |
+| A02 Cryptographic Failures    | Mitigado (TLS gerenciado, sem segredos em código; tokens em `sb_secret_*`)   |
+| A03 Injection                 | Mitigado (queries parametrizadas via `supabase-js`; sem SQL string-concat)   |
+| A04 Insecure Design           | Mitigado (server/client isolation, secrets fora do bundle)                   |
+| A05 Security Misconfiguration | Mitigado (CSP no `__root.tsx`, MIME correto para SW)                         |
+| A07 Auth Failures             | Mitigado (Supabase Auth + rate limiting nativo) — ver ressalva `warn` abaixo |
+| A08 Software/Data Integrity   | Mitigado (webhooks com HMAC constante-time)                                  |
+| A09 Logging/Monitoring        | Mitigado (`fcm_diagnostics`, painel `/painel-runtime`, `/painel-erros`)      |
+| A10 SSRF                      | Não aplicável — sem fetch server-side de URLs supplied by user               |
 
 ### 4. Dados, Criptografia e Privacidade
 
@@ -92,10 +92,10 @@ Nenhum bug em aberto identificado. Áreas historicamente sensíveis (push, servi
 
 ### 5. Findings Abertos do Scanner
 
-| ID | Nível | Diagnóstico |
-|---|---|---|
-| `SUPA_security_definer_view` | error | **Aceito como exceção intencional.** View `public.profissionais_publicos` foi criada com `security_invoker = off` deliberadamente para permitir listagem pública dos profissionais sem expor a tabela-base. Colunas expostas são apenas dados profissionais (nome, cargo, foto) — decisão de produto documentada. |
-| `SUPA_auth_leaked_password_protection` | warn | **Recomendado ativar** no painel do Supabase (Auth → Password Protection). Ação de configuração, não requer código. |
+| ID                                     | Nível | Diagnóstico                                                                                                                                                                                                                                                                                                       |
+| -------------------------------------- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SUPA_security_definer_view`           | error | **Aceito como exceção intencional.** View `public.profissionais_publicos` foi criada com `security_invoker = off` deliberadamente para permitir listagem pública dos profissionais sem expor a tabela-base. Colunas expostas são apenas dados profissionais (nome, cargo, foto) — decisão de produto documentada. |
+| `SUPA_auth_leaked_password_protection` | warn  | **Recomendado ativar** no painel do Supabase (Auth → Password Protection). Ação de configuração, não requer código.                                                                                                                                                                                               |
 
 ### 6. DevSecOps / Pipeline
 
@@ -105,13 +105,13 @@ Nenhum bug em aberto identificado. Áreas historicamente sensíveis (push, servi
 
 ### 7. Simulação de Cenários de Ataque (teórica)
 
-| Cenário | Resultado esperado |
-|---|---|
-| Chamada direta a server function admin sem sessão | 401 (`requireSupabaseAuth`) |
-| POST em `/api/public/reminders-dispatch` sem `DISPATCH_SECRET` | 401 (compare constante-time) |
-| Tentativa de `UPDATE user_roles` por usuário comum | Bloqueado (RLS) |
-| Escalar para `desenvolvedor` via UI | UI-guard + RLS negam ambos |
-| Upload de `.apk` por usuário comum | Storage policy nega (`private.has_role`) |
+| Cenário                                                        | Resultado esperado                       |
+| -------------------------------------------------------------- | ---------------------------------------- |
+| Chamada direta a server function admin sem sessão              | 401 (`requireSupabaseAuth`)              |
+| POST em `/api/public/reminders-dispatch` sem `DISPATCH_SECRET` | 401 (compare constante-time)             |
+| Tentativa de `UPDATE user_roles` por usuário comum             | Bloqueado (RLS)                          |
+| Escalar para `desenvolvedor` via UI                            | UI-guard + RLS negam ambos               |
+| Upload de `.apk` por usuário comum                             | Storage policy nega (`private.has_role`) |
 
 ---
 
@@ -153,13 +153,13 @@ Sistema pronto para uso operacional real pela escola, com trilhas de auditoria, 
 
 ## 6.4 Veredito Consolidado
 
-| Item | Status |
-|---|---|
-| **Qualidade do Código** | Boa — sem bugs em aberto, lint limpo |
-| **Segurança** | Aprovada com ressalvas — 1 exceção documentada + 1 warn de configuração |
-| **Conformidade** | Conforme (LGPD, OWASP Top 10) |
-| **Funcionalidade e Escopo** | Escopo cumprido integralmente — SIM |
-| **Prontidão Operacional** | Apto para uso real e distribuição — SIM |
+| Item                        | Status                                                                  |
+| --------------------------- | ----------------------------------------------------------------------- |
+| **Qualidade do Código**     | Boa — sem bugs em aberto, lint limpo                                    |
+| **Segurança**               | Aprovada com ressalvas — 1 exceção documentada + 1 warn de configuração |
+| **Conformidade**            | Conforme (LGPD, OWASP Top 10)                                           |
+| **Funcionalidade e Escopo** | Escopo cumprido integralmente — SIM                                     |
+| **Prontidão Operacional**   | Apto para uso real e distribuição — SIM                                 |
 
 ### Ações recomendadas (não bloqueantes)
 
@@ -180,4 +180,4 @@ Veredito é válido para o commit atual no momento de emissão deste relatório.
 
 ---
 
-*Relatório emitido conforme o Prompt Mestre 2 — Análise Técnica Completa de Sistema (v1.0).*
+_Relatório emitido conforme o Prompt Mestre 2 — Análise Técnica Completa de Sistema (v1.0)._

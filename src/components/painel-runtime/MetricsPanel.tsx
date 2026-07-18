@@ -49,12 +49,7 @@ export function MetricsPanel() {
         data: {
           hours,
           kind: (kind || undefined) as
-            | "server_fn"
-            | "api_route"
-            | "web_vital"
-            | "client_nav"
-            | "custom"
-            | undefined,
+            "server_fn" | "api_route" | "web_vital" | "client_nav" | "custom" | undefined,
         },
       }),
     refetchOnWindowFocus: false,
@@ -69,7 +64,8 @@ export function MetricsPanel() {
         <div>
           <h2 className="text-lg font-semibold">Observabilidade — p50 / p95 / p99</h2>
           <p className="text-xs text-muted-foreground">
-            Latência agregada de server functions, rotas de API, Web Vitals e navegação. Atualiza a cada 30s.
+            Latência agregada de server functions, rotas de API, Web Vitals e navegação. Atualiza a
+            cada 30s.
           </p>
         </div>
         <div className="flex items-center gap-2 text-xs">
@@ -136,18 +132,24 @@ export function MetricsPanel() {
               {rows.map((r, i) => (
                 <tr key={i} className="border-b last:border-0">
                   <td className="py-2 pr-3">
-                    <span className="rounded-md bg-muted px-2 py-0.5 text-xs">{KIND_LABEL[r.kind] ?? r.kind}</span>
+                    <span className="rounded-md bg-muted px-2 py-0.5 text-xs">
+                      {KIND_LABEL[r.kind] ?? r.kind}
+                    </span>
                   </td>
                   <td className="py-2 pr-3 font-mono text-xs">{r.name}</td>
                   <td className="py-2 pr-3 text-right tabular-nums">{r.samples}</td>
                   <td className="py-2 pr-3 text-right tabular-nums">{fmt(r.p50)}</td>
                   <td className="py-2 pr-3 text-right">
-                    <span className={`rounded-md px-2 py-0.5 text-xs tabular-nums ${badge(r.p95, r.kind)}`}>
+                    <span
+                      className={`rounded-md px-2 py-0.5 text-xs tabular-nums ${badge(r.p95, r.kind)}`}
+                    >
                       {fmt(r.p95)}
                     </span>
                   </td>
                   <td className="py-2 pr-3 text-right tabular-nums">{fmt(r.p99)}</td>
-                  <td className="py-2 pr-3 text-right tabular-nums text-muted-foreground">{fmt(r.max_ms)}</td>
+                  <td className="py-2 pr-3 text-right tabular-nums text-muted-foreground">
+                    {fmt(r.max_ms)}
+                  </td>
                   <td className="py-2 pr-3 text-right tabular-nums">
                     {r.error_rate > 0 ? (
                       <span className="rounded-md bg-red-500/10 px-2 py-0.5 text-xs text-red-700 dark:text-red-400">
@@ -166,8 +168,8 @@ export function MetricsPanel() {
 
       <p className="mt-3 text-[11px] text-muted-foreground">
         Alertas críticos: erros não capturados no cliente e falhas com severidade{" "}
-        <code className="rounded bg-muted px-1">critical</code> vão para <code>system_errors</code>, disparando push +
-        notificação in-app para admins automaticamente.
+        <code className="rounded bg-muted px-1">critical</code> vão para <code>system_errors</code>,
+        disparando push + notificação in-app para admins automaticamente.
       </p>
     </section>
   );

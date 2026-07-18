@@ -111,7 +111,9 @@ export const backfillPostEmbeddings = createServerFn({ method: "POST" })
           p.categoria,
           p.resumo,
           p.excerpt,
-          String(p.conteudo ?? "").replace(/<[^>]+>/g, " ").slice(0, 4000),
+          String(p.conteudo ?? "")
+            .replace(/<[^>]+>/g, " ")
+            .slice(0, 4000),
         ]
           .filter(Boolean)
           .join("\n");

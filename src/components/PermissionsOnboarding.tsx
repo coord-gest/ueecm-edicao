@@ -27,7 +27,6 @@ function isStandalone(): boolean {
   );
 }
 
-
 function wasRecentlyDismissed(): boolean {
   const v = safeLocalStorage.getItem(DISMISS_KEY);
   if (!v) return false;

@@ -90,9 +90,7 @@ function DetalheFilhoPage() {
               <ArrowLeft className="size-4" /> Voltar
             </Link>
           </Button>
-          {aluno && (
-            <ChatProfessorButton alunoId={aluno.id} />
-          )}
+          {aluno && <ChatProfessorButton alunoId={aluno.id} />}
         </div>
 
         {isLoading ? (

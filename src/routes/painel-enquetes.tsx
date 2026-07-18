@@ -180,9 +180,7 @@ function PainelEnquetes() {
                       <Badge variant={e.ativo ? "default" : "outline"}>
                         {e.ativo ? "Ativa" : "Inativa"}
                       </Badge>
-                      <Badge variant="secondary">
-                        {e.tipo === "unica" ? "Única" : "Múltipla"}
-                      </Badge>
+                      <Badge variant="secondary">{e.tipo === "unica" ? "Única" : "Múltipla"}</Badge>
                       {encerrada && <Badge variant="destructive">Encerrada</Badge>}
                       <Badge variant="outline">{e.publico}</Badge>
                     </div>

@@ -25,11 +25,11 @@ Data do release: `____/____/______` — Responsável: `______________`
 - [ ] Linter Supabase rodado — nenhum `error` novo
 - [ ] RLS ativa em toda tabela `public.*` criada nesta release
 - [ ] Nenhuma função `SECURITY DEFINER` com `EXECUTE` para `anon`/`authenticated`
-  sem justificativa documentada em `docs/relatorios/`
+      sem justificativa documentada em `docs/relatorios/`
 - [ ] Endpoints `/api/public/*` sensíveis (dispatch, cron) validam
-  `Authorization` via `timingSafeEqualStr`
+      `Authorization` via `timingSafeEqualStr`
 - [ ] Nenhum `service_role_key` referenciado em código de cliente
-  (`rg -n "SERVICE_ROLE" src/ | rg -v ".server.ts"`)
+      (`rg -n "SERVICE_ROLE" src/ | rg -v ".server.ts"`)
 - [ ] "Leaked Password Protection" habilitado no Supabase Auth
 
 ## 3. Push / FCM
@@ -44,7 +44,7 @@ Data do release: `____/____/______` — Responsável: `______________`
 ## 4. UX / Responsividade
 
 - [ ] Rotas críticas checadas em 375px, 768px, 1440px:
-  `/`, `/painel`, `/escola/agendamentos`, `/instalar`, `/painel-runtime`
+      `/`, `/painel`, `/escola/agendamentos`, `/instalar`, `/painel-runtime`
 - [ ] Sem overflow horizontal em mobile
 - [ ] Botão de instalar APP visível no rodapé
 
@@ -57,4 +57,4 @@ Data do release: `____/____/______` — Responsável: `______________`
 
 ---
 
-**Aprovação final:** ______________________  Data: ____/____/______
+**Aprovação final:** ______________________ Data: ****/****/______

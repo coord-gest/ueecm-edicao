@@ -15,7 +15,10 @@ import { chromium } from "playwright";
 import { AxeBuilder } from "@axe-core/playwright";
 
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:8080";
-const ROUTES = (process.env.AXE_ROUTES ?? "/,/equipe,/calendario,/galeria,/posts,/instalar,/auth,/privacidade,/termos-de-uso")
+const ROUTES = (
+  process.env.AXE_ROUTES ??
+  "/,/equipe,/calendario,/galeria,/posts,/instalar,/auth,/privacidade,/termos-de-uso"
+)
   .split(",")
   .map((r) => r.trim())
   .filter(Boolean);

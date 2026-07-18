@@ -8,7 +8,6 @@ import {
   ComunicadoDownloadImage,
 } from "@/components/comunicados/ComunicadoImageCard";
 
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -602,7 +601,6 @@ function NovoComunicadoPage() {
           </Button>
         </div>
       </form>
-
     </EscolaShell>
   );
 }

@@ -154,7 +154,6 @@ function ComunicadoCard({ c }: { c: Comunicado }) {
   );
 }
 
-
 function AnexoLink({ anexo }: { anexo: Anexo }) {
   const [loading, setLoading] = useState(false);
   const handleOpen = async () => {

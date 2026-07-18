@@ -13,12 +13,12 @@ Documento de conformidade LGPD. Base legal: Lei 13.709/2018.
 
 ### 1. Identificação
 
-| Campo | Valor |
-|---|---|
-| Controlador | União Espírita Evangélica Cristo do Morumbi (UEECM) |
-| Encarregado (DPO) | _preencher_ — dpo@conectaueecm.com |
-| Operador | Supabase Inc. (banco) · Cloudflare (CDN/Workers) · Google (FCM/Gemini) |
-| Sistema | Conecta UEECM (aplicação web PWA) |
+| Campo             | Valor                                                                  |
+| ----------------- | ---------------------------------------------------------------------- |
+| Controlador       | União Espírita Evangélica Cristo do Morumbi (UEECM)                    |
+| Encarregado (DPO) | _preencher_ — dpo@conectaueecm.com                                     |
+| Operador          | Supabase Inc. (banco) · Cloudflare (CDN/Workers) · Google (FCM/Gemini) |
+| Sistema           | Conecta UEECM (aplicação web PWA)                                      |
 
 ### 2. Finalidades
 
@@ -30,37 +30,37 @@ Documento de conformidade LGPD. Base legal: Lei 13.709/2018.
 
 ### 3. Categorias de dados e titulares
 
-| Categoria de titular | Dados tratados | Sensível? | Base legal |
-|---|---|---|---|
-| Alunos (menores) | Nome, foto, turma, notas, frequência, autorizações | Sim (menor) | Art. 14 §1º — consentimento parental |
-| Pais/responsáveis | Nome, e-mail, telefone, vínculo | Não | Consentimento (Art. 7 I) + execução de contrato educacional (Art. 7 V) |
-| Profissionais | Nome, foto, bio, email, telefone, cargo | Não | Legítimo interesse (Art. 7 IX) + consentimento |
-| Visitantes públicos | Depoimentos, foto (quando enviada) | Não | Consentimento explícito no formulário |
-| Autores de conteúdo | Metadados de posts/comentários | Não | Execução do serviço |
+| Categoria de titular | Dados tratados                                     | Sensível?   | Base legal                                                             |
+| -------------------- | -------------------------------------------------- | ----------- | ---------------------------------------------------------------------- |
+| Alunos (menores)     | Nome, foto, turma, notas, frequência, autorizações | Sim (menor) | Art. 14 §1º — consentimento parental                                   |
+| Pais/responsáveis    | Nome, e-mail, telefone, vínculo                    | Não         | Consentimento (Art. 7 I) + execução de contrato educacional (Art. 7 V) |
+| Profissionais        | Nome, foto, bio, email, telefone, cargo            | Não         | Legítimo interesse (Art. 7 IX) + consentimento                         |
+| Visitantes públicos  | Depoimentos, foto (quando enviada)                 | Não         | Consentimento explícito no formulário                                  |
+| Autores de conteúdo  | Metadados de posts/comentários                     | Não         | Execução do serviço                                                    |
 
 ### 4. Compartilhamento com terceiros (subprocessadores)
 
-| Terceiro | País | Finalidade | Salvaguarda |
-|---|---|---|---|
-| Supabase | EUA | Banco, auth, storage | DPA + criptografia em repouso |
-| Cloudflare | Global | CDN, Workers, Turnstile | DPA + TLS |
-| Google Firebase (FCM) | EUA | Push notifications | DPA Google + tokens anônimos |
-| Google Gemini | EUA | Assistente IA (`/api/chat`) | Sem envio de PII sensível; prompts filtrados |
-| Lovable | UE/EUA | Hospedagem gerenciada | DPA Lovable |
+| Terceiro              | País   | Finalidade                  | Salvaguarda                                  |
+| --------------------- | ------ | --------------------------- | -------------------------------------------- |
+| Supabase              | EUA    | Banco, auth, storage        | DPA + criptografia em repouso                |
+| Cloudflare            | Global | CDN, Workers, Turnstile     | DPA + TLS                                    |
+| Google Firebase (FCM) | EUA    | Push notifications          | DPA Google + tokens anônimos                 |
+| Google Gemini         | EUA    | Assistente IA (`/api/chat`) | Sem envio de PII sensível; prompts filtrados |
+| Lovable               | UE/EUA | Hospedagem gerenciada       | DPA Lovable                                  |
 
 ### 5. Retenção
 
-| Dado | Prazo | Base |
-|---|---|---|
-| Registros acadêmicos (notas, frequência) | 5 anos após saída | Norma MEC |
-| Comunicados/mensagens | 2 anos após envio | Legítimo interesse |
-| Chat aluno↔escola | 1 ano após última mensagem | Minimização |
-| Fotos em galerias | Enquanto publicadas + 30 dias após despublicação | Consentimento revogável |
-| Autorizações assinadas | Duração do vínculo + 5 anos | Comprovação legal |
-| Logs de acesso / audit | 12 meses | Segurança (Art. 46) |
-| `system_errors` | 90 dias | Segurança operacional |
-| Tokens FCM inativos | 60 dias | Limpeza automática |
-| Consentimentos parentais revogados | Até anonimização das fotos vinculadas | Direito de revogação (Art. 8 §5º) |
+| Dado                                     | Prazo                                            | Base                              |
+| ---------------------------------------- | ------------------------------------------------ | --------------------------------- |
+| Registros acadêmicos (notas, frequência) | 5 anos após saída                                | Norma MEC                         |
+| Comunicados/mensagens                    | 2 anos após envio                                | Legítimo interesse                |
+| Chat aluno↔escola                        | 1 ano após última mensagem                       | Minimização                       |
+| Fotos em galerias                        | Enquanto publicadas + 30 dias após despublicação | Consentimento revogável           |
+| Autorizações assinadas                   | Duração do vínculo + 5 anos                      | Comprovação legal                 |
+| Logs de acesso / audit                   | 12 meses                                         | Segurança (Art. 46)               |
+| `system_errors`                          | 90 dias                                          | Segurança operacional             |
+| Tokens FCM inativos                      | 60 dias                                          | Limpeza automática                |
+| Consentimentos parentais revogados       | Até anonimização das fotos vinculadas            | Direito de revogação (Art. 8 §5º) |
 
 ### 6. Medidas técnicas e organizacionais (Art. 46)
 
@@ -96,17 +96,17 @@ momento em `/uso-de-imagem`.
 
 ### 9. Riscos identificados e mitigações
 
-| # | Risco | Impacto | Prob. | Mitigação atual |
-|---|---|---|---|---|
-| R1 | Vazamento de fotos de alunos | Alto | Baixa | Storage policy exige `publicado=true` (fix 2025) |
-| R2 | Acesso indevido a notas/frequência | Alto | Baixa | RLS por `aluno_responsavel` + role staff |
-| R3 | Exposição de contato de profissionais | Médio | Baixa | Grants por coluna — email/tel só via RPC admin |
-| R4 | Injeção via chat Gemini | Médio | Média | Rate limit 3-níveis + validação de tamanho |
-| R5 | Abuso de endpoints `/api/public/*` | Médio | Baixa | HMAC timing-safe |
-| R6 | Perda de dados por falha Supabase | Alto | Baixa | PITR + runbook de restore |
-| R7 | Uso de imagem sem consentimento renovado | Alto (menor) | Média | Consentimento parental revalidado anualmente na rematrícula |
-| R8 | Vazamento de senha (credential stuffing) | Médio | Média | **Pendente:** ativar Leaked Password Protection |
-| R9 | Ataque a11y (bypass de teclado) | Baixo | Baixa | Radix/shadcn + auditoria axe periódica |
+| #   | Risco                                    | Impacto      | Prob. | Mitigação atual                                             |
+| --- | ---------------------------------------- | ------------ | ----- | ----------------------------------------------------------- |
+| R1  | Vazamento de fotos de alunos             | Alto         | Baixa | Storage policy exige `publicado=true` (fix 2025)            |
+| R2  | Acesso indevido a notas/frequência       | Alto         | Baixa | RLS por `aluno_responsavel` + role staff                    |
+| R3  | Exposição de contato de profissionais    | Médio        | Baixa | Grants por coluna — email/tel só via RPC admin              |
+| R4  | Injeção via chat Gemini                  | Médio        | Média | Rate limit 3-níveis + validação de tamanho                  |
+| R5  | Abuso de endpoints `/api/public/*`       | Médio        | Baixa | HMAC timing-safe                                            |
+| R6  | Perda de dados por falha Supabase        | Alto         | Baixa | PITR + runbook de restore                                   |
+| R7  | Uso de imagem sem consentimento renovado | Alto (menor) | Média | Consentimento parental revalidado anualmente na rematrícula |
+| R8  | Vazamento de senha (credential stuffing) | Médio        | Média | **Pendente:** ativar Leaked Password Protection             |
+| R9  | Ataque a11y (bypass de teclado)          | Baixo        | Baixa | Radix/shadcn + auditoria axe periódica                      |
 
 ### 10. Ações prioritárias
 
@@ -118,11 +118,11 @@ momento em `/uso-de-imagem`.
 
 ### 11. Aprovação
 
-| Papel | Nome | Data | Assinatura |
-|---|---|---|---|
-| Controlador | — | — | — |
-| DPO | — | — | — |
-| Direção da escola | — | — | — |
+| Papel             | Nome | Data | Assinatura |
+| ----------------- | ---- | ---- | ---------- |
+| Controlador       | —    | —    | —          |
+| DPO               | —    | —    | —          |
+| Direção da escola | —    | —    | —          |
 
 > Rever este documento **anualmente** ou sempre que houver mudança material
 > nas finalidades, categorias de dados ou subprocessadores.

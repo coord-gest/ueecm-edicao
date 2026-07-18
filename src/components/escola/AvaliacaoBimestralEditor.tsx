@@ -131,9 +131,12 @@ export function AvaliacaoBimestralEditor({ template: _template, preenchimento }:
 
   useEffect(() => {
     if (!user) return;
-    const channel = supabase.channel(uniqueRealtimeChannelName(`preenchimento:${preenchimento.id}`), {
-      config: { presence: { key: user.id } },
-    });
+    const channel = supabase.channel(
+      uniqueRealtimeChannelName(`preenchimento:${preenchimento.id}`),
+      {
+        config: { presence: { key: user.id } },
+      },
+    );
 
     channel
       .on(

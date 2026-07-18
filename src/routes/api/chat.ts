@@ -69,10 +69,7 @@ function hitBucket(
   return { ok: true, retryAfter: 0 };
 }
 
-function checkRateLimit(
-  key: string,
-  ip: string,
-): { ok: boolean; retryAfter: number } {
+function checkRateLimit(key: string, ip: string): { ok: boolean; retryAfter: number } {
   const perSession = hitBucket(`s:${key}`, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW_MS);
   if (!perSession.ok) return perSession;
   const perIpMin = hitBucket(`ipm:${ip}`, IP_MINUTE_MAX, IP_MINUTE_WINDOW_MS);

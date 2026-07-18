@@ -34,12 +34,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Progress } from "@/components/ui/progress";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/painel-galeria")({
@@ -352,11 +347,8 @@ function FotosDialog({ albumId, onClose }: { albumId: string; onClose: () => voi
       try {
         setStatusText(`Comprimindo ${file.name}...`);
         const compressed = await compressImage(file);
-        const ext =
-          compressed.file.type === "image/png" ? "png" : "jpg";
-        const path = `${albumId}/${Date.now()}-${Math.random()
-          .toString(36)
-          .slice(2, 8)}.${ext}`;
+        const ext = compressed.file.type === "image/png" ? "png" : "jpg";
+        const path = `${albumId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
         setStatusText(`Enviando ${file.name}...`);
         const { error: upErr } = await supabase.storage
           .from("galeria-eventos")
@@ -366,9 +358,7 @@ function FotosDialog({ albumId, onClose }: { albumId: string; onClose: () => voi
             contentType: compressed.file.type,
           });
         if (upErr) throw upErr;
-        const { data: pub } = supabase.storage
-          .from("galeria-eventos")
-          .getPublicUrl(path);
+        const { data: pub } = supabase.storage.from("galeria-eventos").getPublicUrl(path);
         uploadedRows.push({
           url: pub.publicUrl,
           storage_path: path,

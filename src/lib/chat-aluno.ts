@@ -108,7 +108,9 @@ export async function listarMinhasThreads(): Promise<ThreadInfo[]> {
   const alunoIds = Array.from(new Set(list.map((t) => t.aluno_id)));
   const contrapartes = Array.from(
     new Set(
-      list.map((t) => (t.responsavel_user_id === uid ? t.professor_user_id : t.responsavel_user_id)),
+      list.map((t) =>
+        t.responsavel_user_id === uid ? t.professor_user_id : t.responsavel_user_id,
+      ),
     ),
   );
 
@@ -121,17 +123,18 @@ export async function listarMinhasThreads(): Promise<ThreadInfo[]> {
   ]);
 
   const mapAluno = new Map(
-    ((alunos ?? []) as Array<{
-      id: string;
-      nome_completo: string;
-      turmas_escolares?: { nome?: string } | null;
-    }>).map((a) => [a.id, a]),
+    (
+      (alunos ?? []) as Array<{
+        id: string;
+        nome_completo: string;
+        turmas_escolares?: { nome?: string } | null;
+      }>
+    ).map((a) => [a.id, a]),
   );
   const mapPerfil = new Map(
-    ((perfis ?? []) as Array<{ user_id: string; display_name?: string; email?: string }>).map((p) => [
-      p.user_id,
-      p,
-    ]),
+    ((perfis ?? []) as Array<{ user_id: string; display_name?: string; email?: string }>).map(
+      (p) => [p.user_id, p],
+    ),
   );
 
   // Contagem não lidas (mensagens do outro sem lida_em)
@@ -157,7 +160,9 @@ export async function listarMinhasThreads(): Promise<ThreadInfo[]> {
       aluno_nome: al?.nome_completo ?? "Aluno",
       turma_nome: al?.turmas_escolares?.nome ?? null,
       contraparte_nome:
-        perfil?.display_name || perfil?.email || (meRole === "responsavel" ? "Professor" : "Responsável"),
+        perfil?.display_name ||
+        perfil?.email ||
+        (meRole === "responsavel" ? "Professor" : "Responsável"),
       contraparte_papel: meRole === "responsavel" ? "professor" : "responsavel",
       nao_lidas: naoLidasByThread.get(t.id) ?? 0,
     } satisfies ThreadInfo;
@@ -218,8 +223,6 @@ export async function uploadAnexo(thread_id: string, file: File): Promise<string
 }
 
 export async function getAnexoUrl(path: string): Promise<string | null> {
-  const { data } = await supabase.storage
-    .from("chat-alunos-anexos")
-    .createSignedUrl(path, 60 * 60);
+  const { data } = await supabase.storage.from("chat-alunos-anexos").createSignedUrl(path, 60 * 60);
   return data?.signedUrl ?? null;
 }

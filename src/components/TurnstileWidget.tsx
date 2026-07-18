@@ -21,10 +21,7 @@ type TurnstileRenderOptions = {
 declare global {
   interface Window {
     turnstile?: {
-      render: (
-        el: HTMLElement | string,
-        opts: TurnstileRenderOptions,
-      ) => string;
+      render: (el: HTMLElement | string, opts: TurnstileRenderOptions) => string;
       reset: (widgetId?: string) => void;
       remove: (widgetId?: string) => void;
     };
@@ -32,8 +29,7 @@ declare global {
   }
 }
 
-const SCRIPT_SRC =
-  "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+const SCRIPT_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 
 function loadScript(): Promise<void> {
   if (typeof window === "undefined") return Promise.resolve();
@@ -74,9 +70,7 @@ export function TurnstileWidget({
   const id = useId();
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
-  const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY as
-    | string
-    | undefined;
+  const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
 
   useEffect(() => {
     if (!siteKey || !containerRef.current) return;
