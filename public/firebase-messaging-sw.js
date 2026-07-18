@@ -34,6 +34,14 @@ messaging.onBackgroundMessage((payload) => {
   const body = data.body || notif.body || "";
   const url = data.url || "/";
 
+  // Tag ÚNICA por notificação para evitar que o Android 16 (Chrome) suprima
+  // silenciosamente notificações subsequentes que compartilhem a mesma tag.
+  // No Android 13 o SO era mais tolerante; a partir do 14/16 uma nova
+  // notificação com a mesma tag substitui a anterior SEM alertar quando
+  // renotify=false. Geramos uma tag única por default e só reutilizamos
+  // quando o backend envia uma tag explícita (agrupamento intencional).
+  const tag = data.tag || `ecm-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
   // IMPORTANTE: retornar a Promise para que o FCM SDK a passe ao
   // event.waitUntil interno do 'push' event. Sem isso, o SW é encerrado
   // antes da notificação ser exibida e o Chrome mostra a mensagem
@@ -46,8 +54,17 @@ messaging.onBackgroundMessage((payload) => {
     // alpha e pinta tudo de branco. Usar o icon colorido aqui resulta num
     // quadrado/círculo branco chapado sem forma reconhecível.
     badge: "/badge-96.png",
-    tag: data.tag || "ecm-fcm",
-    renotify: Boolean(data.tag),
+    tag,
+    // Sempre renotify=true: garante que Android 16 exiba som/vibração
+    // mesmo quando uma tag é reutilizada intencionalmente.
+    renotify: true,
+    // Vibração é obrigatória no Android 14+ para que a notificação
+    // "acorde" a tela bloqueada de forma perceptível.
+    vibrate: [200, 100, 200],
+    // Mantém a notificação visível até o usuário interagir — sem isso o
+    // Android 16 pode auto-dismissar em segundos quando o app está fechado.
+    requireInteraction: true,
+    timestamp: Date.now(),
     data: { url },
   });
 });
