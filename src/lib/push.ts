@@ -269,3 +269,51 @@ export async function unsubscribeFromPush(): Promise<void> {
     console.warn("[fcm] unsubscribe falhou:", e);
   }
 }
+
+/**
+ * Re-vincula o token FCM existente ao user_id atual (após login).
+ * NÃO pede permissão — apenas re-envia o token se já houver permissão
+ * e um SW registrado. Silencioso em qualquer falha.
+ */
+export async function reattachPushTokenToUser(): Promise<void> {
+  try {
+    if (typeof window === "undefined") return;
+    if (!isPushSupported()) return;
+    if (Notification.permission !== "granted") return;
+
+    const messaging = await getFirebaseMessaging();
+    if (!messaging) return;
+
+    const cfg = await loadFcmConfig();
+    const reg = await navigator.serviceWorker.getRegistration(
+      "/firebase-cloud-messaging-push-scope",
+    );
+    if (!reg) return;
+
+    const token = await getToken(messaging, {
+      vapidKey: cfg.vapidKey,
+      serviceWorkerRegistration: reg,
+    }).catch(() => null);
+    if (!token) return;
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession().catch(() => ({ data: { session: null } }));
+    if (!session?.access_token) return;
+
+    await fetch("/api/push/fcm-register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({
+        token,
+        platform: detectPlatform(),
+        user_agent: navigator.userAgent.slice(0, 500),
+      }),
+    }).catch(() => undefined);
+  } catch {
+    /* silencioso */
+  }
+}
