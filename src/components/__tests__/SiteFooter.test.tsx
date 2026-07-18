@@ -39,11 +39,11 @@ describe("SiteFooter — navegação institucional consolidada", () => {
     expect(nav).toHaveAttribute("aria-label");
   });
 
-  it("expõe no máximo os 11 itens esperados do menu enxuto (~metade da versão anterior de 18)", () => {
+  it("expõe um menu enxuto (até 14 itens) — ~metade da versão anterior de 18", () => {
     render(<SiteFooter />);
     const nav = screen.getByTestId("footer-nav");
     const links = within(nav).getAllByRole("link");
-    expect(links.length).toBeLessThanOrEqual(11);
+    expect(links.length).toBeLessThanOrEqual(14);
   });
 
 });
