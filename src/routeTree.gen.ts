@@ -101,6 +101,7 @@ import { Route as EscolaComunicadosIndexRouteImport } from './routes/escola.comu
 import { Route as EscolaComunicadosNovoRouteImport } from './routes/escola.comunicados.novo'
 import { Route as EscolaComunicadosDashboardRouteImport } from './routes/escola.comunicados.dashboard'
 import { Route as ApiPushFcmRegisterRouteImport } from './routes/api/push/fcm-register'
+import { Route as ApiPublicTurnstileConfigRouteImport } from './routes/api/public/turnstile-config'
 import { Route as ApiPublicRemindersDispatchRouteImport } from './routes/api/public/reminders-dispatch'
 import { Route as ApiPublicFcmConfigRouteImport } from './routes/api/public/fcm-config'
 import { Route as ApiPublicFcmCheckRouteImport } from './routes/api/public/fcm-check'
@@ -576,6 +577,12 @@ const ApiPushFcmRegisterRoute = ApiPushFcmRegisterRouteImport.update({
   path: '/api/push/fcm-register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicTurnstileConfigRoute =
+  ApiPublicTurnstileConfigRouteImport.update({
+    id: '/api/public/turnstile-config',
+    path: '/api/public/turnstile-config',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicRemindersDispatchRoute =
   ApiPublicRemindersDispatchRouteImport.update({
     id: '/api/public/reminders-dispatch',
@@ -734,6 +741,7 @@ export interface FileRoutesByFullPath {
   '/api/public/fcm-check': typeof ApiPublicFcmCheckRoute
   '/api/public/fcm-config': typeof ApiPublicFcmConfigRoute
   '/api/public/reminders-dispatch': typeof ApiPublicRemindersDispatchRoute
+  '/api/public/turnstile-config': typeof ApiPublicTurnstileConfigRoute
   '/api/push/fcm-register': typeof ApiPushFcmRegisterRoute
   '/escola/comunicados/dashboard': typeof EscolaComunicadosDashboardRoute
   '/escola/comunicados/novo': typeof EscolaComunicadosNovoRoute
@@ -838,6 +846,7 @@ export interface FileRoutesByTo {
   '/api/public/fcm-check': typeof ApiPublicFcmCheckRoute
   '/api/public/fcm-config': typeof ApiPublicFcmConfigRoute
   '/api/public/reminders-dispatch': typeof ApiPublicRemindersDispatchRoute
+  '/api/public/turnstile-config': typeof ApiPublicTurnstileConfigRoute
   '/api/push/fcm-register': typeof ApiPushFcmRegisterRoute
   '/escola/comunicados/dashboard': typeof EscolaComunicadosDashboardRoute
   '/escola/comunicados/novo': typeof EscolaComunicadosNovoRoute
@@ -944,6 +953,7 @@ export interface FileRoutesById {
   '/api/public/fcm-check': typeof ApiPublicFcmCheckRoute
   '/api/public/fcm-config': typeof ApiPublicFcmConfigRoute
   '/api/public/reminders-dispatch': typeof ApiPublicRemindersDispatchRoute
+  '/api/public/turnstile-config': typeof ApiPublicTurnstileConfigRoute
   '/api/push/fcm-register': typeof ApiPushFcmRegisterRoute
   '/escola/comunicados/dashboard': typeof EscolaComunicadosDashboardRoute
   '/escola/comunicados/novo': typeof EscolaComunicadosNovoRoute
@@ -1051,6 +1061,7 @@ export interface FileRouteTypes {
     | '/api/public/fcm-check'
     | '/api/public/fcm-config'
     | '/api/public/reminders-dispatch'
+    | '/api/public/turnstile-config'
     | '/api/push/fcm-register'
     | '/escola/comunicados/dashboard'
     | '/escola/comunicados/novo'
@@ -1155,6 +1166,7 @@ export interface FileRouteTypes {
     | '/api/public/fcm-check'
     | '/api/public/fcm-config'
     | '/api/public/reminders-dispatch'
+    | '/api/public/turnstile-config'
     | '/api/push/fcm-register'
     | '/escola/comunicados/dashboard'
     | '/escola/comunicados/novo'
@@ -1260,6 +1272,7 @@ export interface FileRouteTypes {
     | '/api/public/fcm-check'
     | '/api/public/fcm-config'
     | '/api/public/reminders-dispatch'
+    | '/api/public/turnstile-config'
     | '/api/push/fcm-register'
     | '/escola/comunicados/dashboard'
     | '/escola/comunicados/novo'
@@ -1358,6 +1371,7 @@ export interface RootRouteChildren {
   ApiPublicFcmCheckRoute: typeof ApiPublicFcmCheckRoute
   ApiPublicFcmConfigRoute: typeof ApiPublicFcmConfigRoute
   ApiPublicRemindersDispatchRoute: typeof ApiPublicRemindersDispatchRoute
+  ApiPublicTurnstileConfigRoute: typeof ApiPublicTurnstileConfigRoute
   ApiPushFcmRegisterRoute: typeof ApiPushFcmRegisterRoute
   EscolaComunicadosDashboardRoute: typeof EscolaComunicadosDashboardRoute
   EscolaComunicadosNovoRoute: typeof EscolaComunicadosNovoRoute
@@ -2012,6 +2026,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPushFcmRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/turnstile-config': {
+      id: '/api/public/turnstile-config'
+      path: '/api/public/turnstile-config'
+      fullPath: '/api/public/turnstile-config'
+      preLoaderRoute: typeof ApiPublicTurnstileConfigRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/reminders-dispatch': {
       id: '/api/public/reminders-dispatch'
       path: '/api/public/reminders-dispatch'
@@ -2266,6 +2287,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicFcmCheckRoute: ApiPublicFcmCheckRoute,
   ApiPublicFcmConfigRoute: ApiPublicFcmConfigRoute,
   ApiPublicRemindersDispatchRoute: ApiPublicRemindersDispatchRoute,
+  ApiPublicTurnstileConfigRoute: ApiPublicTurnstileConfigRoute,
   ApiPushFcmRegisterRoute: ApiPushFcmRegisterRoute,
   EscolaComunicadosDashboardRoute: EscolaComunicadosDashboardRoute,
   EscolaComunicadosNovoRoute: EscolaComunicadosNovoRoute,
@@ -2276,13 +2298,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
