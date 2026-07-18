@@ -1,0 +1,15 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.conectaueecm.twa",
+      "sha256_cert_fingerprints": [
+        "57:AA:C6:45:23:4B:CE:0B:06:43:59:D8:37:95:74:FC:9F:9F:8A:B4:E7:60:65:0D:C0:11:1B:DF:BB:34:B9:BB",
+        "F0:B8:53:1B:99:01:F2:5E:9C:B3:7D:12:F6:77:2E:11:E3:0C:E7:21:02:42:EB:49:17:ED:7B:89:66:92:F4:54",
+        "26:02:40:4C:99:62:D2:CB:71:DA:C8:DD:25:AA:A5:A7:A9:9F:69:25:E4:86:22:B4:97:98:B6:AE:B2:20:83:13",
+        "BF:D4:3F:2B:D5:6E:7D:E8:4E:96:19:2E:9A:2F:EA:16:19:87:52:1F:60:41:41:32:2D:A6:1F:28:CE:E7:C8:B6"
+      ]
+    }
+  }
+]

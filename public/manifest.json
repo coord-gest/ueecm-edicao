@@ -1,0 +1,137 @@
+{
+  "name": "U.E. - Evaristo Campelo de Matos",
+  "short_name": "U.E. Evaristo",
+  "description": "Blog, comunicados, calendário e horários da U.E. - Evaristo Campelo de Matos.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "fullscreen"],
+  "orientation": "portrait",
+  "background_color": "#F8F6EE",
+  "theme_color": "#F8F6EE",
+  "categories": ["education", "news"],
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/badge-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "monochrome"
+    }
+  ],
+  "serviceworker": {
+    "src": "/sw.js",
+    "scope": "/",
+    "update_via_cache": "none"
+  },
+  "screenshots": [
+    {
+      "src": "/screenshots/mobile-home.png",
+      "sizes": "738x1600",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Página inicial com destaques e mais lidas"
+    },
+    {
+      "src": "/screenshots/mobile-posts.png",
+      "sizes": "738x1600",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Lista de publicações da escola"
+    },
+    {
+      "src": "/screenshots/desktop-home.png",
+      "sizes": "1398x847",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Página inicial em tela larga"
+    },
+    {
+      "src": "/screenshots/desktop-posts.png",
+      "sizes": "1372x900",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Publicações em tela larga"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Publicações",
+      "short_name": "Posts",
+      "url": "/posts",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Calendário",
+      "short_name": "Calendário",
+      "url": "/calendario",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Horários",
+      "short_name": "Horários",
+      "url": "/horarios",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Equipe",
+      "short_name": "Equipe",
+      "url": "/equipe",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.conectaueecm.twa",
+      "id": "com.conectaueecm.twa"
+    }
+  ]
+}

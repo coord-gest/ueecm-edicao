@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Alert images are publicly readable" ON storage.objects;

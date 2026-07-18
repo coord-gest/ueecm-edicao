@@ -1,0 +1,1 @@
+ALTER TABLE public.parental_consents ALTER COLUMN guardian_cpf DROP NOT NULL;

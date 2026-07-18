@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /painel
+Disallow: /painel-
+Disallow: /escola
+Disallow: /minhas-turmas
+Disallow: /meus-filhos
+Disallow: /configuracoes
+Disallow: /usuarios
+Disallow: /login
+Disallow: /offline
+Disallow: /api/
+
+Sitemap: https://conectaueecm.com/sitemap.xml

@@ -1,0 +1,23 @@
+# U.E. Evaristo Campelo de Matos
+
+> Portal oficial da Unidade Escolar Evaristo Campelo de Matos, em Assunção do Piauí — notícias, comunicados, calendário e serviços para a comunidade escolar.
+
+Escola pública estadual fundada em 1982. O portal oferece publicações editoriais, calendário de eventos, agendamento com a equipe, comunicados às famílias e vitrine dos profissionais da educação.
+
+## Páginas principais
+
+- [Início](/): notícias em destaque, eventos e comunicados
+- [Sobre a escola](/sobre): história da U.E. Evaristo Campelo de Matos
+- [Notícias e publicações](/posts): edições, matérias em destaque e álbum de momentos
+- [Calendário escolar](/calendario): provas, reuniões e eventos por turma
+- [Horários](/horarios): grade de aulas
+- [Nossa equipe](/equipe): diretoria, coordenação, professores e secretaria
+- [Alunos em destaque](/alunos-destaque): conquistas dos estudantes
+- [Famílias UEECM](/familias): depoimentos e materiais para responsáveis
+- [Agendar atendimento](/agendar): reunião com direção, coordenação ou professor
+
+## Institucional
+
+- [Política de privacidade](/privacidade)
+- [Termos de uso](/termos-de-uso)
+- [Uso de imagem](/uso-de-imagem)

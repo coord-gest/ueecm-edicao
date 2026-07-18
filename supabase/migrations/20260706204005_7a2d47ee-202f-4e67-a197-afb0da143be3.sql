@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "user_roles_block_non_dev_writes" ON public.user_roles;

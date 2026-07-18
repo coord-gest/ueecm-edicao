@@ -1,0 +1,33 @@
+{
+  "common": {
+    "loading": "Carregando…",
+    "error": "Ocorreu um erro",
+    "retry": "Tentar novamente",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "close": "Fechar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "search": "Buscar",
+    "share": "Compartilhar",
+    "download": "Baixar",
+    "yes": "Sim",
+    "no": "Não"
+  },
+  "nav": {
+    "home": "Início",
+    "team": "Equipe",
+    "news": "Comunicados",
+    "calendar": "Calendário",
+    "gallery": "Galeria",
+    "install": "Baixar o App",
+    "login": "Entrar",
+    "logout": "Sair"
+  },
+  "meta": {
+    "siteName": "U.E. Evaristo Campelo de Matos"
+  }
+}

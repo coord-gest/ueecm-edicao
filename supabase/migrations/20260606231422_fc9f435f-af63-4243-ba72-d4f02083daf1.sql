@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "posts-media leitura pública" ON storage.objects;
