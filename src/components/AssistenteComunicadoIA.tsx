@@ -13,7 +13,13 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import { gerarComunicadoIA } from "@/lib/ai-assistant.functions";
 
@@ -84,7 +90,9 @@ export function AssistenteComunicadoIA({ onGerado, turma, triggerLabel = "Gerar 
             <div>
               <Label>Urgência</Label>
               <Select value={urgencia} onValueChange={setUrgencia}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="baixa">Baixa (informativo)</SelectItem>
                   <SelectItem value="normal">Normal</SelectItem>
@@ -100,7 +108,11 @@ export function AssistenteComunicadoIA({ onGerado, turma, triggerLabel = "Gerar 
             Cancelar
           </Button>
           <Button onClick={handleGerar} disabled={loading} className="gap-2">
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Sparkles className="h-4 w-4" />
+            )}
             Gerar rascunho
           </Button>
         </DialogFooter>

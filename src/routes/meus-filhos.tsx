@@ -87,36 +87,41 @@ function MeusFilhosPage() {
       for (const a of alunos ?? []) {
         const hojeIso = new Date().toISOString().slice(0, 10);
         const em30 = new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10);
-        const [{ data: notas }, { data: freq }, { data: coms }, { data: lidos }, { data: eventos }] =
-          await Promise.all([
-            supabase
-              .from("notas")
-              .select("disciplina, bimestre, valor")
-              .eq("aluno_id", a.id)
-              .order("bimestre", { ascending: false })
-              .limit(12),
-            supabase
-              .from("frequencia")
-              .select("data, presente")
-              .eq("aluno_id", a.id)
-              .gte("data", new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10))
-              .order("data", { ascending: true }),
-            supabase
-              .from("comunicados")
-              .select("id, titulo, created_at")
-              .or(
-                `aluno_id.eq.${a.id},turma_id.eq.${a.turma_id ?? "00000000-0000-0000-0000-000000000000"}`,
-              ),
-            supabase.from("comunicado_leituras").select("comunicado_id").eq("usuario_id", user!.id),
-            supabase
-              .from("eventos")
-              .select("id, titulo, data_inicio, horario")
-              .eq("ativo", true)
-              .gte("data_inicio", hojeIso)
-              .lte("data_inicio", em30)
-              .order("data_inicio", { ascending: true })
-              .limit(4),
-          ]);
+        const [
+          { data: notas },
+          { data: freq },
+          { data: coms },
+          { data: lidos },
+          { data: eventos },
+        ] = await Promise.all([
+          supabase
+            .from("notas")
+            .select("disciplina, bimestre, valor")
+            .eq("aluno_id", a.id)
+            .order("bimestre", { ascending: false })
+            .limit(12),
+          supabase
+            .from("frequencia")
+            .select("data, presente")
+            .eq("aluno_id", a.id)
+            .gte("data", new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10))
+            .order("data", { ascending: true }),
+          supabase
+            .from("comunicados")
+            .select("id, titulo, created_at")
+            .or(
+              `aluno_id.eq.${a.id},turma_id.eq.${a.turma_id ?? "00000000-0000-0000-0000-000000000000"}`,
+            ),
+          supabase.from("comunicado_leituras").select("comunicado_id").eq("usuario_id", user!.id),
+          supabase
+            .from("eventos")
+            .select("id, titulo, data_inicio, horario")
+            .eq("ativo", true)
+            .gte("data_inicio", hojeIso)
+            .lte("data_inicio", em30)
+            .order("data_inicio", { ascending: true })
+            .limit(4),
+        ]);
         const total = freq?.length ?? 0;
         const presentes = freq?.filter((f) => f.presente).length ?? 0;
         const lidosSet = new Set((lidos ?? []).map((l) => l.comunicado_id));

@@ -75,30 +75,26 @@ export const listAlbunsPublicos = createServerFn({ method: "GET" }).handler(
 
 export const getAlbumPublico = createServerFn({ method: "POST" })
   .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
-  .handler(
-    async ({
-      data,
-    }): Promise<{ album: GaleriaAlbum | null; fotos: GaleriaFoto[] }> => {
-      const sb = getServerPublicClient();
-      const { data: album } = await sb
-        .from("galerias_eventos")
-        .select("*")
-        .eq("id", data.id)
-        .eq("publicado", true)
-        .maybeSingle();
-      if (!album) return { album: null, fotos: [] };
-      const { data: fotos } = await sb
-        .from("galeria_fotos")
-        .select("*")
-        .eq("galeria_id", data.id)
-        .order("ordem", { ascending: true })
-        .order("created_at", { ascending: true });
-      return {
-        album: album as GaleriaAlbum,
-        fotos: (fotos ?? []) as GaleriaFoto[],
-      };
-    },
-  );
+  .handler(async ({ data }): Promise<{ album: GaleriaAlbum | null; fotos: GaleriaFoto[] }> => {
+    const sb = getServerPublicClient();
+    const { data: album } = await sb
+      .from("galerias_eventos")
+      .select("*")
+      .eq("id", data.id)
+      .eq("publicado", true)
+      .maybeSingle();
+    if (!album) return { album: null, fotos: [] };
+    const { data: fotos } = await sb
+      .from("galeria_fotos")
+      .select("*")
+      .eq("galeria_id", data.id)
+      .order("ordem", { ascending: true })
+      .order("created_at", { ascending: true });
+    return {
+      album: album as GaleriaAlbum,
+      fotos: (fotos ?? []) as GaleriaFoto[],
+    };
+  });
 
 // ---------- Admin ----------
 async function assertStaff(ctx: { supabase: any; userId: string }) {
@@ -206,10 +202,7 @@ export const deleteAlbum = createServerFn({ method: "POST" })
     if (paths.length > 0) {
       await ctx.supabase.storage.from("galeria-eventos").remove(paths);
     }
-    const { error } = await ctx.supabase
-      .from("galerias_eventos")
-      .delete()
-      .eq("id", data.id);
+    const { error } = await ctx.supabase.from("galerias_eventos").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });

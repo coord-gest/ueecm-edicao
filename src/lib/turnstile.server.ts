@@ -3,8 +3,7 @@
  * Chamar dentro de `.handler()` de server functions/routes, nunca no client.
  */
 
-const SITEVERIFY_URL =
-  "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+const SITEVERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
 export type TurnstileVerifyResult = {
   success: boolean;
@@ -53,8 +52,6 @@ export async function verifyTurnstile(
 
 export function assertTurnstileOk(result: TurnstileVerifyResult): void {
   if (!result.success) {
-    throw new Error(
-      "Falha na verificação anti-bot. Recarregue a página e tente novamente.",
-    );
+    throw new Error("Falha na verificação anti-bot. Recarregue a página e tente novamente.");
   }
 }

@@ -72,7 +72,10 @@ export const Route = createFileRoute("/galeria/$id")({
 
 function AlbumPage() {
   const loaderData = Route.useLoaderData();
-  const { album, fotos } = loaderData as { album: NonNullable<typeof loaderData.album>; fotos: GaleriaFoto[] };
+  const { album, fotos } = loaderData as {
+    album: NonNullable<typeof loaderData.album>;
+    fotos: GaleriaFoto[];
+  };
   const [index, setIndex] = useState(-1);
   const { data } = useQuery({
     queryKey: ["galeria-publico", album.id],

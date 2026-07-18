@@ -920,8 +920,8 @@ function PainelRuntime() {
             <div>
               <h2 className="text-lg font-semibold">Telemetria de envios (FCM)</h2>
               <p className="text-xs text-muted-foreground">
-                Cada execução do dispatcher (fila, testes, cron) grava um log com
-                totais, duração e primeiro erro.
+                Cada execução do dispatcher (fila, testes, cron) grava um log com totais, duração e
+                primeiro erro.
               </p>
             </div>
             <Button
@@ -930,9 +930,7 @@ function PainelRuntime() {
               onClick={() => dispatchLogs.refetch()}
               disabled={dispatchLogs.isFetching}
             >
-              {dispatchLogs.isFetching ? (
-                <Loader2 className="mr-2 size-3.5 animate-spin" />
-              ) : null}
+              {dispatchLogs.isFetching ? <Loader2 className="mr-2 size-3.5 animate-spin" /> : null}
               Atualizar
             </Button>
           </div>

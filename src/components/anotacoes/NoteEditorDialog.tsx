@@ -35,9 +35,7 @@ interface Props {
 }
 
 const MAX_ICON_BYTES = 200 * 1024; // 200 KB max
-const PRESET_ICONS: { label: string; url: string }[] = [
-  { label: "Logo da Escola", url: logo },
-];
+const PRESET_ICONS: { label: string; url: string }[] = [{ label: "Logo da Escola", url: logo }];
 
 export function NoteEditorDialog({ open, onOpenChange, initial, onSave, saving }: Props) {
   const [titulo, setTitulo] = useState("");
@@ -207,9 +205,7 @@ export function NoteEditorDialog({ open, onOpenChange, initial, onSave, saving }
               <div className="space-y-1.5 pt-1">
                 <div className="flex items-center justify-between">
                   <Label className="text-xs text-muted-foreground">Tamanho do ícone</Label>
-                  <span className="text-xs font-mono text-muted-foreground">
-                    {iconeTamanho}px
-                  </span>
+                  <span className="text-xs font-mono text-muted-foreground">{iconeTamanho}px</span>
                 </div>
                 <Slider
                   min={16}

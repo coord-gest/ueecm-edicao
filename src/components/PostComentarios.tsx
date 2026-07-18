@@ -292,10 +292,7 @@ export function PostComentarios({ postId }: PostComentariosProps) {
                 size="sm"
                 className="rounded-full"
                 disabled={
-                  enviar.isPending ||
-                  !texto.trim() ||
-                  !nome.trim() ||
-                  (!isStaff && !captchaToken)
+                  enviar.isPending || !texto.trim() || !nome.trim() || (!isStaff && !captchaToken)
                 }
               >
                 {enviar.isPending ? (

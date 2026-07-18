@@ -137,8 +137,7 @@ function PainelPosts() {
       const d = new Date(p.updated_at ?? p.data ?? Date.now());
       let key: string;
       if (group === "dia") key = format(d, "yyyy-MM-dd");
-      else if (group === "semana")
-        key = format(startOfWeek(d, { weekStartsOn: 1 }), "yyyy-'W'II");
+      else if (group === "semana") key = format(startOfWeek(d, { weekStartsOn: 1 }), "yyyy-'W'II");
       else if (group === "mes") key = format(d, "yyyy-MM");
       else key = format(d, "yyyy");
       const cur = map.get(key) ?? { label: groupLabelFor(d, group), items: [] };
@@ -147,7 +146,6 @@ function PainelPosts() {
     }
     return Array.from(map.values());
   }, [posts, group]);
-
 
   const deletePost = useMutation({
     mutationFn: async (id: string) => {
@@ -348,8 +346,8 @@ function PainelPosts() {
                                   <AlertDialogHeader>
                                     <AlertDialogTitle>Excluir este post?</AlertDialogTitle>
                                     <AlertDialogDescription>
-                                      "{p.titulo}" será removido permanentemente. Esta ação não
-                                      pode ser desfeita.
+                                      "{p.titulo}" será removido permanentemente. Esta ação não pode
+                                      ser desfeita.
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
@@ -373,7 +371,6 @@ function PainelPosts() {
               ))}
             </div>
           )}
-
 
           {totalPages > 1 && (
             <div className="mt-6 flex items-center justify-center gap-2">

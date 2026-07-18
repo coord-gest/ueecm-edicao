@@ -23,19 +23,10 @@ export function CardSkeleton({ className }: { className?: string }) {
   );
 }
 
-export function CardGridSkeleton({
-  count = 6,
-  className,
-}: {
-  count?: number;
-  className?: string;
-}) {
+export function CardGridSkeleton({ count = 6, className }: { count?: number; className?: string }) {
   return (
     <div
-      className={cn(
-        "grid gap-4 sm:grid-cols-2 lg:grid-cols-3",
-        className,
-      )}
+      className={cn("grid gap-4 sm:grid-cols-2 lg:grid-cols-3", className)}
       role="status"
       aria-label="Carregando lista"
     >
@@ -46,19 +37,9 @@ export function CardGridSkeleton({
   );
 }
 
-export function ListSkeleton({
-  count = 5,
-  className,
-}: {
-  count?: number;
-  className?: string;
-}) {
+export function ListSkeleton({ count = 5, className }: { count?: number; className?: string }) {
   return (
-    <div
-      className={cn("space-y-3", className)}
-      role="status"
-      aria-label="Carregando itens"
-    >
+    <div className={cn("space-y-3", className)} role="status" aria-label="Carregando itens">
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="flex items-center gap-3 rounded-md border bg-card p-3">
           <Skeleton className="h-10 w-10 rounded-full" />
@@ -83,11 +64,7 @@ export function TableSkeleton({
   className?: string;
 }) {
   return (
-    <div
-      className={cn("space-y-2", className)}
-      role="status"
-      aria-label="Carregando tabela"
-    >
+    <div className={cn("space-y-2", className)} role="status" aria-label="Carregando tabela">
       <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
         {Array.from({ length: cols }).map((_, i) => (
           <Skeleton key={`h-${i}`} className="h-5" />
@@ -106,11 +83,7 @@ export function TableSkeleton({
 
 export function DetailSkeleton({ className }: { className?: string }) {
   return (
-    <div
-      className={cn("space-y-4", className)}
-      role="status"
-      aria-label="Carregando detalhes"
-    >
+    <div className={cn("space-y-4", className)} role="status" aria-label="Carregando detalhes">
       <Skeleton className="h-8 w-2/3" />
       <Skeleton className="h-4 w-1/3" />
       <Skeleton className="h-64 w-full rounded-lg" />

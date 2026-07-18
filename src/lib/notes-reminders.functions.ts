@@ -19,7 +19,6 @@ export type Note = {
   updated_at: string;
 };
 
-
 export type Reminder = {
   id: string;
   user_id: string;
@@ -75,7 +74,6 @@ export const upsertNote = createServerFn({ method: "POST" })
       icone_url: data.icone_url,
       icone_tamanho: data.icone_tamanho,
     };
-
 
     if (data.id) {
       const { data: row, error } = await context.supabase

@@ -155,7 +155,15 @@ async function assertAdmin(ctx: { supabase: any; userId: string }) {
     .from("user_roles")
     .select("role")
     .eq("user_id", ctx.userId)
-    .in("role", ["desenvolvedor", "developer", "diretor", "director", "coordenador", "coordinator", "admin"])
+    .in("role", [
+      "desenvolvedor",
+      "developer",
+      "diretor",
+      "director",
+      "coordenador",
+      "coordinator",
+      "admin",
+    ])
     .limit(1);
   if (!Array.isArray(data) || data.length === 0) {
     throw new Error("Acesso restrito a administradores.");
@@ -259,10 +267,7 @@ export const getEnqueteAdmin = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(
-    async ({
-      data,
-      context,
-    }): Promise<{ enquete: Enquete | null; opcoes: EnqueteOpcao[] }> => {
+    async ({ data, context }): Promise<{ enquete: Enquete | null; opcoes: EnqueteOpcao[] }> => {
       const ctx = context as unknown as { supabase: any; userId: string };
       await assertAdmin(ctx);
       const { data: enq } = await ctx.supabase

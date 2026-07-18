@@ -3,7 +3,13 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { ArrowLeft, BarChart3, CheckCircle2, Lock, Vote as VoteIcon } from "lucide-react";
 import { toast } from "sonner";
-import { getEnquetePublica, votarEnquete, getMeuVoto, type EnqueteOpcao, type EnqueteResultado } from "@/lib/enquetes.functions";
+import {
+  getEnquetePublica,
+  votarEnquete,
+  getMeuVoto,
+  type EnqueteOpcao,
+  type EnqueteResultado,
+} from "@/lib/enquetes.functions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -18,7 +24,10 @@ import { uniqueRealtimeChannelName } from "@/lib/realtime-channel";
 
 export const Route = createFileRoute("/enquetes/$id")({
   head: ({ params }) => ({
-    meta: [{ title: `Enquete | UEECM` }, { name: "description", content: `Participe da enquete ${params.id}` }],
+    meta: [
+      { title: `Enquete | UEECM` },
+      { name: "description", content: `Participe da enquete ${params.id}` },
+    ],
   }),
   loader: async ({ params }) => await getEnquetePublica({ data: { id: params.id } }),
   component: EnqueteDetail,
@@ -42,7 +51,8 @@ function EnqueteDetail() {
 
   const { data: meuVoto } = useQuery({
     queryKey: ["enquete-voto", id, user?.id],
-    queryFn: () => (user ? getMeuVoto({ data: { enquete_id: id } }) : Promise.resolve({ opcao_ids: [] })),
+    queryFn: () =>
+      user ? getMeuVoto({ data: { enquete_id: id } }) : Promise.resolve({ opcao_ids: [] }),
     enabled: !!user,
   });
 
@@ -86,7 +96,10 @@ function EnqueteDetail() {
 
   const enq = data.enquete;
   const encerrada = enq.encerra_em ? new Date(enq.encerra_em) < new Date() : false;
-  const total = (data.resultados as EnqueteResultado[]).reduce((s: number, r: EnqueteResultado) => s + r.votos, 0);
+  const total = (data.resultados as EnqueteResultado[]).reduce(
+    (s: number, r: EnqueteResultado) => s + r.votos,
+    0,
+  );
   const jaVotou = (meuVoto?.opcao_ids.length ?? 0) > 0;
   const podeVotar = enq.ativo && !encerrada && !jaVotou;
   const precisaLogin = enq.publico !== "todos" && !user;
@@ -94,7 +107,10 @@ function EnqueteDetail() {
 
   const toggleSelected = (opcaoId: string) => {
     if (enq.tipo === "unica") setSelected([opcaoId]);
-    else setSelected((prev) => (prev.includes(opcaoId) ? prev.filter((i) => i !== opcaoId) : [...prev, opcaoId]));
+    else
+      setSelected((prev) =>
+        prev.includes(opcaoId) ? prev.filter((i) => i !== opcaoId) : [...prev, opcaoId],
+      );
   };
 
   return (
@@ -153,17 +169,30 @@ function EnqueteDetail() {
               {enq.tipo === "unica" ? (
                 <RadioGroup value={selected[0] ?? ""} onValueChange={(v) => setSelected([v])}>
                   {(data.opcoes as EnqueteOpcao[]).map((op: EnqueteOpcao) => (
-                    <div key={op.id} className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer" onClick={() => setSelected([op.id])}>
+                    <div
+                      key={op.id}
+                      className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer"
+                      onClick={() => setSelected([op.id])}
+                    >
                       <RadioGroupItem value={op.id} id={op.id} />
-                      <Label htmlFor={op.id} className="flex-1 cursor-pointer">{op.texto}</Label>
+                      <Label htmlFor={op.id} className="flex-1 cursor-pointer">
+                        {op.texto}
+                      </Label>
                     </div>
                   ))}
                 </RadioGroup>
               ) : (
                 <div className="space-y-2">
                   {(data.opcoes as EnqueteOpcao[]).map((op: EnqueteOpcao) => (
-                    <div key={op.id} className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer" onClick={() => toggleSelected(op.id)}>
-                      <Checkbox checked={selected.includes(op.id)} onCheckedChange={() => toggleSelected(op.id)} />
+                    <div
+                      key={op.id}
+                      className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer"
+                      onClick={() => toggleSelected(op.id)}
+                    >
+                      <Checkbox
+                        checked={selected.includes(op.id)}
+                        onCheckedChange={() => toggleSelected(op.id)}
+                      />
                       <Label className="flex-1 cursor-pointer">{op.texto}</Label>
                     </div>
                   ))}
@@ -187,7 +216,9 @@ function EnqueteDetail() {
                 <BarChart3 className="h-4 w-4" /> Resultados em tempo real
               </h2>
               {(data.opcoes as EnqueteOpcao[]).map((op: EnqueteOpcao) => {
-                const r = (data.resultados as EnqueteResultado[]).find((x: EnqueteResultado) => x.opcao_id === op.id);
+                const r = (data.resultados as EnqueteResultado[]).find(
+                  (x: EnqueteResultado) => x.opcao_id === op.id,
+                );
                 const votos = r?.votos ?? 0;
                 const pct = total > 0 ? Math.round((votos / total) * 100) : 0;
                 const eumarcou = meuVoto?.opcao_ids.includes(op.id);

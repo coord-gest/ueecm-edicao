@@ -367,7 +367,6 @@ function CalendarioPage() {
                           {d.getDate()}
                         </span>
 
-
                         {/* Mobile: pontos coloridos */}
                         <div className="flex flex-wrap gap-0.5 sm:hidden">
                           {list.slice(0, 4).map((ev) => {

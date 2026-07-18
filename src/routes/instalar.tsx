@@ -245,9 +245,7 @@ function InstalarPage() {
       </section>
 
       <section className="mt-10 rounded-2xl border border-primary/20 bg-primary/5 p-6 text-center">
-        <h3 className="font-display text-lg font-semibold text-primary">
-          Por que instalar o app?
-        </h3>
+        <h3 className="font-display text-lg font-semibold text-primary">Por que instalar o app?</h3>
         <div className="mt-4 grid gap-3 text-sm text-muted-foreground sm:grid-cols-3">
           <div>
             <p className="font-semibold text-foreground">🔔 Notificações</p>

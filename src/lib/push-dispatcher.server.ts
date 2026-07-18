@@ -203,7 +203,6 @@ async function sendToToken(
         // desktop). O SW cuida da exibição com ícone/badge/click.
         fcm_options: { link: notif.url },
       },
-
     },
   };
 
@@ -409,7 +408,6 @@ export async function drainPushQueue(triggerSource: string = "queue"): Promise<{
 
   return { processed: queue.length, sent, pruned, errors };
 }
-
 
 export async function sendPushToUser(
   userId: string,

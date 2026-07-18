@@ -34,7 +34,6 @@ export function CommandMenu() {
   const navigate = useNavigate();
   const runSemantic = useServerFn(semanticSearchPosts);
 
-
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if ((e.key === "k" || e.key === "K") && (e.metaKey || e.ctrlKey)) {

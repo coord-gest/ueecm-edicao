@@ -17,7 +17,9 @@ export function OfflineBanner() {
       className="flex w-full items-center justify-center gap-2 bg-amber-500/95 px-3 py-1.5 text-xs font-medium text-amber-950 shadow-sm dark:bg-amber-400/90"
     >
       <WifiOff className="size-3.5" aria-hidden />
-      <span>Você está offline — mostrando conteúdo salvo. Suas ações serão enviadas ao reconectar.</span>
+      <span>
+        Você está offline — mostrando conteúdo salvo. Suas ações serão enviadas ao reconectar.
+      </span>
     </div>
   );
 }

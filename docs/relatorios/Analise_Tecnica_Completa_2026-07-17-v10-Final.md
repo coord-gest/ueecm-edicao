@@ -8,13 +8,13 @@
 
 ## 1. Veredito Final
 
-| Dimensão                | Resultado                                                              |
-| ----------------------- | ---------------------------------------------------------------------- |
-| **Qualidade Técnica**   | ✅ Boa (arquitetura sólida, CI verde)                                  |
-| **Segurança Global**    | ✅ Alta (RLS madura, endpoints públicos protegidos com timing-safe)    |
-| **Prontidão Produção**  | ✅ **APROVADO** — em produção com pipeline gated                       |
-| **Push Notifications**  | ✅ Funcional (arquitetura restaurada da v-antiga, LOCKED)              |
-| **Alertas Agendados**   | ✅ Enfileiramento + dispatch automático via `pg_cron` (a cada minuto)  |
+| Dimensão               | Resultado                                                             |
+| ---------------------- | --------------------------------------------------------------------- |
+| **Qualidade Técnica**  | ✅ Boa (arquitetura sólida, CI verde)                                 |
+| **Segurança Global**   | ✅ Alta (RLS madura, endpoints públicos protegidos com timing-safe)   |
+| **Prontidão Produção** | ✅ **APROVADO** — em produção com pipeline gated                      |
+| **Push Notifications** | ✅ Funcional (arquitetura restaurada da v-antiga, LOCKED)             |
+| **Alertas Agendados**  | ✅ Enfileiramento + dispatch automático via `pg_cron` (a cada minuto) |
 
 **Conclusão:** Sistema estável, seguro e publicado em produção. Nenhum bloqueador aberto.
 
@@ -24,15 +24,16 @@
 
 ### 2.1 Bloqueadores Críticos (C-series)
 
-| ID     | Item                                                                 | Status |
-| ------ | -------------------------------------------------------------------- | ------ |
-| **C1a**| Prettier em todo o repositório (~3.684 erros de lint → 0)            | ✅     |
-| **C1b**| `SiteFooter.test.tsx`: expectativa de 9 → 10 links institucionais    | ✅     |
-| **C2** | `deploy-worker.yml` agora depende de novo job `ci-gate` (lint+testes)| ✅     |
-| **A3** | `timingSafeEqualStr` aplicado a 3 endpoints cron restantes           | ✅     |
-| **-**  | Ajuste de `eslint.config.js` (regra `@next/next` inexistente removida)| ✅     |
+| ID      | Item                                                                   | Status |
+| ------- | ---------------------------------------------------------------------- | ------ |
+| **C1a** | Prettier em todo o repositório (~3.684 erros de lint → 0)              | ✅     |
+| **C1b** | `SiteFooter.test.tsx`: expectativa de 9 → 10 links institucionais      | ✅     |
+| **C2**  | `deploy-worker.yml` agora depende de novo job `ci-gate` (lint+testes)  | ✅     |
+| **A3**  | `timingSafeEqualStr` aplicado a 3 endpoints cron restantes             | ✅     |
+| **-**   | Ajuste de `eslint.config.js` (regra `@next/next` inexistente removida) | ✅     |
 
 **Endpoints protegidos com timing-safe agora:**
+
 - `src/routes/api/public/reminders-dispatch.ts` (aplicado em rodada anterior)
 - `src/routes/api/public/comunicados-agendados.ts`
 - `src/routes/api/public/comunicados-lembretes.ts`
@@ -47,13 +48,13 @@
 
 ### 2.3 Segurança (Scanner Supabase)
 
-| Achado                                                | Status |
-| ----------------------------------------------------- | ------ |
-| `SECURITY DEFINER` sem `search_path` fixo             | ✅ Migrado |
-| Policy `posts_update` permissiva (auto-publicação)    | ✅ Corrigida com `is_school_staff()` |
-| `cleanup_fcm_diagnostics()` executável por `anon`     | ✅ `REVOKE EXECUTE` aplicado |
-| RPCs públicos intencionais                            | 📝 Documentados em `mem://index.md` |
-| **Leaked Password Protection**                        | ⚠️ Pendente ação manual no Supabase Dashboard |
+| Achado                                             | Status                                        |
+| -------------------------------------------------- | --------------------------------------------- |
+| `SECURITY DEFINER` sem `search_path` fixo          | ✅ Migrado                                    |
+| Policy `posts_update` permissiva (auto-publicação) | ✅ Corrigida com `is_school_staff()`          |
+| `cleanup_fcm_diagnostics()` executável por `anon`  | ✅ `REVOKE EXECUTE` aplicado                  |
+| RPCs públicos intencionais                         | 📝 Documentados em `mem://index.md`           |
+| **Leaked Password Protection**                     | ⚠️ Pendente ação manual no Supabase Dashboard |
 
 ### 2.4 Limpeza
 
@@ -74,28 +75,28 @@
 validate-secrets  ─►  ci-gate (lint + test)  ─►  deploy (Cloudflare Workers)
 ```
 
-| Etapa           | Status |
-| --------------- | ------ |
-| Lint (ESLint)   | ✅ 0 erros |
+| Etapa           | Status                            |
+| --------------- | --------------------------------- |
+| Lint (ESLint)   | ✅ 0 erros                        |
 | Testes (Vitest) | ✅ 139/139 passando (13 arquivos) |
-| Typecheck       | ✅ tsgo limpo |
-| Deploy gated    | ✅ Sim (não sobe se CI falhar) |
+| Typecheck       | ✅ tsgo limpo                     |
+| Deploy gated    | ✅ Sim (não sobe se CI falhar)    |
 
 ---
 
 ## 4. Débito técnico (M-series — não bloqueia produção)
 
-| ID   | Item                                                                          | Impacto |
-| ---- | ----------------------------------------------------------------------------- | ------- |
-| M1   | Refatorar `src/routes/api/chat.ts` (God File)                                 | Manutenção |
-| M2   | Unificar dispatcher de push (`push-dispatcher.server.ts` + `push-dispatch`)   | Manutenção |
-| M3   | Consolidar `getRuntimeEnv` → `readServerEnv`                                  | Consistência |
-| M4   | Normalizar valor `family` como `AppRole` antes de gravar                      | Correção |
-| M6   | Tipar `SupabaseClient<Database>` (elimina warnings de `any` restantes)        | Type safety |
-| M7   | Integrar Sentry de fato (secret já existe no pipeline)                        | Observabilidade |
-| B4   | Incluir `scripts/test-realtime-rls.ts` no CI                                  | Cobertura |
-| A4   | `/push/fcm-register` (POST/DELETE): adicionar auth + rate limit               | Hardening |
-| A5   | Elevar senha mínima para painéis administrativos                              | Hardening |
+| ID  | Item                                                                        | Impacto         |
+| --- | --------------------------------------------------------------------------- | --------------- |
+| M1  | Refatorar `src/routes/api/chat.ts` (God File)                               | Manutenção      |
+| M2  | Unificar dispatcher de push (`push-dispatcher.server.ts` + `push-dispatch`) | Manutenção      |
+| M3  | Consolidar `getRuntimeEnv` → `readServerEnv`                                | Consistência    |
+| M4  | Normalizar valor `family` como `AppRole` antes de gravar                    | Correção        |
+| M6  | Tipar `SupabaseClient<Database>` (elimina warnings de `any` restantes)      | Type safety     |
+| M7  | Integrar Sentry de fato (secret já existe no pipeline)                      | Observabilidade |
+| B4  | Incluir `scripts/test-realtime-rls.ts` no CI                                | Cobertura       |
+| A4  | `/push/fcm-register` (POST/DELETE): adicionar auth + rate limit             | Hardening       |
+| A5  | Elevar senha mínima para painéis administrativos                            | Hardening       |
 
 ---
 
@@ -115,20 +116,20 @@ validate-secrets  ─►  ci-gate (lint + test)  ─►  deploy (Cloudflare Work
 
 ## 6. Infraestrutura
 
-| Item              | Configuração                                            |
-| ----------------- | ------------------------------------------------------- |
-| Deploy            | Cloudflare Workers (GitHub Actions, gated por `ci-gate`)|
-| Runtime           | Bun 1.2.15 (pinado)                                     |
-| Lockfile          | `bun.lock` sincronizado (frozen no CI)                  |
-| Secrets runtime   | 8 configurados (Supabase, Firebase, Gemini, Dispatch)   |
-| Domínio           | conectaueecm.com                                        |
-| Cron              | `pg_cron` (2 jobs ativos: reminders + alerts+dispatch)  |
+| Item            | Configuração                                             |
+| --------------- | -------------------------------------------------------- |
+| Deploy          | Cloudflare Workers (GitHub Actions, gated por `ci-gate`) |
+| Runtime         | Bun 1.2.15 (pinado)                                      |
+| Lockfile        | `bun.lock` sincronizado (frozen no CI)                   |
+| Secrets runtime | 8 configurados (Supabase, Firebase, Gemini, Dispatch)    |
+| Domínio         | conectaueecm.com                                         |
+| Cron            | `pg_cron` (2 jobs ativos: reminders + alerts+dispatch)   |
 
 ---
 
 ## 7. Próximo passo manual (usuário)
 
-1. **[Baixo]** Habilitar *Leaked Password Protection* em Supabase → Auth → Password Protection.
+1. **[Baixo]** Habilitar _Leaked Password Protection_ em Supabase → Auth → Password Protection.
 
 ---
 

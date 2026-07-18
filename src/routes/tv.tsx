@@ -60,7 +60,9 @@ function TvMode() {
       first.setHours(0, 0, 0, 0);
       const { data, error } = await supabase
         .from("alunos_destaque")
-        .select("id, motivo, foto_url, exibir_foto, posicao, aluno:alunos(nome_completo), turma:turmas_escolares(nome)")
+        .select(
+          "id, motivo, foto_url, exibir_foto, posicao, aluno:alunos(nome_completo), turma:turmas_escolares(nome)",
+        )
         .eq("status", "aprovado")
         .gte("mes", first.toISOString().slice(0, 10))
         .order("posicao", { ascending: true })
@@ -161,8 +163,10 @@ function TvMode() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") setIndex((i) => (i + 1) % slides.length);
       else if (e.key === "ArrowLeft") setIndex((i) => (i - 1 + slides.length) % slides.length);
-      else if (e.key === " ") { e.preventDefault(); setPaused((p) => !p); }
-      else if (e.key === "f" || e.key === "F") requestFs();
+      else if (e.key === " ") {
+        e.preventDefault();
+        setPaused((p) => !p);
+      } else if (e.key === "f" || e.key === "F") requestFs();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -177,7 +181,10 @@ function TvMode() {
   const current = slides[index];
 
   return (
-    <div ref={containerRef} className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
+    <div
+      ref={containerRef}
+      className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white"
+    >
       {/* Header */}
       <header className="flex items-center justify-between px-10 pt-8">
         <div className="flex items-center gap-3">
@@ -191,14 +198,28 @@ function TvMode() {
               {clock.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
             </div>
             <div className="text-sm text-white/70">
-              {clock.toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long" })}
+              {clock.toLocaleDateString("pt-BR", {
+                weekday: "long",
+                day: "2-digit",
+                month: "long",
+              })}
             </div>
           </div>
           <div className="flex gap-1 opacity-0 transition-opacity hover:opacity-100 focus-within:opacity-100">
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10" onClick={() => setPaused((p) => !p)}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white hover:bg-white/10"
+              onClick={() => setPaused((p) => !p)}
+            >
               {paused ? <Play className="size-5" /> : <Pause className="size-5" />}
             </Button>
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10" onClick={requestFs}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white hover:bg-white/10"
+              onClick={requestFs}
+            >
               <Maximize2 className="size-5" />
             </Button>
           </div>
@@ -206,7 +227,10 @@ function TvMode() {
       </header>
 
       {/* Slide */}
-      <main key={index} className="flex flex-1 items-center justify-center px-10 py-6 animate-fade-in">
+      <main
+        key={index}
+        className="flex flex-1 items-center justify-center px-10 py-6 animate-fade-in"
+      >
         {current?.render()}
       </main>
 
@@ -229,14 +253,23 @@ function TvMode() {
   );
 }
 
-function UrgentSlide({ alert }: { alert: { message: string; variant: string; link_label: string | null; image_url: string | null } }) {
+function UrgentSlide({
+  alert,
+}: {
+  alert: { message: string; variant: string; link_label: string | null; image_url: string | null };
+}) {
   const color =
-    alert.variant === "destructive" ? "from-red-600 to-rose-800" :
-    alert.variant === "warning" ? "from-amber-500 to-orange-700" :
-    alert.variant === "success" ? "from-emerald-500 to-green-700" :
-    "from-sky-500 to-indigo-700";
+    alert.variant === "destructive"
+      ? "from-red-600 to-rose-800"
+      : alert.variant === "warning"
+        ? "from-amber-500 to-orange-700"
+        : alert.variant === "success"
+          ? "from-emerald-500 to-green-700"
+          : "from-sky-500 to-indigo-700";
   return (
-    <div className={`flex w-full max-w-6xl flex-col items-center gap-8 rounded-3xl bg-gradient-to-br ${color} p-16 text-center shadow-2xl animate-scale-in`}>
+    <div
+      className={`flex w-full max-w-6xl flex-col items-center gap-8 rounded-3xl bg-gradient-to-br ${color} p-16 text-center shadow-2xl animate-scale-in`}
+    >
       <Megaphone className="size-24 opacity-90" />
       <p className="text-6xl font-bold leading-tight">{alert.message}</p>
       {alert.link_label ? <p className="text-2xl opacity-90">{alert.link_label}</p> : null}
@@ -284,9 +317,16 @@ function HighlightSlide({ items }: { items: HighlightRow[] }) {
       </div>
       <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-3">
         {items.map((h) => (
-          <div key={h.id} className="flex flex-col items-center gap-4 rounded-3xl bg-white/10 p-8 text-center backdrop-blur">
+          <div
+            key={h.id}
+            className="flex flex-col items-center gap-4 rounded-3xl bg-white/10 p-8 text-center backdrop-blur"
+          >
             {h.exibir_foto && h.foto_url ? (
-              <img src={h.foto_url} alt="" className="size-36 rounded-full border-4 border-white/40 object-cover" />
+              <img
+                src={h.foto_url}
+                alt=""
+                className="size-36 rounded-full border-4 border-white/40 object-cover"
+              />
             ) : (
               <div className="grid size-36 place-items-center rounded-full bg-white/20 text-5xl font-bold">
                 {h.aluno?.nome_completo?.[0] ?? "★"}
@@ -326,7 +366,10 @@ function EventsSlide({ items }: { items: EventRow[] }) {
         {items.map((e) => {
           const d = e.data ? new Date(e.data + "T12:00:00") : null;
           return (
-            <div key={e.id} className="flex items-stretch gap-4 rounded-2xl bg-white/10 p-6 backdrop-blur">
+            <div
+              key={e.id}
+              className="flex items-stretch gap-4 rounded-2xl bg-white/10 p-6 backdrop-blur"
+            >
               <div className="flex min-w-24 flex-col items-center justify-center rounded-xl bg-white/15 px-4 py-3">
                 <div className="text-4xl font-bold leading-none">
                   {d ? d.getDate().toString().padStart(2, "0") : "--"}

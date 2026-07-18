@@ -123,7 +123,6 @@ export function NoteViewerDialog({ open, onOpenChange, note, onEdit }: Props) {
           <div className="mt-4 whitespace-pre-wrap break-words text-[15px] leading-relaxed text-foreground/90">
             {note.conteudo || <span className="italic text-muted-foreground">Sem conteúdo.</span>}
           </div>
-
         </div>
 
         {/* Rodapé de ações */}

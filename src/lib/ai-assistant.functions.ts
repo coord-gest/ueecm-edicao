@@ -41,7 +41,10 @@ async function callGemini(prompt: string, opts?: { json?: boolean; maxTokens?: n
 }
 
 function parseJson<T>(text: string): T {
-  const cleaned = text.replace(/^\s*```(?:json)?/i, "").replace(/```\s*$/i, "").trim();
+  const cleaned = text
+    .replace(/^\s*```(?:json)?/i, "")
+    .replace(/```\s*$/i, "")
+    .trim();
   try {
     return JSON.parse(cleaned) as T;
   } catch {

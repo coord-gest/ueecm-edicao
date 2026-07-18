@@ -268,7 +268,6 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
-          
           <UpdateBanner />
           <AlertBanner />
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}

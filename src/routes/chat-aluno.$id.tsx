@@ -98,7 +98,12 @@ function ChatAlunoThread() {
       .channel(uniqueRealtimeChannelName(`chat-${id}`))
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "chat_alunos_mensagens", filter: `thread_id=eq.${id}` },
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "chat_alunos_mensagens",
+          filter: `thread_id=eq.${id}`,
+        },
         () => {
           refetch();
           marcarLidas(id).catch(() => {});
@@ -154,9 +159,7 @@ function ChatAlunoThread() {
       <div className="mx-auto flex h-[calc(100vh-9rem)] max-w-3xl flex-col">
         <div className="border-b p-3">
           <h1 className="text-lg font-semibold">{thread?.aluno_nome ?? "Conversa"}</h1>
-          {thread && (
-            <p className="text-xs text-muted-foreground">Com {thread.contraparte_nome}</p>
-          )}
+          {thread && <p className="text-xs text-muted-foreground">Com {thread.contraparte_nome}</p>}
         </div>
         <div className="border-b p-2">
           <Button variant="ghost" size="sm" asChild>
@@ -215,7 +218,11 @@ function ChatAlunoThread() {
               rows={1}
             />
             <Button onClick={handleSend} disabled={!texto.trim() || sending} size="icon">
-              {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              {sending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
             </Button>
           </div>
         </div>

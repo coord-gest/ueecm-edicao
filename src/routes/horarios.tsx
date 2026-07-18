@@ -323,7 +323,6 @@ function HorariosPage() {
                 </div>
               )}
 
-
               {/* MOBILE: seletor de dia + lista vertical */}
               <div className="mt-4 md:hidden">
                 <div className="flex gap-1.5 overflow-x-auto pb-1">
@@ -422,7 +421,6 @@ function HorariosPage() {
                               </div>
                             )}
                           </div>
-
                         ) : (
                           <div className="flex min-w-0 flex-1 items-center justify-center rounded-xl border border-dashed border-border/60 bg-muted/20 text-xs text-muted-foreground">
                             Sem aula

@@ -2,7 +2,15 @@ import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import Autoplay from "embla-carousel-autoplay";
-import { Heart, ExternalLink, MessageCircle, Instagram, Facebook, Globe, Phone } from "lucide-react";
+import {
+  Heart,
+  ExternalLink,
+  MessageCircle,
+  Instagram,
+  Facebook,
+  Globe,
+  Phone,
+} from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -31,9 +39,11 @@ type CtaInfo = { label: string; icon: typeof Globe };
 
 function ctaFromUrl(url: string): CtaInfo {
   const u = url.toLowerCase();
-  if (u.includes("wa.me") || u.includes("whatsapp")) return { label: "Conversar no WhatsApp", icon: MessageCircle };
+  if (u.includes("wa.me") || u.includes("whatsapp"))
+    return { label: "Conversar no WhatsApp", icon: MessageCircle };
   if (u.includes("instagram.com")) return { label: "Ver no Instagram", icon: Instagram };
-  if (u.includes("facebook.com") || u.includes("fb.com")) return { label: "Ver no Facebook", icon: Facebook };
+  if (u.includes("facebook.com") || u.includes("fb.com"))
+    return { label: "Ver no Facebook", icon: Facebook };
   if (u.startsWith("tel:")) return { label: "Ligar agora", icon: Phone };
   if (u.startsWith("mailto:")) return { label: "Enviar e-mail", icon: MessageCircle };
   return { label: "Visitar site", icon: Globe };
@@ -53,7 +63,7 @@ export function Patrocinadores() {
 
   const [selected, setSelected] = useState<Patrocinador | null>(null);
   const selectedEvento = useMemo<EventoPatrocinio | null>(
-    () => (selected ? eventos.find((e) => e.id === selected.evento_id) ?? null : null),
+    () => (selected ? (eventos.find((e) => e.id === selected.evento_id) ?? null) : null),
     [selected, eventos],
   );
   const cta = selected?.link_url ? ctaFromUrl(selected.link_url) : null;
@@ -178,7 +188,6 @@ export function Patrocinadores() {
         Agradecemos a todos que apoiam nossos eventos escolares. 💛
       </p>
 
-
       <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
         <DialogContent className="max-w-lg overflow-hidden p-0">
           {selected && (
@@ -237,11 +246,7 @@ export function Patrocinadores() {
                       })
                     }
                   >
-                    <a
-                      href={selected.link_url}
-                      target="_blank"
-                      rel="noopener noreferrer sponsored"
-                    >
+                    <a href={selected.link_url} target="_blank" rel="noopener noreferrer sponsored">
                       <cta.icon className="size-4" />
                       {cta.label}
                     </a>

@@ -172,54 +172,54 @@ function PainelAcessosPage() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-            <Table className="min-w-[760px]">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Quando</TableHead>
-                  <TableHead>Usuário</TableHead>
-                  <TableHead>Área</TableHead>
-                  <TableHead>Rota</TableHead>
-                  <TableHead>Papéis</TableHead>
-                  <TableHead>Resultado</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filtrado.map((r) => (
-                  <TableRow key={r.id}>
-                    <TableCell className="text-xs whitespace-nowrap">
-                      {new Date(r.created_at).toLocaleString("pt-BR")}
-                    </TableCell>
-                    <TableCell className="text-xs">
-                      {r.user_email ?? r.user_id.slice(0, 8)}
-                    </TableCell>
-                    <TableCell className="text-xs">{r.area ?? "—"}</TableCell>
-                    <TableCell className="text-xs font-mono text-muted-foreground">
-                      {r.route}
-                    </TableCell>
-                    <TableCell className="text-xs">
-                      <div className="flex flex-wrap gap-1">
-                        {(r.roles ?? []).map((role) => (
-                          <Badge key={role} variant="secondary" className="text-[10px]">
-                            {role}
-                          </Badge>
-                        ))}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {r.outcome === "granted" ? (
-                        <Badge className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 whitespace-nowrap">
-                          <ShieldCheck className="h-3 w-3 mr-1" /> Concedido
-                        </Badge>
-                      ) : (
-                        <Badge className="bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/30 whitespace-nowrap">
-                          <ShieldAlert className="h-3 w-3 mr-1" /> Negado
-                        </Badge>
-                      )}
-                    </TableCell>
+              <Table className="min-w-[760px]">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Quando</TableHead>
+                    <TableHead>Usuário</TableHead>
+                    <TableHead>Área</TableHead>
+                    <TableHead>Rota</TableHead>
+                    <TableHead>Papéis</TableHead>
+                    <TableHead>Resultado</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filtrado.map((r) => (
+                    <TableRow key={r.id}>
+                      <TableCell className="text-xs whitespace-nowrap">
+                        {new Date(r.created_at).toLocaleString("pt-BR")}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {r.user_email ?? r.user_id.slice(0, 8)}
+                      </TableCell>
+                      <TableCell className="text-xs">{r.area ?? "—"}</TableCell>
+                      <TableCell className="text-xs font-mono text-muted-foreground">
+                        {r.route}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        <div className="flex flex-wrap gap-1">
+                          {(r.roles ?? []).map((role) => (
+                            <Badge key={role} variant="secondary" className="text-[10px]">
+                              {role}
+                            </Badge>
+                          ))}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {r.outcome === "granted" ? (
+                          <Badge className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 whitespace-nowrap">
+                            <ShieldCheck className="h-3 w-3 mr-1" /> Concedido
+                          </Badge>
+                        ) : (
+                          <Badge className="bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/30 whitespace-nowrap">
+                            <ShieldAlert className="h-3 w-3 mr-1" /> Negado
+                          </Badge>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           )}
         </div>

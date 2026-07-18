@@ -29,10 +29,8 @@ function ChatAlunoIndex() {
   useEffect(() => {
     const ch = supabase
       .channel(uniqueRealtimeChannelName("chat-alunos-threads-list"))
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "chat_alunos_threads" },
-        () => refetch(),
+      .on("postgres_changes", { event: "*", schema: "public", table: "chat_alunos_threads" }, () =>
+        refetch(),
       )
       .on(
         "postgres_changes",

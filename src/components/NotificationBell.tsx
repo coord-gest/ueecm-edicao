@@ -115,7 +115,6 @@ export function NotificationBell() {
     };
   }, [user, qc]);
 
-
   const markAllRead = useMutation({
     mutationFn: async () => {
       if (!user) return;
@@ -174,9 +173,7 @@ export function NotificationBell() {
           <div className="min-w-0">
             <p className="font-display text-sm font-semibold">Notificações</p>
             <p className="text-xs text-muted-foreground">
-              {unread > 0
-                ? `${unread} não lida${unread === 1 ? "" : "s"}`
-                : "Você está em dia"}
+              {unread > 0 ? `${unread} não lida${unread === 1 ? "" : "s"}` : "Você está em dia"}
             </p>
           </div>
           {unread > 0 && (
@@ -217,9 +214,7 @@ export function NotificationBell() {
                         <span className="text-xs text-muted-foreground">
                           {formatarDataHora(n.created_at)}
                         </span>
-                        {!n.lida && (
-                          <span className="ml-auto size-1.5 rounded-full bg-blue-500" />
-                        )}
+                        {!n.lida && <span className="ml-auto size-1.5 rounded-full bg-blue-500" />}
                       </div>
                       <p className="mt-1 truncate font-medium">{n.titulo}</p>
                       {n.mensagem && (
