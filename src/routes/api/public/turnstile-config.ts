@@ -12,7 +12,13 @@ export const Route = createFileRoute("/api/public/turnstile-config")({
   server: {
     handlers: {
       GET: async () => {
-        const siteKey = process.env.VITE_TURNSTILE_SITE_KEY ?? process.env.TURNSTILE_SITE_KEY;
+        // Site Key do Turnstile é pública (aparece no HTML do widget).
+        // Fallback embutido evita dependência de variável no runtime do Cloudflare.
+        const PUBLIC_FALLBACK = "0x4AAAAAAD4sWFVXfN8ETboA";
+        const siteKey =
+          process.env.VITE_TURNSTILE_SITE_KEY ??
+          process.env.TURNSTILE_SITE_KEY ??
+          PUBLIC_FALLBACK;
 
         if (!siteKey) {
           return Response.json(
