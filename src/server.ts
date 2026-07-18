@@ -71,18 +71,20 @@ const CSP_DIRECTIVES = [
   "default-src 'self'",
   // 'unsafe-inline' ainda é necessário para o script de hidratação inline do
   // TanStack Start. 'unsafe-eval' foi removido (não é usado em produção).
-  "script-src 'self' 'unsafe-inline' https://www.gstatic.com https://static.cloudflareinsights.com",
-  "script-src-elem 'self' 'unsafe-inline' https://www.gstatic.com https://static.cloudflareinsights.com",
+  "script-src 'self' 'unsafe-inline' https://www.gstatic.com https://static.cloudflareinsights.com https://challenges.cloudflare.com",
+  "script-src-elem 'self' 'unsafe-inline' https://www.gstatic.com https://static.cloudflareinsights.com https://challenges.cloudflare.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com data:",
   "img-src 'self' data: blob: https:",
   "media-src 'self' data: blob:",
   // Endpoints permitidos: mesma origem, Supabase (REST + Realtime), Firebase e Cloudflare Insights beacon.
   // Sem coringa https:/wss: — bloqueia exfiltração para hosts arbitrários.
-  `connect-src 'self' ${SUPABASE_ORIGIN} ${SUPABASE_WS_ORIGIN} ${FIREBASE_ORIGINS} https://cloudflareinsights.com`,
+  `connect-src 'self' ${SUPABASE_ORIGIN} ${SUPABASE_WS_ORIGIN} ${FIREBASE_ORIGINS} https://cloudflareinsights.com https://challenges.cloudflare.com`,
   "worker-src 'self' blob:",
   "manifest-src 'self'",
   "frame-ancestors 'none'",
+  // Turnstile renderiza um iframe embutido em challenges.cloudflare.com.
+  "frame-src https://challenges.cloudflare.com",
   "base-uri 'self'",
   "form-action 'self'",
   "object-src 'none'",
@@ -97,6 +99,7 @@ const SECURITY_HEADERS: Record<string, string> = {
   "Permissions-Policy":
     "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()",
   "Cross-Origin-Opener-Policy": "same-origin",
+  "Cross-Origin-Resource-Policy": "same-site",
   "X-DNS-Prefetch-Control": "on",
   "Content-Security-Policy": CSP_DIRECTIVES,
 };
