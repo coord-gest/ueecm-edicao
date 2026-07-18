@@ -118,6 +118,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (!isMounted) return;
           await refreshRoles(event === "SIGNED_IN");
           if (isMounted) setLoading(false);
+          // Re-vincula o token FCM existente ao user_id atual, se o usuário
+          // já concedeu permissão em uma sessão anterior. Silencioso.
+          if (event === "SIGNED_IN") {
+            void import("@/lib/push")
+              .then((m) => m.reattachPushTokenToUser())
+              .catch(() => undefined);
+          }
         }, 0);
       } else {
         setRoles([]);
