@@ -1376,8 +1376,8 @@ export const Route = createFileRoute("/api/chat")({
             );
           }
 
-          // Rate limit por IP+sessão
-          const rl = checkRateLimit(getClientKey(request, sessionId));
+          // Rate limit em dois níveis: (IP+sessão) + global por IP (minuto/hora)
+          const rl = checkRateLimit(getClientKey(request, sessionId), getClientIp(request));
           if (!rl.ok) {
             return jsonResponse(
               {
