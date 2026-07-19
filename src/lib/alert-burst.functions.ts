@@ -35,7 +35,7 @@ export const sendAlertPushNow = createServerFn({ method: "POST" })
     });
     if (perUser === false) {
       await context.supabase.rpc("log_alert_action", {
-        _alert_id: data.alertId ?? null,
+        _alert_id: (data.alertId ?? null) as unknown as string,
         _action: "rate_limited",
         _result: "rate_limited",
         _details: { scope: "per_user", limit: 10, window_seconds: 3600 },
@@ -51,7 +51,7 @@ export const sendAlertPushNow = createServerFn({ method: "POST" })
     });
     if (global === false) {
       await context.supabase.rpc("log_alert_action", {
-        _alert_id: data.alertId ?? null,
+        _alert_id: (data.alertId ?? null) as unknown as string,
         _action: "rate_limited",
         _result: "rate_limited",
         _details: { scope: "global", limit: 30, window_seconds: 3600 },
@@ -98,7 +98,7 @@ export const sendAlertPushNow = createServerFn({ method: "POST" })
     if (qErr) throw qErr;
 
     await context.supabase.rpc("log_alert_action", {
-      _alert_id: sourceId,
+      _alert_id: sourceId as unknown as string,
       _action: "resend_push",
       _result: "success",
       _details: { origin: data.origin ?? "manual", title },
