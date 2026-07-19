@@ -13,6 +13,7 @@ import {
   UserPlus,
   Eye,
   EyeOff,
+  Search,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -156,6 +157,39 @@ function ResponsaveisPage() {
     alunos?.forEach((a) => m.set(a.id, a));
     return m;
   }, [alunos]);
+
+  const turmaById = useMemo(() => {
+    const m = new Map<string, Turma>();
+    turmas?.forEach((t) => m.set(t.id, t));
+    return m;
+  }, [turmas]);
+
+  const [search, setSearch] = useState("");
+  const [filterTurma, setFilterTurma] = useState<string>("__all__");
+
+  const filteredResps = useMemo(() => {
+    if (!resps) return [];
+    const q = search.trim().toLowerCase();
+    return resps.filter((r) => {
+      const vs = vinculosByResp.get(r.id) ?? [];
+      const alunosVinc = vs.map((v) => alunoById.get(v.aluno_id)).filter(Boolean) as Aluno[];
+
+      // Filtro por turma: pelo menos um aluno vinculado precisa ser da turma
+      if (filterTurma !== "__all__") {
+        if (!alunosVinc.some((a) => a.turma_id === filterTurma)) return false;
+      }
+
+      if (!q) return true;
+      const respHit =
+        r.nome.toLowerCase().includes(q) ||
+        (r.email ?? "").toLowerCase().includes(q) ||
+        (r.telefone ?? "").toLowerCase().includes(q);
+      const alunoHit = alunosVinc.some((a) =>
+        `${a.nome_completo} ${a.matricula}`.toLowerCase().includes(q),
+      );
+      return respHit || alunoHit;
+    });
+  }, [resps, search, filterTurma, vinculosByResp, alunoById]);
 
   const saveMut = useMutation({
     mutationFn: async (payload: Partial<Responsavel> & { id?: string }) => {
