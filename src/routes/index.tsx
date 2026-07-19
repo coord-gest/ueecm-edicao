@@ -225,7 +225,7 @@ function Home() {
         <UpcomingEvents />
 
         {/* Faixa: Mais lidas + Opinião */}
-        <section className="mb-16 grid grid-cols-1 gap-10 lg:grid-cols-12">
+        <RevealSection className="mb-16 grid grid-cols-1 gap-10 lg:grid-cols-12">
           <div className="lg:col-span-8">
             <SectionHeader title="Mais Lidas" />
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-3">
@@ -237,11 +237,11 @@ function Home() {
           <aside className="lg:col-span-4">
             <OpinionCard />
           </aside>
-        </section>
+        </RevealSection>
 
         {/* Grid uniforme — últimas notícias, com chips de categoria */}
         {(gridFiltrado.length > 0 || isLoading) && (
-          <section>
+          <RevealSection>
             <div className="mb-6 flex items-end justify-between border-b-2 border-primary pb-3">
               <h2 className="font-display text-2xl text-primary sm:text-3xl lg:text-4xl">
                 Últimas Notícias
@@ -334,7 +334,7 @@ function Home() {
                 Nenhuma publicação em <strong>{categoriaAtiva}</strong> por enquanto.
               </p>
             )}
-          </section>
+          </RevealSection>
         )}
 
         {/* Push inline */}
@@ -425,6 +425,21 @@ function SectionHeader({ title }: { title: string }) {
   );
 }
 
+function RevealSection({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const ref = useReveal<HTMLElement>();
+  return (
+    <section ref={ref} className={`reveal ${className}`}>
+      {children}
+    </section>
+  );
+}
+
 function HeroCarousel({ slides }: { slides: Post[] }) {
   const [index, setIndex] = useState(0);
   const total = slides.length;
@@ -464,8 +479,12 @@ function HeroCarousel({ slides }: { slides: Post[] }) {
                   }`}
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-neutral-900/95 via-neutral-900/50 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-6 text-primary-foreground sm:p-10 lg:p-14">
-                  <div className="mb-3 flex flex-wrap items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.25em]">
+                <div
+                  className={`absolute inset-x-0 bottom-0 p-6 text-primary-foreground sm:p-10 lg:p-14 ${
+                    i === index ? "animate-fade-in" : ""
+                  }`}
+                >
+                  <div className="mb-3 flex flex-wrap items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.25em] dark:text-white">
                     <span className="bg-gold px-2.5 py-1 text-gold-foreground">
                       {post.disciplina ?? "Destaque"}
                     </span>
@@ -477,16 +496,16 @@ function HeroCarousel({ slides }: { slides: Post[] }) {
                       })}
                     </span>
                   </div>
-                  <h2 className="max-w-4xl font-display text-2xl leading-[1.05] sm:text-3xl lg:text-4xl xl:text-5xl">
+                  <h2 className="max-w-4xl font-display text-2xl leading-[1.05] sm:text-3xl lg:text-4xl xl:text-5xl dark:text-gold">
                     {post.titulo}
                   </h2>
 
                   {post.resumo && (
-                    <p className="mt-4 max-w-2xl text-sm leading-relaxed text-primary-foreground/85 sm:text-base lg:text-lg">
+                    <p className="mt-4 max-w-2xl text-sm leading-relaxed text-primary-foreground/85 sm:text-base lg:text-lg dark:text-white/90">
                       {post.resumo}
                     </p>
                   )}
-                  <div className="mt-5 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest">
+                  <div className="mt-5 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest dark:text-gold">
                     Ler matéria{" "}
                     <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
                   </div>
