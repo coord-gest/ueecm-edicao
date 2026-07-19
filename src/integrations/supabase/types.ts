@@ -135,6 +135,103 @@ export type Database = {
           },
         ]
       }
+      alert_audit_logs: {
+        Row: {
+          action: string
+          actor_email: string | null
+          actor_id: string | null
+          alert_id: string | null
+          created_at: string
+          details: Json
+          id: string
+          result: string
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          actor_id?: string | null
+          alert_id?: string | null
+          created_at?: string
+          details?: Json
+          id?: string
+          result?: string
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          actor_id?: string | null
+          alert_id?: string | null
+          created_at?: string
+          details?: Json
+          id?: string
+          result?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alert_audit_logs_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      alert_burst_schedules: {
+        Row: {
+          active: boolean
+          alert_id: string
+          cancelled_at: string | null
+          created_at: string
+          created_by: string
+          id: string
+          interval_minutes: number
+          last_run_at: string | null
+          next_run_at: string
+          repeat_count: number
+          sent_count: number
+          starts_at: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          alert_id: string
+          cancelled_at?: string | null
+          created_at?: string
+          created_by: string
+          id?: string
+          interval_minutes: number
+          last_run_at?: string | null
+          next_run_at: string
+          repeat_count: number
+          sent_count?: number
+          starts_at: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          alert_id?: string
+          cancelled_at?: string | null
+          created_at?: string
+          created_by?: string
+          id?: string
+          interval_minutes?: number
+          last_run_at?: string | null
+          next_run_at?: string
+          repeat_count?: number
+          sent_count?: number
+          starts_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alert_burst_schedules_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       alerts: {
         Row: {
           active: boolean
@@ -2596,9 +2693,11 @@ export type Database = {
           body: string
           created_at: string
           id: string
+          last_error: string | null
           processed_at: string | null
           source: string | null
           source_id: string | null
+          status: string
           title: string
           url: string | null
         }
@@ -2607,9 +2706,11 @@ export type Database = {
           body: string
           created_at?: string
           id?: string
+          last_error?: string | null
           processed_at?: string | null
           source?: string | null
           source_id?: string | null
+          status?: string
           title: string
           url?: string | null
         }
@@ -2618,9 +2719,11 @@ export type Database = {
           body?: string
           created_at?: string
           id?: string
+          last_error?: string | null
           processed_at?: string | null
           source?: string | null
           source_id?: string | null
+          status?: string
           title?: string
           url?: string | null
         }
@@ -3342,6 +3445,15 @@ export type Database = {
         Returns: boolean
       }
       is_school_admin: { Args: { _user_id: string }; Returns: boolean }
+      log_alert_action: {
+        Args: {
+          _action: string
+          _alert_id: string
+          _details: Json
+          _result: string
+        }
+        Returns: string
+      }
       match_posts: {
         Args: {
           match_count?: number
@@ -3376,6 +3488,13 @@ export type Database = {
         }[]
       }
       normalize_turma_name: { Args: { input: string }; Returns: string }
+      process_alert_burst_tick: {
+        Args: never
+        Returns: {
+          enqueued: number
+          processed: number
+        }[]
+      }
       rl_key: { Args: { _scope: string; _subject: string }; Returns: string }
       trigger_dispatch_push: { Args: never; Returns: undefined }
       tv_aniversariantes_hoje: {
