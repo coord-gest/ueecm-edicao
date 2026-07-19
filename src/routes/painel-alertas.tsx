@@ -914,6 +914,20 @@ function PainelAlertas() {
                       <Button
                         size="sm"
                         variant="outline"
+                        onClick={() => resendAlert(a.id)}
+                        disabled={resendingId === a.id || !a.active}
+                        className="rounded-full"
+                      >
+                        {resendingId === a.id ? (
+                          <Loader2 className="size-3.5 animate-spin" />
+                        ) : (
+                          <Send className="size-3.5" />
+                        )}
+                        Reenviar push
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
                         onClick={() => toggleActive(a.id, !a.active)}
                         className="rounded-full"
                       >
