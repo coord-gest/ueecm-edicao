@@ -1,6 +1,6 @@
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import {
   ArrowLeft,
   Megaphone,
@@ -14,6 +14,9 @@ import {
   X,
   Pencil,
   Copy,
+  Send,
+  Zap,
+  StopCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +35,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
 import { dispatchPush } from "@/lib/push.functions";
+import { sendAlertPushNow } from "@/lib/alert-burst.functions";
+import { useServerFn } from "@tanstack/react-start";
 
 import { PainelLayout } from "@/components/PainelLayout";
 
