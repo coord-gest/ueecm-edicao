@@ -72,6 +72,7 @@ type Responsavel = {
   user_id: string | null;
 };
 type Aluno = { id: string; nome_completo: string; matricula: string; turma_id: string | null };
+type Turma = { id: string; nome: string };
 type Vinculo = {
   id: string;
   aluno_id: string;
