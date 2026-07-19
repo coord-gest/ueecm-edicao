@@ -2259,6 +2259,7 @@ export type Database = {
       }
       parental_consents: {
         Row: {
+          aluno_id: string | null
           consented_at: string
           created_at: string
           guardian_cpf: string | null
@@ -2269,11 +2270,12 @@ export type Database = {
           ip_address: string | null
           minor_dob: string
           minor_name: string
-          protocolo: string
+          protocolo: string | null
           term_version: string
           user_agent: string | null
         }
         Insert: {
+          aluno_id?: string | null
           consented_at?: string
           created_at?: string
           guardian_cpf?: string | null
@@ -2284,11 +2286,12 @@ export type Database = {
           ip_address?: string | null
           minor_dob: string
           minor_name: string
-          protocolo: string
+          protocolo?: string | null
           term_version: string
           user_agent?: string | null
         }
         Update: {
+          aluno_id?: string | null
           consented_at?: string
           created_at?: string
           guardian_cpf?: string | null
@@ -2299,11 +2302,26 @@ export type Database = {
           ip_address?: string | null
           minor_dob?: string
           minor_name?: string
-          protocolo?: string
+          protocolo?: string | null
           term_version?: string
           user_agent?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "parental_consents_aluno_id_fkey"
+            columns: ["aluno_id"]
+            isOneToOne: false
+            referencedRelation: "alunos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parental_consents_aluno_id_fkey"
+            columns: ["aluno_id"]
+            isOneToOne: false
+            referencedRelation: "alunos_destaque_publicos"
+            referencedColumns: ["aluno_id"]
+          },
+        ]
       }
       patrocinadores: {
         Row: {
