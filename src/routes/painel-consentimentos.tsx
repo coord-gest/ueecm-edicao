@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { ShieldCheck, RefreshCw, Search, Download, FileText } from "lucide-react";
@@ -54,7 +54,7 @@ function PainelConsentimentos() {
   const [debounced, setDebounced] = useState("");
 
   // Debounce leve para não bater no servidor a cada tecla.
-  useMemo(() => {
+  useEffect(() => {
     const t = setTimeout(() => setDebounced(search.trim()), 300);
     return () => clearTimeout(t);
   }, [search]);
