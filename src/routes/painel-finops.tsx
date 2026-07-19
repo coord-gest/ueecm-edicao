@@ -43,15 +43,18 @@ export const Route = createFileRoute("/painel-finops")({
   component: PainelFinops,
 });
 
-// Estimated pricing per 1M tokens (USD). Adjust as gateway pricing evolves.
-// Blended input+output average — conservative estimate for budget planning.
+// Estimated pricing per 1M tokens (USD). Blended input+output average.
+// Fontes: Google AI Studio (Gemini API), Groq Cloud, OpenAI API — revise conforme tabela oficial de cada provedor.
 const MODEL_PRICING_USD_PER_M: Record<string, number> = {
-  "gemini-flash-lite-latest": 0.25,
-  "gemini-2.5-flash-lite": 0.25,
-  "gemini-2.5-flash": 0.60,
+  // Google Gemini API (ai.google.dev/pricing)
+  "gemini-flash-lite-latest": 0.20,
+  "gemini-2.5-flash-lite": 0.20,
+  "gemini-2.5-flash": 0.50,
   "gemini-2.5-pro": 3.50,
-  "llama-3.1-8b-instant": 0.10,
-  "llama-3.3-70b-versatile": 0.80,
+  // Groq (groq.com/pricing)
+  "llama-3.1-8b-instant": 0.08,
+  "llama-3.3-70b-versatile": 0.70,
+  // OpenAI (openai.com/api/pricing)
   "gpt-5-mini": 1.00,
   "gpt-5": 5.00,
 };
@@ -368,7 +371,7 @@ function PainelFinops() {
             </div>
             <p className="text-xs text-muted-foreground">
               Estimativa baseada no consumo médio do período selecionado extrapolado para 30 dias. Preços em USD por 1M tokens são aproximados —
-              revise em <code className="rounded bg-muted px-1">MODEL_PRICING_USD_PER_M</code> para refletir a tabela atual do Lovable AI Gateway.
+              revise em <code className="rounded bg-muted px-1">MODEL_PRICING_USD_PER_M</code> conforme a tabela oficial de cada provedor (Google Gemini API, Groq, OpenAI).
             </p>
           </CardContent>
         </Card>
