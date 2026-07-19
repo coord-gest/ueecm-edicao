@@ -38,14 +38,21 @@ export function HeroCarousel({ posts }: { posts: Post[] }) {
         <CarouselContent>
           {posts.map((p) => (
             <CarouselItem key={p.id}>
-              <div className="relative h-[420px] sm:h-[520px]">
+              <div className="relative h-[420px] bg-black sm:h-[520px]">
+                {/* Fundo desfocado com a mesma imagem para preencher as laterais */}
+                <img
+                  src={p.imagem ?? heroImg}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 size-full scale-110 object-cover blur-2xl opacity-60"
+                />
+                {/* Imagem principal 100% visível */}
                 <img
                   src={p.imagem ?? heroImg}
                   alt={p.titulo}
-                  className="ken-burns absolute inset-0 size-full object-cover"
+                  className="ken-burns absolute inset-0 size-full object-contain"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/10" />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
 
                 <div className="relative mx-auto flex h-full max-w-6xl flex-col justify-end px-4 pb-12 sm:px-6 sm:pb-16">
                   <Badge className="animate-float mb-4 w-fit rounded-full bg-gold/90 text-gold-foreground shadow-elegant hover:bg-gold">
