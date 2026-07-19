@@ -306,6 +306,51 @@ function ResponsaveisPage() {
         </div>
       }
     >
+      <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="relative flex-1">
+          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Buscar por responsável, aluno, e-mail ou telefone…"
+            className="pl-9"
+          />
+        </div>
+        <div className="sm:w-64">
+          <Select value={filterTurma} onValueChange={setFilterTurma}>
+            <SelectTrigger>
+              <SelectValue placeholder="Todas as turmas" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__all__">Todas as turmas</SelectItem>
+              {turmas?.map((t) => (
+                <SelectItem key={t.id} value={t.id}>
+                  {t.nome}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        {(search || filterTurma !== "__all__") && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setSearch("");
+              setFilterTurma("__all__");
+            }}
+          >
+            Limpar
+          </Button>
+        )}
+      </div>
+      {!isLoading && resps && resps.length > 0 && (
+        <p className="mb-2 text-xs text-muted-foreground">
+          {filteredResps.length} de {resps.length} responsável(is)
+        </p>
+      )}
+
       <div className="rounded-2xl border border-border/70 bg-card shadow-sm">
         {!isLoading && resps?.length === 0 ? (
           <EmptyState
@@ -317,6 +362,13 @@ function ResponsaveisPage() {
                 <Plus className="size-4" /> Novo responsável
               </Button>
             }
+            className="border-0"
+          />
+        ) : !isLoading && filteredResps.length === 0 ? (
+          <EmptyState
+            icon={Search}
+            title="Nenhum resultado"
+            description="Ajuste a busca ou o filtro de turma para encontrar o responsável."
             className="border-0"
           />
         ) : (
@@ -335,7 +387,7 @@ function ResponsaveisPage() {
                 <TableRowsSkeleton rows={5} cols={5} />
               ) : (
                 <tbody>
-                  {resps?.map((r) => {
+                  {filteredResps.map((r) => {
                     const vs = vinculosByResp.get(r.id) ?? [];
                     return (
                       <tr key={r.id} className="border-b last:border-0 align-top">
@@ -375,9 +427,17 @@ function ResponsaveisPage() {
                             <div className="flex flex-wrap gap-1">
                               {vs.map((v) => {
                                 const a = alunoById.get(v.aluno_id);
+                                const turmaNome = a?.turma_id
+                                  ? turmaById.get(a.turma_id)?.nome
+                                  : null;
                                 return (
                                   <Badge key={v.id} variant="secondary" className="gap-1">
                                     {a?.nome_completo ?? v.aluno_id.slice(0, 6)}
+                                    {turmaNome && (
+                                      <span className="text-[10px] text-muted-foreground">
+                                        · {turmaNome}
+                                      </span>
+                                    )}
                                     {v.principal && (
                                       <span className="text-[10px]">(principal)</span>
                                     )}
