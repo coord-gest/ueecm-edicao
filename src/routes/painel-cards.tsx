@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { RolePainelShell } from "@/components/RolePainelShell";
+import { useRolePainelGuard } from "@/lib/use-role-guard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -87,6 +88,15 @@ const FORMATS = [
 type FormatId = (typeof FORMATS)[number]["id"];
 
 function PainelCards() {
+  const { checking } = useRolePainelGuard([
+    "desenvolvedor",
+    "admin",
+    "diretor",
+    "coordenador",
+    "secretario",
+    "professor",
+  ]);
+  if (checking) return null;
   const [titulo, setTitulo] = useState("Anotação do dia");
   const [conteudo, setConteudo] = useState(
     "Escreva aqui a mensagem que você quer transformar em imagem. Ideal para posts, avisos, lembretes e frases motivacionais.",
