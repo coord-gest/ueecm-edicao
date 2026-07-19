@@ -399,6 +399,7 @@ function PainelGoogleDrive() {
                           variant="ghost"
                           onClick={() => handleDelete(f)}
                           title="Mover para lixeira"
+                          aria-label="Mover para lixeira"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
