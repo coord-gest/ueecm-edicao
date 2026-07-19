@@ -1,0 +1,5 @@
+# Impede que `bun test` (runner nativo do Bun) tente executar testes escritos
+# para Vitest/Playwright. Rode `bun run test` (Vitest) ou `bun run test:e2e`.
+[test]
+root = "./__bun_tests_placeholder__"
+preload = []
