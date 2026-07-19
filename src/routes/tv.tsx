@@ -211,6 +211,7 @@ function TvMode() {
               size="icon"
               className="text-white hover:bg-white/10"
               onClick={() => setPaused((p) => !p)}
+              aria-label={paused ? "Retomar" : "Pausar"}
             >
               {paused ? <Play className="size-5" /> : <Pause className="size-5" />}
             </Button>
@@ -219,6 +220,7 @@ function TvMode() {
               size="icon"
               className="text-white hover:bg-white/10"
               onClick={requestFs}
+              aria-label="Tela cheia"
             >
               <Maximize2 className="size-5" />
             </Button>
