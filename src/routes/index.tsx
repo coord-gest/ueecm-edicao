@@ -569,7 +569,7 @@ function HeroCarousel({ slides }: { slides: Post[] }) {
             type="button"
             aria-label="Anterior"
             onClick={() => go(index - 1)}
-            className="absolute left-3 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full bg-background/80 p-2 text-primary shadow-md transition hover:bg-background sm:flex"
+            className="absolute left-3 top-1/2 z-20 hidden -translate-y-1/2 items-center justify-center rounded-full bg-background/80 p-2 text-primary shadow-md transition hover:bg-background sm:flex"
           >
             <ChevronLeft className="size-5" />
           </button>
@@ -577,11 +577,11 @@ function HeroCarousel({ slides }: { slides: Post[] }) {
             type="button"
             aria-label="Próximo"
             onClick={() => go(index + 1)}
-            className="absolute right-3 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full bg-background/80 p-2 text-primary shadow-md transition hover:bg-background sm:flex"
+            className="absolute right-3 top-1/2 z-20 hidden -translate-y-1/2 items-center justify-center rounded-full bg-background/80 p-2 text-primary shadow-md transition hover:bg-background sm:flex"
           >
             <ChevronRight className="size-5" />
           </button>
-          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2">
+          <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-2">
             {slides.map((_, i) => (
               <button
                 key={i}
