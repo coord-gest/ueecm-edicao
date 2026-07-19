@@ -211,6 +211,16 @@ function AlunosPage() {
             guardian_phone: __consent.respTelefone || null,
           },
         });
+        // Best-effort: notifica o responsável por e-mail. Se o domínio ainda
+        // não estiver ativo, o server function retorna silenciosamente.
+        void notifyGuardian({
+          data: {
+            guardian_email: __consent.respEmail,
+            guardian_name: __consent.respNome,
+            minor_name: alunoPayload.nome_completo,
+            term_version: "v1",
+          },
+        }).catch(() => undefined);
       }
     },
     onSuccess: () => {
