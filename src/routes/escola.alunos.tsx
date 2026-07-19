@@ -1,5 +1,5 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -465,14 +465,20 @@ function AlunoFormDialog({
 
   // Ao abrir para edição, verificamos se já existe consentimento — evita
   // exigir novamente dados que já foram registrados.
-  useMemo(() => {
-    if (open && aluno?.id) {
+  useEffect(() => {
+    if (!open) return;
+    if (aluno?.id) {
       setExistingConsent(null);
       checkConsent({ data: { aluno_id: aluno.id } })
         .then((r) => setExistingConsent(r.hasConsent))
         .catch(() => setExistingConsent(null));
-    } else if (!aluno) {
+    } else {
       setExistingConsent(null);
+      setRespNome("");
+      setRespCpf("");
+      setRespEmail("");
+      setRespTelefone("");
+      setAceite(false);
     }
   }, [open, aluno, checkConsent]);
 
