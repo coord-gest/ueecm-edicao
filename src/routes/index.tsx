@@ -225,7 +225,7 @@ function Home() {
         <UpcomingEvents />
 
         {/* Faixa: Mais lidas + Opinião */}
-        <section className="mb-16 grid grid-cols-1 gap-10 lg:grid-cols-12">
+        <RevealSection className="mb-16 grid grid-cols-1 gap-10 lg:grid-cols-12">
           <div className="lg:col-span-8">
             <SectionHeader title="Mais Lidas" />
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-3">
@@ -237,11 +237,11 @@ function Home() {
           <aside className="lg:col-span-4">
             <OpinionCard />
           </aside>
-        </section>
+        </RevealSection>
 
         {/* Grid uniforme — últimas notícias, com chips de categoria */}
         {(gridFiltrado.length > 0 || isLoading) && (
-          <section>
+          <RevealSection>
             <div className="mb-6 flex items-end justify-between border-b-2 border-primary pb-3">
               <h2 className="font-display text-2xl text-primary sm:text-3xl lg:text-4xl">
                 Últimas Notícias
@@ -334,7 +334,7 @@ function Home() {
                 Nenhuma publicação em <strong>{categoriaAtiva}</strong> por enquanto.
               </p>
             )}
-          </section>
+          </RevealSection>
         )}
 
         {/* Push inline */}
