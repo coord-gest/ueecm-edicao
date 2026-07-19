@@ -1,0 +1,71 @@
+name: SBOM
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate-sbom:
+    name: Generate CycloneDX SBOM
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Generate SBOM (CycloneDX JSON)
+        run: |
+          bunx --bun @cyclonedx/cyclonedx-npm \
+            --output-format JSON \
+            --output-file sbom.json \
+            --spec-version 1.5 \
+            --package-lock-only
+
+      - name: Generate SBOM (CycloneDX XML)
+        run: |
+          bunx --bun @cyclonedx/cyclonedx-npm \
+            --output-format XML \
+            --output-file sbom.xml \
+            --spec-version 1.5 \
+            --package-lock-only
+
+      - name: Summarize SBOM
+        run: |
+          echo "## SBOM Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          COMPONENTS=$(jq '.components | length' sbom.json)
+          SPEC=$(jq -r '.specVersion' sbom.json)
+          echo "- **Spec version:** CycloneDX $SPEC" >> $GITHUB_STEP_SUMMARY
+          echo "- **Components:** $COMPONENTS" >> $GITHUB_STEP_SUMMARY
+          echo "- **Formats:** JSON + XML" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-${{ github.sha }}
+          path: |
+            sbom.json
+            sbom.xml
+          retention-days: 90
+
+      - name: Attach SBOM to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            sbom.json
+            sbom.xml
