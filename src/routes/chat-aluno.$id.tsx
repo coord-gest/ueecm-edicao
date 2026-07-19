@@ -217,7 +217,7 @@ function ChatAlunoThread() {
               className="max-h-32 min-h-[42px] flex-1 resize-none"
               rows={1}
             />
-            <Button onClick={handleSend} disabled={!texto.trim() || sending} size="icon">
+            <Button onClick={handleSend} disabled={!texto.trim() || sending} size="icon" aria-label="Enviar mensagem">
               {sending ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (

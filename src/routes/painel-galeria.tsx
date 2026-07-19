@@ -466,6 +466,7 @@ function FotosDialog({ albumId, onClose }: { albumId: string; onClose: () => voi
                       variant="secondary"
                       title="Definir como capa"
                       onClick={() => capa.mutate(f.url)}
+                      aria-label="Definir como capa"
                     >
                       <Star className="h-4 w-4" />
                     </Button>
@@ -476,6 +477,7 @@ function FotosDialog({ albumId, onClose }: { albumId: string; onClose: () => voi
                       onClick={() => {
                         if (confirm("Remover esta foto?")) excluirFoto.mutate(f.id);
                       }}
+                      aria-label="Remover foto"
                     >
                       <X className="h-4 w-4" />
                     </Button>

@@ -328,6 +328,7 @@ export function ImportarBoletinsDialog({
                         size="icon"
                         onClick={() => setFiles((prev) => prev.filter((_, j) => j !== i))}
                         title="Remover"
+                        aria-label="Remover arquivo"
                       >
                         <X className="size-4" />
                       </Button>
