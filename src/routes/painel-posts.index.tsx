@@ -162,7 +162,7 @@ function PainelPosts() {
 
   if (!isStaff) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-secondary px-4 text-center">
+      <div className="flex min-h-dvh items-center justify-center bg-secondary px-4 text-center">
         <div>
           <h1 className="font-display text-xl font-semibold">Acesso restrito</h1>
           <p className="mt-2 text-sm text-muted-foreground">Apenas membros da equipe.</p>
@@ -176,7 +176,7 @@ function PainelPosts() {
 
   return (
     <PainelLayout>
-      <div className="min-h-screen bg-secondary">
+      <div className="min-h-dvh bg-secondary">
         <header className="border-b border-border/60 bg-background/85 backdrop-blur-lg">
           <div className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-4 sm:px-6">
             <div className="flex min-w-0 items-center gap-3">

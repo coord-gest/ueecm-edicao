@@ -29,7 +29,7 @@ function EnquetesPage() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-dvh flex flex-col bg-background">
       <SiteHeader />
       <main className="flex-1 container mx-auto px-4 py-10 max-w-4xl">
         <header className="mb-8">

@@ -181,7 +181,7 @@ function SolicitarDadosPage() {
 
   if (protocolo) {
     return (
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-dvh flex-col">
         <SiteHeader />
         <main className="flex-1 py-12">
           <div className="container mx-auto max-w-2xl px-4">
@@ -246,7 +246,7 @@ function SolicitarDadosPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-dvh flex-col">
       <SiteHeader />
       <main className="flex-1 py-8 md:py-12">
         <div className="container mx-auto max-w-2xl px-4">

@@ -134,7 +134,7 @@ function EquipePage() {
   }, [lista]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <SiteHeader />
 
       <section className="relative overflow-hidden border-b border-border/60 bg-gradient-to-br from-primary via-primary/90 to-primary/70 py-10 text-primary-foreground sm:py-16">

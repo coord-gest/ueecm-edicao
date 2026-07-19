@@ -76,7 +76,7 @@ const roleLabels: Record<string, string> = {
 function AcessoRestrito() {
   const navigate = useNavigate();
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-secondary px-4 text-center">
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-4 bg-secondary px-4 text-center">
       <ShieldAlert className="size-10 text-destructive" />
       <h1 className="font-display text-xl font-semibold text-foreground">Acesso restrito</h1>
       <p className="max-w-sm text-sm text-muted-foreground">
@@ -211,7 +211,7 @@ function Usuarios() {
   // Aguarda o auth carregar antes de decidir o que renderizar
   if (authLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-secondary">
+      <div className="flex min-h-dvh items-center justify-center bg-secondary">
         <Loader2 className="size-8 animate-spin text-muted-foreground" />
       </div>
     );
@@ -221,7 +221,7 @@ function Usuarios() {
   // NÃO mostre "Acesso restrito" — mostre um fallback com retry e diagnóstico.
   if (roles.length === 0) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-secondary px-4 text-center">
+      <div className="flex min-h-dvh flex-col items-center justify-center gap-4 bg-secondary px-4 text-center">
         <ShieldAlert className="size-10 text-amber-500" />
         <h1 className="font-display text-xl font-semibold text-foreground">
           Não conseguimos carregar seus papéis
@@ -273,7 +273,7 @@ function Usuarios() {
 
   return (
     <PainelLayout>
-      <div className="min-h-screen bg-secondary">
+      <div className="min-h-dvh bg-secondary">
         <header className="border-b border-border/60 bg-background/85 backdrop-blur-lg">
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
             <div className="flex items-center gap-3">

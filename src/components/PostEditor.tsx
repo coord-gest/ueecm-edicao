@@ -410,7 +410,7 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
   const galleryHasErrors = Object.values(galleryStatuses).some((s) => s === "error");
 
   return (
-    <div className="min-h-screen bg-secondary">
+    <div className="min-h-dvh bg-secondary">
       <header className="border-b border-border/60 bg-background/85 backdrop-blur-lg">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <div>
