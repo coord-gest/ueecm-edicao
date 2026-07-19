@@ -8,8 +8,9 @@ const createUserSchema = z.object({
   password: z.string().min(6).max(72),
   displayName: z.string().min(1).max(255),
   role: z.enum(["diretor", "coordenador", "professor", "secretario", "family"]),
-  // Somente quando role = "family" (Pais/Responsável): vincula o usuário a um aluno
+  // Somente quando role = "family" (Pais/Responsável): vincula o usuário a um ou mais alunos
   alunoId: z.string().uuid().optional(),
+  alunoIds: z.array(z.string().uuid()).max(20).optional(),
   parentesco: z.string().max(60).optional(),
   telefone: z.string().max(40).optional(),
 });
@@ -80,9 +81,17 @@ export const createSchoolUser = createServerFn({ method: "POST" })
       return { error: "Cargo inválido." };
     }
 
-    // Pais/Responsável exige aluno vinculado — o acesso é sempre restrito aos próprios filhos
-    if (data.role === "family" && !data.alunoId) {
-      return { error: "Selecione o aluno vinculado ao responsável." };
+    // Pais/Responsável exige pelo menos um aluno vinculado — o acesso é sempre restrito aos próprios filhos
+    const familyAlunoIds =
+      data.role === "family"
+        ? Array.from(
+            new Set(
+              [...(data.alunoIds ?? []), ...(data.alunoId ? [data.alunoId] : [])].filter(Boolean),
+            ),
+          )
+        : [];
+    if (data.role === "family" && familyAlunoIds.length === 0) {
+      return { error: "Selecione pelo menos um aluno para vincular ao responsável." };
     }
 
     const supabaseAdmin = await getAdminClient();
@@ -137,8 +146,8 @@ export const createSchoolUser = createServerFn({ method: "POST" })
       return { error: `Usuário criado, mas falhou ao atribuir o cargo: ${roleError.message}` };
     }
 
-    // Para Pais/Responsável: cria (ou reutiliza) o registro em `responsaveis` e vincula ao aluno
-    if (data.role === "family" && data.alunoId) {
+    // Para Pais/Responsável: cria o registro em `responsaveis` e vincula a todos os alunos selecionados
+    if (data.role === "family" && familyAlunoIds.length > 0) {
       const { data: respRow, error: respErr } = await supabaseAdmin
         .from("responsaveis")
         .insert({
@@ -156,16 +165,20 @@ export const createSchoolUser = createServerFn({ method: "POST" })
         };
       }
 
-      const { error: vincErr } = await supabaseAdmin.from("aluno_responsavel").insert({
-        aluno_id: data.alunoId,
+      const vinculosPayload = familyAlunoIds.map((alunoId, index) => ({
+        aluno_id: alunoId,
         responsavel_id: respRow.id,
         parentesco: data.parentesco ?? null,
-        principal: true,
-      });
+        principal: index === 0,
+      }));
+
+      const { error: vincErr } = await supabaseAdmin
+        .from("aluno_responsavel")
+        .insert(vinculosPayload);
 
       if (vincErr) {
         return {
-          error: `Conta e responsável criados, mas falhou ao vincular ao aluno: ${vincErr.message}`,
+          error: `Conta e responsável criados, mas falhou ao vincular aos alunos: ${vincErr.message}`,
         };
       }
     }

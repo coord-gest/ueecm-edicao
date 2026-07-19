@@ -72,6 +72,7 @@ type Responsavel = {
   user_id: string | null;
 };
 type Aluno = { id: string; nome_completo: string; matricula: string; turma_id: string | null };
+type Turma = { id: string; nome: string };
 type Vinculo = {
   id: string;
   aluno_id: string;
@@ -114,6 +115,19 @@ function ResponsaveisPage() {
         .order("nome_completo");
       if (error) throw error;
       return (data ?? []) as Aluno[];
+    },
+    enabled: isAdmin,
+  });
+
+  const { data: turmas } = useQuery({
+    queryKey: ["escola-turmas-list"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("turmas_escolares")
+        .select("id, nome")
+        .order("nome");
+      if (error) throw error;
+      return (data ?? []) as Turma[];
     },
     enabled: isAdmin,
   });
@@ -209,7 +223,7 @@ function ResponsaveisPage() {
       email: string;
       password: string;
       telefone?: string;
-      alunoId: string;
+      alunoIds: string[];
       parentesco: string;
     }) =>
       createUserFn({
@@ -219,7 +233,7 @@ function ResponsaveisPage() {
           password: vars.password,
           telefone: vars.telefone,
           role: "family",
-          alunoId: vars.alunoId,
+          alunoIds: vars.alunoIds,
           parentesco: vars.parentesco,
         },
       }),
@@ -397,6 +411,7 @@ function ResponsaveisPage() {
       <NovoRespComLoginDialog
         open={creatingLogin}
         alunos={alunos ?? []}
+        turmas={turmas ?? []}
         onClose={() => setCreatingLogin(false)}
         onSave={(p) => createLoginMut.mutate(p)}
         saving={createLoginMut.isPending}
@@ -589,32 +604,54 @@ type NovaContaResp = {
   email: string;
   password: string;
   telefone?: string;
-  alunoId: string;
+  alunoIds: string[];
   parentesco: string;
 };
 
 function NovoRespComLoginDialog({
   open,
   alunos,
+  turmas,
   onClose,
   onSave,
   saving,
 }: {
   open: boolean;
   alunos: Aluno[];
+  turmas: Turma[];
   onClose: () => void;
   onSave: (p: NovaContaResp) => void;
   saving: boolean;
 }) {
-  const [alunoId, setAlunoId] = useState("");
+  const [turmaId, setTurmaId] = useState<string>("");
+  const [selected, setSelected] = useState<string[]>([]);
   const [parentesco, setParentesco] = useState("Mãe");
   const [showPassword, setShowPassword] = useState(false);
+
+  const turmaNome = useMemo(() => {
+    const m = new Map<string, string>();
+    turmas.forEach((t) => m.set(t.id, t.nome));
+    return m;
+  }, [turmas]);
+  const alunoById = useMemo(() => {
+    const m = new Map<string, Aluno>();
+    alunos.forEach((a) => m.set(a.id, a));
+    return m;
+  }, [alunos]);
+  const alunosDaTurma = useMemo(() => {
+    if (!turmaId) return [];
+    return alunos.filter((a) => a.turma_id === turmaId);
+  }, [alunos, turmaId]);
+
+  function toggleAluno(id: string) {
+    setSelected((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  }
 
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
-    if (!alunoId) {
-      toast.error("Selecione o aluno vinculado.");
+    if (selected.length === 0) {
+      toast.error("Selecione pelo menos um aluno para vincular.");
       return;
     }
     onSave({
@@ -622,19 +659,28 @@ function NovoRespComLoginDialog({
       email: String(f.get("email") ?? "").trim(),
       password: String(f.get("senha") ?? ""),
       telefone: String(f.get("telefone") ?? "").trim() || undefined,
-      alunoId,
+      alunoIds: selected,
       parentesco,
     });
   }
 
   return (
-    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => {
+        if (!v) {
+          onClose();
+          setSelected([]);
+          setTurmaId("");
+        }
+      }}
+    >
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Novo responsável com login</DialogTitle>
           <DialogDescription>
-            Cria uma conta de acesso vinculada a um aluno. O responsável só verá dados do próprio
-            filho.
+            Cria uma conta de acesso vinculada a um ou mais alunos. O responsável só verá dados
+            dos filhos vinculados.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-3">
@@ -673,19 +719,77 @@ function NovoRespComLoginDialog({
             <Input id="resp-tel" name="telefone" />
           </div>
           <div>
-            <Label>Aluno vinculado</Label>
-            <Select value={alunoId} onValueChange={setAlunoId}>
+            <Label>1. Turma</Label>
+            <Select value={turmaId} onValueChange={setTurmaId}>
               <SelectTrigger>
-                <SelectValue placeholder="Selecione o filho" />
+                <SelectValue placeholder="Selecione a turma" />
               </SelectTrigger>
               <SelectContent>
-                {alunos.map((a) => (
-                  <SelectItem key={a.id} value={a.id}>
-                    {a.nome_completo} ({a.matricula})
+                {turmas.map((t) => (
+                  <SelectItem key={t.id} value={t.id}>
+                    {t.nome}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+          </div>
+          <div>
+            <Label>
+              2. Alunos vinculados{" "}
+              <span className="text-xs text-muted-foreground">
+                (marque um ou mais — pode trocar de turma para adicionar de outras)
+              </span>
+            </Label>
+            {!turmaId ? (
+              <p className="rounded-md border border-dashed p-3 text-xs text-muted-foreground">
+                Selecione uma turma para listar os alunos.
+              </p>
+            ) : alunosDaTurma.length === 0 ? (
+              <p className="rounded-md border border-dashed p-3 text-xs text-muted-foreground">
+                Nenhum aluno nesta turma.
+              </p>
+            ) : (
+              <div className="max-h-48 overflow-y-auto rounded-md border p-2 space-y-1">
+                {alunosDaTurma.map((a) => (
+                  <label
+                    key={a.id}
+                    className="flex items-center gap-2 rounded px-2 py-1 text-sm hover:bg-muted/50 cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selected.includes(a.id)}
+                      onChange={() => toggleAluno(a.id)}
+                    />
+                    <span className="flex-1">{a.nome_completo}</span>
+                    <span className="text-xs text-muted-foreground">{a.matricula}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+            {selected.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1">
+                {selected.map((id) => {
+                  const a = alunoById.get(id);
+                  if (!a) return null;
+                  return (
+                    <Badge key={id} variant="secondary" className="gap-1">
+                      {a.nome_completo}
+                      <span className="text-[10px] text-muted-foreground">
+                        {a.turma_id ? turmaNome.get(a.turma_id) : ""}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => toggleAluno(id)}
+                        className="ml-1 opacity-60 hover:opacity-100"
+                        aria-label="Remover"
+                      >
+                        <X className="size-3" />
+                      </button>
+                    </Badge>
+                  );
+                })}
+              </div>
+            )}
           </div>
           <div>
             <Label>Parentesco</Label>
@@ -707,7 +811,7 @@ function NovoRespComLoginDialog({
             <Button type="button" variant="outline" onClick={onClose} disabled={saving}>
               Cancelar
             </Button>
-            <Button type="submit" disabled={saving}>
+            <Button type="submit" disabled={saving || selected.length === 0}>
               {saving && <Loader2 className="size-4 animate-spin" />} Criar conta
             </Button>
           </DialogFooter>
