@@ -16,24 +16,56 @@ export async function parseFile(file: File): Promise<ParsedRow[]> {
       });
     });
   }
-  // Excel — carregado sob demanda para não inflar o bundle inicial
-  const XLSX = await import("xlsx");
+  // Excel — carregado sob demanda para não inflar o bundle inicial.
+  // Usamos ExcelJS (mantido, sem CVE de Prototype Pollution como xlsx@0.18.5).
+  const ExcelJS = (await import("exceljs")).default;
   const buf = await file.arrayBuffer();
-  const wb = XLSX.read(buf, { type: "array" });
-  const sheetName = wb.SheetNames[0];
-  if (!sheetName) return [];
-  const sheet = wb.Sheets[sheetName];
-  const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, {
-    defval: "",
-    raw: false,
+  const wb = new ExcelJS.Workbook();
+  await wb.xlsx.load(buf);
+  const sheet = wb.worksheets[0];
+  if (!sheet) return [];
+  // Cabeçalhos: primeira linha da planilha, normalizados (trim + lowercase).
+  const headerRow = sheet.getRow(1);
+  const headers: string[] = [];
+  headerRow.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+    headers[colNumber - 1] = String(cell.value ?? "")
+      .trim()
+      .toLowerCase();
   });
-  return rows.map((r) => {
-    const out: ParsedRow = {};
-    for (const [k, v] of Object.entries(r)) {
-      out[k.trim().toLowerCase()] = (v as string | number | null | undefined) ?? "";
-    }
-    return out;
+  const out: ParsedRow[] = [];
+  sheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+    if (rowNumber === 1) return; // pula cabeçalho
+    const rec: ParsedRow = {};
+    let hasAny = false;
+    row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+      const key = headers[colNumber - 1];
+      if (!key) return;
+      let v = cell.value;
+      // Normaliza formatos comuns do ExcelJS (Date, {richText}, {result}, {text}, hyperlink).
+      if (v instanceof Date) {
+        const y = v.getUTCFullYear();
+        const m = String(v.getUTCMonth() + 1).padStart(2, "0");
+        const d = String(v.getUTCDate()).padStart(2, "0");
+        v = `${y}-${m}-${d}`;
+      } else if (v && typeof v === "object") {
+        const obj = v as {
+          richText?: { text: string }[];
+          result?: unknown;
+          text?: string;
+          hyperlink?: string;
+        };
+        if (Array.isArray(obj.richText)) v = obj.richText.map((p) => p.text).join("");
+        else if (obj.result !== undefined) v = obj.result as string | number;
+        else if (typeof obj.text === "string") v = obj.text;
+        else if (typeof obj.hyperlink === "string") v = obj.hyperlink;
+      }
+      const str = v == null ? "" : String(v);
+      rec[key] = str;
+      if (str !== "") hasAny = true;
+    });
+    if (hasAny) out.push(rec);
   });
+  return out;
 }
 
 // ----------- Schemas -----------
