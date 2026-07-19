@@ -941,6 +941,7 @@ function PainelAlertas() {
               })}
             </div>
           </div>
+          </div>
         </main>
       </div>
     </PainelLayout>
