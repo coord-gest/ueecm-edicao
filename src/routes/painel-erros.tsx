@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { AlertTriangle, RefreshCw, ShieldAlert, Trash2 } from "lucide-react";
+import { AlertTriangle, Bug, RefreshCw, ShieldAlert, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -28,6 +28,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { PainelLayout } from "@/components/PainelLayout";
 import { cleanupSystemErrors } from "@/lib/system-errors.functions";
+import { captureException } from "@/lib/sentry";
 
 type Severity = "info" | "warning" | "error" | "critical";
 
@@ -135,6 +136,24 @@ function PainelErros() {
             </Select>
             <Button variant="outline" size="icon" onClick={() => q.refetch()}>
               <RefreshCw className={q.isFetching ? "h-4 w-4 animate-spin" : "h-4 w-4"} />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1"
+              onClick={() => {
+                const err = new Error(
+                  `Sentry test error @ ${new Date().toISOString()}`,
+                );
+                captureException(err, { source: "painel-erros:test-button" });
+                toast.success("Erro de teste enviado ao Sentry.");
+                // Também dispara um erro assíncrono não tratado, capturado pelo listener global
+                setTimeout(() => {
+                  throw new Error("Sentry test — unhandled async error");
+                }, 0);
+              }}
+            >
+              <Bug className="h-4 w-4" /> Disparar erro de teste
             </Button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
