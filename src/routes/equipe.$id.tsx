@@ -72,7 +72,7 @@ function DetalhePage() {
   });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10">
         <Button asChild variant="ghost" size="sm" className="mb-4 rounded-full">

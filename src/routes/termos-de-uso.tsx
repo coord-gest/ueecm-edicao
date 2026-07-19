@@ -29,7 +29,7 @@ export const Route = createFileRoute("/termos-de-uso")({
 function TermsPage() {
   const lastUpdate = "8 de julho de 2026";
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
         <article className="prose prose-slate dark:prose-invert max-w-none">

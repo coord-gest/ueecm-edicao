@@ -31,7 +31,7 @@ function EditarPost() {
 
   if (isLoading || !post) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-secondary">
+      <div className="flex min-h-dvh items-center justify-center bg-secondary">
         <Loader2 className="size-6 animate-spin text-muted-foreground" />
       </div>
     );

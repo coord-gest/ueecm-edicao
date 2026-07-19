@@ -106,7 +106,7 @@ function MomentosPage() {
   const notConnected = anosQ.data && !anosQ.data.connected;
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-background to-muted/30">
+    <div className="min-h-dvh flex flex-col bg-gradient-to-b from-background to-muted/30">
       <SiteHeader />
 
       <main className="flex-1">

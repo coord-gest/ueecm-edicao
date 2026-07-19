@@ -134,7 +134,7 @@ function isEmailFicticio(email?: string | null): boolean {
 function AcessoRestrito() {
   const navigate = useNavigate();
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-secondary px-4 text-center">
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-4 bg-secondary px-4 text-center">
       <ShieldAlert className="size-10 text-destructive" />
       <h1 className="font-display text-xl font-semibold text-foreground">Acesso restrito</h1>
       <p className="max-w-sm text-sm text-muted-foreground">
@@ -306,7 +306,7 @@ function PainelProfissionais() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-secondary">
+      <div className="flex min-h-dvh items-center justify-center bg-secondary">
         <Loader2 className="size-8 animate-spin text-muted-foreground" />
       </div>
     );
@@ -345,7 +345,7 @@ function PainelProfissionais() {
 
   return (
     <PainelLayout>
-      <div className="min-h-screen bg-secondary">
+      <div className="min-h-dvh bg-secondary">
         <header className="sticky top-0 z-30 border-b border-border/60 bg-background/85 backdrop-blur-lg">
           <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:flex sm:justify-between sm:gap-4 sm:px-6 sm:py-4">
             <div className="flex min-w-0 items-center gap-3">

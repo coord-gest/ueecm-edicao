@@ -27,7 +27,7 @@ export function PainelLayout({ children }: { children: ReactNode }) {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-secondary">
+      <div className="flex min-h-dvh w-full bg-secondary">
         <PainelSidebar />
         <SidebarInset className="relative flex flex-1 flex-col bg-secondary">
           <div className="pointer-events-none absolute left-2 top-2 z-40">

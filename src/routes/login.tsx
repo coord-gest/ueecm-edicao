@@ -61,7 +61,7 @@ function Login() {
   };
 
   return (
-    <div className="relative flex min-h-screen w-full bg-background">
+    <div className="relative flex min-h-dvh w-full bg-background">
       <ThemeToggle className="absolute right-4 top-4 z-50 rounded-full border border-border/60 bg-background/70 backdrop-blur-md shadow-sm hover:bg-background" />
       {/* Left: Visual / Branding */}
       <aside className="relative hidden overflow-hidden lg:flex lg:w-1/2 xl:w-[55%]">

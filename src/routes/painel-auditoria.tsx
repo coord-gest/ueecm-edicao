@@ -187,7 +187,7 @@ function PainelAuditoria() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-dvh items-center justify-center">
         <Loader2 className="size-6 animate-spin text-muted-foreground" />
       </div>
     );
@@ -210,7 +210,7 @@ function PainelAuditoria() {
 
   return (
     <PainelLayout>
-      <div className="min-h-screen bg-secondary">
+      <div className="min-h-dvh bg-secondary">
         <header className="border-b border-border/60 bg-background/85 backdrop-blur-lg">
           <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-4 sm:px-6">
             <Button asChild variant="ghost" size="sm" className="rounded-full">

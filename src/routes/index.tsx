@@ -174,7 +174,7 @@ function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-dvh bg-background text-foreground">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between border-b border-border py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-accent">
           <span className="capitalize" suppressHydrationWarning>

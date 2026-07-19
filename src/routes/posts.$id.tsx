@@ -133,7 +133,7 @@ export const Route = createFileRoute("/posts/$id")({
   },
   component: PostDetail,
   errorComponent: ({ error, reset }) => (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-16 text-center">
         <h1 className="font-display text-2xl font-semibold">Erro ao carregar a notícia</h1>
@@ -146,7 +146,7 @@ export const Route = createFileRoute("/posts/$id")({
     </div>
   ),
   notFoundComponent: () => (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-16 text-center">
         <h1 className="font-display text-2xl font-semibold">Notícia não encontrada</h1>
@@ -189,7 +189,7 @@ function PostDetail() {
   if (!post) return null;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <ReadingProgress />
       <SiteHeader />
       <article className="mx-auto max-w-3xl px-4 pb-16 pt-8 sm:px-6">

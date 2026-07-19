@@ -355,6 +355,7 @@ function NotificacoesPage() {
                         className="size-8"
                         onClick={() => marcarLida.mutate({ id: n.id, lida: !n.lida })}
                         title={n.lida ? "Marcar como não lida" : "Marcar como lida"}
+                        aria-label={n.lida ? "Marcar como não lida" : "Marcar como lida"}
                       >
                         <CheckCheck
                           className={cn(
@@ -370,6 +371,7 @@ function NotificacoesPage() {
                       className="size-8"
                       onClick={() => arquivar.mutate({ id: n.id, arquivada: !n.arquivada })}
                       title={n.arquivada ? "Restaurar" : "Arquivar"}
+                      aria-label={n.arquivada ? "Restaurar notificação" : "Arquivar notificação"}
                     >
                       {n.arquivada ? (
                         <ArchiveRestore className="size-4" />
@@ -387,6 +389,7 @@ function NotificacoesPage() {
                         }
                       }}
                       title="Excluir"
+                      aria-label="Excluir notificação"
                     >
                       <Trash2 className="size-4" />
                     </Button>

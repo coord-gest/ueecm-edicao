@@ -86,7 +86,7 @@ function EnqueteDetail() {
 
   if (!data.enquete) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-dvh flex flex-col">
         <SiteHeader />
         <main className="flex-1 container mx-auto px-4 py-10">Enquete não encontrada.</main>
         <SiteFooter />
@@ -114,7 +114,7 @@ function EnqueteDetail() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-dvh flex flex-col bg-background">
       <SiteHeader />
       <main className="flex-1 container mx-auto px-4 py-8 max-w-3xl">
         <Button asChild variant="ghost" size="sm" className="mb-4">
