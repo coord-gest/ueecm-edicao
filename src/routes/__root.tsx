@@ -268,7 +268,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
-          <div className="mx-auto w-full max-w-[1280px]">
+          <div className="w-full">
             <UpdateBanner />
             <AlertBanner />
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
