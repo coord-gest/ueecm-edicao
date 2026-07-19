@@ -36,9 +36,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
 import { dispatchPush } from "@/lib/push.functions";
 import { sendAlertPushNow } from "@/lib/alert-burst.functions";
+import { logAlertClientAction } from "@/lib/alert-management.functions";
 import { useServerFn } from "@tanstack/react-start";
 
 import { PainelLayout } from "@/components/PainelLayout";
+import { BurstScheduler } from "@/components/painel-alertas/BurstScheduler";
+import { AlertAuditLog } from "@/components/painel-alertas/AlertAuditLog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { AlertBanner } from "@/components/AlertBanner";
 
 type Variant = "info" | "success" | "warning" | "destructive";
 
@@ -76,6 +88,9 @@ function PainelAlertas() {
   const canManage = hasRole("desenvolvedor") || hasRole("diretor") || hasRole("coordenador");
 
   const sendPushNow = useServerFn(sendAlertPushNow);
+  const logAction = useServerFn(logAlertClientAction);
+  const safeLog = (payload: Parameters<typeof logAction>[0]["data"]) =>
+    logAction({ data: payload }).catch(() => {});
 
   // Rajada de notificações (client-side).
   const [burstAlertId, setBurstAlertId] = useState<string>("");
@@ -191,6 +206,8 @@ function PainelAlertas() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [pendingPayload, setPendingPayload] = useState<null | Record<string, unknown>>(null);
 
   const toLocalInput = (iso: string | null | undefined) => {
     if (!iso) return "";
@@ -277,6 +294,32 @@ function PainelAlertas() {
     },
   });
 
+  // Status de entrega agregado por alerta (source_id → contagens por status)
+  const alertIds = (alerts ?? []).map((a) => a.id);
+  const { data: deliveryMap } = useQuery({
+    queryKey: ["alert-delivery", alertIds.length, alertIds.slice(0, 5).join(",")],
+    enabled: canManage && alertIds.length > 0,
+    refetchInterval: 20_000,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("push_notifications_queue")
+        .select("source_id, status")
+        .eq("source", "alert")
+        .in("source_id", alertIds);
+      if (error) throw error;
+      const map: Record<string, { pending: number; sent: number; failed: number; partial: number }> =
+        {};
+      for (const r of data ?? []) {
+        const id = r.source_id as string | null;
+        if (!id) continue;
+        map[id] ??= { pending: 0, sent: 0, failed: 0, partial: 0 };
+        const s = (r.status as string) || "pending";
+        if (s in map[id]) (map[id] as Record<string, number>)[s]++;
+      }
+      return map;
+    },
+  });
+
   if (!loading && !canManage) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
@@ -333,6 +376,17 @@ function PainelAlertas() {
       });
       return;
     }
+
+    // Abre pré-visualização — a publicação real acontece em `confirmPublish()`.
+    setPendingPayload({ trimmed });
+    setPreviewOpen(true);
+  };
+
+  const confirmPublish = async () => {
+    if (!user) return;
+    setPreviewOpen(false);
+    const trimmed = message.trim();
+    if (!trimmed) return;
     setSubmitting(true);
 
     let uploadedImageUrl: string | null = editingId ? existingImageUrl : null;
@@ -375,26 +429,35 @@ function PainelAlertas() {
       setSubmitting(false);
       if (error) {
         toast.error("Não foi possível salvar as alterações", { description: error.message });
+        safeLog({ alertId: editingId, action: "updated", result: "failed", details: { error: error.message } });
         return;
       }
       toast.success("Alerta atualizado");
+      safeLog({ alertId: editingId, action: "updated", result: "success", details: { variant } });
       resetForm();
       qc.invalidateQueries({ queryKey: ["alerts-admin"] });
       return;
     }
 
-    const { error } = await supabase.from("alerts").insert({
+    const { data: inserted, error } = await supabase.from("alerts").insert({
       ...payload,
       active: true,
       created_by: user.id,
-    } as never);
+    } as never).select("id").single();
     setSubmitting(false);
     if (error) {
       toast.error("Não foi possível criar o alerta", { description: error.message });
+      safeLog({ alertId: null, action: "created", result: "failed", details: { error: error.message } });
       return;
     }
     toast.success("Alerta publicado", {
       description: "Visível em todos os dispositivos imediatamente.",
+    });
+    safeLog({
+      alertId: (inserted as { id: string } | null)?.id ?? null,
+      action: "created",
+      result: "success",
+      details: { variant, scheduled: !!payload.starts_at },
     });
     // Só dispara o envio imediato quando o alerta NÃO está agendado para
     // o futuro. Caso contrário, o cron `enqueue-due-alert-pushes` cuida do
@@ -415,9 +478,11 @@ function PainelAlertas() {
     const { error } = await supabase.from("alerts").update({ active: next }).eq("id", id);
     if (error) {
       toast.error("Falha ao atualizar", { description: error.message });
+      safeLog({ alertId: id, action: next ? "activated" : "deactivated", result: "failed", details: { error: error.message } });
       return;
     }
     toast.success(next ? "Alerta reativado" : "Alerta desativado");
+    safeLog({ alertId: id, action: next ? "activated" : "deactivated", result: "success" });
     qc.invalidateQueries({ queryKey: ["alerts-admin"] });
   };
 
@@ -426,9 +491,11 @@ function PainelAlertas() {
     const { error } = await supabase.from("alerts").delete().eq("id", id);
     if (error) {
       toast.error("Falha ao excluir", { description: error.message });
+      safeLog({ alertId: id, action: "deleted", result: "failed", details: { error: error.message } });
       return;
     }
     toast.success("Alerta excluído");
+    safeLog({ alertId: id, action: "deleted", result: "success" });
     qc.invalidateQueries({ queryKey: ["alerts-admin"] });
   };
 
