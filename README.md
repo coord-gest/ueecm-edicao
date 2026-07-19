@@ -150,16 +150,33 @@ Suíte com Vitest + Testing Library cobrindo:
 
 ## Status
 
-Sistema **APROVADO PARA PRODUÇÃO**. Última análise técnica consolidada: **17/07/2026 (v7 — Final)** — **0 críticos · 0 altos · 1 médio · 2 baixos**. Testes: **138/139 passando** (1 cosmética). Typecheck: **0 erros**. Deploy Cloudflare estável com `bun@1.2.15`. PWA/TWA com ícone do app em notificações. SEO com sitemap dinâmico + JSON-LD (WebSite, NewsArticle, BreadcrumbList, AboutPage, CollectionPage).
+Sistema **APROVADO PARA PRODUÇÃO** — Nota **9.7/10**. Última análise técnica consolidada: **19/07/2026 (v12 — Final)** — **0 críticos · 0 altos · 1 médio · 2 baixos**. Testes: **133+ passando**. Typecheck: **0 erros**. Deploy Cloudflare estável com `bun@1.2.15`. Turnstile v2 ativo em produção (com fallback runtime). Notificações FCM funcionais em Android 13/16+ e iOS (tela bloqueada). Alertas Globais com trigger de push corrigido. PWA/TWA com ícone do app em notificações. SEO com sitemap dinâmico + JSON-LD.
 
 ## Relatórios Técnicos
 
 Todos os relatórios de auditoria ficam versionados em [`docs/relatorios/`](./docs/relatorios/).
 
-- **Relatório atual:** [Análise Técnica Completa — 17/07/2026 (Markdown)](./docs/relatorios/Analise_Tecnica_Completa_2026-07-17.md) · [DOCX](./docs/relatorios/Analise_Tecnica_Completa_2026-07-17.docx) · [PDF](./docs/relatorios/Analise_Tecnica_Completa_2026-07-17.pdf)
-- **Apresentação do sistema:** [Apresentação Completa (PPTX · 14 slides)](./docs/relatorios/Apresentacao_Sistema_UEECM.pptx)
+- **Relatório atual:** [Análise Técnica Completa — 19/07/2026 v12 (Markdown)](./docs/relatorios/Analise_Tecnica_Completa_2026-07-19-v12-Final.md)
+- **Apresentação do sistema:** [Apresentação Executiva (PPTX · 42 slides)](./docs/relatorios/Apresentacao_Sistema_UEECM_v2.pptx)
 - **Veredito atual:** ✅ APROVADO PARA PRODUÇÃO
-- **Framework aplicado:** Prompt Mestre v2 — Análise Técnica Completa (Código · Segurança · SEO · PWA · Validação Final)
+- **Framework aplicado:** Prompt Mestre v2 — Análise Técnica Completa (Código · Segurança · SEO · PWA · LGPD · Validação Final)
+
+## Roadmap Concluído (Consolidado)
+
+- ✅ RLS 100% + column-level security em `profissionais` (PII protegida).
+- ✅ Views `enquete_resultados` e `profissionais_publicos` com `security_invoker=true`.
+- ✅ Revogação de EXECUTE público em 23 funções `SECURITY DEFINER` sensíveis.
+- ✅ Storage `galeria-eventos` restrito a galerias publicadas.
+- ✅ Rate-limit de 3 camadas em `/api/chat` (Gemini).
+- ✅ CSP + HSTS + headers de segurança em `src/server.ts` (inclui domínios Turnstile).
+- ✅ Turnstile v2 com fallback runtime via `/api/public/turnstile-config`.
+- ✅ HMAC/timing-safe em endpoints públicos (backup semanal, dispatch, webhooks).
+- ✅ Trigger `enqueue_due_alert_pushes` corrigido (grace de 10 min, sem coluna fantasma).
+- ✅ Push FCM com tags únicas + `renotify:true` (compatível Android 16).
+- ✅ Reatach de token FCM ao `user_id` no login (`reattachPushTokenToUser`).
+- ✅ Documentação LGPD: `docs/DPIA-ROPA.md` + `docs/RUNBOOK.md`.
+- ✅ CI/CD com gate de Typecheck no PR.
+- 🟡 Pendente (Dashboard): **Enable Leaked Password Protection** em Supabase Auth.
 
 ---
 
