@@ -31,6 +31,7 @@ import { Route as PainelManutencaoRouteImport } from './routes/painel-manutencao
 import { Route as PainelLgpdRouteImport } from './routes/painel-lgpd'
 import { Route as PainelGoogleDriveRouteImport } from './routes/painel-google-drive'
 import { Route as PainelGaleriaRouteImport } from './routes/painel-galeria'
+import { Route as PainelFinopsRouteImport } from './routes/painel-finops'
 import { Route as PainelFamiliasRouteImport } from './routes/painel-familias'
 import { Route as PainelErrosRouteImport } from './routes/painel-erros'
 import { Route as PainelEnviarDriveRouteImport } from './routes/painel-enviar-drive'
@@ -224,6 +225,11 @@ const PainelGoogleDriveRoute = PainelGoogleDriveRouteImport.update({
 const PainelGaleriaRoute = PainelGaleriaRouteImport.update({
   id: '/painel-galeria',
   path: '/painel-galeria',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelFinopsRoute = PainelFinopsRouteImport.update({
+  id: '/painel-finops',
+  path: '/painel-finops',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelFamiliasRoute = PainelFamiliasRouteImport.update({
@@ -702,6 +708,7 @@ export interface FileRoutesByFullPath {
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
   '/painel-erros': typeof PainelErrosRoute
   '/painel-familias': typeof PainelFamiliasRoute
+  '/painel-finops': typeof PainelFinopsRoute
   '/painel-galeria': typeof PainelGaleriaRoute
   '/painel-google-drive': typeof PainelGoogleDriveRoute
   '/painel-lgpd': typeof PainelLgpdRoute
@@ -809,6 +816,7 @@ export interface FileRoutesByTo {
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
   '/painel-erros': typeof PainelErrosRoute
   '/painel-familias': typeof PainelFamiliasRoute
+  '/painel-finops': typeof PainelFinopsRoute
   '/painel-galeria': typeof PainelGaleriaRoute
   '/painel-google-drive': typeof PainelGoogleDriveRoute
   '/painel-lgpd': typeof PainelLgpdRoute
@@ -918,6 +926,7 @@ export interface FileRoutesById {
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
   '/painel-erros': typeof PainelErrosRoute
   '/painel-familias': typeof PainelFamiliasRoute
+  '/painel-finops': typeof PainelFinopsRoute
   '/painel-galeria': typeof PainelGaleriaRoute
   '/painel-google-drive': typeof PainelGoogleDriveRoute
   '/painel-lgpd': typeof PainelLgpdRoute
@@ -1028,6 +1037,7 @@ export interface FileRouteTypes {
     | '/painel-enviar-drive'
     | '/painel-erros'
     | '/painel-familias'
+    | '/painel-finops'
     | '/painel-galeria'
     | '/painel-google-drive'
     | '/painel-lgpd'
@@ -1135,6 +1145,7 @@ export interface FileRouteTypes {
     | '/painel-enviar-drive'
     | '/painel-erros'
     | '/painel-familias'
+    | '/painel-finops'
     | '/painel-galeria'
     | '/painel-google-drive'
     | '/painel-lgpd'
@@ -1243,6 +1254,7 @@ export interface FileRouteTypes {
     | '/painel-enviar-drive'
     | '/painel-erros'
     | '/painel-familias'
+    | '/painel-finops'
     | '/painel-galeria'
     | '/painel-google-drive'
     | '/painel-lgpd'
@@ -1352,6 +1364,7 @@ export interface RootRouteChildren {
   PainelEnviarDriveRoute: typeof PainelEnviarDriveRoute
   PainelErrosRoute: typeof PainelErrosRoute
   PainelFamiliasRoute: typeof PainelFamiliasRoute
+  PainelFinopsRoute: typeof PainelFinopsRoute
   PainelGaleriaRoute: typeof PainelGaleriaRoute
   PainelGoogleDriveRoute: typeof PainelGoogleDriveRoute
   PainelLgpdRoute: typeof PainelLgpdRoute
@@ -1560,6 +1573,13 @@ declare module '@tanstack/react-router' {
       path: '/painel-galeria'
       fullPath: '/painel-galeria'
       preLoaderRoute: typeof PainelGaleriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-finops': {
+      id: '/painel-finops'
+      path: '/painel-finops'
+      fullPath: '/painel-finops'
+      preLoaderRoute: typeof PainelFinopsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-familias': {
@@ -2284,6 +2304,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelEnviarDriveRoute: PainelEnviarDriveRoute,
   PainelErrosRoute: PainelErrosRoute,
   PainelFamiliasRoute: PainelFamiliasRoute,
+  PainelFinopsRoute: PainelFinopsRoute,
   PainelGaleriaRoute: PainelGaleriaRoute,
   PainelGoogleDriveRoute: PainelGoogleDriveRoute,
   PainelLgpdRoute: PainelLgpdRoute,
