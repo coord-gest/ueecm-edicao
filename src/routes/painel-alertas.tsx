@@ -203,6 +203,32 @@ function PainelAlertas() {
       });
       return;
     }
+    // Validações de agendamento: evita alertas que "expiram antes de começar"
+    // — bug clássico que fazia o cron descartar o push (expires_at > now()).
+    const startsAtDateValidation = scheduleStart && startsAt ? new Date(startsAt) : null;
+    const expiresAtDateValidation = expiresAt ? new Date(expiresAt) : null;
+    if (expiresAtDateValidation && expiresAtDateValidation.getTime() <= Date.now()) {
+      toast.error("Data de expiração inválida", {
+        description: "A expiração precisa estar no futuro.",
+      });
+      return;
+    }
+    if (
+      startsAtDateValidation &&
+      expiresAtDateValidation &&
+      expiresAtDateValidation.getTime() <= startsAtDateValidation.getTime()
+    ) {
+      toast.error("Agendamento inválido", {
+        description: "A expiração precisa ser posterior ao início agendado.",
+      });
+      return;
+    }
+    if (dailyStart && dailyEnd && dailyEnd <= dailyStart) {
+      toast.error("Janela diária inválida", {
+        description: "O horário final precisa ser maior que o inicial.",
+      });
+      return;
+    }
     setSubmitting(true);
 
     let uploadedImageUrl: string | null = editingId ? existingImageUrl : null;
