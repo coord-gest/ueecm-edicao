@@ -451,7 +451,124 @@ function PainelAlertas() {
           </div>
         </header>
 
-        <main className="mx-auto grid max-w-5xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[1fr_1.3fr]">
+        <main className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
+          {/* Rajada de notificações */}
+          <section className="rounded-3xl border border-border/70 bg-card p-6 shadow-sm">
+            <div className="flex flex-wrap items-center gap-2">
+              <Zap className="size-5 text-amber-500" />
+              <h2 className="font-display text-lg font-semibold">Rajada de notificações</h2>
+              <Badge variant="outline" className="ml-auto text-xs">
+                Reenvia N pushes em intervalos definidos
+              </Badge>
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Reforce um alerta importante enviando várias notificações espaçadas (ex.: 5 pushes a
+              cada 2 minutos). A rajada roda enquanto esta aba estiver aberta.
+            </p>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto_auto_auto]">
+              <div className="space-y-1.5">
+                <Label htmlFor="burstAlert" className="text-xs">
+                  Alerta a repetir
+                </Label>
+                <Select
+                  value={burstAlertId}
+                  onValueChange={setBurstAlertId}
+                  disabled={!!burstProgress}
+                >
+                  <SelectTrigger id="burstAlert">
+                    <SelectValue placeholder="Selecione um alerta ativo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(alerts ?? [])
+                      .filter((a) => a.active)
+                      .map((a) => (
+                        <SelectItem key={a.id} value={a.id}>
+                          [{variantLabels[(a.variant ?? "info") as Variant]}]{" "}
+                          {a.message.slice(0, 60)}
+                          {a.message.length > 60 ? "…" : ""}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="burstCount" className="text-xs">
+                  Quantidade
+                </Label>
+                <Input
+                  id="burstCount"
+                  type="number"
+                  min={1}
+                  max={20}
+                  value={burstCount}
+                  onChange={(e) => setBurstCount(Number(e.target.value))}
+                  className="w-24"
+                  disabled={!!burstProgress}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="burstInterval" className="text-xs">
+                  Intervalo (min)
+                </Label>
+                <Input
+                  id="burstInterval"
+                  type="number"
+                  min={1}
+                  max={120}
+                  value={burstInterval}
+                  onChange={(e) => setBurstInterval(Number(e.target.value))}
+                  className="w-24"
+                  disabled={!!burstProgress}
+                />
+              </div>
+              <div className="flex items-end">
+                {burstProgress ? (
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={cancelBurst}
+                    className="rounded-xl"
+                  >
+                    <StopCircle className="size-4" /> Cancelar
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    onClick={startBurst}
+                    disabled={!burstAlertId}
+                    className="rounded-xl"
+                  >
+                    <Zap className="size-4" /> Iniciar rajada
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {burstProgress && (
+              <div className="mt-4 rounded-xl border border-amber-500/40 bg-amber-500/5 p-3 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="font-medium">
+                    Enviados {burstProgress.sent}/{burstProgress.total}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    Próximo em ~{burstInterval} min
+                  </span>
+                </div>
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-background/60">
+                  <div
+                    className="h-full bg-amber-500 transition-all"
+                    style={{ width: `${(burstProgress.sent / burstProgress.total) * 100}%` }}
+                  />
+                </div>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Não feche esta aba — a rajada é executada no navegador.
+                </p>
+              </div>
+            )}
+          </section>
+
+          <div className="grid gap-6 lg:grid-cols-[1fr_1.3fr]">
           {/* Formulário */}
           <form
             onSubmit={handleCreate}
