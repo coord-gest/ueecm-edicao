@@ -59,6 +59,7 @@ export const ADMIN_ROUTE_PERMISSIONS: Record<string, AdminRoutePermission> = {
   // ---------- Administração ----------
   "/usuarios": { area: "Usuários", roles: ["diretor"] },
   "/painel-analytics": { area: "Analytics", roles: ["diretor", "coordenador"] },
+  "/painel-finops": { area: "FinOps (custos & uso)", roles: ["diretor"] },
   "/painel-auditoria": { area: "Auditoria", roles: [] }, // apenas desenvolvedor/admin
   "/painel-acessos": { area: "Acessos administrativos", roles: [] }, // apenas desenvolvedor/admin
   "/painel-erros": { area: "Painel de erros", roles: [] },
