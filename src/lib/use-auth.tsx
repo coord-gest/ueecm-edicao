@@ -111,6 +111,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!isMounted) return;
       setSession(nextSession);
       setUser(nextSession?.user ?? null);
+      // Vincula identidade ao Sentry (não bloqueia o fluxo de auth).
+      void import("@/lib/sentry")
+        .then((m) =>
+          m.setSentryUser(
+            nextSession?.user
+              ? { id: nextSession.user.id, email: nextSession.user.email ?? undefined }
+              : null,
+          ),
+        )
+        .catch(() => undefined);
       if (nextSession?.user) {
         // Adia a chamada ao Supabase para evitar deadlock dentro do callback
         setLoading(true);

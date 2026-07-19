@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { installClientErrorMonitor } from "../lib/error-monitor";
 import { installObservability } from "../lib/observability";
+import { installSentry } from "../lib/sentry";
 import { AuthProvider } from "../lib/use-auth";
 import { ThemeProvider } from "../lib/use-theme";
 import { supabase } from "../integrations/supabase/client";
@@ -220,6 +221,7 @@ function RootComponent() {
   useEffect(() => {
     installClientErrorMonitor();
     installObservability();
+    installSentry();
     registerServiceWorker();
     installOnlineFlushListener();
   }, []);
