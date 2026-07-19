@@ -1,6 +1,7 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import {
   Plus,
   Pencil,
@@ -10,12 +11,15 @@ import {
   GraduationCap,
   Search,
   Download,
+  ShieldCheck,
+  AlertTriangle,
 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -51,6 +55,16 @@ import { EmptyState } from "@/components/EmptyState";
 import { TableRowsSkeleton } from "@/components/TableRowsSkeleton";
 import { alunoRowSchema, ALUNO_TEMPLATE, type AlunoRow } from "@/lib/escola-import";
 import { exportRowsAsCsv } from "@/lib/csv-export";
+import {
+  calcularIdade,
+  cpfDigits,
+  formatCpf,
+  validateParentalConsent,
+} from "@/lib/parental-consent";
+import {
+  logAlunoParentalConsent,
+  hasAlunoParentalConsent,
+} from "@/lib/aluno-parental-consent.functions";
 
 export const Route = createFileRoute("/escola/alunos")({
   ssr: false,
@@ -77,6 +91,8 @@ function AlunosPage() {
   const qc = useQueryClient();
   const { hasRole, loading } = useAuth();
   const isAdmin = useIsSchoolAdmin(hasRole);
+  const logConsent = useServerFn(logAlunoParentalConsent);
+  const checkConsent = useServerFn(hasAlunoParentalConsent);
 
   const [editing, setEditing] = useState<Aluno | null>(null);
   const [creating, setCreating] = useState(false);
@@ -131,19 +147,52 @@ function AlunosPage() {
   }, [alunos, filter, filterTurma]);
 
   const saveMut = useMutation({
-    mutationFn: async (payload: Partial<Aluno> & { id?: string }) => {
-      if (payload.id) {
-        const { id, ...rest } = payload;
-        const { error } = await supabase.from("alunos").update(rest).eq("id", id);
+    mutationFn: async (
+      payload: Partial<Aluno> & {
+        id?: string;
+        __consent?: {
+          respNome: string;
+          respCpf: string;
+          respEmail: string;
+          respTelefone: string;
+        } | null;
+      },
+    ) => {
+      const { __consent, ...alunoPayload } = payload;
+      let alunoId = alunoPayload.id;
+      if (alunoId) {
+        const { id: _id, ...rest } = alunoPayload;
+        void _id;
+        const { error } = await supabase.from("alunos").update(rest).eq("id", alunoId);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("alunos").insert(payload as never);
+        const { data, error } = await supabase
+          .from("alunos")
+          .insert(alunoPayload as never)
+          .select("id")
+          .single();
         if (error) throw error;
+        alunoId = (data as { id: string }).id;
+      }
+      // Registra o consentimento parental (LGPD Art. 14) quando aplicável.
+      if (__consent && alunoId && alunoPayload.nome_completo && alunoPayload.data_nascimento) {
+        await logConsent({
+          data: {
+            aluno_id: alunoId,
+            minor_name: alunoPayload.nome_completo,
+            minor_dob: alunoPayload.data_nascimento,
+            guardian_name: __consent.respNome,
+            guardian_cpf: __consent.respCpf || null,
+            guardian_email: __consent.respEmail,
+            guardian_phone: __consent.respTelefone || null,
+          },
+        });
       }
     },
     onSuccess: () => {
       toast.success("Aluno salvo.");
       qc.invalidateQueries({ queryKey: ["escola-alunos"] });
+      qc.invalidateQueries({ queryKey: ["aluno-consent"] });
       setCreating(false);
       setEditing(null);
     },
@@ -327,6 +376,7 @@ function AlunosPage() {
         open={creating || !!editing}
         aluno={editing}
         turmas={turmas ?? []}
+        checkConsent={checkConsent}
         onClose={() => {
           setCreating(false);
           setEditing(null);
@@ -380,6 +430,7 @@ function AlunoFormDialog({
   open,
   aluno,
   turmas,
+  checkConsent,
   onClose,
   onSave,
   saving,
@@ -387,28 +438,105 @@ function AlunoFormDialog({
   open: boolean;
   aluno: Aluno | null;
   turmas: Turma[];
+  checkConsent: (opts: { data: { aluno_id: string } }) => Promise<{ hasConsent: boolean }>;
   onClose: () => void;
-  onSave: (p: Partial<Aluno> & { id?: string }) => void;
+  onSave: (
+    p: Partial<Aluno> & {
+      id?: string;
+      __consent?: {
+        respNome: string;
+        respCpf: string;
+        respEmail: string;
+        respTelefone: string;
+      } | null;
+    },
+  ) => void;
   saving: boolean;
 }) {
   const [ativo, setAtivo] = useState(aluno?.ativo ?? true);
+  const [dob, setDob] = useState(aluno?.data_nascimento ?? "");
+  const [nome, setNome] = useState(aluno?.nome_completo ?? "");
+  const [respNome, setRespNome] = useState("");
+  const [respCpf, setRespCpf] = useState("");
+  const [respEmail, setRespEmail] = useState("");
+  const [respTelefone, setRespTelefone] = useState("");
+  const [aceite, setAceite] = useState(false);
+  const [existingConsent, setExistingConsent] = useState<boolean | null>(null);
+
+  // Ao abrir para edição, verificamos se já existe consentimento — evita
+  // exigir novamente dados que já foram registrados.
+  useEffect(() => {
+    if (!open) return;
+    if (aluno?.id) {
+      setExistingConsent(null);
+      checkConsent({ data: { aluno_id: aluno.id } })
+        .then((r) => setExistingConsent(r.hasConsent))
+        .catch(() => setExistingConsent(null));
+    } else {
+      setExistingConsent(null);
+      setRespNome("");
+      setRespCpf("");
+      setRespEmail("");
+      setRespTelefone("");
+      setAceite(false);
+    }
+  }, [open, aluno, checkConsent]);
+
+  const idade = calcularIdade(dob);
+  const isMenor = idade !== null && idade < 18;
+  const precisaConsentimento = isMenor && existingConsent !== true;
+
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const turma = String(f.get("turma_id") ?? "");
+    const nomeCompleto = String(f.get("nome_completo") ?? "").trim();
+    const dataNasc = String(f.get("data_nascimento") ?? "").trim() || null;
+
+    // LGPD Art. 14: para menores de 18, exige registro de consentimento do
+    // responsável legal. Se ainda não há consentimento no banco, valida os
+    // dados do responsável antes de gravar o aluno.
+    let consentPayload: null | {
+      respNome: string;
+      respCpf: string;
+      respEmail: string;
+      respTelefone: string;
+    } = null;
+    if (precisaConsentimento) {
+      if (!dataNasc) {
+        toast.error("Informe a data de nascimento do aluno.");
+        return;
+      }
+      const check = validateParentalConsent({
+        nome: nomeCompleto,
+        dataNascimento: dataNasc,
+        respNome,
+        respCpf,
+        respEmail,
+        aceiteParental: aceite,
+        aceiteLgpd: true,
+      });
+      if (!check.ok) {
+        toast.error(check.error);
+        return;
+      }
+      consentPayload = { respNome, respCpf, respEmail, respTelefone };
+    }
+
     onSave({
       id: aluno?.id,
       matricula: String(f.get("matricula") ?? "").trim(),
-      nome_completo: String(f.get("nome_completo") ?? "").trim(),
+      nome_completo: nomeCompleto,
       turma_id: turma && turma !== "__none__" ? turma : null,
-      data_nascimento: String(f.get("data_nascimento") ?? "").trim() || null,
+      data_nascimento: dataNasc,
       observacoes: String(f.get("observacoes") ?? "").trim() || null,
       ativo,
+      __consent: consentPayload,
     });
   }
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{aluno ? "Editar aluno" : "Novo aluno"}</DialogTitle>
           <DialogDescription>
@@ -432,7 +560,8 @@ function AlunoFormDialog({
                 id="data_nascimento"
                 name="data_nascimento"
                 type="date"
-                defaultValue={aluno?.data_nascimento ?? ""}
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
               />
             </div>
           </div>
@@ -442,7 +571,8 @@ function AlunoFormDialog({
               id="nome_completo"
               name="nome_completo"
               required
-              defaultValue={aluno?.nome_completo ?? ""}
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
             />
           </div>
           <div>
@@ -474,6 +604,100 @@ function AlunoFormDialog({
             <Label htmlFor="ativo">Aluno ativo</Label>
             <Switch id="ativo" checked={ativo} onCheckedChange={setAtivo} />
           </div>
+
+          {isMenor && existingConsent === true && (
+            <div className="flex items-start gap-2 rounded-md border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-900 dark:border-emerald-900/50 dark:bg-emerald-950/30 dark:text-emerald-200">
+              <ShieldCheck className="mt-0.5 size-4 shrink-0" />
+              <span>Consentimento parental já registrado para este aluno.</span>
+            </div>
+          )}
+
+          {precisaConsentimento && (
+            <div className="space-y-3 rounded-lg border border-amber-300 bg-amber-50/60 p-4 dark:border-amber-800/50 dark:bg-amber-950/20">
+              <div className="flex items-start gap-2 text-sm text-amber-900 dark:text-amber-200">
+                <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+                <div>
+                  <p className="font-medium">Consentimento do responsável legal</p>
+                  <p className="text-xs opacity-90">
+                    Aluno menor de 18 anos ({idade} anos). A LGPD (Art. 14) exige registro do
+                    consentimento de um dos pais ou responsáveis.
+                  </p>
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="respNome">Nome do responsável</Label>
+                <Input
+                  id="respNome"
+                  value={respNome}
+                  onChange={(e) => setRespNome(e.target.value)}
+                  autoComplete="off"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label htmlFor="respCpf">CPF (opcional)</Label>
+                  <Input
+                    id="respCpf"
+                    value={respCpf}
+                    inputMode="numeric"
+                    placeholder="000.000.000-00"
+                    onChange={(e) => setRespCpf(formatCpf(e.target.value))}
+                    autoComplete="off"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="respTelefone">Telefone (opcional)</Label>
+                  <Input
+                    id="respTelefone"
+                    value={respTelefone}
+                    onChange={(e) => setRespTelefone(e.target.value)}
+                    autoComplete="off"
+                  />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="respEmail">E-mail do responsável</Label>
+                <Input
+                  id="respEmail"
+                  type="email"
+                  value={respEmail}
+                  onChange={(e) => setRespEmail(e.target.value)}
+                  autoComplete="off"
+                />
+              </div>
+              <label className="flex items-start gap-2 text-xs leading-relaxed">
+                <Checkbox
+                  checked={aceite}
+                  onCheckedChange={(v) => setAceite(v === true)}
+                  className="mt-0.5"
+                />
+                <span>
+                  Declaro, na qualidade de responsável legal, que autorizo o tratamento dos dados
+                  pessoais do(a) menor {nome ? <strong>{nome}</strong> : "aluno(a)"} pela escola,
+                  conforme a{" "}
+                  <a
+                    href="/privacidade"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline underline-offset-2"
+                  >
+                    Política de Privacidade
+                  </a>{" "}
+                  e a LGPD (Lei 13.709/2018).
+                </span>
+              </label>
+              <p className="text-[10px] text-muted-foreground">
+                CPF é opcional. O consentimento fica registrado com data, hora e endereço IP para
+                auditoria (
+                {(() => {
+                  const d = cpfDigits(respCpf);
+                  return d ? "CPF será armazenado apenas em dígitos" : "sem CPF armazenado";
+                })()}
+                ).
+              </p>
+            </div>
+          )}
+
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose} disabled={saving}>
               Cancelar
