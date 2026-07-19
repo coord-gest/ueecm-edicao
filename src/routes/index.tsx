@@ -425,6 +425,33 @@ function SectionHeader({ title }: { title: string }) {
   );
 }
 
+function RevealSection({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const ref = useReveal<HTMLElement>();
+  return (
+    <section ref={ref} className={`reveal ${className}`}>
+      {children}
+    </section>
+  );
+}
+
+function _SectionHeaderPlaceholder({ title }: { title: string }) {
+  return (
+    <div className="mb-6 flex items-center gap-3">
+      <span className="h-px flex-1 bg-border" />
+      <h2 className="font-sans text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+        {title}
+      </h2>
+      <span className="h-px flex-1 bg-border" />
+    </div>
+  );
+}
+
 function HeroCarousel({ slides }: { slides: Post[] }) {
   const [index, setIndex] = useState(0);
   const total = slides.length;
