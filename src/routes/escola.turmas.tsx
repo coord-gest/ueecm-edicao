@@ -209,10 +209,10 @@ function TurmasPage() {
                           {prof?.display_name ?? prof?.email ?? "—"}
                         </td>
                         <td className="px-4 py-3 text-right">
-                          <Button size="icon" variant="ghost" onClick={() => setEditing(t)}>
+                          <Button size="icon" variant="ghost" aria-label={`Editar turma ${t.nome}`} onClick={() => setEditing(t)}>
                             <Pencil className="size-4" />
                           </Button>
-                          <Button size="icon" variant="ghost" onClick={() => setDeleting(t)}>
+                          <Button size="icon" variant="ghost" aria-label={`Excluir turma ${t.nome}`} onClick={() => setDeleting(t)}>
                             <Trash2 className="size-4 text-destructive" />
                           </Button>
                         </td>

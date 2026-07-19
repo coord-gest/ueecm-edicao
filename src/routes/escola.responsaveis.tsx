@@ -462,13 +462,13 @@ function ResponsaveisPage() {
                           )}
                         </td>
                         <td className="px-4 py-3 text-right whitespace-nowrap">
-                          <Button size="icon" variant="ghost" onClick={() => setLinking(r)}>
+                          <Button size="icon" variant="ghost" aria-label={`Vincular alunos ao responsável ${r.nome}`} onClick={() => setLinking(r)}>
                             <Link2 className="size-4" />
                           </Button>
-                          <Button size="icon" variant="ghost" onClick={() => setEditing(r)}>
+                          <Button size="icon" variant="ghost" aria-label={`Editar responsável ${r.nome}`} onClick={() => setEditing(r)}>
                             <Pencil className="size-4" />
                           </Button>
-                          <Button size="icon" variant="ghost" onClick={() => setDeleting(r)}>
+                          <Button size="icon" variant="ghost" aria-label={`Excluir responsável ${r.nome}`} onClick={() => setDeleting(r)}>
                             <Trash2 className="size-4 text-destructive" />
                           </Button>
                         </td>

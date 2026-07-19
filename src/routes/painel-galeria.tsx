@@ -196,6 +196,7 @@ function PainelGaleria() {
                     <Button
                       size="icon"
                       variant="ghost"
+                      aria-label={`Editar álbum "${a.titulo}"`}
                       onClick={() => {
                         setForm({
                           id: a.id,
@@ -212,6 +213,7 @@ function PainelGaleria() {
                     <Button
                       size="icon"
                       variant="ghost"
+                      aria-label={`Excluir álbum "${a.titulo}"`}
                       onClick={() => {
                         if (confirm(`Excluir "${a.titulo}" e todas as fotos?`))
                           excluir.mutate(a.id);

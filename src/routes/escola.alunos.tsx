@@ -399,10 +399,10 @@ function AlunosPage() {
                         />
                       </td>
                       <td className="px-4 py-3 text-right">
-                        <Button size="icon" variant="ghost" onClick={() => setEditing(a)}>
+                        <Button size="icon" variant="ghost" aria-label={`Editar aluno ${a.nome_completo}`} onClick={() => setEditing(a)}>
                           <Pencil className="size-4" />
                         </Button>
-                        <Button size="icon" variant="ghost" onClick={() => setDeleting(a)}>
+                        <Button size="icon" variant="ghost" aria-label={`Excluir aluno ${a.nome_completo}`} onClick={() => setDeleting(a)}>
                           <Trash2 className="size-4 text-destructive" />
                         </Button>
                       </td>

@@ -134,7 +134,7 @@ function PainelErros() {
                 <SelectItem value="info">Info</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="icon" onClick={() => q.refetch()}>
+            <Button variant="outline" size="icon" onClick={() => q.refetch()} aria-label="Atualizar lista de erros">
               <RefreshCw className={q.isFetching ? "h-4 w-4 animate-spin" : "h-4 w-4"} />
             </Button>
             <Button
