@@ -310,7 +310,7 @@ export async function drainPushQueue(triggerSource: string = "queue"): Promise<{
   if (tokenRows.length === 0) {
     await supabaseAdmin
       .from("push_notifications_queue")
-      .update({ processed_at: new Date().toISOString() })
+      .update({ processed_at: new Date().toISOString(), status: "sent" })
       .in("id", ids);
     await recordDispatchLog({
       trigger_source: triggerSource,
@@ -386,7 +386,11 @@ export async function drainPushQueue(triggerSource: string = "queue"): Promise<{
 
   await supabaseAdmin
     .from("push_notifications_queue")
-    .update({ processed_at: new Date().toISOString() })
+    .update({
+      processed_at: new Date().toISOString(),
+      status: errors.length === 0 ? "sent" : sent > 0 ? "partial" : "failed",
+      last_error: errors[0] ?? null,
+    })
     .in("id", ids);
 
   logger.debug(
