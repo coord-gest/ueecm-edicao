@@ -50,7 +50,7 @@ export function TeamHighlight() {
             ? Array.from({ length: 4 }).map((_, i) => (
                 <div
                   key={i}
-                  className="h-40 w-56 shrink-0 animate-pulse rounded-lg bg-secondary/50 sm:w-auto"
+                  className="h-40 w-56 shrink-0 animate-pulse bg-secondary/50 sm:w-auto"
                 />
               ))
             : (data ?? []).slice(0, 8).map((p) => <TeamCard key={p.id} p={p} />)}
@@ -66,7 +66,7 @@ function TeamCard({ p }: { p: ProfPublico }) {
   return (
     <Link
       to="/equipe"
-      className="group relative flex w-56 shrink-0 flex-col items-center overflow-hidden rounded-lg border border-border bg-linear-to-br from-primary to-accent p-5 text-center text-primary-foreground shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:border-gold hover:shadow-xl sm:w-auto"
+      className="group relative flex w-56 shrink-0 flex-col items-center overflow-hidden border border-border bg-linear-to-br from-primary to-accent p-5 text-center text-primary-foreground shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:border-gold hover:shadow-xl sm:w-auto"
     >
       <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-gold via-gold/70 to-transparent" />
       <span className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-gold/20 blur-2xl transition-transform group-hover:scale-125" />
