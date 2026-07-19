@@ -36,9 +36,20 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
 import { dispatchPush } from "@/lib/push.functions";
 import { sendAlertPushNow } from "@/lib/alert-burst.functions";
+import { logAlertClientAction } from "@/lib/alert-management.functions";
 import { useServerFn } from "@tanstack/react-start";
 
 import { PainelLayout } from "@/components/PainelLayout";
+import { BurstScheduler } from "@/components/painel-alertas/BurstScheduler";
+import { AlertAuditLog } from "@/components/painel-alertas/AlertAuditLog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 type Variant = "info" | "success" | "warning" | "destructive";
 
@@ -76,6 +87,15 @@ function PainelAlertas() {
   const canManage = hasRole("desenvolvedor") || hasRole("diretor") || hasRole("coordenador");
 
   const sendPushNow = useServerFn(sendAlertPushNow);
+  const logAction = useServerFn(logAlertClientAction);
+  type LogPayload = {
+    alertId: string | null;
+    action: "created" | "updated" | "deleted" | "activated" | "deactivated";
+    result?: "success" | "failed";
+    details?: Record<string, unknown>;
+  };
+  const safeLog = (payload: LogPayload) =>
+    logAction({ data: payload }).catch(() => {});
 
   // Rajada de notificações (client-side).
   const [burstAlertId, setBurstAlertId] = useState<string>("");
@@ -191,6 +211,8 @@ function PainelAlertas() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [pendingPayload, setPendingPayload] = useState<null | Record<string, unknown>>(null);
 
   const toLocalInput = (iso: string | null | undefined) => {
     if (!iso) return "";
@@ -277,6 +299,32 @@ function PainelAlertas() {
     },
   });
 
+  // Status de entrega agregado por alerta (source_id → contagens por status)
+  const alertIds = (alerts ?? []).map((a) => a.id);
+  const { data: deliveryMap } = useQuery({
+    queryKey: ["alert-delivery", alertIds.length, alertIds.slice(0, 5).join(",")],
+    enabled: canManage && alertIds.length > 0,
+    refetchInterval: 20_000,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("push_notifications_queue")
+        .select("source_id, status")
+        .eq("source", "alert")
+        .in("source_id", alertIds);
+      if (error) throw error;
+      const map: Record<string, { pending: number; sent: number; failed: number; partial: number }> =
+        {};
+      for (const r of data ?? []) {
+        const id = r.source_id as string | null;
+        if (!id) continue;
+        map[id] ??= { pending: 0, sent: 0, failed: 0, partial: 0 };
+        const s = (r.status as string) || "pending";
+        if (s in map[id]) (map[id] as Record<string, number>)[s]++;
+      }
+      return map;
+    },
+  });
+
   if (!loading && !canManage) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
@@ -333,6 +381,17 @@ function PainelAlertas() {
       });
       return;
     }
+
+    // Abre pré-visualização — a publicação real acontece em `confirmPublish()`.
+    setPendingPayload({ trimmed });
+    setPreviewOpen(true);
+  };
+
+  const confirmPublish = async () => {
+    if (!user) return;
+    setPreviewOpen(false);
+    const trimmed = message.trim();
+    if (!trimmed) return;
     setSubmitting(true);
 
     let uploadedImageUrl: string | null = editingId ? existingImageUrl : null;
@@ -375,26 +434,35 @@ function PainelAlertas() {
       setSubmitting(false);
       if (error) {
         toast.error("Não foi possível salvar as alterações", { description: error.message });
+        safeLog({ alertId: editingId, action: "updated", result: "failed", details: { error: error.message } });
         return;
       }
       toast.success("Alerta atualizado");
+      safeLog({ alertId: editingId, action: "updated", result: "success", details: { variant } });
       resetForm();
       qc.invalidateQueries({ queryKey: ["alerts-admin"] });
       return;
     }
 
-    const { error } = await supabase.from("alerts").insert({
+    const { data: inserted, error } = await supabase.from("alerts").insert({
       ...payload,
       active: true,
       created_by: user.id,
-    } as never);
+    } as never).select("id").single();
     setSubmitting(false);
     if (error) {
       toast.error("Não foi possível criar o alerta", { description: error.message });
+      safeLog({ alertId: null, action: "created", result: "failed", details: { error: error.message } });
       return;
     }
     toast.success("Alerta publicado", {
       description: "Visível em todos os dispositivos imediatamente.",
+    });
+    safeLog({
+      alertId: (inserted as { id: string } | null)?.id ?? null,
+      action: "created",
+      result: "success",
+      details: { variant, scheduled: !!payload.starts_at },
     });
     // Só dispara o envio imediato quando o alerta NÃO está agendado para
     // o futuro. Caso contrário, o cron `enqueue-due-alert-pushes` cuida do
@@ -415,9 +483,11 @@ function PainelAlertas() {
     const { error } = await supabase.from("alerts").update({ active: next }).eq("id", id);
     if (error) {
       toast.error("Falha ao atualizar", { description: error.message });
+      safeLog({ alertId: id, action: next ? "activated" : "deactivated", result: "failed", details: { error: error.message } });
       return;
     }
     toast.success(next ? "Alerta reativado" : "Alerta desativado");
+    safeLog({ alertId: id, action: next ? "activated" : "deactivated", result: "success" });
     qc.invalidateQueries({ queryKey: ["alerts-admin"] });
   };
 
@@ -426,9 +496,11 @@ function PainelAlertas() {
     const { error } = await supabase.from("alerts").delete().eq("id", id);
     if (error) {
       toast.error("Falha ao excluir", { description: error.message });
+      safeLog({ alertId: id, action: "deleted", result: "failed", details: { error: error.message } });
       return;
     }
     toast.success("Alerta excluído");
+    safeLog({ alertId: id, action: "deleted", result: "success" });
     qc.invalidateQueries({ queryKey: ["alerts-admin"] });
   };
 
@@ -857,6 +929,48 @@ function PainelAlertas() {
                       ) : (
                         <Badge variant="secondary">{expired ? "Expirado" : "Inativo"}</Badge>
                       )}
+                      {(() => {
+                        const s = deliveryMap?.[a.id];
+                        if (!s) return null;
+                        const total = s.sent + s.failed + s.partial + s.pending;
+                        if (total === 0) return null;
+                        return (
+                          <span className="inline-flex items-center gap-1 text-xs">
+                            {s.sent > 0 && (
+                              <Badge
+                                variant="outline"
+                                className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                              >
+                                {s.sent} enviado{s.sent > 1 ? "s" : ""}
+                              </Badge>
+                            )}
+                            {s.pending > 0 && (
+                              <Badge
+                                variant="outline"
+                                className="bg-sky-500/10 text-sky-700 dark:text-sky-300"
+                              >
+                                {s.pending} na fila
+                              </Badge>
+                            )}
+                            {s.partial > 0 && (
+                              <Badge
+                                variant="outline"
+                                className="bg-amber-500/10 text-amber-700 dark:text-amber-300"
+                              >
+                                {s.partial} parcial
+                              </Badge>
+                            )}
+                            {s.failed > 0 && (
+                              <Badge
+                                variant="outline"
+                                className="bg-red-500/10 text-red-700 dark:text-red-300"
+                              >
+                                {s.failed} falhou
+                              </Badge>
+                            )}
+                          </span>
+                        );
+                      })()}
                       {ax.starts_at && (
                         <span className="text-xs text-muted-foreground">
                           Início: {new Date(ax.starts_at).toLocaleString("pt-BR")}
@@ -956,6 +1070,79 @@ function PainelAlertas() {
             </div>
           </div>
           </div>
+
+          <BurstScheduler
+            alertOptions={(alerts ?? []).map((a) => ({
+              id: a.id,
+              message: a.message,
+              variant: a.variant,
+              active: a.active,
+            }))}
+          />
+
+          <AlertAuditLog />
+
+          <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+            <DialogContent className="max-w-lg">
+              <DialogHeader>
+                <DialogTitle>Pré-visualização do alerta</DialogTitle>
+                <DialogDescription>
+                  Confira como aparecerá para os usuários antes de {editingId ? "salvar" : "publicar"}.
+                </DialogDescription>
+              </DialogHeader>
+              <div
+                className={`rounded-2xl border p-4 text-sm ${variantTone[variant]}`}
+              >
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline">{variantLabels[variant]}</Badge>
+                </div>
+                <p className="mt-2 whitespace-pre-wrap font-medium">
+                  {message.trim() || "(mensagem vazia)"}
+                </p>
+                {linkUrl.trim() && (
+                  <a
+                    href={linkUrl.trim()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                  >
+                    {linkLabel.trim() || linkUrl.trim()}
+                    <ExternalLink className="size-3" />
+                  </a>
+                )}
+                {existingImageUrl && (
+                  <img
+                    src={existingImageUrl}
+                    alt=""
+                    className="mt-3 max-h-40 w-full rounded-lg object-cover"
+                  />
+                )}
+              </div>
+              <div className="text-xs text-muted-foreground">
+                <p>Variante: <span className="font-medium text-foreground">{variantLabels[variant]}</span></p>
+                {scheduleStart && startsAt && (
+                  <p>Início agendado: {new Date(startsAt).toLocaleString("pt-BR")}</p>
+                )}
+                {expiresAt && (
+                  <p>Expira: {new Date(expiresAt).toLocaleString("pt-BR")}</p>
+                )}
+                {(dailyStart || dailyEnd) && (
+                  <p>
+                    Janela diária: {dailyStart || "--:--"} → {dailyEnd || "--:--"}
+                  </p>
+                )}
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setPreviewOpen(false)} className="rounded-full">
+                  Voltar
+                </Button>
+                <Button onClick={confirmPublish} disabled={submitting} className="rounded-full">
+                  {submitting ? <Loader2 className="size-4 animate-spin" /> : null}
+                  {editingId ? "Salvar alterações" : "Publicar alerta"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </main>
       </div>
     </PainelLayout>
