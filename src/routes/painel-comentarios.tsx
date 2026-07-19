@@ -63,7 +63,7 @@ function PainelComentarios() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-dvh items-center justify-center">
         <Loader2 className="size-6 animate-spin text-muted-foreground" />
       </div>
     );
@@ -85,7 +85,7 @@ function PainelComentarios() {
 
   return (
     <PainelLayout>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-dvh bg-background">
         <header className="border-b border-border/60 bg-card/40">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
             <div className="flex items-center gap-3">
