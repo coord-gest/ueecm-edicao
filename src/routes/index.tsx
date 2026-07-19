@@ -194,20 +194,20 @@ function Home() {
 
       <SiteHeader />
 
+      <section className="mb-16 w-full" aria-label="Notícias em destaque">
+        {isLoading ? (
+          <HeroSkeleton />
+        ) : heroSlides.length > 0 ? (
+          <HeroCarousel slides={heroSlides} />
+        ) : (
+          <EmptyHero />
+        )}
+      </section>
+
       <div className="mx-auto w-full max-w-7xl px-4 pb-20 pt-6 sm:px-6 lg:px-8">
         <h1 className="sr-only">
           Portal U.E. Evaristo Campelo de Matos — notícias e comunicados da comunidade escolar
         </h1>
-        {/* HERO em destaque — banner amplo */}
-        <section className="mb-16" aria-label="Notícias em destaque">
-          {isLoading ? (
-            <HeroSkeleton />
-          ) : heroSlides.length > 0 ? (
-            <HeroCarousel slides={heroSlides} />
-          ) : (
-            <EmptyHero />
-          )}
-        </section>
 
         {/* Sobre a escola (resumo) */}
         <SobreEscola />
