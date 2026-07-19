@@ -35,7 +35,7 @@ export function SiteHeader() {
       <OfflineBanner />
       <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-lg">
         <div className="flex h-16 w-full items-center justify-between gap-3 px-4 py-3 sm:h-18 sm:px-6 lg:gap-4 lg:px-8">
-          <Link to="/" className="flex min-w-0 items-center gap-2 sm:gap-3 xl:shrink">
+          <Link to="/" className="group flex min-w-0 items-center gap-3 sm:gap-4 xl:shrink">
             <img
               src={logo}
               alt="Brasão U.E. Evaristo Campelo de Matos"
@@ -43,7 +43,11 @@ export function SiteHeader() {
               width={48}
               height={48}
             />
-            <span className="truncate border-y-2 border-primary px-2 py-1 font-display text-xs font-bold tracking-tight text-primary sm:text-sm xl:text-base 2xl:whitespace-nowrap 2xl:text-xl dark:text-foreground">
+            <span
+              aria-hidden="true"
+              className="h-9 w-px shrink-0 bg-gradient-to-b from-transparent via-primary/70 to-transparent sm:h-10 xl:h-12"
+            />
+            <span className="truncate font-display text-xs font-bold tracking-tight text-primary sm:text-sm xl:text-base 2xl:whitespace-nowrap 2xl:text-xl dark:text-foreground">
               U.E. Evaristo Campelo de Matos
             </span>
           </Link>
