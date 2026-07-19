@@ -25,6 +25,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Input as SearchInput } from "@/components/ui/input";
+import { Search } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -113,6 +116,10 @@ function Usuarios() {
   const [showPassword, setShowPassword] = useState(false);
   const [nome, setNome] = useState("");
   const [role, setRole] = useState<(typeof roleOptions)[number]["value"]>("diretor");
+  const [activeTab, setActiveTab] = useState<
+    "gestao" | "professores" | "funcionarios" | "familias" | "sem-cargo"
+  >("gestao");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const {
     data: users,
@@ -372,8 +379,40 @@ function Usuarios() {
                 <Loader2 className="size-6 animate-spin text-muted-foreground" />
               </div>
             ) : (
-              <ul className="mt-4 divide-y divide-border/60">
-                {(users ?? []).map((u) => {
+              (() => {
+                const allUsers = users ?? [];
+                const categorize = (
+                  roles: string[],
+                ): "gestao" | "professores" | "funcionarios" | "familias" | "sem-cargo" => {
+                  if (roles.length === 0) return "sem-cargo";
+                  if (
+                    roles.some((r) =>
+                      ["desenvolvedor", "admin", "diretor", "coordenador"].includes(r),
+                    )
+                  )
+                    return "gestao";
+                  if (roles.includes("professor")) return "professores";
+                  if (roles.includes("secretario")) return "funcionarios";
+                  if (roles.includes("leitor")) return "familias";
+                  return "sem-cargo";
+                };
+                const term = searchTerm.trim().toLowerCase();
+                const matchesSearch = (u: (typeof allUsers)[number]) => {
+                  if (!term) return true;
+                  return (
+                    (u.displayName ?? "").toLowerCase().includes(term) ||
+                    (u.email ?? "").toLowerCase().includes(term)
+                  );
+                };
+                const byCategory = {
+                  gestao: allUsers.filter((u) => categorize(u.roles) === "gestao"),
+                  professores: allUsers.filter((u) => categorize(u.roles) === "professores"),
+                  funcionarios: allUsers.filter((u) => categorize(u.roles) === "funcionarios"),
+                  familias: allUsers.filter((u) => categorize(u.roles) === "familias"),
+                  "sem-cargo": allUsers.filter((u) => categorize(u.roles) === "sem-cargo"),
+                } as const;
+
+                const renderRow = (u: (typeof allUsers)[number]) => {
                   const isSelf = u.userId === user?.id;
                   const targetIsDev = u.roles.includes("desenvolvedor");
                   const canDelete = !isSelf && (isDeveloper || !targetIsDev);
@@ -429,7 +468,6 @@ function Usuarios() {
                             </SelectContent>
                           </Select>
                         )}
-
                         {canDelete && (
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
@@ -467,13 +505,85 @@ function Usuarios() {
                       </div>
                     </li>
                   );
-                })}
-                {(users ?? []).length === 0 && (
-                  <li className="py-6 text-center text-sm text-muted-foreground">
-                    Nenhum usuário cadastrado ainda.
-                  </li>
-                )}
-              </ul>
+                };
+
+                const renderList = (
+                  list: readonly (typeof allUsers)[number][],
+                  emptyMsg: string,
+                ) => {
+                  const filtered = list.filter(matchesSearch);
+                  if (filtered.length === 0) {
+                    return (
+                      <p className="py-6 text-center text-sm text-muted-foreground">
+                        {term ? "Nenhum resultado para a busca." : emptyMsg}
+                      </p>
+                    );
+                  }
+                  return <ul className="divide-y divide-border/60">{filtered.map(renderRow)}</ul>;
+                };
+
+                return (
+                  <div className="mt-4 space-y-4">
+                    <div className="relative">
+                      <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                      <SearchInput
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder="Buscar por nome ou e-mail…"
+                        className="rounded-full pl-9"
+                      />
+                    </div>
+                    <Tabs
+                      value={activeTab}
+                      onValueChange={(v) => setActiveTab(v as typeof activeTab)}
+                    >
+                      <TabsList className="flex h-auto w-full flex-wrap justify-start gap-1 bg-muted/60 p-1">
+                        <TabsTrigger value="gestao" className="rounded-full">
+                          Gestão Escolar ({byCategory.gestao.length})
+                        </TabsTrigger>
+                        <TabsTrigger value="professores" className="rounded-full">
+                          Professores ({byCategory.professores.length})
+                        </TabsTrigger>
+                        <TabsTrigger value="funcionarios" className="rounded-full">
+                          Demais Funcionários ({byCategory.funcionarios.length})
+                        </TabsTrigger>
+                        <TabsTrigger value="familias" className="rounded-full">
+                          Pais e Responsáveis ({byCategory.familias.length})
+                        </TabsTrigger>
+                        {byCategory["sem-cargo"].length > 0 && (
+                          <TabsTrigger value="sem-cargo" className="rounded-full">
+                            Sem cargo ({byCategory["sem-cargo"].length})
+                          </TabsTrigger>
+                        )}
+                      </TabsList>
+                      <TabsContent value="gestao" className="mt-4">
+                        {renderList(
+                          byCategory.gestao,
+                          "Nenhum usuário de gestão cadastrado ainda.",
+                        )}
+                      </TabsContent>
+                      <TabsContent value="professores" className="mt-4">
+                        {renderList(byCategory.professores, "Nenhum professor cadastrado ainda.")}
+                      </TabsContent>
+                      <TabsContent value="funcionarios" className="mt-4">
+                        {renderList(
+                          byCategory.funcionarios,
+                          "Nenhum funcionário cadastrado ainda.",
+                        )}
+                      </TabsContent>
+                      <TabsContent value="familias" className="mt-4">
+                        {renderList(
+                          byCategory.familias,
+                          "Nenhum responsável cadastrado ainda.",
+                        )}
+                      </TabsContent>
+                      <TabsContent value="sem-cargo" className="mt-4">
+                        {renderList(byCategory["sem-cargo"], "Nenhum usuário sem cargo.")}
+                      </TabsContent>
+                    </Tabs>
+                  </div>
+                );
+              })()
             )}
           </section>
         </main>
