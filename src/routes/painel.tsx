@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SeedAcademicCard } from "@/components/SeedAcademicCard";
+import { SeedExtendedCard } from "@/components/SeedExtendedCard";
 import { TestPushButton } from "@/components/TestPushButton";
 import { BroadcastTestPushButton } from "@/components/BroadcastTestPushButton";
 import { RuntimeEnvBanner } from "@/components/RuntimeEnvBanner";
@@ -338,6 +339,7 @@ function Painel() {
             )}
 
             {isDeveloper && <SeedAcademicCard />}
+            {isDeveloper && <div className="mt-6"><SeedExtendedCard /></div>}
 
             <div className="mt-6 rounded-3xl border border-primary/20 bg-card p-6 shadow-sm">
               <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-foreground">
