@@ -468,12 +468,24 @@ function HeroCarousel({ slides }: { slides: Post[] }) {
   const [index, setIndex] = useState(0);
   const total = slides.length;
   const [paused, setPaused] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, []);
 
   useEffect(() => {
     if (total <= 1 || paused) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % total), 4000);
+    // Usuários com "reduzir movimento" recebem uma rotação bem mais lenta.
+    const interval = reducedMotion ? 12000 : 5500;
+    const id = setInterval(() => setIndex((i) => (i + 1) % total), interval);
     return () => clearInterval(id);
-  }, [total, paused]);
+  }, [total, paused, reducedMotion]);
 
   useEffect(() => {
     if (index >= total) setIndex(0);
