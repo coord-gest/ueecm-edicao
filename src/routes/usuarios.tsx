@@ -25,6 +25,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Input as SearchInput } from "@/components/ui/input";
+import { Search } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -113,6 +116,10 @@ function Usuarios() {
   const [showPassword, setShowPassword] = useState(false);
   const [nome, setNome] = useState("");
   const [role, setRole] = useState<(typeof roleOptions)[number]["value"]>("diretor");
+  const [activeTab, setActiveTab] = useState<
+    "gestao" | "professores" | "funcionarios" | "familias" | "sem-cargo"
+  >("gestao");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const {
     data: users,
