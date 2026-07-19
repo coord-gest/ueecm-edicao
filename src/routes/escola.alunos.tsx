@@ -161,8 +161,9 @@ function AlunosPage() {
       const { __consent, ...alunoPayload } = payload;
       let alunoId = alunoPayload.id;
       if (alunoId) {
-        const { id, ...rest } = alunoPayload;
-        const { error } = await supabase.from("alunos").update(rest).eq("id", id);
+        const { id: _id, ...rest } = alunoPayload;
+        void _id;
+        const { error } = await supabase.from("alunos").update(rest).eq("id", alunoId);
         if (error) throw error;
       } else {
         const { data, error } = await supabase
