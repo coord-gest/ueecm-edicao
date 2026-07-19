@@ -64,7 +64,15 @@ import {
 import {
   logAlunoParentalConsent,
   hasAlunoParentalConsent,
+  listAlunoConsentBadges,
+  type ConsentBadge,
 } from "@/lib/aluno-parental-consent.functions";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const Route = createFileRoute("/escola/alunos")({
   ssr: false,
@@ -93,6 +101,8 @@ function AlunosPage() {
   const isAdmin = useIsSchoolAdmin(hasRole);
   const logConsent = useServerFn(logAlunoParentalConsent);
   const checkConsent = useServerFn(hasAlunoParentalConsent);
+  const listBadges = useServerFn(listAlunoConsentBadges);
+  const notifyGuardian = useServerFn(notifyGuardianConsent);
 
   const [editing, setEditing] = useState<Aluno | null>(null);
   const [creating, setCreating] = useState(false);
@@ -145,6 +155,19 @@ function AlunosPage() {
       return a.nome_completo.toLowerCase().includes(q) || a.matricula.toLowerCase().includes(q);
     });
   }, [alunos, filter, filterTurma]);
+
+  // Consulta em lote dos badges de consentimento parental para os alunos
+  // atualmente carregados. Alimenta o indicador visual "OK" / "Pendente".
+  const alunoIds = useMemo(() => (alunos ?? []).map((a) => a.id), [alunos]);
+  const { data: consentByAluno } = useQuery({
+    queryKey: ["parental-consent-badges", alunoIds],
+    queryFn: async () => {
+      if (alunoIds.length === 0) return {} as Record<string, ConsentBadge>;
+      const r = await listBadges({ data: { aluno_ids: alunoIds } });
+      return r.byAluno;
+    },
+    enabled: isAdmin && alunoIds.length > 0,
+  });
 
   const saveMut = useMutation({
     mutationFn: async (
@@ -336,11 +359,12 @@ function AlunosPage() {
                   <th className="px-4 py-3">Nome</th>
                   <th className="px-4 py-3">Turma</th>
                   <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3">Consentimento</th>
                   <th className="px-4 py-3" />
                 </tr>
               </thead>
               {isLoading ? (
-                <TableRowsSkeleton rows={5} cols={5} />
+                <TableRowsSkeleton rows={5} cols={6} />
               ) : (
                 <tbody>
                   {filtered.map((a) => (
@@ -354,6 +378,14 @@ function AlunosPage() {
                         <span className={a.ativo ? "text-emerald-600" : "text-muted-foreground"}>
                           {a.ativo ? "Ativo" : "Inativo"}
                         </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <ConsentBadgePill
+                          idade={
+                            a.data_nascimento ? calcularIdade(a.data_nascimento) : null
+                          }
+                          badge={consentByAluno?.[a.id] ?? null}
+                        />
                       </td>
                       <td className="px-4 py-3 text-right">
                         <Button size="icon" variant="ghost" onClick={() => setEditing(a)}>
@@ -709,5 +741,55 @@ function AlunoFormDialog({
         </form>
       </DialogContent>
     </Dialog>
+  );
+}
+
+/**
+ * Badge de status de consentimento parental (LGPD Art. 14).
+ * - Adulto: "N/A" (não aplicável)
+ * - Menor + consentimento: pill verde com tooltip mostrando responsável e data
+ * - Menor sem consentimento: pill âmbar de pendência
+ */
+function ConsentBadgePill({
+  idade,
+  badge,
+}: {
+  idade: number | null;
+  badge: ConsentBadge | null;
+}) {
+  const isMenor = idade !== null && idade < 18;
+  if (!isMenor) {
+    return <span className="text-xs text-muted-foreground">—</span>;
+  }
+  if (badge) {
+    const dt = new Date(badge.consented_at);
+    const label = `Registrado por ${badge.guardian_name} em ${dt.toLocaleDateString("pt-BR")} às ${dt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`;
+    return (
+      <TooltipProvider delayDuration={150}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-300/70 bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-200">
+              <ShieldCheck className="size-3" /> OK
+            </span>
+          </TooltipTrigger>
+          <TooltipContent side="top">{label}</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+  return (
+    <TooltipProvider delayDuration={150}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span className="inline-flex items-center gap-1 rounded-full border border-amber-300/70 bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800 dark:border-amber-800/60 dark:bg-amber-950/40 dark:text-amber-200">
+            <AlertTriangle className="size-3" /> Pendente
+          </span>
+        </TooltipTrigger>
+        <TooltipContent side="top">
+          Consentimento parental não registrado. Edite o aluno para preencher os dados do
+          responsável.
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }

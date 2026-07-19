@@ -3,6 +3,7 @@ import {
   calcularIdade,
   formatCpf,
   cpfDigits,
+  isValidCpf,
   validateParentalConsent,
   type ParentalFormInput,
 } from "./parental-consent";
@@ -73,6 +74,34 @@ describe("formatCpf / cpfDigits", () => {
   });
 });
 
+describe("isValidCpf", () => {
+  it("rejeita string vazia, tamanho errado e não-numéricos", () => {
+    expect(isValidCpf("")).toBe(false);
+    expect(isValidCpf("123")).toBe(false);
+    expect(isValidCpf("abcdefghijk")).toBe(false);
+  });
+
+  it("rejeita sequências repetidas (000..., 111..., 999...)", () => {
+    expect(isValidCpf("00000000000")).toBe(false);
+    expect(isValidCpf("11111111111")).toBe(false);
+    expect(isValidCpf("99999999999")).toBe(false);
+  });
+
+  it("rejeita CPF com dígitos verificadores incorretos", () => {
+    // 123.456.789-00 falha nos DVs (corretos seriam 09)
+    expect(isValidCpf("12345678900")).toBe(false);
+    expect(isValidCpf("123.456.789-01")).toBe(false);
+  });
+
+  it("aceita CPFs matematicamente válidos, com ou sem máscara", () => {
+    // CPFs de teste com DVs corretos (calculados pelo algoritmo oficial).
+    expect(isValidCpf("52998224725")).toBe(true);
+    expect(isValidCpf("529.982.247-25")).toBe(true);
+    expect(isValidCpf("11144477735")).toBe(true);
+    expect(isValidCpf("111.444.777-35")).toBe(true);
+  });
+});
+
 describe("validateParentalConsent — submissão em /agendar", () => {
   it("bloqueia quando falta data de nascimento", () => {
     const r = validateParentalConsent(base(), REF);
@@ -118,6 +147,21 @@ describe("validateParentalConsent — submissão em /agendar", () => {
     if (!r.ok) expect(r.error).toMatch(/CPF/i);
   });
 
+  it("bloqueia menor com CPF de 11 dígitos mas DV inválido", () => {
+    const r = validateParentalConsent(
+      base({
+        dataNascimento: "2015-01-01",
+        respNome: "Maria Silva",
+        respCpf: "123.456.789-00", // formato ok, DV errado
+        respEmail: "maria@example.com",
+        aceiteParental: true,
+      }),
+      REF,
+    );
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error).toMatch(/dígitos verificadores/i);
+  });
+
   it("bloqueia menor com e-mail do responsável inválido", () => {
     const r = validateParentalConsent(
       base({
@@ -138,7 +182,7 @@ describe("validateParentalConsent — submissão em /agendar", () => {
       base({
         dataNascimento: "2015-01-01",
         respNome: "Maria Silva",
-        respCpf: "123.456.789-01",
+        respCpf: "529.982.247-25",
         respEmail: "maria@example.com",
         aceiteParental: true,
       }),
@@ -152,7 +196,7 @@ describe("validateParentalConsent — submissão em /agendar", () => {
       base({
         dataNascimento: "2015-01-01",
         respNome: "Maria Silva",
-        respCpf: "12345678901",
+        respCpf: "52998224725",
         respEmail: "maria@example.com",
         aceiteParental: true,
       }),
