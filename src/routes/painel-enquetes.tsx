@@ -340,6 +340,7 @@ function PainelEnquetes() {
                           const next = form.opcoes.filter((_, i) => i !== idx);
                           setForm({ ...form, opcoes: next });
                         }}
+                        aria-label="Remover opção"
                       >
                         <X className="h-4 w-4" />
                       </Button>
