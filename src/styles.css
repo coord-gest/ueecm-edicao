@@ -22,8 +22,8 @@ a[href*="lovable.dev"][target="_blank"] {
   --radius-3xl: calc(var(--radius) + 8px);
   --radius-4xl: calc(var(--radius) + 10px);
 
-  --font-sans: "Karla", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Cormorant Garamond", "Times New Roman", Georgia, serif;
+  --font-sans: "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Outfit", "Figtree", ui-sans-serif, system-ui, sans-serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -301,7 +301,7 @@ a[href*="lovable.dev"][target="_blank"] {
   h4 {
     font-family: var(--font-display);
     letter-spacing: -0.015em;
-    font-weight: 400;
+    font-weight: 600;
   }
 }
 
