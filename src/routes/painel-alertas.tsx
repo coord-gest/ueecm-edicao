@@ -50,7 +50,6 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { AlertBanner } from "@/components/AlertBanner";
 
 type Variant = "info" | "success" | "warning" | "destructive";
 
@@ -1091,18 +1090,33 @@ function PainelAlertas() {
                   Confira como aparecerá para os usuários antes de {editingId ? "salvar" : "publicar"}.
                 </DialogDescription>
               </DialogHeader>
-              <div className="rounded-2xl border border-border/60 bg-background/40 p-3">
-                <AlertBanner
-                  alert={{
-                    id: "preview",
-                    message: message.trim() || "(mensagem vazia)",
-                    variant,
-                    link_url: linkUrl.trim() || null,
-                    link_label: linkLabel.trim() || null,
-                    image_url: existingImageUrl,
-                    dismissible: false,
-                  }}
-                />
+              <div
+                className={`rounded-2xl border p-4 text-sm ${variantTone[variant]}`}
+              >
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline">{variantLabels[variant]}</Badge>
+                </div>
+                <p className="mt-2 whitespace-pre-wrap font-medium">
+                  {message.trim() || "(mensagem vazia)"}
+                </p>
+                {linkUrl.trim() && (
+                  <a
+                    href={linkUrl.trim()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                  >
+                    {linkLabel.trim() || linkUrl.trim()}
+                    <ExternalLink className="size-3" />
+                  </a>
+                )}
+                {existingImageUrl && (
+                  <img
+                    src={existingImageUrl}
+                    alt=""
+                    className="mt-3 max-h-40 w-full rounded-lg object-cover"
+                  />
+                )}
               </div>
               <div className="text-xs text-muted-foreground">
                 <p>Variante: <span className="font-medium text-foreground">{variantLabels[variant]}</span></p>
