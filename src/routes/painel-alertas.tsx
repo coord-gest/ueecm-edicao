@@ -89,7 +89,13 @@ function PainelAlertas() {
 
   const sendPushNow = useServerFn(sendAlertPushNow);
   const logAction = useServerFn(logAlertClientAction);
-  const safeLog = (payload: Parameters<typeof logAction>[0]["data"]) =>
+  type LogPayload = {
+    alertId: string | null;
+    action: "created" | "updated" | "deleted" | "activated" | "deactivated";
+    result?: "success" | "failed";
+    details?: Record<string, unknown>;
+  };
+  const safeLog = (payload: LogPayload) =>
     logAction({ data: payload }).catch(() => {});
 
   // Rajada de notificações (client-side).
