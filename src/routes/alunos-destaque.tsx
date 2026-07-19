@@ -132,7 +132,7 @@ function AlunosDestaquePage() {
   const resetPage = () => setPage(1);
 
   return (
-    <div className="min-h-screen bg-secondary">
+    <div className="min-h-dvh bg-secondary">
       <SiteHeader />
       <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="mb-6 flex items-center justify-between gap-3">

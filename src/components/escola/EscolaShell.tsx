@@ -25,7 +25,7 @@ export function EscolaShell({
     }
   };
   return (
-    <div className="min-h-screen bg-secondary">
+    <div className="min-h-dvh bg-secondary">
       <header className="border-b border-border/60 bg-background/85 backdrop-blur-lg">
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-4 sm:px-6">
           <div className="flex min-w-0 items-center gap-3">
@@ -69,7 +69,7 @@ export function EscolaShell({
 
 export function AccessDenied() {
   return (
-    <div className="min-h-screen grid place-items-center bg-secondary p-6">
+    <div className="min-h-dvh grid place-items-center bg-secondary p-6">
       <div className="max-w-md rounded-3xl border border-border/70 bg-card p-8 text-center shadow-sm">
         <h1 className="font-display text-xl font-semibold text-foreground">Acesso restrito</h1>
         <p className="mt-2 text-sm text-muted-foreground">
