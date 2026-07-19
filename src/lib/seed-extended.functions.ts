@@ -858,8 +858,8 @@ export const wipeAllExtended = createServerFn({ method: "POST" })
 
     // Ordem importa: filhos antes de pais
     const results: Record<string, number> = {};
-    const drop = async (label: string, promise: Promise<{ count: number | null }>) => {
-      const { count } = await promise;
+    const drop = async (label: string, promise: PromiseLike<{ count: number | null }>) => {
+      const { count } = await Promise.resolve(promise);
       results[label] = count ?? 0;
     };
 
