@@ -109,11 +109,38 @@ const SECURITY_HEADERS: Record<string, string> = {
 // Aplicamos as security headers apenas em produção.
 const IS_PRODUCTION = import.meta.env.PROD;
 
-function applySecurityHeaders(response: Response): Response {
+function isLovablePreviewHost(request: Request): boolean {
+  try {
+    const host = new URL(request.url).hostname;
+    // Preview do editor Lovable: id-preview--<id>.lovable.app / <id>.lovableproject.com
+    return (
+      host.endsWith(".lovable.app") ||
+      host.endsWith(".lovableproject.com") ||
+      host.endsWith(".lovable.dev")
+    );
+  } catch {
+    return false;
+  }
+}
+
+function applySecurityHeaders(response: Response, request?: Request): Response {
   if (!IS_PRODUCTION) return response;
-  // Response.headers pode ser imutável em alguns runtimes — clonamos.
   const headers = new Headers(response.headers);
+  const isPreview = request ? isLovablePreviewHost(request) : false;
   for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    if (isPreview) {
+      // No preview do Lovable, o editor embute a página em iframe e injeta
+      // um client que usa eval — cabeçalhos estritos quebram o preview.
+      if (name === "X-Frame-Options" || name === "Cross-Origin-Opener-Policy") continue;
+      if (name === "Content-Security-Policy") {
+        const relaxed = value
+          .replace("frame-ancestors 'none'", "frame-ancestors https://lovable.dev https://*.lovable.dev https://lovable.app https://*.lovable.app")
+          .replace("script-src 'self' 'unsafe-inline'", "script-src 'self' 'unsafe-inline' 'unsafe-eval'")
+          .replace("script-src-elem 'self' 'unsafe-inline'", "script-src-elem 'self' 'unsafe-inline' 'unsafe-eval'");
+        if (!headers.has(name)) headers.set(name, relaxed);
+        continue;
+      }
+    }
     if (!headers.has(name)) headers.set(name, value);
   }
   return new Response(response.body, {
@@ -129,7 +156,7 @@ export default {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       const normalized = await normalizeCatastrophicSsrResponse(response);
-      return applySecurityHeaders(normalized);
+      return applySecurityHeaders(normalized, request);
     } catch (error) {
       console.error(error);
       return applySecurityHeaders(
@@ -137,6 +164,7 @@ export default {
           status: 500,
           headers: { "content-type": "text/html; charset=utf-8" },
         }),
+        request,
       );
     }
   },
