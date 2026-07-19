@@ -3,7 +3,8 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 // Enfileira 1 push referente a um alerta (existente ou avulso) e dispara
-// o drain imediato. Restrito a administradores da escola.
+// o drain imediato. Restrito a administradores da escola, com rate-limit
+// anti-spam (10/h por admin, 30/h global) e registro em alert_audit_logs.
 export const sendAlertPushNow = createServerFn({ method: "POST" })
   .inputValidator((data) =>
     z
@@ -12,6 +13,7 @@ export const sendAlertPushNow = createServerFn({ method: "POST" })
         title: z.string().min(1).max(140).optional(),
         body: z.string().min(1).max(500).optional(),
         url: z.string().max(500).optional().nullable(),
+        origin: z.enum(["manual", "burst"]).optional(),
       })
       .parse(data),
   )
@@ -24,6 +26,40 @@ export const sendAlertPushNow = createServerFn({ method: "POST" })
     if (!isAdmin) throw new Error("Acesso restrito a administradores.");
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // --- Rate limit (10/h por admin, 30/h global) ---
+    const { data: perUser } = await context.supabase.rpc("check_rate_limit", {
+      _key: `alert-push:${context.userId}`,
+      _max_requests: 10,
+      _window_seconds: 3600,
+    });
+    if (perUser === false) {
+      await context.supabase.rpc("log_alert_action", {
+        _alert_id: data.alertId ?? null,
+        _action: "rate_limited",
+        _result: "rate_limited",
+        _details: { scope: "per_user", limit: 10, window_seconds: 3600 },
+      });
+      throw new Error(
+        "Limite atingido: você já enviou 10 pushes na última hora. Aguarde antes de reenviar.",
+      );
+    }
+    const { data: global } = await context.supabase.rpc("check_rate_limit", {
+      _key: "alert-push:__global__",
+      _max_requests: 30,
+      _window_seconds: 3600,
+    });
+    if (global === false) {
+      await context.supabase.rpc("log_alert_action", {
+        _alert_id: data.alertId ?? null,
+        _action: "rate_limited",
+        _result: "rate_limited",
+        _details: { scope: "global", limit: 30, window_seconds: 3600 },
+      });
+      throw new Error(
+        "Limite global atingido: já foram enviados 30 pushes de alerta na última hora.",
+      );
+    }
 
     let title = data.title ?? "Alerta da escola";
     let body = data.body ?? "";
@@ -60,6 +96,13 @@ export const sendAlertPushNow = createServerFn({ method: "POST" })
       source_id: sourceId,
     });
     if (qErr) throw qErr;
+
+    await context.supabase.rpc("log_alert_action", {
+      _alert_id: sourceId,
+      _action: "resend_push",
+      _result: "success",
+      _details: { origin: data.origin ?? "manual", title },
+    });
 
     const { drainPushQueue } = await import("./push-dispatcher.server");
     return drainPushQueue();
