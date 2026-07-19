@@ -122,7 +122,7 @@ describe("validateParentalConsent — submissão em /agendar", () => {
       base({
         dataNascimento: "2015-01-01", // 11 anos
         respNome: "Maria Silva",
-        respCpf: "123.456.789-01",
+        respCpf: "529.982.247-25",
         respEmail: "maria@example.com",
         aceiteParental: false, // ← ponto crítico
       }),
@@ -167,7 +167,7 @@ describe("validateParentalConsent — submissão em /agendar", () => {
       base({
         dataNascimento: "2015-01-01",
         respNome: "Maria Silva",
-        respCpf: "123.456.789-01",
+        respCpf: "529.982.247-25",
         respEmail: "não-é-email",
         aceiteParental: true,
       }),
