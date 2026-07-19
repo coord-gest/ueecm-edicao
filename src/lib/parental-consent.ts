@@ -46,6 +46,26 @@ export function cpfDigits(raw: string): string {
   return d.length === 11 ? d : "";
 }
 
+/**
+ * Valida um CPF pelo algoritmo oficial (dois dígitos verificadores mod 11).
+ * Aceita string com ou sem máscara; rejeita sequências repetidas (000..., 111..., etc.),
+ * que passam nos dois dígitos mas são inválidas na prática.
+ */
+export function isValidCpf(raw: string): boolean {
+  const d = raw.replace(/\D/g, "");
+  if (d.length !== 11) return false;
+  if (/^(\d)\1{10}$/.test(d)) return false;
+  const calc = (slice: string, factor: number) => {
+    let sum = 0;
+    for (let i = 0; i < slice.length; i++) sum += Number(slice[i]) * (factor - i);
+    const mod = (sum * 10) % 11;
+    return mod === 10 ? 0 : mod;
+  };
+  const dv1 = calc(d.slice(0, 9), 10);
+  const dv2 = calc(d.slice(0, 10), 11);
+  return dv1 === Number(d[9]) && dv2 === Number(d[10]);
+}
+
 export type ParentalFormInput = {
   nome: string;
   dataNascimento: string;
@@ -83,6 +103,11 @@ export function validateParentalConsent(
     return { ok: false, error: "Informe o nome completo do responsável legal." };
   if (!cpfDigits(input.respCpf))
     return { ok: false, error: "Informe um CPF válido do responsável legal (11 dígitos)." };
+  if (!isValidCpf(input.respCpf))
+    return {
+      ok: false,
+      error: "O CPF do responsável é inválido — verifique os dígitos verificadores.",
+    };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.respEmail.trim()))
     return { ok: false, error: "Informe um e-mail válido do responsável legal." };
   if (!input.aceiteParental)
