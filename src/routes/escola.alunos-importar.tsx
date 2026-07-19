@@ -771,6 +771,7 @@ function ImportarAlunosPorDocumentos() {
                             variant="ghost"
                             size="icon"
                             onClick={() => removerArquivo(arq.key)}
+                            aria-label="Remover arquivo"
                           >
                             <Trash2 className="size-4" />
                           </Button>
@@ -810,6 +811,7 @@ function ImportarAlunosPorDocumentos() {
                                         variant="ghost"
                                         size="icon"
                                         onClick={() => removerAluno(arq.key, a.key)}
+                                        aria-label="Remover aluno"
                                       >
                                         <Trash2 className="size-4" />
                                       </Button>
