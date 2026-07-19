@@ -65,6 +65,7 @@ import {
   logAlunoParentalConsent,
   hasAlunoParentalConsent,
   listAlunoConsentBadges,
+  notifyGuardianConsent,
   type ConsentBadge,
 } from "@/lib/aluno-parental-consent.functions";
 import {
