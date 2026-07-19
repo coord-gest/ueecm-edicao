@@ -1,0 +1,6 @@
+# Impede que `bun test` (runner nativo do Bun) tente executar testes escritos
+# para Vitest/Playwright, que usam APIs (vi.hoisted, test.describe do Playwright)
+# incompatíveis com o runner do Bun.
+# Use SEMPRE: `bun run test` (Vitest) ou `bun run test:e2e` (Playwright).
+[test]
+root = "./__bun_tests_placeholder__"
