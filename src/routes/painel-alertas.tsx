@@ -930,6 +930,48 @@ function PainelAlertas() {
                       ) : (
                         <Badge variant="secondary">{expired ? "Expirado" : "Inativo"}</Badge>
                       )}
+                      {(() => {
+                        const s = deliveryMap?.[a.id];
+                        if (!s) return null;
+                        const total = s.sent + s.failed + s.partial + s.pending;
+                        if (total === 0) return null;
+                        return (
+                          <span className="inline-flex items-center gap-1 text-xs">
+                            {s.sent > 0 && (
+                              <Badge
+                                variant="outline"
+                                className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                              >
+                                {s.sent} enviado{s.sent > 1 ? "s" : ""}
+                              </Badge>
+                            )}
+                            {s.pending > 0 && (
+                              <Badge
+                                variant="outline"
+                                className="bg-sky-500/10 text-sky-700 dark:text-sky-300"
+                              >
+                                {s.pending} na fila
+                              </Badge>
+                            )}
+                            {s.partial > 0 && (
+                              <Badge
+                                variant="outline"
+                                className="bg-amber-500/10 text-amber-700 dark:text-amber-300"
+                              >
+                                {s.partial} parcial
+                              </Badge>
+                            )}
+                            {s.failed > 0 && (
+                              <Badge
+                                variant="outline"
+                                className="bg-red-500/10 text-red-700 dark:text-red-300"
+                              >
+                                {s.failed} falhou
+                              </Badge>
+                            )}
+                          </span>
+                        );
+                      })()}
                       {ax.starts_at && (
                         <span className="text-xs text-muted-foreground">
                           Início: {new Date(ax.starts_at).toLocaleString("pt-BR")}
