@@ -221,6 +221,7 @@ function RootComponent() {
   useEffect(() => {
     installClientErrorMonitor();
     installObservability();
+    installSentry();
     registerServiceWorker();
     installOnlineFlushListener();
   }, []);
