@@ -88,7 +88,7 @@ type DispatchRow = {
 };
 
 function estimateCostUSD(model: string | null, tokens: number): number {
-  const price = (model && MODEL_PRICING_USD_PER_M[model]) ?? DEFAULT_PRICE_PER_M;
+  const price = (model ? MODEL_PRICING_USD_PER_M[model] : undefined) ?? DEFAULT_PRICE_PER_M;
   return (tokens / 1_000_000) * price;
 }
 
