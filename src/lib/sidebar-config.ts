@@ -389,7 +389,6 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       label: "Produtividade",
       items: [
         { title: "Anotações & Lembretes", url: "/painel-anotacoes", icon: NotebookPen },
-        { title: "Cards de Anotação", url: "/painel-cards", icon: Sparkles },
       ],
     },
     {
