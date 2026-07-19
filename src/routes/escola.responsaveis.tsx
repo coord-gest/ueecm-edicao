@@ -119,6 +119,19 @@ function ResponsaveisPage() {
     enabled: isAdmin,
   });
 
+  const { data: turmas } = useQuery({
+    queryKey: ["escola-turmas-list"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("turmas_escolares")
+        .select("id, nome")
+        .order("nome");
+      if (error) throw error;
+      return (data ?? []) as Turma[];
+    },
+    enabled: isAdmin,
+  });
+
   const { data: vinculos } = useQuery({
     queryKey: ["escola-vinculos"],
     queryFn: async () => {
@@ -210,7 +223,7 @@ function ResponsaveisPage() {
       email: string;
       password: string;
       telefone?: string;
-      alunoId: string;
+      alunoIds: string[];
       parentesco: string;
     }) =>
       createUserFn({
@@ -220,7 +233,7 @@ function ResponsaveisPage() {
           password: vars.password,
           telefone: vars.telefone,
           role: "family",
-          alunoId: vars.alunoId,
+          alunoIds: vars.alunoIds,
           parentesco: vars.parentesco,
         },
       }),
@@ -398,6 +411,7 @@ function ResponsaveisPage() {
       <NovoRespComLoginDialog
         open={creatingLogin}
         alunos={alunos ?? []}
+        turmas={turmas ?? []}
         onClose={() => setCreatingLogin(false)}
         onSave={(p) => createLoginMut.mutate(p)}
         saving={createLoginMut.isPending}
