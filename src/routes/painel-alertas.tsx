@@ -75,6 +75,105 @@ function PainelAlertas() {
 
   const canManage = hasRole("desenvolvedor") || hasRole("diretor") || hasRole("coordenador");
 
+  const sendPushNow = useServerFn(sendAlertPushNow);
+
+  // Rajada de notificações (client-side).
+  const [burstAlertId, setBurstAlertId] = useState<string>("");
+  const [burstCount, setBurstCount] = useState<number>(5);
+  const [burstInterval, setBurstInterval] = useState<number>(2);
+  const [burstProgress, setBurstProgress] = useState<{
+    sent: number;
+    total: number;
+    nextAt: number | null;
+  } | null>(null);
+  const burstCancelRef = useRef<{ cancelled: boolean; timer: number | null }>({
+    cancelled: false,
+    timer: null,
+  });
+  const [resendingId, setResendingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (burstCancelRef.current.timer) window.clearTimeout(burstCancelRef.current.timer);
+      burstCancelRef.current.cancelled = true;
+    };
+  }, []);
+
+  const resendAlert = async (id: string) => {
+    setResendingId(id);
+    try {
+      await sendPushNow({ data: { alertId: id } });
+      toast.success("Push reenviado", { description: "Enfileirado e disparado agora." });
+    } catch (e) {
+      toast.error("Falha ao reenviar", {
+        description: e instanceof Error ? e.message : String(e),
+      });
+    } finally {
+      setResendingId(null);
+    }
+  };
+
+  const cancelBurst = () => {
+    burstCancelRef.current.cancelled = true;
+    if (burstCancelRef.current.timer) {
+      window.clearTimeout(burstCancelRef.current.timer);
+      burstCancelRef.current.timer = null;
+    }
+    setBurstProgress(null);
+    toast.info("Rajada cancelada");
+  };
+
+  const startBurst = async () => {
+    if (!burstAlertId) {
+      toast.error("Escolha um alerta para a rajada");
+      return;
+    }
+    if (burstCount < 1 || burstCount > 20) {
+      toast.error("Quantidade inválida", { description: "Envie entre 1 e 20 pushes." });
+      return;
+    }
+    if (burstInterval < 1 || burstInterval > 120) {
+      toast.error("Intervalo inválido", { description: "Use entre 1 e 120 minutos." });
+      return;
+    }
+    if (
+      !confirm(
+        `Enviar ${burstCount} notificações a cada ${burstInterval} minuto(s)?\n` +
+          `Duração total ≈ ${burstInterval * (burstCount - 1)} min.\n` +
+          `Mantenha esta aba aberta durante a rajada.`,
+      )
+    )
+      return;
+
+    burstCancelRef.current.cancelled = false;
+    setBurstProgress({ sent: 0, total: burstCount, nextAt: Date.now() });
+
+    const runOne = async (index: number) => {
+      if (burstCancelRef.current.cancelled) return;
+      try {
+        await sendPushNow({ data: { alertId: burstAlertId } });
+        setBurstProgress((p) =>
+          p ? { ...p, sent: index + 1, nextAt: Date.now() + burstInterval * 60_000 } : p,
+        );
+        toast.success(`Push ${index + 1}/${burstCount} enviado`);
+      } catch (e) {
+        toast.error(`Falha no push ${index + 1}`, {
+          description: e instanceof Error ? e.message : String(e),
+        });
+      }
+      if (index + 1 >= burstCount) {
+        setBurstProgress(null);
+        toast.success("Rajada concluída");
+        return;
+      }
+      burstCancelRef.current.timer = window.setTimeout(
+        () => runOne(index + 1),
+        burstInterval * 60_000,
+      );
+    };
+    runOne(0);
+  };
+
   const [message, setMessage] = useState("");
   const [linkUrl, setLinkUrl] = useState("");
   const [linkLabel, setLinkLabel] = useState("");
