@@ -213,16 +213,24 @@ function Home() {
         </h1>
 
         {/* Sobre a escola (resumo) */}
-        <SobreEscola />
+        <RevealSection>
+          <SobreEscola />
+        </RevealSection>
 
         {/* Faixa de estatísticas */}
-        <StatsBar />
+        <RevealSection delay={80}>
+          <StatsBar />
+        </RevealSection>
 
         {/* CTA duplo: agendar + portal */}
-        <CtaDuo />
+        <RevealSection delay={160}>
+          <CtaDuo />
+        </RevealSection>
 
         {/* Próximos eventos */}
-        <UpcomingEvents />
+        <RevealSection delay={80}>
+          <UpcomingEvents />
+        </RevealSection>
 
         {/* Faixa: Mais lidas + Opinião */}
         <RevealSection className="mb-16 grid grid-cols-1 gap-10 lg:grid-cols-12">
@@ -338,35 +346,49 @@ function Home() {
         )}
 
         {/* Push inline */}
-        <div className="mt-16">
+        <RevealSection className="mt-16">
           <PushInline />
-        </div>
+        </RevealSection>
 
         {/* Depoimentos */}
-        <Testimonials />
+        <RevealSection delay={80}>
+          <Testimonials />
+        </RevealSection>
 
         {/* Alunos de Destaque do Mês */}
-        <AlunosDestaque />
+        <RevealSection delay={80}>
+          <AlunosDestaque />
+        </RevealSection>
 
         {/* Galeria de momentos */}
-        <MomentsGallery />
+        <RevealSection delay={80}>
+          <MomentsGallery />
+        </RevealSection>
 
         {/* Nossos Patrocinadores (visível quando um evento estiver ativo) */}
-        <div className="mt-16 md:mt-24">
+        <RevealSection className="mt-16 md:mt-24" delay={120}>
           <Patrocinadores />
-        </div>
+        </RevealSection>
 
         {/* Equipe em destaque */}
-        <TeamHighlight />
+        <RevealSection delay={80}>
+          <TeamHighlight />
+        </RevealSection>
 
         {/* Resumos institucionais */}
-        <SchoolHighlights />
+        <RevealSection delay={80}>
+          <SchoolHighlights />
+        </RevealSection>
 
         {/* Contato rápido */}
-        <QuickContact />
+        <RevealSection delay={80}>
+          <QuickContact />
+        </RevealSection>
 
         {/* CTA Titinho */}
-        <TitinhoCta />
+        <RevealSection delay={120}>
+          <TitinhoCta />
+        </RevealSection>
       </div>
 
       <SiteFooter />
@@ -428,11 +450,13 @@ function SectionHeader({ title }: { title: string }) {
 function RevealSection({
   children,
   className = "",
+  delay = 0,
 }: {
   children: React.ReactNode;
   className?: string;
+  delay?: number;
 }) {
-  const ref = useReveal<HTMLElement>();
+  const ref = useReveal<HTMLElement>({ delay });
   return (
     <section ref={ref} className={`reveal ${className}`}>
       {children}
