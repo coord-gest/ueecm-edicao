@@ -83,7 +83,7 @@ export function StatsBar() {
   return (
     <div
       ref={ref}
-      className="reveal group relative mb-16 grid grid-cols-2 gap-3 overflow-hidden rounded-lg border border-border bg-linear-to-br from-primary to-accent p-5 text-primary-foreground shadow-lg sm:p-6 md:grid-cols-4 md:gap-6"
+      className="reveal group relative mb-16 grid grid-cols-2 gap-3 overflow-hidden border border-border bg-linear-to-br from-primary to-accent p-5 text-primary-foreground shadow-lg sm:p-6 md:grid-cols-4 md:gap-6"
     >
       <span className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-linear-to-r from-gold via-gold/70 to-transparent" />
       <span className="pointer-events-none absolute -right-16 -top-16 size-56 rounded-full bg-gold/20 blur-3xl" />
@@ -109,7 +109,7 @@ function StatCell({
   const n = useCountUp(value);
   return (
     <div className="relative flex items-center gap-4">
-      <div className="inline-flex size-11 shrink-0 items-center justify-center rounded-md bg-gold text-gold-foreground shadow-md">
+      <div className="inline-flex size-11 shrink-0 items-center justify-center bg-gold text-gold-foreground shadow-md">
         <Icon className="size-5" aria-hidden />
       </div>
       <div>

@@ -95,7 +95,7 @@ export function Testimonials() {
         </div>
       </div>
 
-      <div className="relative overflow-hidden rounded-2xl border border-accent/25 bg-gradient-to-br from-primary via-primary to-accent p-8 text-primary-foreground shadow-elegant sm:p-12">
+      <div className="relative overflow-hidden border border-accent/25 bg-gradient-to-br from-primary via-primary to-accent p-8 text-primary-foreground shadow-elegant sm:p-12">
         <span
           aria-hidden
           className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-gold/30 blur-3xl"

@@ -7,7 +7,7 @@ export function SobreEscola() {
 
   return (
     <section ref={ref} className="reveal mb-16">
-      <div className="relative overflow-hidden rounded-3xl border border-accent/25 bg-gradient-to-br from-primary via-primary to-accent text-primary-foreground shadow-elegant">
+      <div className="relative overflow-hidden border border-accent/25 bg-gradient-to-br from-primary via-primary to-accent text-primary-foreground shadow-elegant">
         <span
           aria-hidden
           className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-gold/30 blur-3xl"
@@ -76,7 +76,7 @@ function MiniFact({
   text: string;
 }) {
   return (
-    <li className="flex items-start gap-3 rounded-2xl border border-primary-foreground/15 bg-primary-foreground/10 p-3.5 backdrop-blur-sm transition-colors hover:border-gold/50 hover:bg-primary-foreground/15">
+    <li className="flex items-start gap-3 border border-primary-foreground/15 bg-primary-foreground/10 p-3.5 backdrop-blur-sm transition-colors hover:border-gold/50 hover:bg-primary-foreground/15">
       <div className="grid size-10 shrink-0 place-items-center rounded-full bg-gold text-gold-foreground shadow-gold">
         <Icon className="size-5" />
       </div>

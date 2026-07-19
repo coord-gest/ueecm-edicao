@@ -97,11 +97,11 @@ export function AlunosDestaque() {
       {isLoading ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="h-56 animate-pulse rounded-2xl border border-border bg-card" />
+            <div key={i} className="h-56 animate-pulse border border-border bg-card" />
           ))}
         </div>
       ) : destaques.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center">
+        <div className="border border-dashed border-border bg-card p-10 text-center">
           <Star className="mx-auto mb-3 size-8 text-muted-foreground/60" aria-hidden />
           <p className="font-display text-foreground">
             Nenhum destaque publicado para {mesLabel(mes)}.
@@ -115,7 +115,7 @@ export function AlunosDestaque() {
           {destaques.slice(0, 10).map((d) => (
             <article
               key={d.id}
-              className="group relative overflow-hidden rounded-2xl border border-border bg-linear-to-br from-primary to-accent p-4 text-primary-foreground shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:border-gold hover:shadow-xl"
+              className="group relative overflow-hidden border border-border bg-linear-to-br from-primary to-accent p-4 text-primary-foreground shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:border-gold hover:shadow-xl"
             >
               <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-gold via-gold/70 to-transparent" />
               <span className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-gold/20 blur-2xl transition-transform group-hover:scale-125" />

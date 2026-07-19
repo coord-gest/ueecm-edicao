@@ -184,7 +184,7 @@ function Home() {
             <span className="text-muted-foreground">Edição Digital</span>
             <Link
               to="/posts"
-              className="rounded-sm bg-primary px-3 py-1 text-primary-foreground transition-colors hover:bg-accent"
+              className="bg-primary px-3 py-1 text-primary-foreground transition-colors hover:bg-accent"
             >
               Ver Edição
             </Link>
@@ -315,11 +315,11 @@ function Home() {
                   : gridFiltrado.map((p) => <GridArticle key={p.id} post={p} />)}
               </div>
             ) : (
-              <ul className="divide-y divide-border rounded-2xl border border-border bg-card">
+              <ul className="divide-y divide-border border border-border bg-card">
                 {isLoading
                   ? Array.from({ length: 6 }).map((_, i) => (
                       <li key={i} className="flex items-center gap-4 p-4">
-                        <Skeleton className="size-16 rounded-md" />
+                        <Skeleton className="size-16 " />
                         <div className="flex-1 space-y-2">
                           <Skeleton className="h-3 w-24" />
                           <Skeleton className="h-4 w-full" />
@@ -386,11 +386,11 @@ function CompactArticle({ post }: { post: Post }) {
           <img
             src={post.imagem}
             alt=""
-            className="size-16 shrink-0 rounded-md object-cover"
+            className="size-16 shrink-0 object-cover"
             loading="lazy"
           />
         ) : (
-          <div className="grid size-16 shrink-0 place-items-center rounded-md bg-secondary text-muted-foreground">
+          <div className="grid size-16 shrink-0 place-items-center bg-secondary text-muted-foreground">
             <Eye className="size-5" />
           </div>
         )}
@@ -444,7 +444,7 @@ function HeroCarousel({ slides }: { slides: Post[] }) {
 
   return (
     <div
-      className="relative overflow-hidden rounded-sm"
+      className="relative overflow-hidden "
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -571,9 +571,9 @@ function GridArticle({ post }: { post: Post }) {
     <Link
       to="/posts/$id"
       params={{ id: post.id }}
-      className="group flex flex-col rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="group flex flex-col outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
-      <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-sm bg-secondary border border-black/5 shadow-[0_6px_18px_-8px_rgb(0_0_0_/_0.18)] ring-1 ring-black/5 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_18px_36px_-12px_rgb(0_0_0_/_0.28)] dark:border-white/10 dark:ring-white/10 dark:bg-card dark:shadow-[0_6px_18px_-8px_rgb(0_0_0_/_0.55)] dark:group-hover:shadow-[0_20px_40px_-12px_rgb(0_0_0_/_0.75)]">
+      <div className="relative mb-4 aspect-[16/9] overflow-hidden bg-secondary border border-black/5 shadow-[0_6px_18px_-8px_rgb(0_0_0_/_0.18)] ring-1 ring-black/5 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_18px_36px_-12px_rgb(0_0_0_/_0.28)] dark:border-white/10 dark:ring-white/10 dark:bg-card dark:shadow-[0_6px_18px_-8px_rgb(0_0_0_/_0.55)] dark:group-hover:shadow-[0_20px_40px_-12px_rgb(0_0_0_/_0.75)]">
         <img
           src={post.imagem ?? heroImg}
           alt={post.titulo}
@@ -636,7 +636,7 @@ function OpinionCard() {
   const label = entry.type === "citacao" ? "Citação" : "Opinião";
 
   return (
-    <div className="relative h-full overflow-hidden rounded-sm bg-primary p-8 text-primary-foreground">
+    <div className="relative h-full overflow-hidden bg-primary p-8 text-primary-foreground">
       <span className="absolute right-4 top-2 font-display text-[8rem] leading-none text-gold/30">
         "
       </span>
@@ -790,7 +790,7 @@ function SchoolHighlights() {
           <Link
             key={c.titulo}
             to={c.to}
-            className="group relative flex flex-col overflow-hidden rounded-lg border border-accent/25 bg-gradient-to-br from-primary via-primary to-accent p-6 text-primary-foreground shadow-elegant ring-1 ring-black/5 transition-all hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-2xl"
+            className="group relative flex flex-col overflow-hidden border border-accent/25 bg-gradient-to-br from-primary via-primary to-accent p-6 text-primary-foreground shadow-elegant ring-1 ring-black/5 transition-all hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-2xl"
           >
             <span
               aria-hidden
@@ -801,7 +801,7 @@ function SchoolHighlights() {
               className="pointer-events-none absolute -bottom-20 -left-14 size-48 rounded-full bg-accent/40 blur-3xl"
             />
             <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-gold via-accent to-gold" />
-            <div className="relative mb-4 inline-flex size-12 items-center justify-center rounded-lg bg-gold text-gold-foreground shadow-gold transition-transform group-hover:scale-110">
+            <div className="relative mb-4 inline-flex size-12 items-center justify-center bg-gold text-gold-foreground shadow-gold transition-transform group-hover:scale-110">
               <c.icon className="size-6" />
             </div>
             <h3 className="relative font-display text-xl text-primary-foreground">{c.titulo}</h3>
@@ -814,9 +814,9 @@ function SchoolHighlights() {
           </Link>
         ))}
 
-        <div className="relative flex flex-col overflow-hidden rounded-lg border-2 border-destructive/40 bg-card p-6 shadow-md ring-1 ring-destructive/10">
+        <div className="relative flex flex-col overflow-hidden border-2 border-destructive/40 bg-card p-6 shadow-md ring-1 ring-destructive/10">
           <span className="absolute inset-x-0 top-0 h-1 bg-destructive" />
-          <div className="mb-4 inline-flex size-12 items-center justify-center rounded-lg bg-destructive/10 text-destructive">
+          <div className="mb-4 inline-flex size-12 items-center justify-center bg-destructive/10 text-destructive">
             <AlertTriangle className="size-6" />
           </div>
           <h3 className="font-display text-xl text-primary">Últimos Alertas</h3>

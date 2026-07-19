@@ -55,7 +55,7 @@ export function SiteFooter() {
   }, [pathname, isMobile]);
 
   return (
-    <footer className="mt-20 border-t border-border/60 bg-primary text-primary-foreground">
+    <footer className="w-full border-t border-border/60 bg-primary text-primary-foreground">
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:grid lg:grid-cols-3 lg:gap-8 lg:py-12">
         <div className="pb-4 lg:pb-0">
           <div className="flex items-center gap-3">

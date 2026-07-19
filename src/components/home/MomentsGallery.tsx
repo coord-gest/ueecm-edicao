@@ -109,14 +109,14 @@ export function MomentsGallery() {
       <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 md:grid-cols-6">
         {isLoading || visible.length === 0
           ? Array.from({ length: VISIBLE }).map((_, i) => (
-              <Skeleton key={i} className="aspect-square w-full rounded-md" />
+              <Skeleton key={i} className="aspect-square w-full " />
             ))
           : visible.map((m, i) => (
               <Link
                 key={`${m.postId}-${m.imagem}-${i}`}
                 to="/posts/$id"
                 params={{ id: m.postId }}
-                className="group relative block aspect-square overflow-hidden rounded-md border border-border bg-secondary shadow-sm transition-all hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent animate-in fade-in duration-700"
+                className="group relative block aspect-square overflow-hidden border border-border bg-secondary shadow-sm transition-all hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent animate-in fade-in duration-700"
               >
                 <img
                   src={m.imagem}
