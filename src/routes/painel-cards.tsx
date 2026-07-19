@@ -96,7 +96,6 @@ function PainelCards() {
     "secretario",
     "professor",
   ]);
-  if (checking) return null;
   const [titulo, setTitulo] = useState("Anotação do dia");
   const [conteudo, setConteudo] = useState(
     "Escreva aqui a mensagem que você quer transformar em imagem. Ideal para posts, avisos, lembretes e frases motivacionais.",
@@ -147,6 +146,8 @@ function PainelCards() {
   // Preview aspect ratio
   const previewMaxW = 480;
   const previewH = (previewMaxW * fmt.h) / fmt.w;
+
+  if (checking) return null;
 
   return (
     <RolePainelShell
