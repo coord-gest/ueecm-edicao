@@ -23,7 +23,7 @@ const nav = [
   { label: "Agendar", to: "/agendar" },
 ];
 
-const desktopNav = nav.filter((item) => !["/sobre", "/agendar"].includes(item.to));
+const desktopNav = nav;
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
