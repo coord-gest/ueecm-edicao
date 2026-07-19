@@ -512,10 +512,18 @@ function HeroCarousel({ slides }: { slides: Post[] }) {
             >
               <Link to="/posts/$id" params={{ id: post.id }} className="block size-full">
                 <div className="relative size-full overflow-hidden bg-neutral-950">
+                  {/* Fundo desfocado com a mesma imagem — preenche laterais sem recortar. */}
+                  <img
+                    src={post.imagem ?? heroImg}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 size-full scale-110 object-cover opacity-60 blur-2xl"
+                  />
+                  {/* Imagem principal 100% visível (sem recorte). */}
                   <img
                     src={post.imagem ?? heroImg}
                     alt={post.titulo}
-                    className={`size-full object-cover transition-transform duration-700 group-hover:scale-[1.03] ${
+                    className={`relative size-full object-contain transition-transform duration-700 group-hover:scale-[1.02] ${
                       active ? "ken-burns" : ""
                     }`}
                   />
