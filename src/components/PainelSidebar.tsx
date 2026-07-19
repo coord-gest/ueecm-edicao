@@ -15,6 +15,7 @@ import {
   Home,
   FolderOpen,
   BarChart3,
+  DollarSign,
   Sparkles,
   Heart,
   NotebookPen,
@@ -168,6 +169,12 @@ const administracao: NavItem[] = [
     url: "/painel-analytics",
     icon: BarChart3,
     roles: ["desenvolvedor", "admin", "diretor", "coordenador"],
+  },
+  {
+    title: "FinOps — Custos",
+    url: "/painel-finops",
+    icon: DollarSign,
+    roles: ["desenvolvedor", "admin", "diretor"],
   },
   {
     title: "Animações do tema",
