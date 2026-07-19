@@ -1071,6 +1071,64 @@ function PainelAlertas() {
             </div>
           </div>
           </div>
+
+          <BurstScheduler
+            alertOptions={(alerts ?? []).map((a) => ({
+              id: a.id,
+              message: a.message,
+              variant: a.variant,
+              active: a.active,
+            }))}
+          />
+
+          <AlertAuditLog />
+
+          <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+            <DialogContent className="max-w-lg">
+              <DialogHeader>
+                <DialogTitle>Pré-visualização do alerta</DialogTitle>
+                <DialogDescription>
+                  Confira como aparecerá para os usuários antes de {editingId ? "salvar" : "publicar"}.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="rounded-2xl border border-border/60 bg-background/40 p-3">
+                <AlertBanner
+                  alert={{
+                    id: "preview",
+                    message: message.trim() || "(mensagem vazia)",
+                    variant,
+                    link_url: linkUrl.trim() || null,
+                    link_label: linkLabel.trim() || null,
+                    image_url: existingImageUrl,
+                    dismissible: false,
+                  }}
+                />
+              </div>
+              <div className="text-xs text-muted-foreground">
+                <p>Variante: <span className="font-medium text-foreground">{variantLabels[variant]}</span></p>
+                {scheduleStart && startsAt && (
+                  <p>Início agendado: {new Date(startsAt).toLocaleString("pt-BR")}</p>
+                )}
+                {expiresAt && (
+                  <p>Expira: {new Date(expiresAt).toLocaleString("pt-BR")}</p>
+                )}
+                {(dailyStart || dailyEnd) && (
+                  <p>
+                    Janela diária: {dailyStart || "--:--"} → {dailyEnd || "--:--"}
+                  </p>
+                )}
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setPreviewOpen(false)} className="rounded-full">
+                  Voltar
+                </Button>
+                <Button onClick={confirmPublish} disabled={submitting} className="rounded-full">
+                  {submitting ? <Loader2 className="size-4 animate-spin" /> : null}
+                  {editingId ? "Salvar alterações" : "Publicar alerta"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </main>
       </div>
     </PainelLayout>
