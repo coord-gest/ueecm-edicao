@@ -11,6 +11,7 @@ export const ROLE_PRIORITY: AppRole[] = [
   "coordenador",
   "secretario",
   "professor",
+  "social_media",
   "leitor",
 ];
 
@@ -21,6 +22,7 @@ export const ROLE_PANEL_PATH: Record<AppRole, string> = {
   coordenador: "/painel-coordenador",
   secretario: "/painel-secretario",
   professor: "/painel-professor",
+  social_media: "/painel-social-media",
   leitor: "/painel-responsavel",
 };
 

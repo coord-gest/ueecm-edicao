@@ -264,6 +264,7 @@ const assignRoleSchema = z.object({
     "coordenador",
     "professor",
     "secretario",
+    "social_media",
     "family",
   ]),
 });

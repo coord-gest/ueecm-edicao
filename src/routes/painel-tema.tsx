@@ -32,7 +32,7 @@ export const Route = createFileRoute("/painel-tema")({
 });
 
 function PainelTema() {
-  useRolePainelGuard(["desenvolvedor", "diretor", "coordenador"]);
+  useRolePainelGuard(["desenvolvedor", "diretor", "coordenador", "social_media"]);
   const { roles, loading: authLoading } = useAuth();
   const [config, setConfig] = useState<ThemeConfig>(DEFAULT_THEME_CONFIG);
   const [loading, setLoading] = useState(true);

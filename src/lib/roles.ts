@@ -5,6 +5,7 @@ export const APP_ROLES = [
   "coordenador",
   "professor",
   "secretario",
+  "social_media",
   "leitor",
 ] as const;
 
@@ -17,6 +18,7 @@ export const roleLabels: Record<AppRole, string> = {
   coordenador: "Coordenador",
   professor: "Professor",
   secretario: "Secretário",
+  social_media: "Social Media",
   leitor: "Leitor",
 };
 
@@ -34,6 +36,10 @@ const ROLE_ALIASES: Record<string, AppRole> = {
   secretario: "secretario",
   secretária: "secretario",
   secretaria: "secretario",
+  social_media: "social_media",
+  socialmedia: "social_media",
+  "social-media": "social_media",
+  social: "social_media",
   leitor: "leitor",
   aluno: "leitor",
   student: "leitor",

@@ -59,6 +59,7 @@ const roleOptions = [
   { value: "diretor", label: "Diretor" },
   { value: "coordenador", label: "Coordenador" },
   { value: "secretario", label: "Secretário" },
+  { value: "social_media", label: "Social Media" },
 ] as const;
 
 const roleLabels: Record<string, string> = {
@@ -68,6 +69,7 @@ const roleLabels: Record<string, string> = {
   coordenador: "Coordenador",
   professor: "Professor",
   secretario: "Secretário",
+  social_media: "Social Media",
   leitor: "Leitor",
 };
 

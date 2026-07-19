@@ -194,7 +194,10 @@ function Home() {
 
       <SiteHeader />
 
-      <section className="mb-16 w-full" aria-label="Notícias em destaque">
+      <section
+        className="mx-auto mb-16 w-full max-w-7xl px-4 pt-6 sm:px-6 lg:px-8"
+        aria-label="Notícias em destaque"
+      >
         {isLoading ? (
           <HeroSkeleton />
         ) : heroSlides.length > 0 ? (

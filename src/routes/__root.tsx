@@ -268,12 +268,14 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
-          <UpdateBanner />
-          <AlertBanner />
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <PainelLayoutFallback pathname={pathname}>
-            <Outlet />
-          </PainelLayoutFallback>
+          <div className="mx-auto w-full max-w-[1280px]">
+            <UpdateBanner />
+            <AlertBanner />
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <PainelLayoutFallback pathname={pathname}>
+              <Outlet />
+            </PainelLayoutFallback>
+          </div>
           <Suspense fallback={null}>
             <CommandMenu />
             <InstallPrompt />

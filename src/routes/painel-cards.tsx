@@ -95,6 +95,7 @@ function PainelCards() {
     "coordenador",
     "secretario",
     "professor",
+    "social_media",
   ]);
   const [titulo, setTitulo] = useState("Anotação do dia");
   const [conteudo, setConteudo] = useState(

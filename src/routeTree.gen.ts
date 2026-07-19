@@ -9,140 +9,416 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AgendarRouteImport } from './routes/agendar'
-import { Route as AlunosDestaqueRouteImport } from './routes/alunos-destaque'
-import { Route as CalendarioRouteImport } from './routes/calendario'
-import { Route as ChatAlunoRouteImport } from './routes/chat-aluno'
-import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
-import { Route as DiagnosticarNotificacoesRouteImport } from './routes/diagnosticar-notificacoes'
-import { Route as EnquetesRouteImport } from './routes/enquetes'
-import { Route as EquipeRouteImport } from './routes/equipe'
-import { Route as FamiliasRouteImport } from './routes/familias'
-import { Route as GaleriaRouteImport } from './routes/galeria'
-import { Route as HorariosRouteImport } from './routes/horarios'
-import { Route as InstalarRouteImport } from './routes/instalar'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as MensagensCoordenacaoRouteImport } from './routes/mensagens-coordenacao'
-import { Route as MeusAgendamentosRouteImport } from './routes/meus-agendamentos'
-import { Route as MeusComunicadosRouteImport } from './routes/meus-comunicados'
-import { Route as MeusFilhosRouteImport } from './routes/meus-filhos'
-import { Route as MinhasTurmasRouteImport } from './routes/minhas-turmas'
-import { Route as MomentosRouteImport } from './routes/momentos'
-import { Route as NotificacoesRouteImport } from './routes/notificacoes'
-import { Route as OfflineRouteImport } from './routes/offline'
-import { Route as PainelRouteImport } from './routes/painel'
-import { Route as PainelAcademicoRouteImport } from './routes/painel-academico'
-import { Route as PainelAcessosRouteImport } from './routes/painel-acessos'
-import { Route as PainelAgendamentosRouteImport } from './routes/painel-agendamentos'
-import { Route as PainelAlertasRouteImport } from './routes/painel-alertas'
-import { Route as PainelAnalyticsRouteImport } from './routes/painel-analytics'
-import { Route as PainelAnotacoesRouteImport } from './routes/painel-anotacoes'
-import { Route as PainelAprovacaoRouteImport } from './routes/painel-aprovacao'
-import { Route as PainelArquivosRouteImport } from './routes/painel-arquivos'
-import { Route as PainelAuditoriaRouteImport } from './routes/painel-auditoria'
-import { Route as PainelAutorizacoesRouteImport } from './routes/painel-autorizacoes'
-import { Route as PainelCardsRouteImport } from './routes/painel-cards'
-import { Route as PainelComentariosRouteImport } from './routes/painel-comentarios'
-import { Route as PainelConsentimentosRouteImport } from './routes/painel-consentimentos'
-import { Route as PainelCoordenadorRouteImport } from './routes/painel-coordenador'
-import { Route as PainelDesenvolvedorRouteImport } from './routes/painel-desenvolvedor'
-import { Route as PainelDestaquesRouteImport } from './routes/painel-destaques'
-import { Route as PainelDestaquesAlunosRouteImport } from './routes/painel-destaques-alunos'
-import { Route as PainelDiagnosticoRouteImport } from './routes/painel-diagnostico'
-import { Route as PainelDiretorRouteImport } from './routes/painel-diretor'
-import { Route as PainelEnquetesRouteImport } from './routes/painel-enquetes'
-import { Route as PainelEnviarDriveRouteImport } from './routes/painel-enviar-drive'
-import { Route as PainelErrosRouteImport } from './routes/painel-erros'
-import { Route as PainelFamiliasRouteImport } from './routes/painel-familias'
-import { Route as PainelGaleriaRouteImport } from './routes/painel-galeria'
-import { Route as PainelGoogleDriveRouteImport } from './routes/painel-google-drive'
-import { Route as PainelLgpdRouteImport } from './routes/painel-lgpd'
-import { Route as PainelManutencaoRouteImport } from './routes/painel-manutencao'
-import { Route as PainelMensagensRouteImport } from './routes/painel-mensagens'
-import { Route as PainelPatrocinadoresRouteImport } from './routes/painel-patrocinadores'
-import { Route as PainelProfessorRouteImport } from './routes/painel-professor'
-import { Route as PainelProfissionaisRouteImport } from './routes/painel-profissionais'
-import { Route as PainelResponsavelRouteImport } from './routes/painel-responsavel'
-import { Route as PainelRuntimeRouteImport } from './routes/painel-runtime'
-import { Route as PainelSecretarioRouteImport } from './routes/painel-secretario'
-import { Route as PainelTemaRouteImport } from './routes/painel-tema'
-import { Route as PrivacidadeRouteImport } from './routes/privacidade'
-import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as SobreRouteImport } from './routes/sobre'
-import { Route as SolicitarDadosRouteImport } from './routes/solicitar-dados'
-import { Route as TermosDeUsoRouteImport } from './routes/termos-de-uso'
-import { Route as TvRouteImport } from './routes/tv'
-import { Route as UsoDeImagemRouteImport } from './routes/uso-de-imagem'
 import { Route as UsuariosRouteImport } from './routes/usuarios'
-import { Route as ApiChatRouteImport } from './routes/api/chat'
-import { Route as ApiHealthRouteImport } from './routes/api/health'
-import { Route as ChatAlunoIdRouteImport } from './routes/chat-aluno.$id'
-import { Route as EnquetesIdRouteImport } from './routes/enquetes.$id'
-import { Route as EquipeIdRouteImport } from './routes/equipe.$id'
-import { Route as EscolaIndexRouteImport } from './routes/escola.index'
-import { Route as EscolaAlunosRouteImport } from './routes/escola.alunos'
-import { Route as EscolaAlunosImportarRouteImport } from './routes/escola.alunos-importar'
-import { Route as EscolaDashboardRouteImport } from './routes/escola.dashboard'
-import { Route as EscolaProfessoresRouteImport } from './routes/escola.professores'
-import { Route as EscolaResponsaveisRouteImport } from './routes/escola.responsaveis'
-import { Route as EscolaTurmasRouteImport } from './routes/escola.turmas'
-import { Route as GaleriaIdRouteImport } from './routes/galeria.$id'
-import { Route as MeusFilhosIdRouteImport } from './routes/meus-filhos.$id'
-import { Route as MinhasTurmasTurmaIdRouteImport } from './routes/minhas-turmas.$turmaId'
-import { Route as PainelArquivosIndexRouteImport } from './routes/painel-arquivos.index'
-import { Route as PainelArquivosTemplateIdRouteImport } from './routes/painel-arquivos.$templateId'
-import { Route as PainelPostsIndexRouteImport } from './routes/painel-posts.index'
-import { Route as PainelPostsIdRouteImport } from './routes/painel-posts.$id'
-import { Route as PainelPostsNovoRouteImport } from './routes/painel-posts.novo'
+import { Route as UsoDeImagemRouteImport } from './routes/uso-de-imagem'
+import { Route as TvRouteImport } from './routes/tv'
+import { Route as TermosDeUsoRouteImport } from './routes/termos-de-uso'
+import { Route as SolicitarDadosRouteImport } from './routes/solicitar-dados'
+import { Route as SobreRouteImport } from './routes/sobre'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
+import { Route as PrivacidadeRouteImport } from './routes/privacidade'
+import { Route as PainelTemaRouteImport } from './routes/painel-tema'
+import { Route as PainelSocialMediaRouteImport } from './routes/painel-social-media'
+import { Route as PainelSecretarioRouteImport } from './routes/painel-secretario'
+import { Route as PainelRuntimeRouteImport } from './routes/painel-runtime'
+import { Route as PainelResponsavelRouteImport } from './routes/painel-responsavel'
+import { Route as PainelProfissionaisRouteImport } from './routes/painel-profissionais'
+import { Route as PainelProfessorRouteImport } from './routes/painel-professor'
+import { Route as PainelPatrocinadoresRouteImport } from './routes/painel-patrocinadores'
+import { Route as PainelMensagensRouteImport } from './routes/painel-mensagens'
+import { Route as PainelManutencaoRouteImport } from './routes/painel-manutencao'
+import { Route as PainelLgpdRouteImport } from './routes/painel-lgpd'
+import { Route as PainelGoogleDriveRouteImport } from './routes/painel-google-drive'
+import { Route as PainelGaleriaRouteImport } from './routes/painel-galeria'
+import { Route as PainelFamiliasRouteImport } from './routes/painel-familias'
+import { Route as PainelErrosRouteImport } from './routes/painel-erros'
+import { Route as PainelEnviarDriveRouteImport } from './routes/painel-enviar-drive'
+import { Route as PainelEnquetesRouteImport } from './routes/painel-enquetes'
+import { Route as PainelDiretorRouteImport } from './routes/painel-diretor'
+import { Route as PainelDiagnosticoRouteImport } from './routes/painel-diagnostico'
+import { Route as PainelDestaquesAlunosRouteImport } from './routes/painel-destaques-alunos'
+import { Route as PainelDestaquesRouteImport } from './routes/painel-destaques'
+import { Route as PainelDesenvolvedorRouteImport } from './routes/painel-desenvolvedor'
+import { Route as PainelCoordenadorRouteImport } from './routes/painel-coordenador'
+import { Route as PainelConsentimentosRouteImport } from './routes/painel-consentimentos'
+import { Route as PainelComentariosRouteImport } from './routes/painel-comentarios'
+import { Route as PainelCardsRouteImport } from './routes/painel-cards'
+import { Route as PainelAutorizacoesRouteImport } from './routes/painel-autorizacoes'
+import { Route as PainelAuditoriaRouteImport } from './routes/painel-auditoria'
+import { Route as PainelArquivosRouteImport } from './routes/painel-arquivos'
+import { Route as PainelAprovacaoRouteImport } from './routes/painel-aprovacao'
+import { Route as PainelAnotacoesRouteImport } from './routes/painel-anotacoes'
+import { Route as PainelAnalyticsRouteImport } from './routes/painel-analytics'
+import { Route as PainelAlertasRouteImport } from './routes/painel-alertas'
+import { Route as PainelAgendamentosRouteImport } from './routes/painel-agendamentos'
+import { Route as PainelAcessosRouteImport } from './routes/painel-acessos'
+import { Route as PainelAcademicoRouteImport } from './routes/painel-academico'
+import { Route as PainelRouteImport } from './routes/painel'
+import { Route as OfflineRouteImport } from './routes/offline'
+import { Route as NotificacoesRouteImport } from './routes/notificacoes'
+import { Route as MomentosRouteImport } from './routes/momentos'
+import { Route as MinhasTurmasRouteImport } from './routes/minhas-turmas'
+import { Route as MeusFilhosRouteImport } from './routes/meus-filhos'
+import { Route as MeusComunicadosRouteImport } from './routes/meus-comunicados'
+import { Route as MeusAgendamentosRouteImport } from './routes/meus-agendamentos'
+import { Route as MensagensCoordenacaoRouteImport } from './routes/mensagens-coordenacao'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as InstalarRouteImport } from './routes/instalar'
+import { Route as HorariosRouteImport } from './routes/horarios'
+import { Route as GaleriaRouteImport } from './routes/galeria'
+import { Route as FamiliasRouteImport } from './routes/familias'
+import { Route as EquipeRouteImport } from './routes/equipe'
+import { Route as EnquetesRouteImport } from './routes/enquetes'
+import { Route as DiagnosticarNotificacoesRouteImport } from './routes/diagnosticar-notificacoes'
+import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
+import { Route as ChatAlunoRouteImport } from './routes/chat-aluno'
+import { Route as CalendarioRouteImport } from './routes/calendario'
+import { Route as AlunosDestaqueRouteImport } from './routes/alunos-destaque'
+import { Route as AgendarRouteImport } from './routes/agendar'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as PostsIndexRouteImport } from './routes/posts.index'
+import { Route as PainelPostsIndexRouteImport } from './routes/painel-posts.index'
+import { Route as PainelArquivosIndexRouteImport } from './routes/painel-arquivos.index'
+import { Route as EscolaIndexRouteImport } from './routes/escola.index'
 import { Route as PostsIdRouteImport } from './routes/posts.$id'
-import { Route as ApiDebugFcmDiagnosticsRouteImport } from './routes/api/debug/fcm-diagnostics'
-import { Route as ApiPublicAgendamentosLembretesRouteImport } from './routes/api/public/agendamentos-lembretes'
-import { Route as ApiPublicBackupSemanalRouteImport } from './routes/api/public/backup-semanal'
-import { Route as ApiPublicComunicadosAgendadosRouteImport } from './routes/api/public/comunicados-agendados'
-import { Route as ApiPublicComunicadosLembretesRouteImport } from './routes/api/public/comunicados-lembretes'
-import { Route as ApiPublicDispatchPushRouteImport } from './routes/api/public/dispatch-push'
-import { Route as ApiPublicFcmCheckRouteImport } from './routes/api/public/fcm-check'
-import { Route as ApiPublicFcmConfigRouteImport } from './routes/api/public/fcm-config'
-import { Route as ApiPublicRemindersDispatchRouteImport } from './routes/api/public/reminders-dispatch'
-import { Route as ApiPublicTurnstileConfigRouteImport } from './routes/api/public/turnstile-config'
-import { Route as ApiPushFcmRegisterRouteImport } from './routes/api/push/fcm-register'
+import { Route as PainelPostsNovoRouteImport } from './routes/painel-posts.novo'
+import { Route as PainelPostsIdRouteImport } from './routes/painel-posts.$id'
+import { Route as PainelArquivosTemplateIdRouteImport } from './routes/painel-arquivos.$templateId'
+import { Route as MinhasTurmasTurmaIdRouteImport } from './routes/minhas-turmas.$turmaId'
+import { Route as MeusFilhosIdRouteImport } from './routes/meus-filhos.$id'
+import { Route as GaleriaIdRouteImport } from './routes/galeria.$id'
+import { Route as EscolaTurmasRouteImport } from './routes/escola.turmas'
+import { Route as EscolaResponsaveisRouteImport } from './routes/escola.responsaveis'
+import { Route as EscolaProfessoresRouteImport } from './routes/escola.professores'
+import { Route as EscolaDashboardRouteImport } from './routes/escola.dashboard'
+import { Route as EscolaAlunosImportarRouteImport } from './routes/escola.alunos-importar'
+import { Route as EscolaAlunosRouteImport } from './routes/escola.alunos'
+import { Route as EquipeIdRouteImport } from './routes/equipe.$id'
+import { Route as EnquetesIdRouteImport } from './routes/enquetes.$id'
+import { Route as ChatAlunoIdRouteImport } from './routes/chat-aluno.$id'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as EscolaComunicadosIndexRouteImport } from './routes/escola.comunicados.index'
-import { Route as EscolaComunicadosDashboardRouteImport } from './routes/escola.comunicados.dashboard'
 import { Route as EscolaComunicadosNovoRouteImport } from './routes/escola.comunicados.novo'
-import { Route as ApiPublicDriveFotoIdRouteImport } from './routes/api/public/drive-foto.$id'
+import { Route as EscolaComunicadosDashboardRouteImport } from './routes/escola.comunicados.dashboard'
+import { Route as ApiPushFcmRegisterRouteImport } from './routes/api/push/fcm-register'
+import { Route as ApiPublicTurnstileConfigRouteImport } from './routes/api/public/turnstile-config'
+import { Route as ApiPublicRemindersDispatchRouteImport } from './routes/api/public/reminders-dispatch'
+import { Route as ApiPublicFcmConfigRouteImport } from './routes/api/public/fcm-config'
+import { Route as ApiPublicFcmCheckRouteImport } from './routes/api/public/fcm-check'
+import { Route as ApiPublicDispatchPushRouteImport } from './routes/api/public/dispatch-push'
+import { Route as ApiPublicComunicadosLembretesRouteImport } from './routes/api/public/comunicados-lembretes'
+import { Route as ApiPublicComunicadosAgendadosRouteImport } from './routes/api/public/comunicados-agendados'
+import { Route as ApiPublicBackupSemanalRouteImport } from './routes/api/public/backup-semanal'
+import { Route as ApiPublicAgendamentosLembretesRouteImport } from './routes/api/public/agendamentos-lembretes'
+import { Route as ApiDebugFcmDiagnosticsRouteImport } from './routes/api/debug/fcm-diagnostics'
 import { Route as ApiPublicMomentosFotoIdRouteImport } from './routes/api/public/momentos-foto.$id'
+import { Route as ApiPublicDriveFotoIdRouteImport } from './routes/api/public/drive-foto.$id'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const UsuariosRoute = UsuariosRouteImport.update({
+  id: '/usuarios',
+  path: '/usuarios',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AgendarRoute = AgendarRouteImport.update({
-  id: '/agendar',
-  path: '/agendar',
+const UsoDeImagemRoute = UsoDeImagemRouteImport.update({
+  id: '/uso-de-imagem',
+  path: '/uso-de-imagem',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AlunosDestaqueRoute = AlunosDestaqueRouteImport.update({
-  id: '/alunos-destaque',
-  path: '/alunos-destaque',
+const TvRoute = TvRouteImport.update({
+  id: '/tv',
+  path: '/tv',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CalendarioRoute = CalendarioRouteImport.update({
-  id: '/calendario',
-  path: '/calendario',
+const TermosDeUsoRoute = TermosDeUsoRouteImport.update({
+  id: '/termos-de-uso',
+  path: '/termos-de-uso',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ChatAlunoRoute = ChatAlunoRouteImport.update({
-  id: '/chat-aluno',
-  path: '/chat-aluno',
+const SolicitarDadosRoute = SolicitarDadosRouteImport.update({
+  id: '/solicitar-dados',
+  path: '/solicitar-dados',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ConfiguracoesRoute = ConfiguracoesRouteImport.update({
-  id: '/configuracoes',
-  path: '/configuracoes',
+const SobreRoute = SobreRouteImport.update({
+  id: '/sobre',
+  path: '/sobre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RssDotxmlRoute = RssDotxmlRouteImport.update({
+  id: '/rss.xml',
+  path: '/rss.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacidadeRoute = PrivacidadeRouteImport.update({
+  id: '/privacidade',
+  path: '/privacidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelTemaRoute = PainelTemaRouteImport.update({
+  id: '/painel-tema',
+  path: '/painel-tema',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelSocialMediaRoute = PainelSocialMediaRouteImport.update({
+  id: '/painel-social-media',
+  path: '/painel-social-media',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelSecretarioRoute = PainelSecretarioRouteImport.update({
+  id: '/painel-secretario',
+  path: '/painel-secretario',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelRuntimeRoute = PainelRuntimeRouteImport.update({
+  id: '/painel-runtime',
+  path: '/painel-runtime',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelResponsavelRoute = PainelResponsavelRouteImport.update({
+  id: '/painel-responsavel',
+  path: '/painel-responsavel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelProfissionaisRoute = PainelProfissionaisRouteImport.update({
+  id: '/painel-profissionais',
+  path: '/painel-profissionais',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelProfessorRoute = PainelProfessorRouteImport.update({
+  id: '/painel-professor',
+  path: '/painel-professor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelPatrocinadoresRoute = PainelPatrocinadoresRouteImport.update({
+  id: '/painel-patrocinadores',
+  path: '/painel-patrocinadores',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelMensagensRoute = PainelMensagensRouteImport.update({
+  id: '/painel-mensagens',
+  path: '/painel-mensagens',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelManutencaoRoute = PainelManutencaoRouteImport.update({
+  id: '/painel-manutencao',
+  path: '/painel-manutencao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelLgpdRoute = PainelLgpdRouteImport.update({
+  id: '/painel-lgpd',
+  path: '/painel-lgpd',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelGoogleDriveRoute = PainelGoogleDriveRouteImport.update({
+  id: '/painel-google-drive',
+  path: '/painel-google-drive',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelGaleriaRoute = PainelGaleriaRouteImport.update({
+  id: '/painel-galeria',
+  path: '/painel-galeria',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelFamiliasRoute = PainelFamiliasRouteImport.update({
+  id: '/painel-familias',
+  path: '/painel-familias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelErrosRoute = PainelErrosRouteImport.update({
+  id: '/painel-erros',
+  path: '/painel-erros',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelEnviarDriveRoute = PainelEnviarDriveRouteImport.update({
+  id: '/painel-enviar-drive',
+  path: '/painel-enviar-drive',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelEnquetesRoute = PainelEnquetesRouteImport.update({
+  id: '/painel-enquetes',
+  path: '/painel-enquetes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelDiretorRoute = PainelDiretorRouteImport.update({
+  id: '/painel-diretor',
+  path: '/painel-diretor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelDiagnosticoRoute = PainelDiagnosticoRouteImport.update({
+  id: '/painel-diagnostico',
+  path: '/painel-diagnostico',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelDestaquesAlunosRoute = PainelDestaquesAlunosRouteImport.update({
+  id: '/painel-destaques-alunos',
+  path: '/painel-destaques-alunos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelDestaquesRoute = PainelDestaquesRouteImport.update({
+  id: '/painel-destaques',
+  path: '/painel-destaques',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelDesenvolvedorRoute = PainelDesenvolvedorRouteImport.update({
+  id: '/painel-desenvolvedor',
+  path: '/painel-desenvolvedor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelCoordenadorRoute = PainelCoordenadorRouteImport.update({
+  id: '/painel-coordenador',
+  path: '/painel-coordenador',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelConsentimentosRoute = PainelConsentimentosRouteImport.update({
+  id: '/painel-consentimentos',
+  path: '/painel-consentimentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelComentariosRoute = PainelComentariosRouteImport.update({
+  id: '/painel-comentarios',
+  path: '/painel-comentarios',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelCardsRoute = PainelCardsRouteImport.update({
+  id: '/painel-cards',
+  path: '/painel-cards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelAutorizacoesRoute = PainelAutorizacoesRouteImport.update({
+  id: '/painel-autorizacoes',
+  path: '/painel-autorizacoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelAuditoriaRoute = PainelAuditoriaRouteImport.update({
+  id: '/painel-auditoria',
+  path: '/painel-auditoria',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelArquivosRoute = PainelArquivosRouteImport.update({
+  id: '/painel-arquivos',
+  path: '/painel-arquivos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelAprovacaoRoute = PainelAprovacaoRouteImport.update({
+  id: '/painel-aprovacao',
+  path: '/painel-aprovacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelAnotacoesRoute = PainelAnotacoesRouteImport.update({
+  id: '/painel-anotacoes',
+  path: '/painel-anotacoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelAnalyticsRoute = PainelAnalyticsRouteImport.update({
+  id: '/painel-analytics',
+  path: '/painel-analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelAlertasRoute = PainelAlertasRouteImport.update({
+  id: '/painel-alertas',
+  path: '/painel-alertas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelAgendamentosRoute = PainelAgendamentosRouteImport.update({
+  id: '/painel-agendamentos',
+  path: '/painel-agendamentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelAcessosRoute = PainelAcessosRouteImport.update({
+  id: '/painel-acessos',
+  path: '/painel-acessos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelAcademicoRoute = PainelAcademicoRouteImport.update({
+  id: '/painel-academico',
+  path: '/painel-academico',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelRoute = PainelRouteImport.update({
+  id: '/painel',
+  path: '/painel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfflineRoute = OfflineRouteImport.update({
+  id: '/offline',
+  path: '/offline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificacoesRoute = NotificacoesRouteImport.update({
+  id: '/notificacoes',
+  path: '/notificacoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MomentosRoute = MomentosRouteImport.update({
+  id: '/momentos',
+  path: '/momentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MinhasTurmasRoute = MinhasTurmasRouteImport.update({
+  id: '/minhas-turmas',
+  path: '/minhas-turmas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeusFilhosRoute = MeusFilhosRouteImport.update({
+  id: '/meus-filhos',
+  path: '/meus-filhos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeusComunicadosRoute = MeusComunicadosRouteImport.update({
+  id: '/meus-comunicados',
+  path: '/meus-comunicados',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeusAgendamentosRoute = MeusAgendamentosRouteImport.update({
+  id: '/meus-agendamentos',
+  path: '/meus-agendamentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MensagensCoordenacaoRoute = MensagensCoordenacaoRouteImport.update({
+  id: '/mensagens-coordenacao',
+  path: '/mensagens-coordenacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstalarRoute = InstalarRouteImport.update({
+  id: '/instalar',
+  path: '/instalar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HorariosRoute = HorariosRouteImport.update({
+  id: '/horarios',
+  path: '/horarios',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GaleriaRoute = GaleriaRouteImport.update({
+  id: '/galeria',
+  path: '/galeria',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FamiliasRoute = FamiliasRouteImport.update({
+  id: '/familias',
+  path: '/familias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EquipeRoute = EquipeRouteImport.update({
+  id: '/equipe',
+  path: '/equipe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnquetesRoute = EnquetesRouteImport.update({
+  id: '/enquetes',
+  path: '/enquetes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DiagnosticarNotificacoesRoute =
@@ -151,405 +427,34 @@ const DiagnosticarNotificacoesRoute =
     path: '/diagnosticar-notificacoes',
     getParentRoute: () => rootRouteImport,
   } as any)
-const EnquetesRoute = EnquetesRouteImport.update({
-  id: '/enquetes',
-  path: '/enquetes',
+const ConfiguracoesRoute = ConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EquipeRoute = EquipeRouteImport.update({
-  id: '/equipe',
-  path: '/equipe',
+const ChatAlunoRoute = ChatAlunoRouteImport.update({
+  id: '/chat-aluno',
+  path: '/chat-aluno',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FamiliasRoute = FamiliasRouteImport.update({
-  id: '/familias',
-  path: '/familias',
+const CalendarioRoute = CalendarioRouteImport.update({
+  id: '/calendario',
+  path: '/calendario',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GaleriaRoute = GaleriaRouteImport.update({
-  id: '/galeria',
-  path: '/galeria',
+const AlunosDestaqueRoute = AlunosDestaqueRouteImport.update({
+  id: '/alunos-destaque',
+  path: '/alunos-destaque',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HorariosRoute = HorariosRouteImport.update({
-  id: '/horarios',
-  path: '/horarios',
+const AgendarRoute = AgendarRouteImport.update({
+  id: '/agendar',
+  path: '/agendar',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InstalarRoute = InstalarRouteImport.update({
-  id: '/instalar',
-  path: '/instalar',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MensagensCoordenacaoRoute = MensagensCoordenacaoRouteImport.update({
-  id: '/mensagens-coordenacao',
-  path: '/mensagens-coordenacao',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeusAgendamentosRoute = MeusAgendamentosRouteImport.update({
-  id: '/meus-agendamentos',
-  path: '/meus-agendamentos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeusComunicadosRoute = MeusComunicadosRouteImport.update({
-  id: '/meus-comunicados',
-  path: '/meus-comunicados',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeusFilhosRoute = MeusFilhosRouteImport.update({
-  id: '/meus-filhos',
-  path: '/meus-filhos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MinhasTurmasRoute = MinhasTurmasRouteImport.update({
-  id: '/minhas-turmas',
-  path: '/minhas-turmas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MomentosRoute = MomentosRouteImport.update({
-  id: '/momentos',
-  path: '/momentos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotificacoesRoute = NotificacoesRouteImport.update({
-  id: '/notificacoes',
-  path: '/notificacoes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OfflineRoute = OfflineRouteImport.update({
-  id: '/offline',
-  path: '/offline',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelRoute = PainelRouteImport.update({
-  id: '/painel',
-  path: '/painel',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelAcademicoRoute = PainelAcademicoRouteImport.update({
-  id: '/painel-academico',
-  path: '/painel-academico',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelAcessosRoute = PainelAcessosRouteImport.update({
-  id: '/painel-acessos',
-  path: '/painel-acessos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelAgendamentosRoute = PainelAgendamentosRouteImport.update({
-  id: '/painel-agendamentos',
-  path: '/painel-agendamentos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelAlertasRoute = PainelAlertasRouteImport.update({
-  id: '/painel-alertas',
-  path: '/painel-alertas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelAnalyticsRoute = PainelAnalyticsRouteImport.update({
-  id: '/painel-analytics',
-  path: '/painel-analytics',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelAnotacoesRoute = PainelAnotacoesRouteImport.update({
-  id: '/painel-anotacoes',
-  path: '/painel-anotacoes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelAprovacaoRoute = PainelAprovacaoRouteImport.update({
-  id: '/painel-aprovacao',
-  path: '/painel-aprovacao',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelArquivosRoute = PainelArquivosRouteImport.update({
-  id: '/painel-arquivos',
-  path: '/painel-arquivos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelAuditoriaRoute = PainelAuditoriaRouteImport.update({
-  id: '/painel-auditoria',
-  path: '/painel-auditoria',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelAutorizacoesRoute = PainelAutorizacoesRouteImport.update({
-  id: '/painel-autorizacoes',
-  path: '/painel-autorizacoes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelCardsRoute = PainelCardsRouteImport.update({
-  id: '/painel-cards',
-  path: '/painel-cards',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelComentariosRoute = PainelComentariosRouteImport.update({
-  id: '/painel-comentarios',
-  path: '/painel-comentarios',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelConsentimentosRoute = PainelConsentimentosRouteImport.update({
-  id: '/painel-consentimentos',
-  path: '/painel-consentimentos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelCoordenadorRoute = PainelCoordenadorRouteImport.update({
-  id: '/painel-coordenador',
-  path: '/painel-coordenador',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelDesenvolvedorRoute = PainelDesenvolvedorRouteImport.update({
-  id: '/painel-desenvolvedor',
-  path: '/painel-desenvolvedor',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelDestaquesRoute = PainelDestaquesRouteImport.update({
-  id: '/painel-destaques',
-  path: '/painel-destaques',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelDestaquesAlunosRoute = PainelDestaquesAlunosRouteImport.update({
-  id: '/painel-destaques-alunos',
-  path: '/painel-destaques-alunos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelDiagnosticoRoute = PainelDiagnosticoRouteImport.update({
-  id: '/painel-diagnostico',
-  path: '/painel-diagnostico',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelDiretorRoute = PainelDiretorRouteImport.update({
-  id: '/painel-diretor',
-  path: '/painel-diretor',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelEnquetesRoute = PainelEnquetesRouteImport.update({
-  id: '/painel-enquetes',
-  path: '/painel-enquetes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelEnviarDriveRoute = PainelEnviarDriveRouteImport.update({
-  id: '/painel-enviar-drive',
-  path: '/painel-enviar-drive',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelErrosRoute = PainelErrosRouteImport.update({
-  id: '/painel-erros',
-  path: '/painel-erros',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelFamiliasRoute = PainelFamiliasRouteImport.update({
-  id: '/painel-familias',
-  path: '/painel-familias',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelGaleriaRoute = PainelGaleriaRouteImport.update({
-  id: '/painel-galeria',
-  path: '/painel-galeria',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelGoogleDriveRoute = PainelGoogleDriveRouteImport.update({
-  id: '/painel-google-drive',
-  path: '/painel-google-drive',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelLgpdRoute = PainelLgpdRouteImport.update({
-  id: '/painel-lgpd',
-  path: '/painel-lgpd',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelManutencaoRoute = PainelManutencaoRouteImport.update({
-  id: '/painel-manutencao',
-  path: '/painel-manutencao',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelMensagensRoute = PainelMensagensRouteImport.update({
-  id: '/painel-mensagens',
-  path: '/painel-mensagens',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelPatrocinadoresRoute = PainelPatrocinadoresRouteImport.update({
-  id: '/painel-patrocinadores',
-  path: '/painel-patrocinadores',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelProfessorRoute = PainelProfessorRouteImport.update({
-  id: '/painel-professor',
-  path: '/painel-professor',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelProfissionaisRoute = PainelProfissionaisRouteImport.update({
-  id: '/painel-profissionais',
-  path: '/painel-profissionais',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelResponsavelRoute = PainelResponsavelRouteImport.update({
-  id: '/painel-responsavel',
-  path: '/painel-responsavel',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelRuntimeRoute = PainelRuntimeRouteImport.update({
-  id: '/painel-runtime',
-  path: '/painel-runtime',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelSecretarioRoute = PainelSecretarioRouteImport.update({
-  id: '/painel-secretario',
-  path: '/painel-secretario',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelTemaRoute = PainelTemaRouteImport.update({
-  id: '/painel-tema',
-  path: '/painel-tema',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacidadeRoute = PrivacidadeRouteImport.update({
-  id: '/privacidade',
-  path: '/privacidade',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RssDotxmlRoute = RssDotxmlRouteImport.update({
-  id: '/rss.xml',
-  path: '/rss.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SobreRoute = SobreRouteImport.update({
-  id: '/sobre',
-  path: '/sobre',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SolicitarDadosRoute = SolicitarDadosRouteImport.update({
-  id: '/solicitar-dados',
-  path: '/solicitar-dados',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TermosDeUsoRoute = TermosDeUsoRouteImport.update({
-  id: '/termos-de-uso',
-  path: '/termos-de-uso',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TvRoute = TvRouteImport.update({
-  id: '/tv',
-  path: '/tv',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UsoDeImagemRoute = UsoDeImagemRouteImport.update({
-  id: '/uso-de-imagem',
-  path: '/uso-de-imagem',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UsuariosRoute = UsuariosRouteImport.update({
-  id: '/usuarios',
-  path: '/usuarios',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiChatRoute = ApiChatRouteImport.update({
-  id: '/api/chat',
-  path: '/api/chat',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiHealthRoute = ApiHealthRouteImport.update({
-  id: '/api/health',
-  path: '/api/health',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ChatAlunoIdRoute = ChatAlunoIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => ChatAlunoRoute,
-} as any)
-const EnquetesIdRoute = EnquetesIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => EnquetesRoute,
-} as any)
-const EquipeIdRoute = EquipeIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => EquipeRoute,
-} as any)
-const EscolaIndexRoute = EscolaIndexRouteImport.update({
-  id: '/escola/',
-  path: '/escola/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EscolaAlunosRoute = EscolaAlunosRouteImport.update({
-  id: '/escola/alunos',
-  path: '/escola/alunos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EscolaAlunosImportarRoute = EscolaAlunosImportarRouteImport.update({
-  id: '/escola/alunos-importar',
-  path: '/escola/alunos-importar',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EscolaDashboardRoute = EscolaDashboardRouteImport.update({
-  id: '/escola/dashboard',
-  path: '/escola/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EscolaProfessoresRoute = EscolaProfessoresRouteImport.update({
-  id: '/escola/professores',
-  path: '/escola/professores',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EscolaResponsaveisRoute = EscolaResponsaveisRouteImport.update({
-  id: '/escola/responsaveis',
-  path: '/escola/responsaveis',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EscolaTurmasRoute = EscolaTurmasRouteImport.update({
-  id: '/escola/turmas',
-  path: '/escola/turmas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GaleriaIdRoute = GaleriaIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => GaleriaRoute,
-} as any)
-const MeusFilhosIdRoute = MeusFilhosIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => MeusFilhosRoute,
-} as any)
-const MinhasTurmasTurmaIdRoute = MinhasTurmasTurmaIdRouteImport.update({
-  id: '/$turmaId',
-  path: '/$turmaId',
-  getParentRoute: () => MinhasTurmasRoute,
-} as any)
-const PainelArquivosIndexRoute = PainelArquivosIndexRouteImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => PainelArquivosRoute,
-} as any)
-const PainelArquivosTemplateIdRoute =
-  PainelArquivosTemplateIdRouteImport.update({
-    id: '/$templateId',
-    path: '/$templateId',
-    getParentRoute: () => PainelArquivosRoute,
-  } as any)
-const PainelPostsIndexRoute = PainelPostsIndexRouteImport.update({
-  id: '/painel-posts/',
-  path: '/painel-posts/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelPostsIdRoute = PainelPostsIdRouteImport.update({
-  id: '/painel-posts/$id',
-  path: '/painel-posts/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelPostsNovoRoute = PainelPostsNovoRouteImport.update({
-  id: '/painel-posts/novo',
-  path: '/painel-posts/novo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PostsIndexRoute = PostsIndexRouteImport.update({
@@ -557,74 +462,120 @@ const PostsIndexRoute = PostsIndexRouteImport.update({
   path: '/posts/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PainelPostsIndexRoute = PainelPostsIndexRouteImport.update({
+  id: '/painel-posts/',
+  path: '/painel-posts/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelArquivosIndexRoute = PainelArquivosIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PainelArquivosRoute,
+} as any)
+const EscolaIndexRoute = EscolaIndexRouteImport.update({
+  id: '/escola/',
+  path: '/escola/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PostsIdRoute = PostsIdRouteImport.update({
   id: '/posts/$id',
   path: '/posts/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiDebugFcmDiagnosticsRoute = ApiDebugFcmDiagnosticsRouteImport.update({
-  id: '/api/debug/fcm-diagnostics',
-  path: '/api/debug/fcm-diagnostics',
+const PainelPostsNovoRoute = PainelPostsNovoRouteImport.update({
+  id: '/painel-posts/novo',
+  path: '/painel-posts/novo',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicAgendamentosLembretesRoute =
-  ApiPublicAgendamentosLembretesRouteImport.update({
-    id: '/api/public/agendamentos-lembretes',
-    path: '/api/public/agendamentos-lembretes',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicBackupSemanalRoute = ApiPublicBackupSemanalRouteImport.update({
-  id: '/api/public/backup-semanal',
-  path: '/api/public/backup-semanal',
+const PainelPostsIdRoute = PainelPostsIdRouteImport.update({
+  id: '/painel-posts/$id',
+  path: '/painel-posts/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicComunicadosAgendadosRoute =
-  ApiPublicComunicadosAgendadosRouteImport.update({
-    id: '/api/public/comunicados-agendados',
-    path: '/api/public/comunicados-agendados',
-    getParentRoute: () => rootRouteImport,
+const PainelArquivosTemplateIdRoute =
+  PainelArquivosTemplateIdRouteImport.update({
+    id: '/$templateId',
+    path: '/$templateId',
+    getParentRoute: () => PainelArquivosRoute,
   } as any)
-const ApiPublicComunicadosLembretesRoute =
-  ApiPublicComunicadosLembretesRouteImport.update({
-    id: '/api/public/comunicados-lembretes',
-    path: '/api/public/comunicados-lembretes',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicDispatchPushRoute = ApiPublicDispatchPushRouteImport.update({
-  id: '/api/public/dispatch-push',
-  path: '/api/public/dispatch-push',
+const MinhasTurmasTurmaIdRoute = MinhasTurmasTurmaIdRouteImport.update({
+  id: '/$turmaId',
+  path: '/$turmaId',
+  getParentRoute: () => MinhasTurmasRoute,
+} as any)
+const MeusFilhosIdRoute = MeusFilhosIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => MeusFilhosRoute,
+} as any)
+const GaleriaIdRoute = GaleriaIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => GaleriaRoute,
+} as any)
+const EscolaTurmasRoute = EscolaTurmasRouteImport.update({
+  id: '/escola/turmas',
+  path: '/escola/turmas',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicFcmCheckRoute = ApiPublicFcmCheckRouteImport.update({
-  id: '/api/public/fcm-check',
-  path: '/api/public/fcm-check',
+const EscolaResponsaveisRoute = EscolaResponsaveisRouteImport.update({
+  id: '/escola/responsaveis',
+  path: '/escola/responsaveis',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicFcmConfigRoute = ApiPublicFcmConfigRouteImport.update({
-  id: '/api/public/fcm-config',
-  path: '/api/public/fcm-config',
+const EscolaProfessoresRoute = EscolaProfessoresRouteImport.update({
+  id: '/escola/professores',
+  path: '/escola/professores',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicRemindersDispatchRoute =
-  ApiPublicRemindersDispatchRouteImport.update({
-    id: '/api/public/reminders-dispatch',
-    path: '/api/public/reminders-dispatch',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicTurnstileConfigRoute =
-  ApiPublicTurnstileConfigRouteImport.update({
-    id: '/api/public/turnstile-config',
-    path: '/api/public/turnstile-config',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPushFcmRegisterRoute = ApiPushFcmRegisterRouteImport.update({
-  id: '/api/push/fcm-register',
-  path: '/api/push/fcm-register',
+const EscolaDashboardRoute = EscolaDashboardRouteImport.update({
+  id: '/escola/dashboard',
+  path: '/escola/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EscolaAlunosImportarRoute = EscolaAlunosImportarRouteImport.update({
+  id: '/escola/alunos-importar',
+  path: '/escola/alunos-importar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EscolaAlunosRoute = EscolaAlunosRouteImport.update({
+  id: '/escola/alunos',
+  path: '/escola/alunos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EquipeIdRoute = EquipeIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => EquipeRoute,
+} as any)
+const EnquetesIdRoute = EnquetesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => EnquetesRoute,
+} as any)
+const ChatAlunoIdRoute = ChatAlunoIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ChatAlunoRoute,
+} as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EscolaComunicadosIndexRoute = EscolaComunicadosIndexRouteImport.update({
   id: '/escola/comunicados/',
   path: '/escola/comunicados/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EscolaComunicadosNovoRoute = EscolaComunicadosNovoRouteImport.update({
+  id: '/escola/comunicados/novo',
+  path: '/escola/comunicados/novo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EscolaComunicadosDashboardRoute =
@@ -633,19 +584,74 @@ const EscolaComunicadosDashboardRoute =
     path: '/escola/comunicados/dashboard',
     getParentRoute: () => rootRouteImport,
   } as any)
-const EscolaComunicadosNovoRoute = EscolaComunicadosNovoRouteImport.update({
-  id: '/escola/comunicados/novo',
-  path: '/escola/comunicados/novo',
+const ApiPushFcmRegisterRoute = ApiPushFcmRegisterRouteImport.update({
+  id: '/api/push/fcm-register',
+  path: '/api/push/fcm-register',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicDriveFotoIdRoute = ApiPublicDriveFotoIdRouteImport.update({
-  id: '/api/public/drive-foto/$id',
-  path: '/api/public/drive-foto/$id',
+const ApiPublicTurnstileConfigRoute =
+  ApiPublicTurnstileConfigRouteImport.update({
+    id: '/api/public/turnstile-config',
+    path: '/api/public/turnstile-config',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicRemindersDispatchRoute =
+  ApiPublicRemindersDispatchRouteImport.update({
+    id: '/api/public/reminders-dispatch',
+    path: '/api/public/reminders-dispatch',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicFcmConfigRoute = ApiPublicFcmConfigRouteImport.update({
+  id: '/api/public/fcm-config',
+  path: '/api/public/fcm-config',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicFcmCheckRoute = ApiPublicFcmCheckRouteImport.update({
+  id: '/api/public/fcm-check',
+  path: '/api/public/fcm-check',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicDispatchPushRoute = ApiPublicDispatchPushRouteImport.update({
+  id: '/api/public/dispatch-push',
+  path: '/api/public/dispatch-push',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicComunicadosLembretesRoute =
+  ApiPublicComunicadosLembretesRouteImport.update({
+    id: '/api/public/comunicados-lembretes',
+    path: '/api/public/comunicados-lembretes',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicComunicadosAgendadosRoute =
+  ApiPublicComunicadosAgendadosRouteImport.update({
+    id: '/api/public/comunicados-agendados',
+    path: '/api/public/comunicados-agendados',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicBackupSemanalRoute = ApiPublicBackupSemanalRouteImport.update({
+  id: '/api/public/backup-semanal',
+  path: '/api/public/backup-semanal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicAgendamentosLembretesRoute =
+  ApiPublicAgendamentosLembretesRouteImport.update({
+    id: '/api/public/agendamentos-lembretes',
+    path: '/api/public/agendamentos-lembretes',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiDebugFcmDiagnosticsRoute = ApiDebugFcmDiagnosticsRouteImport.update({
+  id: '/api/debug/fcm-diagnostics',
+  path: '/api/debug/fcm-diagnostics',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicMomentosFotoIdRoute = ApiPublicMomentosFotoIdRouteImport.update({
   id: '/api/public/momentos-foto/$id',
   path: '/api/public/momentos-foto/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicDriveFotoIdRoute = ApiPublicDriveFotoIdRouteImport.update({
+  id: '/api/public/drive-foto/$id',
+  path: '/api/public/drive-foto/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -707,6 +713,7 @@ export interface FileRoutesByFullPath {
   '/painel-responsavel': typeof PainelResponsavelRoute
   '/painel-runtime': typeof PainelRuntimeRoute
   '/painel-secretario': typeof PainelSecretarioRoute
+  '/painel-social-media': typeof PainelSocialMediaRoute
   '/painel-tema': typeof PainelTemaRoute
   '/privacidade': typeof PrivacidadeRoute
   '/rss.xml': typeof RssDotxmlRoute
@@ -813,6 +820,7 @@ export interface FileRoutesByTo {
   '/painel-responsavel': typeof PainelResponsavelRoute
   '/painel-runtime': typeof PainelRuntimeRoute
   '/painel-secretario': typeof PainelSecretarioRoute
+  '/painel-social-media': typeof PainelSocialMediaRoute
   '/painel-tema': typeof PainelTemaRoute
   '/privacidade': typeof PrivacidadeRoute
   '/rss.xml': typeof RssDotxmlRoute
@@ -921,6 +929,7 @@ export interface FileRoutesById {
   '/painel-responsavel': typeof PainelResponsavelRoute
   '/painel-runtime': typeof PainelRuntimeRoute
   '/painel-secretario': typeof PainelSecretarioRoute
+  '/painel-social-media': typeof PainelSocialMediaRoute
   '/painel-tema': typeof PainelTemaRoute
   '/privacidade': typeof PrivacidadeRoute
   '/rss.xml': typeof RssDotxmlRoute
@@ -1030,6 +1039,7 @@ export interface FileRouteTypes {
     | '/painel-responsavel'
     | '/painel-runtime'
     | '/painel-secretario'
+    | '/painel-social-media'
     | '/painel-tema'
     | '/privacidade'
     | '/rss.xml'
@@ -1136,6 +1146,7 @@ export interface FileRouteTypes {
     | '/painel-responsavel'
     | '/painel-runtime'
     | '/painel-secretario'
+    | '/painel-social-media'
     | '/painel-tema'
     | '/privacidade'
     | '/rss.xml'
@@ -1243,6 +1254,7 @@ export interface FileRouteTypes {
     | '/painel-responsavel'
     | '/painel-runtime'
     | '/painel-secretario'
+    | '/painel-social-media'
     | '/painel-tema'
     | '/privacidade'
     | '/rss.xml'
@@ -1351,6 +1363,7 @@ export interface RootRouteChildren {
   PainelResponsavelRoute: typeof PainelResponsavelRoute
   PainelRuntimeRoute: typeof PainelRuntimeRoute
   PainelSecretarioRoute: typeof PainelSecretarioRoute
+  PainelSocialMediaRoute: typeof PainelSocialMediaRoute
   PainelTemaRoute: typeof PainelTemaRoute
   PrivacidadeRoute: typeof PrivacidadeRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
@@ -1395,459 +1408,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/agendar': {
-      id: '/agendar'
-      path: '/agendar'
-      fullPath: '/agendar'
-      preLoaderRoute: typeof AgendarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/alunos-destaque': {
-      id: '/alunos-destaque'
-      path: '/alunos-destaque'
-      fullPath: '/alunos-destaque'
-      preLoaderRoute: typeof AlunosDestaqueRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/calendario': {
-      id: '/calendario'
-      path: '/calendario'
-      fullPath: '/calendario'
-      preLoaderRoute: typeof CalendarioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/chat-aluno': {
-      id: '/chat-aluno'
-      path: '/chat-aluno'
-      fullPath: '/chat-aluno'
-      preLoaderRoute: typeof ChatAlunoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/configuracoes': {
-      id: '/configuracoes'
-      path: '/configuracoes'
-      fullPath: '/configuracoes'
-      preLoaderRoute: typeof ConfiguracoesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/diagnosticar-notificacoes': {
-      id: '/diagnosticar-notificacoes'
-      path: '/diagnosticar-notificacoes'
-      fullPath: '/diagnosticar-notificacoes'
-      preLoaderRoute: typeof DiagnosticarNotificacoesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/enquetes': {
-      id: '/enquetes'
-      path: '/enquetes'
-      fullPath: '/enquetes'
-      preLoaderRoute: typeof EnquetesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/equipe': {
-      id: '/equipe'
-      path: '/equipe'
-      fullPath: '/equipe'
-      preLoaderRoute: typeof EquipeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/familias': {
-      id: '/familias'
-      path: '/familias'
-      fullPath: '/familias'
-      preLoaderRoute: typeof FamiliasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/galeria': {
-      id: '/galeria'
-      path: '/galeria'
-      fullPath: '/galeria'
-      preLoaderRoute: typeof GaleriaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/horarios': {
-      id: '/horarios'
-      path: '/horarios'
-      fullPath: '/horarios'
-      preLoaderRoute: typeof HorariosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/instalar': {
-      id: '/instalar'
-      path: '/instalar'
-      fullPath: '/instalar'
-      preLoaderRoute: typeof InstalarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mensagens-coordenacao': {
-      id: '/mensagens-coordenacao'
-      path: '/mensagens-coordenacao'
-      fullPath: '/mensagens-coordenacao'
-      preLoaderRoute: typeof MensagensCoordenacaoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meus-agendamentos': {
-      id: '/meus-agendamentos'
-      path: '/meus-agendamentos'
-      fullPath: '/meus-agendamentos'
-      preLoaderRoute: typeof MeusAgendamentosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meus-comunicados': {
-      id: '/meus-comunicados'
-      path: '/meus-comunicados'
-      fullPath: '/meus-comunicados'
-      preLoaderRoute: typeof MeusComunicadosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meus-filhos': {
-      id: '/meus-filhos'
-      path: '/meus-filhos'
-      fullPath: '/meus-filhos'
-      preLoaderRoute: typeof MeusFilhosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/minhas-turmas': {
-      id: '/minhas-turmas'
-      path: '/minhas-turmas'
-      fullPath: '/minhas-turmas'
-      preLoaderRoute: typeof MinhasTurmasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/momentos': {
-      id: '/momentos'
-      path: '/momentos'
-      fullPath: '/momentos'
-      preLoaderRoute: typeof MomentosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notificacoes': {
-      id: '/notificacoes'
-      path: '/notificacoes'
-      fullPath: '/notificacoes'
-      preLoaderRoute: typeof NotificacoesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/offline': {
-      id: '/offline'
-      path: '/offline'
-      fullPath: '/offline'
-      preLoaderRoute: typeof OfflineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel': {
-      id: '/painel'
-      path: '/painel'
-      fullPath: '/painel'
-      preLoaderRoute: typeof PainelRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-academico': {
-      id: '/painel-academico'
-      path: '/painel-academico'
-      fullPath: '/painel-academico'
-      preLoaderRoute: typeof PainelAcademicoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-acessos': {
-      id: '/painel-acessos'
-      path: '/painel-acessos'
-      fullPath: '/painel-acessos'
-      preLoaderRoute: typeof PainelAcessosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-agendamentos': {
-      id: '/painel-agendamentos'
-      path: '/painel-agendamentos'
-      fullPath: '/painel-agendamentos'
-      preLoaderRoute: typeof PainelAgendamentosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-alertas': {
-      id: '/painel-alertas'
-      path: '/painel-alertas'
-      fullPath: '/painel-alertas'
-      preLoaderRoute: typeof PainelAlertasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-analytics': {
-      id: '/painel-analytics'
-      path: '/painel-analytics'
-      fullPath: '/painel-analytics'
-      preLoaderRoute: typeof PainelAnalyticsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-anotacoes': {
-      id: '/painel-anotacoes'
-      path: '/painel-anotacoes'
-      fullPath: '/painel-anotacoes'
-      preLoaderRoute: typeof PainelAnotacoesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-aprovacao': {
-      id: '/painel-aprovacao'
-      path: '/painel-aprovacao'
-      fullPath: '/painel-aprovacao'
-      preLoaderRoute: typeof PainelAprovacaoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-arquivos': {
-      id: '/painel-arquivos'
-      path: '/painel-arquivos'
-      fullPath: '/painel-arquivos'
-      preLoaderRoute: typeof PainelArquivosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-auditoria': {
-      id: '/painel-auditoria'
-      path: '/painel-auditoria'
-      fullPath: '/painel-auditoria'
-      preLoaderRoute: typeof PainelAuditoriaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-autorizacoes': {
-      id: '/painel-autorizacoes'
-      path: '/painel-autorizacoes'
-      fullPath: '/painel-autorizacoes'
-      preLoaderRoute: typeof PainelAutorizacoesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-cards': {
-      id: '/painel-cards'
-      path: '/painel-cards'
-      fullPath: '/painel-cards'
-      preLoaderRoute: typeof PainelCardsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-comentarios': {
-      id: '/painel-comentarios'
-      path: '/painel-comentarios'
-      fullPath: '/painel-comentarios'
-      preLoaderRoute: typeof PainelComentariosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-consentimentos': {
-      id: '/painel-consentimentos'
-      path: '/painel-consentimentos'
-      fullPath: '/painel-consentimentos'
-      preLoaderRoute: typeof PainelConsentimentosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-coordenador': {
-      id: '/painel-coordenador'
-      path: '/painel-coordenador'
-      fullPath: '/painel-coordenador'
-      preLoaderRoute: typeof PainelCoordenadorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-desenvolvedor': {
-      id: '/painel-desenvolvedor'
-      path: '/painel-desenvolvedor'
-      fullPath: '/painel-desenvolvedor'
-      preLoaderRoute: typeof PainelDesenvolvedorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-destaques': {
-      id: '/painel-destaques'
-      path: '/painel-destaques'
-      fullPath: '/painel-destaques'
-      preLoaderRoute: typeof PainelDestaquesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-destaques-alunos': {
-      id: '/painel-destaques-alunos'
-      path: '/painel-destaques-alunos'
-      fullPath: '/painel-destaques-alunos'
-      preLoaderRoute: typeof PainelDestaquesAlunosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-diagnostico': {
-      id: '/painel-diagnostico'
-      path: '/painel-diagnostico'
-      fullPath: '/painel-diagnostico'
-      preLoaderRoute: typeof PainelDiagnosticoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-diretor': {
-      id: '/painel-diretor'
-      path: '/painel-diretor'
-      fullPath: '/painel-diretor'
-      preLoaderRoute: typeof PainelDiretorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-enquetes': {
-      id: '/painel-enquetes'
-      path: '/painel-enquetes'
-      fullPath: '/painel-enquetes'
-      preLoaderRoute: typeof PainelEnquetesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-enviar-drive': {
-      id: '/painel-enviar-drive'
-      path: '/painel-enviar-drive'
-      fullPath: '/painel-enviar-drive'
-      preLoaderRoute: typeof PainelEnviarDriveRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-erros': {
-      id: '/painel-erros'
-      path: '/painel-erros'
-      fullPath: '/painel-erros'
-      preLoaderRoute: typeof PainelErrosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-familias': {
-      id: '/painel-familias'
-      path: '/painel-familias'
-      fullPath: '/painel-familias'
-      preLoaderRoute: typeof PainelFamiliasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-galeria': {
-      id: '/painel-galeria'
-      path: '/painel-galeria'
-      fullPath: '/painel-galeria'
-      preLoaderRoute: typeof PainelGaleriaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-google-drive': {
-      id: '/painel-google-drive'
-      path: '/painel-google-drive'
-      fullPath: '/painel-google-drive'
-      preLoaderRoute: typeof PainelGoogleDriveRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-lgpd': {
-      id: '/painel-lgpd'
-      path: '/painel-lgpd'
-      fullPath: '/painel-lgpd'
-      preLoaderRoute: typeof PainelLgpdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-manutencao': {
-      id: '/painel-manutencao'
-      path: '/painel-manutencao'
-      fullPath: '/painel-manutencao'
-      preLoaderRoute: typeof PainelManutencaoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-mensagens': {
-      id: '/painel-mensagens'
-      path: '/painel-mensagens'
-      fullPath: '/painel-mensagens'
-      preLoaderRoute: typeof PainelMensagensRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-patrocinadores': {
-      id: '/painel-patrocinadores'
-      path: '/painel-patrocinadores'
-      fullPath: '/painel-patrocinadores'
-      preLoaderRoute: typeof PainelPatrocinadoresRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-professor': {
-      id: '/painel-professor'
-      path: '/painel-professor'
-      fullPath: '/painel-professor'
-      preLoaderRoute: typeof PainelProfessorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-profissionais': {
-      id: '/painel-profissionais'
-      path: '/painel-profissionais'
-      fullPath: '/painel-profissionais'
-      preLoaderRoute: typeof PainelProfissionaisRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-responsavel': {
-      id: '/painel-responsavel'
-      path: '/painel-responsavel'
-      fullPath: '/painel-responsavel'
-      preLoaderRoute: typeof PainelResponsavelRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-runtime': {
-      id: '/painel-runtime'
-      path: '/painel-runtime'
-      fullPath: '/painel-runtime'
-      preLoaderRoute: typeof PainelRuntimeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-secretario': {
-      id: '/painel-secretario'
-      path: '/painel-secretario'
-      fullPath: '/painel-secretario'
-      preLoaderRoute: typeof PainelSecretarioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-tema': {
-      id: '/painel-tema'
-      path: '/painel-tema'
-      fullPath: '/painel-tema'
-      preLoaderRoute: typeof PainelTemaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacidade': {
-      id: '/privacidade'
-      path: '/privacidade'
-      fullPath: '/privacidade'
-      preLoaderRoute: typeof PrivacidadeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/rss.xml': {
-      id: '/rss.xml'
-      path: '/rss.xml'
-      fullPath: '/rss.xml'
-      preLoaderRoute: typeof RssDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sobre': {
-      id: '/sobre'
-      path: '/sobre'
-      fullPath: '/sobre'
-      preLoaderRoute: typeof SobreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/solicitar-dados': {
-      id: '/solicitar-dados'
-      path: '/solicitar-dados'
-      fullPath: '/solicitar-dados'
-      preLoaderRoute: typeof SolicitarDadosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/termos-de-uso': {
-      id: '/termos-de-uso'
-      path: '/termos-de-uso'
-      fullPath: '/termos-de-uso'
-      preLoaderRoute: typeof TermosDeUsoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tv': {
-      id: '/tv'
-      path: '/tv'
-      fullPath: '/tv'
-      preLoaderRoute: typeof TvRouteImport
+    '/usuarios': {
+      id: '/usuarios'
+      path: '/usuarios'
+      fullPath: '/usuarios'
+      preLoaderRoute: typeof UsuariosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/uso-de-imagem': {
@@ -1857,151 +1422,466 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsoDeImagemRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/usuarios': {
-      id: '/usuarios'
-      path: '/usuarios'
-      fullPath: '/usuarios'
-      preLoaderRoute: typeof UsuariosRouteImport
+    '/tv': {
+      id: '/tv'
+      path: '/tv'
+      fullPath: '/tv'
+      preLoaderRoute: typeof TvRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/chat': {
-      id: '/api/chat'
-      path: '/api/chat'
-      fullPath: '/api/chat'
-      preLoaderRoute: typeof ApiChatRouteImport
+    '/termos-de-uso': {
+      id: '/termos-de-uso'
+      path: '/termos-de-uso'
+      fullPath: '/termos-de-uso'
+      preLoaderRoute: typeof TermosDeUsoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/health': {
-      id: '/api/health'
-      path: '/api/health'
-      fullPath: '/api/health'
-      preLoaderRoute: typeof ApiHealthRouteImport
+    '/solicitar-dados': {
+      id: '/solicitar-dados'
+      path: '/solicitar-dados'
+      fullPath: '/solicitar-dados'
+      preLoaderRoute: typeof SolicitarDadosRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/chat-aluno/$id': {
-      id: '/chat-aluno/$id'
-      path: '/$id'
-      fullPath: '/chat-aluno/$id'
-      preLoaderRoute: typeof ChatAlunoIdRouteImport
-      parentRoute: typeof ChatAlunoRoute
-    }
-    '/enquetes/$id': {
-      id: '/enquetes/$id'
-      path: '/$id'
-      fullPath: '/enquetes/$id'
-      preLoaderRoute: typeof EnquetesIdRouteImport
-      parentRoute: typeof EnquetesRoute
-    }
-    '/equipe/$id': {
-      id: '/equipe/$id'
-      path: '/$id'
-      fullPath: '/equipe/$id'
-      preLoaderRoute: typeof EquipeIdRouteImport
-      parentRoute: typeof EquipeRoute
-    }
-    '/escola/': {
-      id: '/escola/'
-      path: '/escola'
-      fullPath: '/escola/'
-      preLoaderRoute: typeof EscolaIndexRouteImport
+    '/sobre': {
+      id: '/sobre'
+      path: '/sobre'
+      fullPath: '/sobre'
+      preLoaderRoute: typeof SobreRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/escola/alunos': {
-      id: '/escola/alunos'
-      path: '/escola/alunos'
-      fullPath: '/escola/alunos'
-      preLoaderRoute: typeof EscolaAlunosRouteImport
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/escola/alunos-importar': {
-      id: '/escola/alunos-importar'
-      path: '/escola/alunos-importar'
-      fullPath: '/escola/alunos-importar'
-      preLoaderRoute: typeof EscolaAlunosImportarRouteImport
+    '/rss.xml': {
+      id: '/rss.xml'
+      path: '/rss.xml'
+      fullPath: '/rss.xml'
+      preLoaderRoute: typeof RssDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/escola/dashboard': {
-      id: '/escola/dashboard'
-      path: '/escola/dashboard'
-      fullPath: '/escola/dashboard'
-      preLoaderRoute: typeof EscolaDashboardRouteImport
+    '/privacidade': {
+      id: '/privacidade'
+      path: '/privacidade'
+      fullPath: '/privacidade'
+      preLoaderRoute: typeof PrivacidadeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/escola/professores': {
-      id: '/escola/professores'
-      path: '/escola/professores'
-      fullPath: '/escola/professores'
-      preLoaderRoute: typeof EscolaProfessoresRouteImport
+    '/painel-tema': {
+      id: '/painel-tema'
+      path: '/painel-tema'
+      fullPath: '/painel-tema'
+      preLoaderRoute: typeof PainelTemaRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/escola/responsaveis': {
-      id: '/escola/responsaveis'
-      path: '/escola/responsaveis'
-      fullPath: '/escola/responsaveis'
-      preLoaderRoute: typeof EscolaResponsaveisRouteImport
+    '/painel-social-media': {
+      id: '/painel-social-media'
+      path: '/painel-social-media'
+      fullPath: '/painel-social-media'
+      preLoaderRoute: typeof PainelSocialMediaRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/escola/turmas': {
-      id: '/escola/turmas'
-      path: '/escola/turmas'
-      fullPath: '/escola/turmas'
-      preLoaderRoute: typeof EscolaTurmasRouteImport
+    '/painel-secretario': {
+      id: '/painel-secretario'
+      path: '/painel-secretario'
+      fullPath: '/painel-secretario'
+      preLoaderRoute: typeof PainelSecretarioRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/galeria/$id': {
-      id: '/galeria/$id'
-      path: '/$id'
-      fullPath: '/galeria/$id'
-      preLoaderRoute: typeof GaleriaIdRouteImport
-      parentRoute: typeof GaleriaRoute
+    '/painel-runtime': {
+      id: '/painel-runtime'
+      path: '/painel-runtime'
+      fullPath: '/painel-runtime'
+      preLoaderRoute: typeof PainelRuntimeRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/meus-filhos/$id': {
-      id: '/meus-filhos/$id'
-      path: '/$id'
-      fullPath: '/meus-filhos/$id'
-      preLoaderRoute: typeof MeusFilhosIdRouteImport
-      parentRoute: typeof MeusFilhosRoute
+    '/painel-responsavel': {
+      id: '/painel-responsavel'
+      path: '/painel-responsavel'
+      fullPath: '/painel-responsavel'
+      preLoaderRoute: typeof PainelResponsavelRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/minhas-turmas/$turmaId': {
-      id: '/minhas-turmas/$turmaId'
-      path: '/$turmaId'
-      fullPath: '/minhas-turmas/$turmaId'
-      preLoaderRoute: typeof MinhasTurmasTurmaIdRouteImport
-      parentRoute: typeof MinhasTurmasRoute
+    '/painel-profissionais': {
+      id: '/painel-profissionais'
+      path: '/painel-profissionais'
+      fullPath: '/painel-profissionais'
+      preLoaderRoute: typeof PainelProfissionaisRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/painel-arquivos/': {
-      id: '/painel-arquivos/'
+    '/painel-professor': {
+      id: '/painel-professor'
+      path: '/painel-professor'
+      fullPath: '/painel-professor'
+      preLoaderRoute: typeof PainelProfessorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-patrocinadores': {
+      id: '/painel-patrocinadores'
+      path: '/painel-patrocinadores'
+      fullPath: '/painel-patrocinadores'
+      preLoaderRoute: typeof PainelPatrocinadoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-mensagens': {
+      id: '/painel-mensagens'
+      path: '/painel-mensagens'
+      fullPath: '/painel-mensagens'
+      preLoaderRoute: typeof PainelMensagensRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-manutencao': {
+      id: '/painel-manutencao'
+      path: '/painel-manutencao'
+      fullPath: '/painel-manutencao'
+      preLoaderRoute: typeof PainelManutencaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-lgpd': {
+      id: '/painel-lgpd'
+      path: '/painel-lgpd'
+      fullPath: '/painel-lgpd'
+      preLoaderRoute: typeof PainelLgpdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-google-drive': {
+      id: '/painel-google-drive'
+      path: '/painel-google-drive'
+      fullPath: '/painel-google-drive'
+      preLoaderRoute: typeof PainelGoogleDriveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-galeria': {
+      id: '/painel-galeria'
+      path: '/painel-galeria'
+      fullPath: '/painel-galeria'
+      preLoaderRoute: typeof PainelGaleriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-familias': {
+      id: '/painel-familias'
+      path: '/painel-familias'
+      fullPath: '/painel-familias'
+      preLoaderRoute: typeof PainelFamiliasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-erros': {
+      id: '/painel-erros'
+      path: '/painel-erros'
+      fullPath: '/painel-erros'
+      preLoaderRoute: typeof PainelErrosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-enviar-drive': {
+      id: '/painel-enviar-drive'
+      path: '/painel-enviar-drive'
+      fullPath: '/painel-enviar-drive'
+      preLoaderRoute: typeof PainelEnviarDriveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-enquetes': {
+      id: '/painel-enquetes'
+      path: '/painel-enquetes'
+      fullPath: '/painel-enquetes'
+      preLoaderRoute: typeof PainelEnquetesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-diretor': {
+      id: '/painel-diretor'
+      path: '/painel-diretor'
+      fullPath: '/painel-diretor'
+      preLoaderRoute: typeof PainelDiretorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-diagnostico': {
+      id: '/painel-diagnostico'
+      path: '/painel-diagnostico'
+      fullPath: '/painel-diagnostico'
+      preLoaderRoute: typeof PainelDiagnosticoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-destaques-alunos': {
+      id: '/painel-destaques-alunos'
+      path: '/painel-destaques-alunos'
+      fullPath: '/painel-destaques-alunos'
+      preLoaderRoute: typeof PainelDestaquesAlunosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-destaques': {
+      id: '/painel-destaques'
+      path: '/painel-destaques'
+      fullPath: '/painel-destaques'
+      preLoaderRoute: typeof PainelDestaquesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-desenvolvedor': {
+      id: '/painel-desenvolvedor'
+      path: '/painel-desenvolvedor'
+      fullPath: '/painel-desenvolvedor'
+      preLoaderRoute: typeof PainelDesenvolvedorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-coordenador': {
+      id: '/painel-coordenador'
+      path: '/painel-coordenador'
+      fullPath: '/painel-coordenador'
+      preLoaderRoute: typeof PainelCoordenadorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-consentimentos': {
+      id: '/painel-consentimentos'
+      path: '/painel-consentimentos'
+      fullPath: '/painel-consentimentos'
+      preLoaderRoute: typeof PainelConsentimentosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-comentarios': {
+      id: '/painel-comentarios'
+      path: '/painel-comentarios'
+      fullPath: '/painel-comentarios'
+      preLoaderRoute: typeof PainelComentariosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-cards': {
+      id: '/painel-cards'
+      path: '/painel-cards'
+      fullPath: '/painel-cards'
+      preLoaderRoute: typeof PainelCardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-autorizacoes': {
+      id: '/painel-autorizacoes'
+      path: '/painel-autorizacoes'
+      fullPath: '/painel-autorizacoes'
+      preLoaderRoute: typeof PainelAutorizacoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-auditoria': {
+      id: '/painel-auditoria'
+      path: '/painel-auditoria'
+      fullPath: '/painel-auditoria'
+      preLoaderRoute: typeof PainelAuditoriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-arquivos': {
+      id: '/painel-arquivos'
+      path: '/painel-arquivos'
+      fullPath: '/painel-arquivos'
+      preLoaderRoute: typeof PainelArquivosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-aprovacao': {
+      id: '/painel-aprovacao'
+      path: '/painel-aprovacao'
+      fullPath: '/painel-aprovacao'
+      preLoaderRoute: typeof PainelAprovacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-anotacoes': {
+      id: '/painel-anotacoes'
+      path: '/painel-anotacoes'
+      fullPath: '/painel-anotacoes'
+      preLoaderRoute: typeof PainelAnotacoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-analytics': {
+      id: '/painel-analytics'
+      path: '/painel-analytics'
+      fullPath: '/painel-analytics'
+      preLoaderRoute: typeof PainelAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-alertas': {
+      id: '/painel-alertas'
+      path: '/painel-alertas'
+      fullPath: '/painel-alertas'
+      preLoaderRoute: typeof PainelAlertasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-agendamentos': {
+      id: '/painel-agendamentos'
+      path: '/painel-agendamentos'
+      fullPath: '/painel-agendamentos'
+      preLoaderRoute: typeof PainelAgendamentosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-acessos': {
+      id: '/painel-acessos'
+      path: '/painel-acessos'
+      fullPath: '/painel-acessos'
+      preLoaderRoute: typeof PainelAcessosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-academico': {
+      id: '/painel-academico'
+      path: '/painel-academico'
+      fullPath: '/painel-academico'
+      preLoaderRoute: typeof PainelAcademicoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel': {
+      id: '/painel'
+      path: '/painel'
+      fullPath: '/painel'
+      preLoaderRoute: typeof PainelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/offline': {
+      id: '/offline'
+      path: '/offline'
+      fullPath: '/offline'
+      preLoaderRoute: typeof OfflineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notificacoes': {
+      id: '/notificacoes'
+      path: '/notificacoes'
+      fullPath: '/notificacoes'
+      preLoaderRoute: typeof NotificacoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/momentos': {
+      id: '/momentos'
+      path: '/momentos'
+      fullPath: '/momentos'
+      preLoaderRoute: typeof MomentosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/minhas-turmas': {
+      id: '/minhas-turmas'
+      path: '/minhas-turmas'
+      fullPath: '/minhas-turmas'
+      preLoaderRoute: typeof MinhasTurmasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meus-filhos': {
+      id: '/meus-filhos'
+      path: '/meus-filhos'
+      fullPath: '/meus-filhos'
+      preLoaderRoute: typeof MeusFilhosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meus-comunicados': {
+      id: '/meus-comunicados'
+      path: '/meus-comunicados'
+      fullPath: '/meus-comunicados'
+      preLoaderRoute: typeof MeusComunicadosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meus-agendamentos': {
+      id: '/meus-agendamentos'
+      path: '/meus-agendamentos'
+      fullPath: '/meus-agendamentos'
+      preLoaderRoute: typeof MeusAgendamentosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mensagens-coordenacao': {
+      id: '/mensagens-coordenacao'
+      path: '/mensagens-coordenacao'
+      fullPath: '/mensagens-coordenacao'
+      preLoaderRoute: typeof MensagensCoordenacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/instalar': {
+      id: '/instalar'
+      path: '/instalar'
+      fullPath: '/instalar'
+      preLoaderRoute: typeof InstalarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/horarios': {
+      id: '/horarios'
+      path: '/horarios'
+      fullPath: '/horarios'
+      preLoaderRoute: typeof HorariosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/galeria': {
+      id: '/galeria'
+      path: '/galeria'
+      fullPath: '/galeria'
+      preLoaderRoute: typeof GaleriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/familias': {
+      id: '/familias'
+      path: '/familias'
+      fullPath: '/familias'
+      preLoaderRoute: typeof FamiliasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/equipe': {
+      id: '/equipe'
+      path: '/equipe'
+      fullPath: '/equipe'
+      preLoaderRoute: typeof EquipeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/enquetes': {
+      id: '/enquetes'
+      path: '/enquetes'
+      fullPath: '/enquetes'
+      preLoaderRoute: typeof EnquetesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/diagnosticar-notificacoes': {
+      id: '/diagnosticar-notificacoes'
+      path: '/diagnosticar-notificacoes'
+      fullPath: '/diagnosticar-notificacoes'
+      preLoaderRoute: typeof DiagnosticarNotificacoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/configuracoes': {
+      id: '/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/configuracoes'
+      preLoaderRoute: typeof ConfiguracoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat-aluno': {
+      id: '/chat-aluno'
+      path: '/chat-aluno'
+      fullPath: '/chat-aluno'
+      preLoaderRoute: typeof ChatAlunoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendario': {
+      id: '/calendario'
+      path: '/calendario'
+      fullPath: '/calendario'
+      preLoaderRoute: typeof CalendarioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alunos-destaque': {
+      id: '/alunos-destaque'
+      path: '/alunos-destaque'
+      fullPath: '/alunos-destaque'
+      preLoaderRoute: typeof AlunosDestaqueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agendar': {
+      id: '/agendar'
+      path: '/agendar'
+      fullPath: '/agendar'
+      preLoaderRoute: typeof AgendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
       path: '/'
-      fullPath: '/painel-arquivos/'
-      preLoaderRoute: typeof PainelArquivosIndexRouteImport
-      parentRoute: typeof PainelArquivosRoute
-    }
-    '/painel-arquivos/$templateId': {
-      id: '/painel-arquivos/$templateId'
-      path: '/$templateId'
-      fullPath: '/painel-arquivos/$templateId'
-      preLoaderRoute: typeof PainelArquivosTemplateIdRouteImport
-      parentRoute: typeof PainelArquivosRoute
-    }
-    '/painel-posts/': {
-      id: '/painel-posts/'
-      path: '/painel-posts'
-      fullPath: '/painel-posts/'
-      preLoaderRoute: typeof PainelPostsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-posts/$id': {
-      id: '/painel-posts/$id'
-      path: '/painel-posts/$id'
-      fullPath: '/painel-posts/$id'
-      preLoaderRoute: typeof PainelPostsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-posts/novo': {
-      id: '/painel-posts/novo'
-      path: '/painel-posts/novo'
-      fullPath: '/painel-posts/novo'
-      preLoaderRoute: typeof PainelPostsNovoRouteImport
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/posts/': {
@@ -2011,6 +1891,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PostsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/painel-posts/': {
+      id: '/painel-posts/'
+      path: '/painel-posts'
+      fullPath: '/painel-posts/'
+      preLoaderRoute: typeof PainelPostsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-arquivos/': {
+      id: '/painel-arquivos/'
+      path: '/'
+      fullPath: '/painel-arquivos/'
+      preLoaderRoute: typeof PainelArquivosIndexRouteImport
+      parentRoute: typeof PainelArquivosRoute
+    }
+    '/escola/': {
+      id: '/escola/'
+      path: '/escola'
+      fullPath: '/escola/'
+      preLoaderRoute: typeof EscolaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/posts/$id': {
       id: '/posts/$id'
       path: '/posts/$id'
@@ -2018,81 +1919,123 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PostsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/debug/fcm-diagnostics': {
-      id: '/api/debug/fcm-diagnostics'
-      path: '/api/debug/fcm-diagnostics'
-      fullPath: '/api/debug/fcm-diagnostics'
-      preLoaderRoute: typeof ApiDebugFcmDiagnosticsRouteImport
+    '/painel-posts/novo': {
+      id: '/painel-posts/novo'
+      path: '/painel-posts/novo'
+      fullPath: '/painel-posts/novo'
+      preLoaderRoute: typeof PainelPostsNovoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/agendamentos-lembretes': {
-      id: '/api/public/agendamentos-lembretes'
-      path: '/api/public/agendamentos-lembretes'
-      fullPath: '/api/public/agendamentos-lembretes'
-      preLoaderRoute: typeof ApiPublicAgendamentosLembretesRouteImport
+    '/painel-posts/$id': {
+      id: '/painel-posts/$id'
+      path: '/painel-posts/$id'
+      fullPath: '/painel-posts/$id'
+      preLoaderRoute: typeof PainelPostsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/backup-semanal': {
-      id: '/api/public/backup-semanal'
-      path: '/api/public/backup-semanal'
-      fullPath: '/api/public/backup-semanal'
-      preLoaderRoute: typeof ApiPublicBackupSemanalRouteImport
+    '/painel-arquivos/$templateId': {
+      id: '/painel-arquivos/$templateId'
+      path: '/$templateId'
+      fullPath: '/painel-arquivos/$templateId'
+      preLoaderRoute: typeof PainelArquivosTemplateIdRouteImport
+      parentRoute: typeof PainelArquivosRoute
+    }
+    '/minhas-turmas/$turmaId': {
+      id: '/minhas-turmas/$turmaId'
+      path: '/$turmaId'
+      fullPath: '/minhas-turmas/$turmaId'
+      preLoaderRoute: typeof MinhasTurmasTurmaIdRouteImport
+      parentRoute: typeof MinhasTurmasRoute
+    }
+    '/meus-filhos/$id': {
+      id: '/meus-filhos/$id'
+      path: '/$id'
+      fullPath: '/meus-filhos/$id'
+      preLoaderRoute: typeof MeusFilhosIdRouteImport
+      parentRoute: typeof MeusFilhosRoute
+    }
+    '/galeria/$id': {
+      id: '/galeria/$id'
+      path: '/$id'
+      fullPath: '/galeria/$id'
+      preLoaderRoute: typeof GaleriaIdRouteImport
+      parentRoute: typeof GaleriaRoute
+    }
+    '/escola/turmas': {
+      id: '/escola/turmas'
+      path: '/escola/turmas'
+      fullPath: '/escola/turmas'
+      preLoaderRoute: typeof EscolaTurmasRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/comunicados-agendados': {
-      id: '/api/public/comunicados-agendados'
-      path: '/api/public/comunicados-agendados'
-      fullPath: '/api/public/comunicados-agendados'
-      preLoaderRoute: typeof ApiPublicComunicadosAgendadosRouteImport
+    '/escola/responsaveis': {
+      id: '/escola/responsaveis'
+      path: '/escola/responsaveis'
+      fullPath: '/escola/responsaveis'
+      preLoaderRoute: typeof EscolaResponsaveisRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/comunicados-lembretes': {
-      id: '/api/public/comunicados-lembretes'
-      path: '/api/public/comunicados-lembretes'
-      fullPath: '/api/public/comunicados-lembretes'
-      preLoaderRoute: typeof ApiPublicComunicadosLembretesRouteImport
+    '/escola/professores': {
+      id: '/escola/professores'
+      path: '/escola/professores'
+      fullPath: '/escola/professores'
+      preLoaderRoute: typeof EscolaProfessoresRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/dispatch-push': {
-      id: '/api/public/dispatch-push'
-      path: '/api/public/dispatch-push'
-      fullPath: '/api/public/dispatch-push'
-      preLoaderRoute: typeof ApiPublicDispatchPushRouteImport
+    '/escola/dashboard': {
+      id: '/escola/dashboard'
+      path: '/escola/dashboard'
+      fullPath: '/escola/dashboard'
+      preLoaderRoute: typeof EscolaDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/fcm-check': {
-      id: '/api/public/fcm-check'
-      path: '/api/public/fcm-check'
-      fullPath: '/api/public/fcm-check'
-      preLoaderRoute: typeof ApiPublicFcmCheckRouteImport
+    '/escola/alunos-importar': {
+      id: '/escola/alunos-importar'
+      path: '/escola/alunos-importar'
+      fullPath: '/escola/alunos-importar'
+      preLoaderRoute: typeof EscolaAlunosImportarRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/fcm-config': {
-      id: '/api/public/fcm-config'
-      path: '/api/public/fcm-config'
-      fullPath: '/api/public/fcm-config'
-      preLoaderRoute: typeof ApiPublicFcmConfigRouteImport
+    '/escola/alunos': {
+      id: '/escola/alunos'
+      path: '/escola/alunos'
+      fullPath: '/escola/alunos'
+      preLoaderRoute: typeof EscolaAlunosRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/reminders-dispatch': {
-      id: '/api/public/reminders-dispatch'
-      path: '/api/public/reminders-dispatch'
-      fullPath: '/api/public/reminders-dispatch'
-      preLoaderRoute: typeof ApiPublicRemindersDispatchRouteImport
+    '/equipe/$id': {
+      id: '/equipe/$id'
+      path: '/$id'
+      fullPath: '/equipe/$id'
+      preLoaderRoute: typeof EquipeIdRouteImport
+      parentRoute: typeof EquipeRoute
+    }
+    '/enquetes/$id': {
+      id: '/enquetes/$id'
+      path: '/$id'
+      fullPath: '/enquetes/$id'
+      preLoaderRoute: typeof EnquetesIdRouteImport
+      parentRoute: typeof EnquetesRoute
+    }
+    '/chat-aluno/$id': {
+      id: '/chat-aluno/$id'
+      path: '/$id'
+      fullPath: '/chat-aluno/$id'
+      preLoaderRoute: typeof ChatAlunoIdRouteImport
+      parentRoute: typeof ChatAlunoRoute
+    }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/turnstile-config': {
-      id: '/api/public/turnstile-config'
-      path: '/api/public/turnstile-config'
-      fullPath: '/api/public/turnstile-config'
-      preLoaderRoute: typeof ApiPublicTurnstileConfigRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/push/fcm-register': {
-      id: '/api/push/fcm-register'
-      path: '/api/push/fcm-register'
-      fullPath: '/api/push/fcm-register'
-      preLoaderRoute: typeof ApiPushFcmRegisterRouteImport
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/escola/comunicados/': {
@@ -2102,13 +2045,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EscolaComunicadosIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/escola/comunicados/dashboard': {
-      id: '/escola/comunicados/dashboard'
-      path: '/escola/comunicados/dashboard'
-      fullPath: '/escola/comunicados/dashboard'
-      preLoaderRoute: typeof EscolaComunicadosDashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/escola/comunicados/novo': {
       id: '/escola/comunicados/novo'
       path: '/escola/comunicados/novo'
@@ -2116,11 +2052,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EscolaComunicadosNovoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/drive-foto/$id': {
-      id: '/api/public/drive-foto/$id'
-      path: '/api/public/drive-foto/$id'
-      fullPath: '/api/public/drive-foto/$id'
-      preLoaderRoute: typeof ApiPublicDriveFotoIdRouteImport
+    '/escola/comunicados/dashboard': {
+      id: '/escola/comunicados/dashboard'
+      path: '/escola/comunicados/dashboard'
+      fullPath: '/escola/comunicados/dashboard'
+      preLoaderRoute: typeof EscolaComunicadosDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/push/fcm-register': {
+      id: '/api/push/fcm-register'
+      path: '/api/push/fcm-register'
+      fullPath: '/api/push/fcm-register'
+      preLoaderRoute: typeof ApiPushFcmRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/turnstile-config': {
+      id: '/api/public/turnstile-config'
+      path: '/api/public/turnstile-config'
+      fullPath: '/api/public/turnstile-config'
+      preLoaderRoute: typeof ApiPublicTurnstileConfigRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/reminders-dispatch': {
+      id: '/api/public/reminders-dispatch'
+      path: '/api/public/reminders-dispatch'
+      fullPath: '/api/public/reminders-dispatch'
+      preLoaderRoute: typeof ApiPublicRemindersDispatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/fcm-config': {
+      id: '/api/public/fcm-config'
+      path: '/api/public/fcm-config'
+      fullPath: '/api/public/fcm-config'
+      preLoaderRoute: typeof ApiPublicFcmConfigRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/fcm-check': {
+      id: '/api/public/fcm-check'
+      path: '/api/public/fcm-check'
+      fullPath: '/api/public/fcm-check'
+      preLoaderRoute: typeof ApiPublicFcmCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/dispatch-push': {
+      id: '/api/public/dispatch-push'
+      path: '/api/public/dispatch-push'
+      fullPath: '/api/public/dispatch-push'
+      preLoaderRoute: typeof ApiPublicDispatchPushRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/comunicados-lembretes': {
+      id: '/api/public/comunicados-lembretes'
+      path: '/api/public/comunicados-lembretes'
+      fullPath: '/api/public/comunicados-lembretes'
+      preLoaderRoute: typeof ApiPublicComunicadosLembretesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/comunicados-agendados': {
+      id: '/api/public/comunicados-agendados'
+      path: '/api/public/comunicados-agendados'
+      fullPath: '/api/public/comunicados-agendados'
+      preLoaderRoute: typeof ApiPublicComunicadosAgendadosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/backup-semanal': {
+      id: '/api/public/backup-semanal'
+      path: '/api/public/backup-semanal'
+      fullPath: '/api/public/backup-semanal'
+      preLoaderRoute: typeof ApiPublicBackupSemanalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/agendamentos-lembretes': {
+      id: '/api/public/agendamentos-lembretes'
+      path: '/api/public/agendamentos-lembretes'
+      fullPath: '/api/public/agendamentos-lembretes'
+      preLoaderRoute: typeof ApiPublicAgendamentosLembretesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/debug/fcm-diagnostics': {
+      id: '/api/debug/fcm-diagnostics'
+      path: '/api/debug/fcm-diagnostics'
+      fullPath: '/api/debug/fcm-diagnostics'
+      preLoaderRoute: typeof ApiDebugFcmDiagnosticsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/momentos-foto/$id': {
@@ -2128,6 +2141,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/momentos-foto/$id'
       fullPath: '/api/public/momentos-foto/$id'
       preLoaderRoute: typeof ApiPublicMomentosFotoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/drive-foto/$id': {
+      id: '/api/public/drive-foto/$id'
+      path: '/api/public/drive-foto/$id'
+      fullPath: '/api/public/drive-foto/$id'
+      preLoaderRoute: typeof ApiPublicDriveFotoIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -2275,6 +2295,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelResponsavelRoute: PainelResponsavelRoute,
   PainelRuntimeRoute: PainelRuntimeRoute,
   PainelSecretarioRoute: PainelSecretarioRoute,
+  PainelSocialMediaRoute: PainelSocialMediaRoute,
   PainelTemaRoute: PainelTemaRoute,
   PrivacidadeRoute: PrivacidadeRoute,
   RssDotxmlRoute: RssDotxmlRoute,
@@ -2319,13 +2340,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

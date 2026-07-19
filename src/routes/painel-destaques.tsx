@@ -27,7 +27,7 @@ const MAX_DESTAQUES = 5;
 function PainelDestaques() {
   const { hasRole } = useAuth();
   const canManage =
-    hasRole("desenvolvedor") || hasRole("admin") || hasRole("diretor") || hasRole("coordenador");
+    hasRole("desenvolvedor") || hasRole("admin") || hasRole("diretor") || hasRole("coordenador") || hasRole("social_media");
   const qc = useQueryClient();
   const [q, setQ] = useState("");
 

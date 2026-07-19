@@ -3548,6 +3548,7 @@ export type Database = {
         | "teacher"
         | "student"
         | "family"
+        | "social_media"
       dsr_status: "pendente" | "em_analise" | "concluida" | "rejeitada"
       dsr_type:
         | "acesso"
@@ -3721,6 +3722,7 @@ export const Constants = {
         "teacher",
         "student",
         "family",
+        "social_media",
       ],
       dsr_status: ["pendente", "em_analise", "concluida", "rejeitada"],
       dsr_type: [

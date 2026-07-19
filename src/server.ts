@@ -104,7 +104,13 @@ const SECURITY_HEADERS: Record<string, string> = {
   "Content-Security-Policy": CSP_DIRECTIVES,
 };
 
+// Em dev/preview, o Lovable preview client e o HMR do Vite usam
+// `new AsyncFunction(...)` — CSP sem 'unsafe-eval' quebra a página no editor.
+// Aplicamos as security headers apenas em produção.
+const IS_PRODUCTION = import.meta.env.PROD;
+
 function applySecurityHeaders(response: Response): Response {
+  if (!IS_PRODUCTION) return response;
   // Response.headers pode ser imutável em alguns runtimes — clonamos.
   const headers = new Headers(response.headers);
   for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
