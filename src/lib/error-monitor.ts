@@ -8,6 +8,7 @@
  */
 import { reportLovableError } from "./lovable-error-reporting";
 import { reportClientError } from "./observability.functions";
+import { captureException as sentryCapture } from "./sentry";
 
 type LoggedError = {
   at: string;
@@ -80,6 +81,13 @@ export function installClientErrorMonitor() {
       colno: event.colno,
     });
     forwardToServer(entry, "critical");
+    sentryCapture(error, {
+      source: "window.error",
+      filename: event.filename,
+      lineno: event.lineno,
+      colno: event.colno,
+      route: entry.route,
+    });
   });
 
   window.addEventListener("unhandledrejection", (event) => {
@@ -90,6 +98,7 @@ export function installClientErrorMonitor() {
     console.error("[error-monitor] unhandledrejection", entry, reason);
     reportLovableError(reason, { source: "unhandledrejection" });
     forwardToServer(entry, "critical");
+    sentryCapture(reason, { source: "unhandledrejection", route: entry.route });
   });
 }
 
@@ -104,4 +113,5 @@ export function logManualError(
   reportLovableError(error, { source: "manual", ...context });
   const sev = (context?.severity as "error" | "critical") ?? "error";
   forwardToServer(entry, sev);
+  sentryCapture(error, { source: "manual", ...context });
 }
