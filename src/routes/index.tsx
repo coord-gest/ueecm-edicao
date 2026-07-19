@@ -213,16 +213,24 @@ function Home() {
         </h1>
 
         {/* Sobre a escola (resumo) */}
-        <SobreEscola />
+        <RevealSection>
+          <SobreEscola />
+        </RevealSection>
 
         {/* Faixa de estatísticas */}
-        <StatsBar />
+        <RevealSection delay={80}>
+          <StatsBar />
+        </RevealSection>
 
         {/* CTA duplo: agendar + portal */}
-        <CtaDuo />
+        <RevealSection delay={160}>
+          <CtaDuo />
+        </RevealSection>
 
         {/* Próximos eventos */}
-        <UpcomingEvents />
+        <RevealSection delay={80}>
+          <UpcomingEvents />
+        </RevealSection>
 
         {/* Faixa: Mais lidas + Opinião */}
         <RevealSection className="mb-16 grid grid-cols-1 gap-10 lg:grid-cols-12">
@@ -338,35 +346,49 @@ function Home() {
         )}
 
         {/* Push inline */}
-        <div className="mt-16">
+        <RevealSection className="mt-16">
           <PushInline />
-        </div>
+        </RevealSection>
 
         {/* Depoimentos */}
-        <Testimonials />
+        <RevealSection delay={80}>
+          <Testimonials />
+        </RevealSection>
 
         {/* Alunos de Destaque do Mês */}
-        <AlunosDestaque />
+        <RevealSection delay={80}>
+          <AlunosDestaque />
+        </RevealSection>
 
         {/* Galeria de momentos */}
-        <MomentsGallery />
+        <RevealSection delay={80}>
+          <MomentsGallery />
+        </RevealSection>
 
         {/* Nossos Patrocinadores (visível quando um evento estiver ativo) */}
-        <div className="mt-16 md:mt-24">
+        <RevealSection className="mt-16 md:mt-24" delay={120}>
           <Patrocinadores />
-        </div>
+        </RevealSection>
 
         {/* Equipe em destaque */}
-        <TeamHighlight />
+        <RevealSection delay={80}>
+          <TeamHighlight />
+        </RevealSection>
 
         {/* Resumos institucionais */}
-        <SchoolHighlights />
+        <RevealSection delay={80}>
+          <SchoolHighlights />
+        </RevealSection>
 
         {/* Contato rápido */}
-        <QuickContact />
+        <RevealSection delay={80}>
+          <QuickContact />
+        </RevealSection>
 
         {/* CTA Titinho */}
-        <TitinhoCta />
+        <RevealSection delay={120}>
+          <TitinhoCta />
+        </RevealSection>
       </div>
 
       <SiteFooter />
@@ -428,11 +450,13 @@ function SectionHeader({ title }: { title: string }) {
 function RevealSection({
   children,
   className = "",
+  delay = 0,
 }: {
   children: React.ReactNode;
   className?: string;
+  delay?: number;
 }) {
-  const ref = useReveal<HTMLElement>();
+  const ref = useReveal<HTMLElement>({ delay });
   return (
     <section ref={ref} className={`reveal ${className}`}>
       {children}
@@ -444,12 +468,24 @@ function HeroCarousel({ slides }: { slides: Post[] }) {
   const [index, setIndex] = useState(0);
   const total = slides.length;
   const [paused, setPaused] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, []);
 
   useEffect(() => {
     if (total <= 1 || paused) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % total), 4000);
+    // Usuários com "reduzir movimento" recebem uma rotação bem mais lenta.
+    const interval = reducedMotion ? 12000 : 5500;
+    const id = setInterval(() => setIndex((i) => (i + 1) % total), interval);
     return () => clearInterval(id);
-  }, [total, paused]);
+  }, [total, paused, reducedMotion]);
 
   useEffect(() => {
     if (index >= total) setIndex(0);
@@ -459,61 +495,64 @@ function HeroCarousel({ slides }: { slides: Post[] }) {
 
   return (
     <div
-      className="relative overflow-hidden "
+      className="relative overflow-hidden bg-neutral-950"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div
-        className="flex transition-transform duration-700 ease-out"
-        style={{ transform: `translateX(-${index * 100}%)` }}
-      >
-        {slides.map((post, i) => (
-          <article key={post.id} className="group relative w-full shrink-0">
-            <Link to="/posts/$id" params={{ id: post.id }} className="block">
-              <div className="relative aspect-[4/5] w-full overflow-hidden bg-secondary sm:aspect-[16/9] lg:aspect-[16/7]">
-                <img
-                  src={post.imagem ?? heroImg}
-                  alt={post.titulo}
-                  className={`size-full object-cover transition-transform duration-700 group-hover:scale-[1.03] ${
-                    i === index ? "ken-burns" : ""
-                  }`}
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-neutral-900/95 via-neutral-900/50 to-transparent" />
-                <div
-                  className={`absolute inset-x-0 bottom-0 p-6 text-primary-foreground sm:p-10 lg:p-14 ${
-                    i === index ? "animate-fade-in" : ""
-                  }`}
-                >
-                  <div className="mb-3 flex flex-wrap items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.25em] dark:text-white">
-                    <span className="bg-gold px-2.5 py-1 text-gold-foreground">
-                      {post.disciplina ?? "Destaque"}
-                    </span>
-                    <span>
-                      {new Date(post.data).toLocaleDateString("pt-BR", {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric",
-                      })}
-                    </span>
-                  </div>
-                  <h2 className="max-w-4xl font-display text-2xl leading-[1.05] sm:text-3xl lg:text-4xl xl:text-5xl dark:text-gold">
-                    {post.titulo}
-                  </h2>
+      {/* Wrapper com aspect ratio — os slides são empilhados em absoluto e
+          alternam via crossfade, evitando o "piscar" do translateX. */}
+      <div className="relative aspect-[4/5] w-full sm:aspect-[16/9] lg:aspect-[16/7]">
+        {slides.map((post, i) => {
+          const active = i === index;
+          return (
+            <article
+              key={post.id}
+              className={`hero-slide group ${active ? "hero-slide-active" : ""}`}
+              aria-hidden={!active}
+            >
+              <Link to="/posts/$id" params={{ id: post.id }} className="block size-full">
+                <div className="relative size-full overflow-hidden bg-neutral-950">
+                  <img
+                    src={post.imagem ?? heroImg}
+                    alt={post.titulo}
+                    className={`size-full object-cover transition-transform duration-700 group-hover:scale-[1.03] ${
+                      active ? "ken-burns" : ""
+                    }`}
+                  />
+                  {/* Overlay: mais denso no dark para garantir contraste do texto. */}
+                  <div className="absolute inset-0 bg-linear-to-t from-neutral-950/95 via-neutral-950/55 to-neutral-950/10 dark:from-black dark:via-black/70 dark:to-black/20" />
+                  <div className="absolute inset-x-0 bottom-0 p-6 text-primary-foreground sm:p-10 lg:p-14">
+                    <div className="mb-3 flex flex-wrap items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-white [text-shadow:0_1px_2px_rgb(0_0_0_/_0.6)]">
+                      <span className="bg-gold px-2.5 py-1 text-gold-foreground [text-shadow:none]">
+                        {post.disciplina ?? "Destaque"}
+                      </span>
+                      <span>
+                        {new Date(post.data).toLocaleDateString("pt-BR", {
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
+                    <h2 className="max-w-4xl font-display text-2xl leading-[1.05] text-white [text-shadow:0_2px_10px_rgb(0_0_0_/_0.55)] sm:text-3xl lg:text-4xl xl:text-5xl dark:text-gold dark:[text-shadow:0_2px_12px_rgb(0_0_0_/_0.85)]">
+                        {post.titulo}
+                      </h2>
 
-                  {post.resumo && (
-                    <p className="mt-4 max-w-2xl text-sm leading-relaxed text-primary-foreground/85 sm:text-base lg:text-lg dark:text-white/90">
-                      {post.resumo}
-                    </p>
-                  )}
-                  <div className="mt-5 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest dark:text-gold">
-                    Ler matéria{" "}
-                    <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+                    {post.resumo && (
+                      <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/90 [text-shadow:0_1px_6px_rgb(0_0_0_/_0.55)] sm:text-base lg:text-lg dark:text-white dark:[text-shadow:0_1px_8px_rgb(0_0_0_/_0.85)]">
+                        {post.resumo}
+                      </p>
+                    )}
+                    <div className="mt-5 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest text-white [text-shadow:0_1px_2px_rgb(0_0_0_/_0.6)] dark:text-gold">
+                      Ler matéria{" "}
+                      <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          </article>
-        ))}
+              </Link>
+            </article>
+          );
+        })}
       </div>
 
       {total > 1 && (

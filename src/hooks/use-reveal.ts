@@ -1,10 +1,18 @@
 import { useEffect, useRef } from "react";
 
+export interface UseRevealOptions {
+  /** Atraso em ms aplicado à transição (para efeito escalonado). */
+  delay?: number;
+}
+
 /**
  * Scroll reveal: adiciona a classe `is-visible` quando o elemento entra
  * na viewport (uma única vez). Use com a utility CSS `reveal` do styles.css.
  */
-export function useReveal<T extends HTMLElement = HTMLDivElement>() {
+export function useReveal<T extends HTMLElement = HTMLDivElement>(
+  options: UseRevealOptions = {},
+) {
+  const { delay = 0 } = options;
   const ref = useRef<T | null>(null);
 
   useEffect(() => {
@@ -16,6 +24,10 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>() {
     if (reduce) {
       el.classList.add("is-visible");
       return;
+    }
+
+    if (delay > 0) {
+      el.style.transitionDelay = `${delay}ms`;
     }
 
     const io = new IntersectionObserver(
@@ -31,7 +43,7 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>() {
     );
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [delay]);
 
   return ref;
 }
