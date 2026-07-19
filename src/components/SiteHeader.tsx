@@ -34,7 +34,7 @@ export function SiteHeader() {
     <>
       <OfflineBanner />
       <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-lg">
-        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:h-18 sm:px-6 lg:gap-4 lg:px-8">
+        <div className="flex h-16 w-full items-center justify-between gap-3 px-4 py-3 sm:h-18 sm:px-6 lg:gap-4 lg:px-8">
           <Link to="/" className="flex min-w-0 items-center gap-2 sm:gap-3 xl:shrink">
             <img
               src={logo}
