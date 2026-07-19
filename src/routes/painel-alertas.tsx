@@ -1,6 +1,6 @@
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import {
   ArrowLeft,
   Megaphone,
@@ -14,6 +14,9 @@ import {
   X,
   Pencil,
   Copy,
+  Send,
+  Zap,
+  StopCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +35,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
 import { dispatchPush } from "@/lib/push.functions";
+import { sendAlertPushNow } from "@/lib/alert-burst.functions";
+import { useServerFn } from "@tanstack/react-start";
 
 import { PainelLayout } from "@/components/PainelLayout";
 
@@ -69,6 +74,105 @@ function PainelAlertas() {
   const qc = useQueryClient();
 
   const canManage = hasRole("desenvolvedor") || hasRole("diretor") || hasRole("coordenador");
+
+  const sendPushNow = useServerFn(sendAlertPushNow);
+
+  // Rajada de notificações (client-side).
+  const [burstAlertId, setBurstAlertId] = useState<string>("");
+  const [burstCount, setBurstCount] = useState<number>(5);
+  const [burstInterval, setBurstInterval] = useState<number>(2);
+  const [burstProgress, setBurstProgress] = useState<{
+    sent: number;
+    total: number;
+    nextAt: number | null;
+  } | null>(null);
+  const burstCancelRef = useRef<{ cancelled: boolean; timer: number | null }>({
+    cancelled: false,
+    timer: null,
+  });
+  const [resendingId, setResendingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (burstCancelRef.current.timer) window.clearTimeout(burstCancelRef.current.timer);
+      burstCancelRef.current.cancelled = true;
+    };
+  }, []);
+
+  const resendAlert = async (id: string) => {
+    setResendingId(id);
+    try {
+      await sendPushNow({ data: { alertId: id } });
+      toast.success("Push reenviado", { description: "Enfileirado e disparado agora." });
+    } catch (e) {
+      toast.error("Falha ao reenviar", {
+        description: e instanceof Error ? e.message : String(e),
+      });
+    } finally {
+      setResendingId(null);
+    }
+  };
+
+  const cancelBurst = () => {
+    burstCancelRef.current.cancelled = true;
+    if (burstCancelRef.current.timer) {
+      window.clearTimeout(burstCancelRef.current.timer);
+      burstCancelRef.current.timer = null;
+    }
+    setBurstProgress(null);
+    toast.info("Rajada cancelada");
+  };
+
+  const startBurst = async () => {
+    if (!burstAlertId) {
+      toast.error("Escolha um alerta para a rajada");
+      return;
+    }
+    if (burstCount < 1 || burstCount > 20) {
+      toast.error("Quantidade inválida", { description: "Envie entre 1 e 20 pushes." });
+      return;
+    }
+    if (burstInterval < 1 || burstInterval > 120) {
+      toast.error("Intervalo inválido", { description: "Use entre 1 e 120 minutos." });
+      return;
+    }
+    if (
+      !confirm(
+        `Enviar ${burstCount} notificações a cada ${burstInterval} minuto(s)?\n` +
+          `Duração total ≈ ${burstInterval * (burstCount - 1)} min.\n` +
+          `Mantenha esta aba aberta durante a rajada.`,
+      )
+    )
+      return;
+
+    burstCancelRef.current.cancelled = false;
+    setBurstProgress({ sent: 0, total: burstCount, nextAt: Date.now() });
+
+    const runOne = async (index: number) => {
+      if (burstCancelRef.current.cancelled) return;
+      try {
+        await sendPushNow({ data: { alertId: burstAlertId } });
+        setBurstProgress((p) =>
+          p ? { ...p, sent: index + 1, nextAt: Date.now() + burstInterval * 60_000 } : p,
+        );
+        toast.success(`Push ${index + 1}/${burstCount} enviado`);
+      } catch (e) {
+        toast.error(`Falha no push ${index + 1}`, {
+          description: e instanceof Error ? e.message : String(e),
+        });
+      }
+      if (index + 1 >= burstCount) {
+        setBurstProgress(null);
+        toast.success("Rajada concluída");
+        return;
+      }
+      burstCancelRef.current.timer = window.setTimeout(
+        () => runOne(index + 1),
+        burstInterval * 60_000,
+      );
+    };
+    runOne(0);
+  };
 
   const [message, setMessage] = useState("");
   const [linkUrl, setLinkUrl] = useState("");
@@ -347,7 +451,124 @@ function PainelAlertas() {
           </div>
         </header>
 
-        <main className="mx-auto grid max-w-5xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[1fr_1.3fr]">
+        <main className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
+          {/* Rajada de notificações */}
+          <section className="rounded-3xl border border-border/70 bg-card p-6 shadow-sm">
+            <div className="flex flex-wrap items-center gap-2">
+              <Zap className="size-5 text-amber-500" />
+              <h2 className="font-display text-lg font-semibold">Rajada de notificações</h2>
+              <Badge variant="outline" className="ml-auto text-xs">
+                Reenvia N pushes em intervalos definidos
+              </Badge>
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Reforce um alerta importante enviando várias notificações espaçadas (ex.: 5 pushes a
+              cada 2 minutos). A rajada roda enquanto esta aba estiver aberta.
+            </p>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto_auto_auto]">
+              <div className="space-y-1.5">
+                <Label htmlFor="burstAlert" className="text-xs">
+                  Alerta a repetir
+                </Label>
+                <Select
+                  value={burstAlertId}
+                  onValueChange={setBurstAlertId}
+                  disabled={!!burstProgress}
+                >
+                  <SelectTrigger id="burstAlert">
+                    <SelectValue placeholder="Selecione um alerta ativo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(alerts ?? [])
+                      .filter((a) => a.active)
+                      .map((a) => (
+                        <SelectItem key={a.id} value={a.id}>
+                          [{variantLabels[(a.variant ?? "info") as Variant]}]{" "}
+                          {a.message.slice(0, 60)}
+                          {a.message.length > 60 ? "…" : ""}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="burstCount" className="text-xs">
+                  Quantidade
+                </Label>
+                <Input
+                  id="burstCount"
+                  type="number"
+                  min={1}
+                  max={20}
+                  value={burstCount}
+                  onChange={(e) => setBurstCount(Number(e.target.value))}
+                  className="w-24"
+                  disabled={!!burstProgress}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="burstInterval" className="text-xs">
+                  Intervalo (min)
+                </Label>
+                <Input
+                  id="burstInterval"
+                  type="number"
+                  min={1}
+                  max={120}
+                  value={burstInterval}
+                  onChange={(e) => setBurstInterval(Number(e.target.value))}
+                  className="w-24"
+                  disabled={!!burstProgress}
+                />
+              </div>
+              <div className="flex items-end">
+                {burstProgress ? (
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={cancelBurst}
+                    className="rounded-xl"
+                  >
+                    <StopCircle className="size-4" /> Cancelar
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    onClick={startBurst}
+                    disabled={!burstAlertId}
+                    className="rounded-xl"
+                  >
+                    <Zap className="size-4" /> Iniciar rajada
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {burstProgress && (
+              <div className="mt-4 rounded-xl border border-amber-500/40 bg-amber-500/5 p-3 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="font-medium">
+                    Enviados {burstProgress.sent}/{burstProgress.total}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    Próximo em ~{burstInterval} min
+                  </span>
+                </div>
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-background/60">
+                  <div
+                    className="h-full bg-amber-500 transition-all"
+                    style={{ width: `${(burstProgress.sent / burstProgress.total) * 100}%` }}
+                  />
+                </div>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Não feche esta aba — a rajada é executada no navegador.
+                </p>
+              </div>
+            )}
+          </section>
+
+          <div className="grid gap-6 lg:grid-cols-[1fr_1.3fr]">
           {/* Formulário */}
           <form
             onSubmit={handleCreate}
@@ -693,6 +914,20 @@ function PainelAlertas() {
                       <Button
                         size="sm"
                         variant="outline"
+                        onClick={() => resendAlert(a.id)}
+                        disabled={resendingId === a.id || !a.active}
+                        className="rounded-full"
+                      >
+                        {resendingId === a.id ? (
+                          <Loader2 className="size-3.5 animate-spin" />
+                        ) : (
+                          <Send className="size-3.5" />
+                        )}
+                        Reenviar push
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
                         onClick={() => toggleActive(a.id, !a.active)}
                         className="rounded-full"
                       >
@@ -719,6 +954,7 @@ function PainelAlertas() {
                 );
               })}
             </div>
+          </div>
           </div>
         </main>
       </div>
