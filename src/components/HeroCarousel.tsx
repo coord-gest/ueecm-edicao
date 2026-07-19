@@ -58,10 +58,10 @@ export function HeroCarousel({ posts }: { posts: Post[] }) {
                   <Badge className="animate-float mb-4 w-fit rounded-full bg-gold/90 text-gold-foreground shadow-elegant hover:bg-gold">
                     <Star className="size-3.5" /> Destaque
                   </Badge>
-                  <h2 className="max-w-3xl font-display text-2xl font-semibold leading-tight text-primary-foreground drop-shadow-md sm:text-4xl">
+                  <h2 className="max-w-3xl font-display text-2xl font-semibold leading-tight text-white drop-shadow-md sm:text-4xl">
                     {p.titulo}
                   </h2>
-                  <p className="mt-3 max-w-2xl text-sm text-primary-foreground/85 sm:text-base line-clamp-2">
+                  <p className="mt-3 max-w-2xl text-sm text-white/85 sm:text-base line-clamp-2">
                     {p.resumo}
                   </p>
                   <div className="mt-6">
@@ -92,7 +92,7 @@ export function HeroCarousel({ posts }: { posts: Post[] }) {
                   aria-label={`Slide ${i + 1}`}
                   onClick={() => api?.scrollTo(i)}
                   className={`h-1.5 rounded-full transition-all ${
-                    i === current ? "w-8 bg-gold" : "w-1.5 bg-primary-foreground/50"
+                    i === current ? "w-8 bg-gold" : "w-1.5 bg-white/50"
                   }`}
                 />
               ))}
