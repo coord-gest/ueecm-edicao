@@ -1,0 +1,1 @@
+GRANT SELECT (id, nome, foto_url, cargo, cargo_descricao, disciplinas, bio, formacao, anos_experiencia, ano_ingresso, destaque, ordem, ativo, created_at, updated_at, linkedin_url, lattes_url, site_url) ON public.profissionais TO anon;
