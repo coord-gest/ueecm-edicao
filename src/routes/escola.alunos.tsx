@@ -1,6 +1,7 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useMemo, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import {
   Plus,
   Pencil,
@@ -10,12 +11,15 @@ import {
   GraduationCap,
   Search,
   Download,
+  ShieldCheck,
+  AlertTriangle,
 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -51,6 +55,16 @@ import { EmptyState } from "@/components/EmptyState";
 import { TableRowsSkeleton } from "@/components/TableRowsSkeleton";
 import { alunoRowSchema, ALUNO_TEMPLATE, type AlunoRow } from "@/lib/escola-import";
 import { exportRowsAsCsv } from "@/lib/csv-export";
+import {
+  calcularIdade,
+  cpfDigits,
+  formatCpf,
+  validateParentalConsent,
+} from "@/lib/parental-consent";
+import {
+  logAlunoParentalConsent,
+  hasAlunoParentalConsent,
+} from "@/lib/aluno-parental-consent.functions";
 
 export const Route = createFileRoute("/escola/alunos")({
   ssr: false,
@@ -77,6 +91,8 @@ function AlunosPage() {
   const qc = useQueryClient();
   const { hasRole, loading } = useAuth();
   const isAdmin = useIsSchoolAdmin(hasRole);
+  const logConsent = useServerFn(logAlunoParentalConsent);
+  const checkConsent = useServerFn(hasAlunoParentalConsent);
 
   const [editing, setEditing] = useState<Aluno | null>(null);
   const [creating, setCreating] = useState(false);
@@ -131,19 +147,51 @@ function AlunosPage() {
   }, [alunos, filter, filterTurma]);
 
   const saveMut = useMutation({
-    mutationFn: async (payload: Partial<Aluno> & { id?: string }) => {
-      if (payload.id) {
-        const { id, ...rest } = payload;
+    mutationFn: async (
+      payload: Partial<Aluno> & {
+        id?: string;
+        __consent?: {
+          respNome: string;
+          respCpf: string;
+          respEmail: string;
+          respTelefone: string;
+        } | null;
+      },
+    ) => {
+      const { __consent, ...alunoPayload } = payload;
+      let alunoId = alunoPayload.id;
+      if (alunoId) {
+        const { id, ...rest } = alunoPayload;
         const { error } = await supabase.from("alunos").update(rest).eq("id", id);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("alunos").insert(payload as never);
+        const { data, error } = await supabase
+          .from("alunos")
+          .insert(alunoPayload as never)
+          .select("id")
+          .single();
         if (error) throw error;
+        alunoId = (data as { id: string }).id;
+      }
+      // Registra o consentimento parental (LGPD Art. 14) quando aplicável.
+      if (__consent && alunoId && alunoPayload.nome_completo && alunoPayload.data_nascimento) {
+        await logConsent({
+          data: {
+            aluno_id: alunoId,
+            minor_name: alunoPayload.nome_completo,
+            minor_dob: alunoPayload.data_nascimento,
+            guardian_name: __consent.respNome,
+            guardian_cpf: __consent.respCpf || null,
+            guardian_email: __consent.respEmail,
+            guardian_phone: __consent.respTelefone || null,
+          },
+        });
       }
     },
     onSuccess: () => {
       toast.success("Aluno salvo.");
       qc.invalidateQueries({ queryKey: ["escola-alunos"] });
+      qc.invalidateQueries({ queryKey: ["aluno-consent"] });
       setCreating(false);
       setEditing(null);
     },
@@ -327,6 +375,7 @@ function AlunosPage() {
         open={creating || !!editing}
         aluno={editing}
         turmas={turmas ?? []}
+        checkConsent={checkConsent}
         onClose={() => {
           setCreating(false);
           setEditing(null);
