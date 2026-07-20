@@ -13,6 +13,14 @@ a[href*="lovable.dev"][target="_blank"] {
 
 @custom-variant dark (&:is(.dark *));
 
+/* Painel administrativo: cantos retos em todos os cards/superfícies/controles.
+   Ativado via body[data-admin="true"] (definido em __root.tsx conforme rota). */
+body[data-admin="true"] *,
+body[data-admin="true"] *::before,
+body[data-admin="true"] *::after {
+  border-radius: 0 !important;
+}
+
 @theme inline {
   /* Cards e superfícies: cantos retos em todo o sistema.
      Botões, inputs e menus mantêm arredondamento sutil via rounded-sm/md. */
