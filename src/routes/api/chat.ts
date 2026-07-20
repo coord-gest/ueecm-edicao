@@ -20,7 +20,7 @@ type ChatRequest = {
 type RuntimeEnv = Record<string, string | undefined>;
 
 type RequiredChatEnv = {
-  LOVABLE_API_KEY: string;
+  GEMINI_API_KEY: string;
   SUPABASE_URL: string;
   SUPABASE_SERVICE_ROLE_KEY: string;
 };
@@ -36,11 +36,12 @@ const CHAT_FALLBACK_REPLY =
 // 45s cobre latências de cauda longa sob carga; menor que isso gerava
 // timeouts frequentes que eram registrados como erros em system_errors.
 const AI_TIMEOUT_MS = 45_000;
-// Migrado para Lovable AI Gateway. `gemini-3.5-flash` é servido pelo
-// gateway (não pela API pública do Google, que só expõe até a série 2.5).
-const AI_GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
-const AI_MODEL = "google/gemini-3.5-flash";
-const AI_MODEL_FALLBACK = "google/gemini-3.1-flash-lite";
+// API pública do Google Generative Language (gratuita no free tier).
+// `gemini-2.0-flash` é o modelo mais barato/rápido disponível para novos
+// consumidores; `gemini-2.0-flash-lite` é usado como fallback.
+const GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
+const AI_MODEL = "gemini-2.0-flash";
+const AI_MODEL_FALLBACK = "gemini-2.0-flash-lite";
 
 // Rate limit em memória em dois níveis (best-effort; reseta a cada cold start do Worker).
 // - Por (IP+session): 12/min → uso legítimo.
@@ -209,37 +210,21 @@ async function callGemini(
   contents: GeminiContent[],
   signal: AbortSignal,
 ): Promise<{ ok: true; text: string } | { ok: false; status: number; error: string }> {
-  // Converte o histórico no formato Gemini nativo para o formato
-  // OpenAI-compatível esperado pelo Lovable AI Gateway.
-  const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
-    { role: "system", content: systemPrompt },
-    ...contents.map((c) => ({
-      role: (c.role === "model" ? "assistant" : "user") as "user" | "assistant",
-      content: c.parts.map((p) => p.text ?? "").join(""),
-    })),
-  ];
-
   async function callWithModel(model: string) {
-    return fetch(AI_GATEWAY_URL, {
+    const url = `${GEMINI_API_BASE}/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    return fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // Gateway aceita ambos: header dedicado e Bearer. Usamos o header
-        // dedicado para não vazar a chave em traces genéricos de HTTP.
-        "Lovable-API-Key": apiKey,
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model,
-        messages,
-        temperature: 0.7,
-        max_tokens: 1024,
+        systemInstruction: { role: "system", parts: [{ text: systemPrompt }] },
+        contents,
+        generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
       }),
       signal,
     });
   }
 
   let res = await callWithModel(AI_MODEL);
-  // 429/503: rotaciona para o modelo lite antes de propagar erro.
   if (res.status === 429 || res.status === 503) {
     try {
       res = await callWithModel(AI_MODEL_FALLBACK);
@@ -259,9 +244,11 @@ async function callGemini(
   }
 
   const data = (await res.json()) as {
-    choices?: Array<{ message?: { content?: string } }>;
+    candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
   };
-  const text = data.choices?.[0]?.message?.content ?? "";
+  const text = (data.candidates?.[0]?.content?.parts ?? [])
+    .map((p) => p.text ?? "")
+    .join("");
   return { ok: true, text };
 }
 
@@ -1334,7 +1321,7 @@ export const Route = createFileRoute("/api/chat")({
         try {
           // Validação de variáveis de ambiente obrigatórias no servidor
           const requiredEnv = {
-            LOVABLE_API_KEY: getRuntimeEnv(request, ["LOVABLE_API_KEY"]),
+            GEMINI_API_KEY: getRuntimeEnv(request, ["GEMINI_API_KEY"]),
             SUPABASE_URL: getRuntimeEnv(request, [
               "SUPABASE_URL",
               "PROJECT_SUPABASE_URL",
@@ -1363,11 +1350,11 @@ export const Route = createFileRoute("/api/chat")({
             );
           }
           const env: RequiredChatEnv = {
-            LOVABLE_API_KEY: requiredEnv.LOVABLE_API_KEY!,
+            GEMINI_API_KEY: requiredEnv.GEMINI_API_KEY!,
             SUPABASE_URL: requiredEnv.SUPABASE_URL!,
             SUPABASE_SERVICE_ROLE_KEY: requiredEnv.SUPABASE_SERVICE_ROLE_KEY!,
           };
-          const apiKey = env.LOVABLE_API_KEY;
+          const apiKey = env.GEMINI_API_KEY;
 
           const body = (await request.json()) as ChatRequest;
           const { sessionId, message } = body;
