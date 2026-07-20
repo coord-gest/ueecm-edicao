@@ -2,7 +2,7 @@ import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-ro
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
-import { FolderOpen, FileText, Download, LogOut, Tag, Layers, Loader2 } from "lucide-react";
+import { FolderOpen, FileText, Download, LogOut, Tag, Layers, Loader2, Sparkles, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -166,6 +166,30 @@ function PainelArquivos() {
             </div>
 
             <section aria-label="Modelos disponíveis" className="mt-8">
+              <Link
+                to="/painel-arquivos/planejamentos"
+                className="mb-6 flex flex-col items-start gap-3 rounded-[5px] border border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 p-5 transition-shadow hover:shadow-md sm:flex-row sm:items-center"
+              >
+                <div className="grid size-12 shrink-0 place-items-center rounded-[5px] bg-primary/15 text-primary">
+                  <CalendarDays className="size-6" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="font-display text-base font-semibold text-foreground sm:text-lg">
+                      Planejamentos Pedagógicos
+                    </h2>
+                    <span className="inline-flex items-center gap-1 rounded-[5px] bg-primary/15 px-2 py-0.5 text-[11px] font-semibold text-primary">
+                      <Sparkles className="size-3" /> IA Gemini
+                    </span>
+                  </div>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Semanais, quinzenais, mensais e semestrais. Coordenação envia por professor e disciplina; cada docente vê apenas os seus.
+                  </p>
+                </div>
+                <span className="rounded-[5px] bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
+                  Acessar
+                </span>
+              </Link>
               {ARQUIVO_TEMPLATES.length === 0 ? (
                 <div className="grid place-items-center rounded-2xl border border-dashed border-border/70 bg-muted/30 p-10 text-center">
                   <FileText className="size-10 text-muted-foreground" />

@@ -2421,6 +2421,69 @@ export type Database = {
         }
         Relationships: []
       }
+      planejamentos: {
+        Row: {
+          ai_generated: boolean
+          arquivo_nome: string | null
+          arquivo_tamanho: number | null
+          arquivo_url: string | null
+          conteudo_ia: string | null
+          created_at: string
+          descricao: string | null
+          disciplina_id: string | null
+          disciplina_nome: string
+          id: string
+          periodo_fim: string | null
+          periodo_inicio: string | null
+          professor_id: string
+          professor_nome: string
+          tipo: Database["public"]["Enums"]["planejamento_tipo"]
+          titulo: string
+          updated_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          ai_generated?: boolean
+          arquivo_nome?: string | null
+          arquivo_tamanho?: number | null
+          arquivo_url?: string | null
+          conteudo_ia?: string | null
+          created_at?: string
+          descricao?: string | null
+          disciplina_id?: string | null
+          disciplina_nome: string
+          id?: string
+          periodo_fim?: string | null
+          periodo_inicio?: string | null
+          professor_id: string
+          professor_nome: string
+          tipo: Database["public"]["Enums"]["planejamento_tipo"]
+          titulo: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          ai_generated?: boolean
+          arquivo_nome?: string | null
+          arquivo_tamanho?: number | null
+          arquivo_url?: string | null
+          conteudo_ia?: string | null
+          created_at?: string
+          descricao?: string | null
+          disciplina_id?: string | null
+          disciplina_nome?: string
+          id?: string
+          periodo_fim?: string | null
+          periodo_inicio?: string | null
+          professor_id?: string
+          professor_nome?: string
+          tipo?: Database["public"]["Enums"]["planejamento_tipo"]
+          titulo?: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: []
+      }
       post_comentarios: {
         Row: {
           autor_avatar: string | null
@@ -3603,6 +3666,7 @@ export type Database = {
         | "comentario"
         | "evento"
         | "sistema"
+      planejamento_tipo: "semanal" | "quinzenal" | "mensal" | "semestral"
       post_status: "rascunho" | "em_revisao" | "publicado" | "rejeitado"
     }
     CompositeTypes: {
@@ -3781,6 +3845,7 @@ export const Constants = {
         "evento",
         "sistema",
       ],
+      planejamento_tipo: ["semanal", "quinzenal", "mensal", "semestral"],
       post_status: ["rascunho", "em_revisao", "publicado", "rejeitado"],
     },
   },
