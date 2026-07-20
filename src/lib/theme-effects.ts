@@ -366,7 +366,7 @@ export const DEFAULT_THEME_CONFIG: ThemeConfig = {
 
 export async function fetchThemeConfig(): Promise<ThemeConfig> {
   const { data, error } = await supabase
-    .from("configuracoes_tema" as never)
+    .from("configuracoes_tema_public" as never)
     .select("tema, ativo, intensidade")
     .eq("id", 1)
     .maybeSingle();

@@ -3071,6 +3071,30 @@ export type Database = {
         }
         Relationships: []
       }
+      configuracoes_tema_public: {
+        Row: {
+          ativo: boolean | null
+          id: number | null
+          intensidade: number | null
+          tema: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          id?: number | null
+          intensidade?: number | null
+          tema?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          id?: number | null
+          intensidade?: number | null
+          tema?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       enquete_resultados: {
         Row: {
           enquete_id: string | null

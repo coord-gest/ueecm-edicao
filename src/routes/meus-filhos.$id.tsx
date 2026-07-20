@@ -646,7 +646,7 @@ function JustificarTab({ alunoId, userId }: { alunoId: string; userId: string | 
       let arquivo_url: string | null = null;
       if (arquivo) {
         if (arquivo.size > 5 * 1024 * 1024) throw new Error("Arquivo maior que 5MB");
-        const path = `${userId}/${Date.now()}-${arquivo.name.replace(/[^\w.-]/g, "_")}`;
+        const path = `${userId}/${alunoId}/${Date.now()}-${arquivo.name.replace(/[^\w.-]/g, "_")}`;
         const { error: upErr } = await supabase.storage
           .from("justificativas")
           .upload(path, arquivo);
