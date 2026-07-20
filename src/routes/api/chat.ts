@@ -1510,7 +1510,7 @@ export const Route = createFileRoute("/api/chat")({
               result = await attempt();
             }
             if (!result.ok) {
-              throw new Error(`Gemini API ${result.status}: ${result.error}`);
+              throw new Error(`Lovable AI ${result.status}: ${result.error}`);
             }
             return result.text;
           }
@@ -1539,7 +1539,7 @@ export const Route = createFileRoute("/api/chat")({
             return fallbackChatResponse(
               supabaseAdmin,
               conversationId,
-              "Gemini retornou resposta vazia",
+              "Lovable AI retornou resposta vazia",
               null,
             );
           }
