@@ -5,7 +5,7 @@ export function QuickContact() {
   const ref = useReveal<HTMLElement>();
 
   return (
-    <section ref={ref} className="reveal mb-16">
+    <section ref={ref} className="reveal mb-10 md:mb-16">
       <div className="relative grid grid-cols-1 gap-6 overflow-hidden border border-border bg-[image:var(--gradient-primary)] p-6 text-white shadow-lg sm:p-8 lg:grid-cols-4">
         <span className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-linear-to-r from-gold via-gold/70 to-transparent" />
         <span className="pointer-events-none absolute -right-20 -top-20 size-64 rounded-full bg-gold/20 blur-3xl" />

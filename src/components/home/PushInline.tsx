@@ -42,7 +42,7 @@ export function PushInline() {
   if (!supported) return null;
 
   return (
-    <section className="mb-16">
+    <section className="mb-10 md:mb-16">
       <div
         ref={ref}
         className="reveal flex flex-col items-start gap-5 border border-accent/20 bg-linear-to-br from-accent/10 via-card to-card p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-8"

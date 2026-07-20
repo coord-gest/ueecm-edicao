@@ -84,7 +84,7 @@ export function Patrocinadores() {
   };
 
   return (
-    <section ref={ref} className="reveal mb-16">
+    <section ref={ref} className="reveal mb-10 md:mb-16">
       <div className="mb-8 flex items-end justify-between border-b-2 border-primary pb-3">
         <div>
           <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-accent">

@@ -80,7 +80,7 @@ export function Testimonials() {
   const atual = depoimentos[ativo] ?? depoimentos[0];
 
   return (
-    <section ref={ref} className="reveal mb-16">
+    <section ref={ref} className="reveal mb-10 md:mb-16">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-3 border-b-2 border-primary pb-3">
         <h2 className="font-display text-2xl text-primary sm:text-3xl lg:text-4xl">
           Famílias UEECM

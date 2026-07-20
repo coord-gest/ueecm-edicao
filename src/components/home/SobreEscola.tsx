@@ -6,7 +6,7 @@ export function SobreEscola() {
   const ref = useReveal<HTMLElement>();
 
   return (
-    <section ref={ref} className="reveal mb-16">
+    <section ref={ref} className="reveal mb-10 md:mb-16">
       <div className="relative overflow-hidden border border-accent/25 bg-[image:var(--gradient-primary)] text-white shadow-elegant">
         <span
           aria-hidden
