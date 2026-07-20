@@ -8,7 +8,7 @@ export function CtaDuo() {
     <div ref={ref} className="reveal mb-16 grid gap-4 md:grid-cols-2">
       <Link
         to="/agendar"
-        className="group relative overflow-hidden border-2 border-border bg-[image:var(--gradient-hero)] p-6 text-primary-foreground shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:shadow-xl sm:p-8"
+        className="group relative overflow-hidden border-2 border-border bg-[image:var(--gradient-hero)] p-6 text-white shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:shadow-xl sm:p-8"
       >
         <span className="absolute -right-6 -top-6 size-32 rounded-full bg-gold/20 blur-2xl transition-transform group-hover:scale-125" />
         <div className="relative flex items-start gap-4">
@@ -22,7 +22,7 @@ export function CtaDuo() {
             <h3 className="mt-1 font-display text-xl leading-tight sm:text-2xl">
               Agende um horário com a equipe
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-primary-foreground/85">
+            <p className="mt-2 text-sm leading-relaxed text-white/85">
               Fale com direção, coordenação ou secretaria em um horário reservado.
             </p>
             <span className="mt-4 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-gold">
