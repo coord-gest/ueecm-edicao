@@ -268,7 +268,7 @@ export const importarBoletinsTexto = createServerFn({ method: "POST" })
 
     const results: ParsedBoletim[] = [];
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-    const MODELS = ["gemini-2.5-flash"];
+    const MODELS = ["gemini-flash-latest"];
 
     async function callGemini(model: string, texto: string): Promise<Response> {
       return fetch(
