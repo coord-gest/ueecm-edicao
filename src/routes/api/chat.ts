@@ -1479,7 +1479,7 @@ export const Route = createFileRoute("/api/chat")({
             .select("role, content")
             .eq("conversation_id", conversationId)
             .order("created_at", { ascending: true })
-            .limit(20);
+            .limit(10);
           if (historyError) throw historyError;
 
           let contents: ChatMessage[] = (
