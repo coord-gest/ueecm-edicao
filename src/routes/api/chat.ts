@@ -223,14 +223,16 @@ async function callGroq(
         model,
         messages,
         temperature: 0.7,
-        max_tokens: 1024,
+        max_tokens: 800,
       }),
       signal,
     });
   }
 
   let res = await callWithModel(AI_MODEL);
-  if (res.status === 429 || res.status === 503) {
+  // 413 = payload maior que o TPM do modelo primário (free tier: 12000 tokens).
+  // O `llama-3.1-8b-instant` tem TPM bem maior, então cai para ele nesses casos.
+  if (res.status === 429 || res.status === 503 || res.status === 413) {
     try {
       res = await callWithModel(AI_MODEL_FALLBACK);
     } catch {
@@ -1417,7 +1419,7 @@ export const Route = createFileRoute("/api/chat")({
               ? `- Fontes disponíveis nesta resposta: ${ragResult.sources.map((s) => `[${s.index}] ${s.link}`).join(" | ")}.`
               : "- ATENÇÃO: a busca não retornou fontes relevantes. NÃO use marcadores [N] nem invente uma seção 'Fontes:'. Em vez disso, faça perguntas de esclarecimento como descrito acima.");
 
-          const systemPrompt =
+          let systemPrompt =
             buildSystemPrompt(profile, faq) +
             "\n\n---\n\n" +
             buildCurrentDateBlock() +
@@ -1429,6 +1431,15 @@ export const Route = createFileRoute("/api/chat")({
             pagesResult.block +
             ragResult.block +
             ragInstructions;
+
+          // Groq free tier limita TPM (12000 para o modelo primário). ~4 chars por token.
+          // Deixamos ~8000 tokens (32000 chars) para o system prompt; sobra folga para histórico + resposta.
+          const SYSTEM_PROMPT_MAX_CHARS = 22000;
+          if (systemPrompt.length > SYSTEM_PROMPT_MAX_CHARS) {
+            systemPrompt =
+              systemPrompt.slice(0, SYSTEM_PROMPT_MAX_CHARS) +
+              "\n\n[...contexto truncado para caber no limite do modelo...]";
+          }
 
           if (conversationId) {
             const { data: existingConversation, error: existingConversationError } =
@@ -1468,7 +1479,7 @@ export const Route = createFileRoute("/api/chat")({
             .select("role, content")
             .eq("conversation_id", conversationId)
             .order("created_at", { ascending: true })
-            .limit(20);
+            .limit(10);
           if (historyError) throw historyError;
 
           let contents: ChatMessage[] = (
