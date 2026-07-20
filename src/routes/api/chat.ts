@@ -1434,7 +1434,7 @@ export const Route = createFileRoute("/api/chat")({
 
           // Groq free tier limita TPM (12000 para o modelo primário). ~4 chars por token.
           // Deixamos ~8000 tokens (32000 chars) para o system prompt; sobra folga para histórico + resposta.
-          const SYSTEM_PROMPT_MAX_CHARS = 32000;
+          const SYSTEM_PROMPT_MAX_CHARS = 22000;
           if (systemPrompt.length > SYSTEM_PROMPT_MAX_CHARS) {
             systemPrompt =
               systemPrompt.slice(0, SYSTEM_PROMPT_MAX_CHARS) +
