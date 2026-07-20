@@ -5,10 +5,11 @@ import { cn } from "@/lib/utils";
 
 interface Props {
   items: TocItem[];
+  variant?: "inline" | "sidebar";
 }
 
 /** Sumário lateral com indicador de seção ativa via IntersectionObserver. */
-export function TableOfContents({ items }: Props) {
+export function TableOfContents({ items, variant = "inline" }: Props) {
   const [activeId, setActiveId] = useState<string | null>(items[0]?.id ?? null);
 
   useEffect(() => {
@@ -34,7 +35,11 @@ export function TableOfContents({ items }: Props) {
   return (
     <nav
       aria-label="Sumário do artigo"
-      className="not-prose my-6 rounded-2xl border border-border/70 bg-card/50 p-4 lg:sticky lg:top-24"
+      className={cn(
+        "not-prose rounded-2xl border border-border/70 bg-card/50 p-4",
+        variant === "inline" && "my-6",
+        variant === "sidebar" && "max-h-[calc(100dvh-8rem)] overflow-y-auto",
+      )}
     >
       <div className="mb-3 flex items-center gap-2 text-sm font-medium text-foreground">
         <List className="size-4" /> Neste artigo
