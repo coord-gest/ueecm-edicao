@@ -12,7 +12,7 @@ export function TitinhoCta() {
 
   return (
     <div ref={ref} className="reveal mb-10 mt-12 md:mb-16 md:mt-20">
-      <div className="relative overflow-hidden border border-border bg-[image:var(--gradient-hero)] p-6 text-white shadow-lg sm:p-8">
+      <div className="relative overflow-hidden rounded-[5px] border border-border bg-[image:var(--gradient-hero)] p-6 text-white shadow-lg sm:p-8">
         <span className="absolute -right-10 -top-10 size-40 rounded-full bg-gold/20 blur-3xl" />
         <div className="relative flex flex-col items-center gap-5 sm:flex-row sm:items-center sm:text-left">
           <img
