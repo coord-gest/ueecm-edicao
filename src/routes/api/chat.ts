@@ -204,21 +204,26 @@ function createSupabaseAdminForChat(
   });
 }
 
-async function callGemini(
+async function callGroq(
   apiKey: string,
   systemPrompt: string,
-  contents: GeminiContent[],
+  history: ChatMessage[],
   signal: AbortSignal,
 ): Promise<{ ok: true; text: string } | { ok: false; status: number; error: string }> {
+  const messages: ChatMessage[] = [{ role: "system", content: systemPrompt }, ...history];
+
   async function callWithModel(model: string) {
-    const url = `${GEMINI_API_BASE}/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
-    return fetch(url, {
+    return fetch(GROQ_API_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
       body: JSON.stringify({
-        systemInstruction: { role: "system", parts: [{ text: systemPrompt }] },
-        contents,
-        generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
+        model,
+        messages,
+        temperature: 0.7,
+        max_tokens: 1024,
       }),
       signal,
     });
@@ -244,11 +249,9 @@ async function callGemini(
   }
 
   const data = (await res.json()) as {
-    candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+    choices?: Array<{ message?: { content?: string } }>;
   };
-  const text = (data.candidates?.[0]?.content?.parts ?? [])
-    .map((p) => p.text ?? "")
-    .join("");
+  const text = data.choices?.[0]?.message?.content ?? "";
   return { ok: true, text };
 }
 
