@@ -115,7 +115,7 @@ export function AlunosDestaque() {
           {destaques.slice(0, 10).map((d) => (
             <article
               key={d.id}
-              className="group relative overflow-hidden border border-border bg-linear-to-br from-primary to-accent p-4 text-primary-foreground shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:border-gold hover:shadow-xl"
+              className="group relative overflow-hidden border border-border bg-[image:var(--gradient-primary)] p-4 text-white shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:border-gold hover:shadow-xl"
             >
               <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-gold via-gold/70 to-transparent" />
               <span className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-gold/20 blur-2xl transition-transform group-hover:scale-125" />
@@ -133,7 +133,7 @@ export function AlunosDestaque() {
                 ) : (
                   <>
                     <div
-                      className="flex size-20 items-center justify-center rounded-full border-2 border-dashed border-gold/60 bg-primary-foreground/10 text-lg font-semibold text-gold"
+                      className="flex size-20 items-center justify-center rounded-full border-2 border-dashed border-gold/60 bg-white/10 text-lg font-semibold text-gold"
                       style={
                         d.disciplina_cor
                           ? { borderColor: d.disciplina_cor, color: d.disciplina_cor }
@@ -147,10 +147,10 @@ export function AlunosDestaque() {
                   </>
                 )}
               </div>
-              <h3 className="relative line-clamp-2 text-center font-display text-sm font-semibold text-primary-foreground">
+              <h3 className="relative line-clamp-2 text-center font-display text-sm font-semibold text-white">
                 {d.aluno_nome}
               </h3>
-              <p className="relative mt-1 text-center text-xs text-primary-foreground/80">
+              <p className="relative mt-1 text-center text-xs text-white/80">
                 {d.turma_nome}
               </p>
               {d.disciplina_nome && (
@@ -171,7 +171,7 @@ export function AlunosDestaque() {
                   </Badge>
                 </div>
               )}
-              <p className="relative mt-3 line-clamp-3 text-center text-xs italic text-primary-foreground/85">
+              <p className="relative mt-3 line-clamp-3 text-center text-xs italic text-white/85">
                 “{d.motivo}”
               </p>
             </article>

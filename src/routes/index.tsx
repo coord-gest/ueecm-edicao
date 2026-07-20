@@ -856,7 +856,7 @@ function SchoolHighlights() {
           <Link
             key={c.titulo}
             to={c.to}
-            className="group relative flex flex-col overflow-hidden border border-accent/25 bg-gradient-to-br from-primary via-primary to-accent p-6 text-white shadow-elegant ring-1 ring-black/5 transition-all hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-2xl"
+            className="group relative flex flex-col overflow-hidden border border-accent/25 bg-[image:var(--gradient-primary)] p-6 text-white shadow-elegant ring-1 ring-black/5 transition-all hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-2xl"
           >
             <span
               aria-hidden
