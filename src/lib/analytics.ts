@@ -4,7 +4,9 @@ import { hasConsentedTo } from "@/lib/cookie-consent";
 const SESSION_KEY = "analytics_session_id";
 // Deduplica eventos idênticos dentro desta janela (ms) para evitar
 // dezenas de inserts em navegações rápidas / re-renders.
-const DEDUPE_WINDOW_MS = 30_000;
+// Widen a bit — pageviews from client-side navigation don't need to fire
+// again for the same session/path within a few minutes.
+const DEDUPE_WINDOW_MS = 5 * 60_000;
 const recentEvents = new Map<string, number>();
 
 function getSessionId(): string {
@@ -51,23 +53,33 @@ export async function trackEvent(
   const path = options.path ?? window.location.pathname;
   const sessionId = getSessionId();
   if (shouldSkip(`${sessionId}|${eventType}|${path}`)) return;
-  try {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    await supabase.from("analytics_events").insert({
-      event_type: eventType,
-      path,
-      user_id: user?.id ?? null,
-      session_id: sessionId,
-      referrer: document.referrer || null,
-      user_agent: navigator.userAgent,
-      metadata: (options.metadata ?? {}) as never,
-    });
-  } catch {
-    // never throw from analytics
-  }
+  // Defer to idle time so the insert never competes with rendering / LCP.
+  const schedule =
+    (window as unknown as { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => void }).requestIdleCallback ??
+    ((cb: () => void) => window.setTimeout(cb, 1500));
+  schedule(
+    async () => {
+      try {
+        // getSession() reads the cached session (no network round-trip).
+        // getUser() forces a `/auth/v1/user` fetch on every pageview.
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        await supabase.from("analytics_events").insert({
+          event_type: eventType,
+          path,
+          user_id: session?.user?.id ?? null,
+          session_id: sessionId,
+          referrer: document.referrer || null,
+          user_agent: navigator.userAgent,
+          metadata: (options.metadata ?? {}) as never,
+        });
+      } catch {
+        // never throw from analytics
+      }
+    },
+    { timeout: 4000 },
+  );
 }
 
 export function trackPageView(path: string): void {
