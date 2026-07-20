@@ -33,7 +33,9 @@ type GeminiContent = {
 const CHAT_FALLBACK_REPLY =
   "Desculpe, o assistente está temporariamente instável. Por favor, tente novamente em alguns instantes.";
 
-const AI_TIMEOUT_MS = 20_000;
+// 45s cobre latências de cauda longa do Gemini sob carga; menor que isso
+// gerava timeouts frequentes que eram registrados como erros em system_errors.
+const AI_TIMEOUT_MS = 45_000;
 const GEMINI_MODEL = "gemini-flash-latest";
 const GEMINI_MODEL_FALLBACK = "gemini-flash-lite-latest";
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
