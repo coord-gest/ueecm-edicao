@@ -223,7 +223,7 @@ async function callGroq(
         model,
         messages,
         temperature: 0.7,
-        max_tokens: 1024,
+        max_tokens: 800,
       }),
       signal,
     });
