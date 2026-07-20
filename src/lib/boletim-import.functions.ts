@@ -137,12 +137,7 @@ export const importarBoletinsPdf = createServerFn({ method: "POST" })
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
     // Modelos em ordem de preferência — se um estourar cota, tentamos o próximo
-    const MODELS = [
-      "gemini-2.5-flash",
-      "gemini-2.5-flash-lite",
-      "gemini-2.0-flash",
-      "gemini-2.0-flash-lite",
-    ];
+    const MODELS = ["gemini-2.5-flash"];
 
     async function callGemini(model: string, base64: string): Promise<Response> {
       return fetch(
@@ -273,12 +268,7 @@ export const importarBoletinsTexto = createServerFn({ method: "POST" })
 
     const results: ParsedBoletim[] = [];
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-    const MODELS = [
-      "gemini-2.5-flash-lite",
-      "gemini-2.5-flash",
-      "gemini-2.0-flash-lite",
-      "gemini-2.0-flash",
-    ];
+    const MODELS = ["gemini-2.5-flash"];
 
     async function callGemini(model: string, texto: string): Promise<Response> {
       return fetch(
