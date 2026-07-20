@@ -67,7 +67,7 @@ const CHART_COLORS = [
 const tooltipStyle = {
   background: "hsl(var(--card))",
   border: "1px solid hsl(var(--border))",
-  borderRadius: 12,
+  borderRadius: 5,
   color: "hsl(var(--foreground))",
   fontSize: 12,
   boxShadow: "0 8px 24px -12px rgba(0,0,0,.25)",
