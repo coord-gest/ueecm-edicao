@@ -1419,7 +1419,7 @@ export const Route = createFileRoute("/api/chat")({
               ? `- Fontes disponíveis nesta resposta: ${ragResult.sources.map((s) => `[${s.index}] ${s.link}`).join(" | ")}.`
               : "- ATENÇÃO: a busca não retornou fontes relevantes. NÃO use marcadores [N] nem invente uma seção 'Fontes:'. Em vez disso, faça perguntas de esclarecimento como descrito acima.");
 
-          const systemPrompt =
+          let systemPrompt =
             buildSystemPrompt(profile, faq) +
             "\n\n---\n\n" +
             buildCurrentDateBlock() +
@@ -1431,6 +1431,15 @@ export const Route = createFileRoute("/api/chat")({
             pagesResult.block +
             ragResult.block +
             ragInstructions;
+
+          // Groq free tier limita TPM (12000 para o modelo primário). ~4 chars por token.
+          // Deixamos ~8000 tokens (32000 chars) para o system prompt; sobra folga para histórico + resposta.
+          const SYSTEM_PROMPT_MAX_CHARS = 32000;
+          if (systemPrompt.length > SYSTEM_PROMPT_MAX_CHARS) {
+            systemPrompt =
+              systemPrompt.slice(0, SYSTEM_PROMPT_MAX_CHARS) +
+              "\n\n[...contexto truncado para caber no limite do modelo...]";
+          }
 
           if (conversationId) {
             const { data: existingConversation, error: existingConversationError } =
