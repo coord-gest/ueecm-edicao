@@ -26,25 +26,26 @@ function applyTheme(theme: Theme) {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [preference, setPreferenceState] = useState<ThemePref>(() => {
+  // Inicializa sempre com "light" para que o HTML gerado no servidor
+  // seja idêntico ao primeiro render do cliente (evita erros de hidratação
+  // React #418/#419/#422). A preferência real é lida no useEffect abaixo.
+  const [preference, setPreferenceState] = useState<ThemePref>("light");
+  const [theme, setTheme] = useState<Theme>("light");
+
+  // Hidrata a preferência salva depois da montagem no cliente.
+  useEffect(() => {
     try {
-      if (typeof window === "undefined" || typeof localStorage === "undefined") return "light";
-      const stored = localStorage.getItem(STORAGE_KEY) as ThemePref | null;
-      return stored ?? "light";
-    } catch {
-      return "light";
-    }
-  });
-  const [theme, setTheme] = useState<Theme>(() => {
-    try {
-      if (typeof window === "undefined" || typeof localStorage === "undefined") return "light";
+      if (typeof localStorage === "undefined") return;
       const stored = localStorage.getItem(STORAGE_KEY) as ThemePref | null;
       const pref = stored ?? "light";
-      return pref === "system" ? getSystemTheme() : pref;
+      const resolved = pref === "system" ? getSystemTheme() : pref;
+      setPreferenceState(pref);
+      setTheme(resolved);
+      applyTheme(resolved);
     } catch {
-      return "light";
+      /* noop */
     }
-  });
+  }, []);
 
   useEffect(() => {
     applyTheme(theme);
