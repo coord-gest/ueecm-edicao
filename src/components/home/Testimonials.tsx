@@ -95,7 +95,7 @@ export function Testimonials() {
         </div>
       </div>
 
-      <div className="relative overflow-hidden border border-accent/25 bg-gradient-to-br from-primary via-primary to-accent p-8 text-primary-foreground shadow-elegant sm:p-12">
+      <div className="relative overflow-hidden border border-accent/25 bg-[image:var(--gradient-primary)] p-8 text-white shadow-elegant sm:p-12">
         <span
           aria-hidden
           className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-gold/30 blur-3xl"
@@ -113,14 +113,14 @@ export function Testimonials() {
           strokeWidth={1.5}
         />
         <div key={ativo} className="relative animate-fade-in">
-          <blockquote className="font-display text-xl leading-relaxed text-primary-foreground sm:text-2xl lg:text-3xl">
+          <blockquote className="font-display text-xl leading-relaxed text-white sm:text-2xl lg:text-3xl">
             “{atual.quote}”
           </blockquote>
           <div className="mt-6 flex items-center gap-3">
-            <div className="h-px flex-1 bg-primary-foreground/25" />
+            <div className="h-px flex-1 bg-white/25" />
             <div className="text-right">
               <div className="text-sm font-semibold text-gold">{atual.autor}</div>
-              <div className="text-xs uppercase tracking-widest text-primary-foreground/70">
+              <div className="text-xs uppercase tracking-widest text-white/70">
                 {atual.papel}
               </div>
             </div>
@@ -136,7 +136,7 @@ export function Testimonials() {
                 onClick={() => setAtivo(i)}
                 aria-label={`Depoimento ${i + 1}`}
                 className={`h-1.5 rounded-full transition-all ${
-                  i === ativo ? "w-8 bg-gold" : "w-1.5 bg-primary-foreground/30"
+                  i === ativo ? "w-8 bg-gold" : "w-1.5 bg-white/30"
                 }`}
               />
             ))}
