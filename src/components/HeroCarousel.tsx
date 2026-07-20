@@ -38,7 +38,7 @@ export function HeroCarousel({ posts }: { posts: Post[] }) {
         <CarouselContent>
           {posts.map((p) => (
             <CarouselItem key={p.id}>
-              <div className="relative h-[420px] bg-black sm:h-[520px]">
+              <div className="relative h-[70vh] max-h-[560px] min-h-[440px] bg-black sm:h-[520px] sm:min-h-0 sm:max-h-none">
                 {/* Fundo desfocado com a mesma imagem para preencher as laterais */}
                 <img
                   src={p.imagem ?? heroImg}
@@ -50,25 +50,24 @@ export function HeroCarousel({ posts }: { posts: Post[] }) {
                 <img
                   src={p.imagem ?? heroImg}
                   alt={p.titulo}
-                  className="ken-burns absolute inset-0 size-full object-contain"
+                  className="ken-burns absolute inset-0 size-full object-cover sm:object-contain"
                 />
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/10 sm:h-2/3 sm:top-auto sm:bg-gradient-to-t sm:from-black/85 sm:via-black/45 sm:to-transparent" />
 
-                <div className="relative mx-auto flex h-full max-w-6xl flex-col justify-end px-4 pb-12 sm:px-6 sm:pb-16">
-                  <Badge className="animate-float mb-4 w-fit rounded-full bg-gold/90 text-gold-foreground shadow-elegant hover:bg-gold">
+                <div className="relative mx-auto flex h-full max-w-6xl flex-col justify-end px-4 pb-16 sm:px-6 sm:pb-16">
+                  <Badge className="animate-float mb-3 w-fit rounded-full bg-gold/90 text-gold-foreground shadow-elegant hover:bg-gold sm:mb-4">
                     <Star className="size-3.5" /> Destaque
                   </Badge>
-                  <h2 className="max-w-3xl font-display text-2xl font-semibold leading-tight text-white drop-shadow-md sm:text-4xl">
+                  <h2 className="max-w-3xl font-display text-xl font-semibold leading-tight text-white drop-shadow-md sm:text-4xl line-clamp-3">
                     {p.titulo}
                   </h2>
-                  <p className="mt-3 max-w-2xl text-sm text-white/85 sm:text-base line-clamp-2">
+                  <p className="mt-2 max-w-2xl text-sm text-white/85 line-clamp-2 sm:mt-3 sm:text-base">
                     {p.resumo}
                   </p>
-                  <div className="mt-6">
+                  <div className="mt-4 sm:mt-6">
                     <Button
                       asChild
-                      size="lg"
-                      className="sheen rounded-full bg-gold text-gold-foreground shadow-elegant transition-transform hover:-translate-y-0.5 hover:bg-gold/90"
+                      className="sheen rounded-full bg-gold text-gold-foreground shadow-elegant transition-transform hover:-translate-y-0.5 hover:bg-gold/90 sm:h-11 sm:px-8 sm:text-base"
                     >
                       <Link to="/posts/$id" params={{ id: p.id }}>
                         Ler matéria{" "}
@@ -85,7 +84,7 @@ export function HeroCarousel({ posts }: { posts: Post[] }) {
           <>
             <CarouselPrevious className="left-4 hidden sm:flex" />
             <CarouselNext className="right-4 hidden sm:flex" />
-            <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-1.5">
+            <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-1.5 sm:bottom-4">
               {posts.map((_, i) => (
                 <button
                   key={i}
