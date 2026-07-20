@@ -5,7 +5,7 @@ import { useReveal } from "@/hooks/use-reveal";
 export function CtaDuo() {
   const ref = useReveal<HTMLDivElement>();
   return (
-    <div ref={ref} className="reveal mb-16 grid gap-4 md:grid-cols-2">
+    <div ref={ref} className="reveal mb-10 md:mb-16 grid gap-4 md:grid-cols-2">
       <Link
         to="/agendar"
         className="group relative overflow-hidden border-2 border-border bg-[image:var(--gradient-hero)] p-6 text-white shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:shadow-xl sm:p-8"

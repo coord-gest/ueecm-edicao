@@ -62,7 +62,7 @@ export function AlunosDestaque() {
   const destaques = data?.rows ?? [];
 
   return (
-    <section ref={ref} className="reveal mb-16">
+    <section ref={ref} className="reveal mb-10 md:mb-16">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-3 border-b-2 border-primary pb-3">
         <div>
           <h2 className="flex items-center gap-2 font-display text-2xl text-primary sm:text-3xl lg:text-4xl">

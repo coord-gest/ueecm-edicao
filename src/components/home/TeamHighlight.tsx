@@ -33,7 +33,7 @@ export function TeamHighlight() {
   if (!isLoading && (!data || data.length === 0)) return null;
 
   return (
-    <section ref={ref} className="reveal mb-16">
+    <section ref={ref} className="reveal mb-10 md:mb-16">
       <div className="mb-8 flex items-end justify-between border-b-2 border-primary pb-3">
         <h2 className="font-display text-2xl text-primary sm:text-3xl lg:text-4xl">Nossa Equipe</h2>
         <Link

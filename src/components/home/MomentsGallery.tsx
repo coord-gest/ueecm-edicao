@@ -92,7 +92,7 @@ export function MomentsGallery() {
   if (!isLoading && pool.length === 0) return null;
 
   return (
-    <section ref={ref} className="reveal mt-16">
+    <section ref={ref} className="reveal mt-10 md:mt-16">
       <div className="mb-6 flex items-end justify-between border-b border-border pb-3">
         <div className="flex items-center gap-2">
           <Camera className="size-5 text-accent" />
