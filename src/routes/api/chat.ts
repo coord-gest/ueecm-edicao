@@ -36,8 +36,12 @@ const CHAT_FALLBACK_REPLY =
 // 45s cobre latências de cauda longa do Gemini sob carga; menor que isso
 // gerava timeouts frequentes que eram registrados como erros em system_errors.
 const AI_TIMEOUT_MS = 45_000;
-const GEMINI_MODEL = "gemini-2.5-flash";
-const GEMINI_MODEL_FALLBACK = "gemini-2.5-flash";
+// `gemini-2.5-flash` foi descontinuado para novos consumidores da API
+// (HTTP 404 "no longer available to new users"). Os aliases `-latest`
+// são mantidos pelo Google e apontam para a versão suportada corrente
+// da família Flash, evitando quebras quando o Google gira as versões.
+const GEMINI_MODEL = "gemini-flash-latest";
+const GEMINI_MODEL_FALLBACK = "gemini-flash-lite-latest";
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 const GEMINI_ENDPOINT_FALLBACK = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL_FALLBACK}:generateContent`;
 

@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const GEMINI_TIMEOUT_MS = 25_000;
-const MODEL = "gemini-2.5-flash";
+const MODEL = "gemini-flash-latest";
 
 async function callGemini(prompt: string, opts?: { json?: boolean; maxTokens?: number }) {
   const apiKey = process.env.GEMINI_API_KEY;
