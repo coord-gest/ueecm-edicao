@@ -192,6 +192,14 @@ function PostDetail() {
     <div className="min-h-dvh bg-background">
       <ReadingProgress />
       <SiteHeader />
+      <aside
+        className="pointer-events-none fixed inset-y-0 left-0 z-10 hidden w-[calc((100vw-48rem)/2-1rem)] max-w-xs pt-28 pl-6 xl:block"
+        aria-hidden={toc.length < 2}
+      >
+        <div className="pointer-events-auto">
+          <TableOfContents items={toc} variant="sidebar" />
+        </div>
+      </aside>
       <article className="mx-auto max-w-3xl px-4 pb-16 pt-8 sm:px-6">
         <Breadcrumbs
           className="mb-3"
@@ -263,7 +271,9 @@ function PostDetail() {
 
         <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{post.resumo}</p>
 
-        <TableOfContents items={toc} />
+        <div className="xl:hidden">
+          <TableOfContents items={toc} />
+        </div>
 
         {conteudoComIds && (
           <ClientOnly
