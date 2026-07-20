@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 
 const GEMINI_TIMEOUT_MS = 15_000;
-const MODEL = "gemini-2.5-flash";
+const MODEL = "gemini-flash-latest";
 
 type Decisao = "aprovar" | "revisar" | "bloquear";
 
