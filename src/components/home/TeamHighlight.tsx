@@ -66,11 +66,11 @@ function TeamCard({ p }: { p: ProfPublico }) {
   return (
     <Link
       to="/equipe"
-      className="group relative flex w-56 shrink-0 flex-col items-center overflow-hidden border border-border bg-linear-to-br from-primary to-accent p-5 text-center text-primary-foreground shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:border-gold hover:shadow-xl sm:w-auto"
+      className="group relative flex w-56 shrink-0 flex-col items-center overflow-hidden border border-border bg-[image:var(--gradient-primary)] p-5 text-center text-white shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:border-gold hover:shadow-xl sm:w-auto"
     >
       <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-gold via-gold/70 to-transparent" />
       <span className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-gold/20 blur-2xl transition-transform group-hover:scale-125" />
-      <div className="relative mb-3 size-20 overflow-hidden rounded-full bg-primary-foreground/10 ring-2 ring-gold/40 transition-all group-hover:ring-gold">
+      <div className="relative mb-3 size-20 overflow-hidden rounded-full bg-white/10 ring-2 ring-gold/40 transition-all group-hover:ring-gold">
         {p.foto_url ? (
           <img src={p.foto_url} alt={p.nome} className="size-full object-cover" loading="lazy" />
         ) : (
@@ -79,11 +79,11 @@ function TeamCard({ p }: { p: ProfPublico }) {
           </div>
         )}
       </div>
-      <h3 className="relative line-clamp-2 font-display text-sm font-semibold leading-tight text-primary-foreground transition-colors group-hover:text-gold sm:text-base">
+      <h3 className="relative line-clamp-2 font-display text-sm font-semibold leading-tight text-white transition-colors group-hover:text-gold sm:text-base">
         {p.nome}
       </h3>
       {subtitle && (
-        <p className="relative mt-1 line-clamp-2 text-[11px] uppercase tracking-widest text-primary-foreground/75">
+        <p className="relative mt-1 line-clamp-2 text-[11px] uppercase tracking-widest text-white/75">
           {subtitle}
         </p>
       )}
