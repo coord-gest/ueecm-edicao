@@ -43,6 +43,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // loading permanece true até que a sessão inicial E os roles sejam resolvidos
   const [loading, setLoading] = useState(true);
 
+  // Marca no window que o Provider já foi montado no cliente — usado pelo
+  // fallback SSR-safe do useAuth() para diferenciar "SSR/streaming" de
+  // "bug real: componente fora do Provider".
+  useEffect(() => {
+    (window as unknown as { __authProviderMounted?: boolean }).__authProviderMounted = true;
+    return () => {
+      (window as unknown as { __authProviderMounted?: boolean }).__authProviderMounted = false;
+    };
+  }, []);
+
   const refreshRoles = useCallback(async (showEmptyWarning = false): Promise<AppRole[]> => {
     // Não chame a server fn protegida sem sessão — evita 401 e blank screen.
     const { data: sessionData } = await supabase.auth.getSession();
@@ -190,6 +200,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  if (!ctx) {
+    // Fallback SSR-safe: evita derrubar o streaming quando o componente
+    // é renderizado transitoriamente fora do AuthProvider (ex.: React
+    // "switched to client rendering" após um Suspense abortar).
+    // No cliente hidratado, o Provider é montado logo em seguida e o
+    // componente re-renderiza com o contexto real.
+    if (typeof window === "undefined" || !(window as unknown as { __authProviderMounted?: boolean }).__authProviderMounted) {
+      return {
+        user: null,
+        session: null,
+        roles: [],
+        loading: true,
+        rolesError: null,
+        isStaff: false,
+        isAdmin: false,
+        isDeveloper: false,
+        hasRole: () => false,
+        refreshRoles: async () => [],
+        signIn: async () => ({ error: "AuthProvider ainda não montado" }),
+        signOut: async () => undefined,
+      } satisfies AuthContextValue;
+    }
+    throw new Error("useAuth must be used within AuthProvider");
+  }
   return ctx;
 }
