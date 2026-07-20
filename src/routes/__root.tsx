@@ -266,6 +266,25 @@ function RootComponent() {
     trackPageView(pathname);
   }, [pathname]);
 
+  // Painel admin: cantos retos. Rotas administrativas usam prefixos abaixo.
+  useEffect(() => {
+    if (typeof document === "undefined" || !pathname) return;
+    const adminPrefixes = [
+      "/painel",
+      "/escola",
+      "/usuarios",
+      "/configuracoes",
+      "/notificacoes",
+      "/diagnosticar-notificacoes",
+    ];
+    const isAdmin = adminPrefixes.some((p) => pathname === p || pathname.startsWith(p + "/") || pathname.startsWith(p));
+    if (isAdmin) {
+      document.body.setAttribute("data-admin", "true");
+    } else {
+      document.body.removeAttribute("data-admin");
+    }
+  }, [pathname]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
