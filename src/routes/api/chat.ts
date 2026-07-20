@@ -20,14 +20,14 @@ type ChatRequest = {
 type RuntimeEnv = Record<string, string | undefined>;
 
 type RequiredChatEnv = {
-  GEMINI_API_KEY: string;
+  GROQ_API_KEY: string;
   SUPABASE_URL: string;
   SUPABASE_SERVICE_ROLE_KEY: string;
 };
 
-type GeminiContent = {
-  role: "user" | "model";
-  parts: Array<{ text: string }>;
+type ChatMessage = {
+  role: "system" | "user" | "assistant";
+  content: string;
 };
 
 const CHAT_FALLBACK_REPLY =
@@ -36,12 +36,12 @@ const CHAT_FALLBACK_REPLY =
 // 45s cobre latências de cauda longa sob carga; menor que isso gerava
 // timeouts frequentes que eram registrados como erros em system_errors.
 const AI_TIMEOUT_MS = 45_000;
-// API pública do Google Generative Language (gratuita no free tier).
-// `gemini-2.0-flash` é o modelo mais barato/rápido disponível para novos
-// consumidores; `gemini-2.0-flash-lite` é usado como fallback.
-const GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
-const AI_MODEL = "gemini-2.0-flash";
-const AI_MODEL_FALLBACK = "gemini-2.0-flash-lite";
+// Groq (API OpenAI-compatível, free tier generoso).
+// `llama-3.3-70b-versatile` entrega ótima qualidade em PT-BR com latência baixa.
+// `llama-3.1-8b-instant` é usado como fallback em caso de 429/503.
+const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+const AI_MODEL = "llama-3.3-70b-versatile";
+const AI_MODEL_FALLBACK = "llama-3.1-8b-instant";
 
 // Rate limit em memória em dois níveis (best-effort; reseta a cada cold start do Worker).
 // - Por (IP+session): 12/min → uso legítimo.
@@ -204,21 +204,26 @@ function createSupabaseAdminForChat(
   });
 }
 
-async function callGemini(
+async function callGroq(
   apiKey: string,
   systemPrompt: string,
-  contents: GeminiContent[],
+  history: ChatMessage[],
   signal: AbortSignal,
 ): Promise<{ ok: true; text: string } | { ok: false; status: number; error: string }> {
+  const messages: ChatMessage[] = [{ role: "system", content: systemPrompt }, ...history];
+
   async function callWithModel(model: string) {
-    const url = `${GEMINI_API_BASE}/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
-    return fetch(url, {
+    return fetch(GROQ_API_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
       body: JSON.stringify({
-        systemInstruction: { role: "system", parts: [{ text: systemPrompt }] },
-        contents,
-        generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
+        model,
+        messages,
+        temperature: 0.7,
+        max_tokens: 1024,
       }),
       signal,
     });
@@ -244,11 +249,9 @@ async function callGemini(
   }
 
   const data = (await res.json()) as {
-    candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+    choices?: Array<{ message?: { content?: string } }>;
   };
-  const text = (data.candidates?.[0]?.content?.parts ?? [])
-    .map((p) => p.text ?? "")
-    .join("");
+  const text = data.choices?.[0]?.message?.content ?? "";
   return { ok: true, text };
 }
 
@@ -1321,7 +1324,7 @@ export const Route = createFileRoute("/api/chat")({
         try {
           // Validação de variáveis de ambiente obrigatórias no servidor
           const requiredEnv = {
-            GEMINI_API_KEY: getRuntimeEnv(request, ["GEMINI_API_KEY"]),
+            GROQ_API_KEY: getRuntimeEnv(request, ["GROQ_API_KEY"]),
             SUPABASE_URL: getRuntimeEnv(request, [
               "SUPABASE_URL",
               "PROJECT_SUPABASE_URL",
@@ -1350,11 +1353,11 @@ export const Route = createFileRoute("/api/chat")({
             );
           }
           const env: RequiredChatEnv = {
-            GEMINI_API_KEY: requiredEnv.GEMINI_API_KEY!,
+            GROQ_API_KEY: requiredEnv.GROQ_API_KEY!,
             SUPABASE_URL: requiredEnv.SUPABASE_URL!,
             SUPABASE_SERVICE_ROLE_KEY: requiredEnv.SUPABASE_SERVICE_ROLE_KEY!,
           };
-          const apiKey = env.GEMINI_API_KEY;
+          const apiKey = env.GROQ_API_KEY;
 
           const body = (await request.json()) as ChatRequest;
           const { sessionId, message } = body;
@@ -1468,25 +1471,25 @@ export const Route = createFileRoute("/api/chat")({
             .limit(20);
           if (historyError) throw historyError;
 
-          let contents: GeminiContent[] = (
+          let contents: ChatMessage[] = (
             (history ?? []) as Array<{ role: string; content: string }>
           )
             .filter((m) => m.role === "user" || m.role === "assistant")
             .map((m) => ({
-              role: m.role === "assistant" ? "model" : "user",
-              parts: [{ text: m.content }],
+              role: m.role === "assistant" ? "assistant" : "user",
+              content: m.content,
             }));
 
           if (contents.length === 0) {
-            contents = [{ role: "user", parts: [{ text: message }] }];
+            contents = [{ role: "user", content: message }];
           }
 
-          async function callGeminiWithRetry(): Promise<string> {
+          async function callGroqWithRetry(): Promise<string> {
             const attempt = async () => {
               const ctrl = new AbortController();
               const to = setTimeout(() => ctrl.abort(), AI_TIMEOUT_MS);
               try {
-                return await callGemini(apiKey, systemPrompt, contents, ctrl.signal);
+                return await callGroq(apiKey, systemPrompt, contents, ctrl.signal);
               } finally {
                 clearTimeout(to);
               }
@@ -1497,14 +1500,14 @@ export const Route = createFileRoute("/api/chat")({
               result = await attempt();
             }
             if (!result.ok) {
-              throw new Error(`Lovable AI ${result.status}: ${result.error}`);
+              throw new Error(`Groq ${result.status}: ${result.error}`);
             }
             return result.text;
           }
 
           let rawAssistantText = "";
           try {
-            rawAssistantText = await callGeminiWithRetry();
+            rawAssistantText = await callGroqWithRetry();
           } catch (err) {
             const errMsg = (err as Error)?.message ?? "";
             const isAbort = (err as Error)?.name === "AbortError";
@@ -1513,10 +1516,10 @@ export const Route = createFileRoute("/api/chat")({
               supabaseAdmin,
               conversationId,
               isAbort
-                  ? `Timeout (>${AI_TIMEOUT_MS}ms) ao chamar Lovable AI`
+                  ? `Timeout (>${AI_TIMEOUT_MS}ms) ao chamar Groq`
                 : isQuota
-                    ? "Cota da Lovable AI esgotada — adicione créditos ao workspace."
-                    : "Falha ao chamar Lovable AI",
+                    ? "Cota da Groq esgotada — verifique o plano da API Key."
+                    : "Falha ao chamar Groq",
               err,
             );
           }
@@ -1526,7 +1529,7 @@ export const Route = createFileRoute("/api/chat")({
             return fallbackChatResponse(
               supabaseAdmin,
               conversationId,
-              "Lovable AI retornou resposta vazia",
+              "Groq retornou resposta vazia",
               null,
             );
           }
