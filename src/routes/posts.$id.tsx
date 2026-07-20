@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { ClientOnly, createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
 import { ArrowLeft, CalendarDays, Clock, Eye, User } from "lucide-react";
@@ -266,13 +266,25 @@ function PostDetail() {
         <TableOfContents items={toc} />
 
         {conteudoComIds && (
-          <PostContent
-            html={conteudoComIds}
-            className={cn(
-              "prose prose-neutral mt-6 max-w-none dark:prose-invert prose-headings:font-display prose-headings:scroll-mt-24 prose-img:rounded-xl",
-              reading.articleClass,
-            )}
-          />
+          <ClientOnly
+            fallback={
+              <div
+                className={cn(
+                  "prose prose-neutral mt-6 max-w-none dark:prose-invert prose-headings:font-display prose-headings:scroll-mt-24 prose-img:rounded-xl",
+                  reading.articleClass,
+                )}
+                dangerouslySetInnerHTML={{ __html: conteudoComIds }}
+              />
+            }
+          >
+            <PostContent
+              html={conteudoComIds}
+              className={cn(
+                "prose prose-neutral mt-6 max-w-none dark:prose-invert prose-headings:font-display prose-headings:scroll-mt-24 prose-img:rounded-xl",
+                reading.articleClass,
+              )}
+            />
+          </ClientOnly>
         )}
 
         <PostShare title={post.titulo} text={post.resumo ?? undefined} />

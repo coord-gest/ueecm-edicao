@@ -145,10 +145,12 @@ async function fallbackChatResponse(
   details?: unknown,
 ) {
   logger.error("[api/chat] " + error, details ?? "");
-  // Registra o erro de forma não-bloqueante para o painel de alertas.
+  // Registra de forma não-bloqueante. Timeout do Gemini é operacional
+  // (rede/modelo lento) e não deve disparar alerta crítico — grava como warning.
+  const isTimeout = /Timeout|aborted|AbortError/i.test(error);
   void logSystemError({
     source: "api:chat",
-    severity: "error",
+    severity: isTimeout ? "warning" : "error",
     message: error,
     error: details,
     context: { conversationId: conversationId ?? null },
