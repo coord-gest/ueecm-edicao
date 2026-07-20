@@ -20,7 +20,7 @@ type ChatRequest = {
 type RuntimeEnv = Record<string, string | undefined>;
 
 type RequiredChatEnv = {
-  GEMINI_API_KEY: string;
+  LOVABLE_API_KEY: string;
   SUPABASE_URL: string;
   SUPABASE_SERVICE_ROLE_KEY: string;
 };
@@ -33,17 +33,14 @@ type GeminiContent = {
 const CHAT_FALLBACK_REPLY =
   "Desculpe, o assistente está temporariamente instável. Por favor, tente novamente em alguns instantes.";
 
-// 45s cobre latências de cauda longa do Gemini sob carga; menor que isso
-// gerava timeouts frequentes que eram registrados como erros em system_errors.
+// 45s cobre latências de cauda longa sob carga; menor que isso gerava
+// timeouts frequentes que eram registrados como erros em system_errors.
 const AI_TIMEOUT_MS = 45_000;
-// `gemini-2.5-flash` foi descontinuado para novos consumidores da API
-// (HTTP 404 "no longer available to new users"). Os aliases `-latest`
-// são mantidos pelo Google e apontam para a versão suportada corrente
-// da família Flash, evitando quebras quando o Google gira as versões.
-const GEMINI_MODEL = "gemini-flash-latest";
-const GEMINI_MODEL_FALLBACK = "gemini-flash-lite-latest";
-const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
-const GEMINI_ENDPOINT_FALLBACK = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL_FALLBACK}:generateContent`;
+// Migrado para Lovable AI Gateway. `gemini-3.5-flash` é servido pelo
+// gateway (não pela API pública do Google, que só expõe até a série 2.5).
+const AI_GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const AI_MODEL = "google/gemini-3.5-flash";
+const AI_MODEL_FALLBACK = "google/gemini-3.1-flash-lite";
 
 // Rate limit em memória em dois níveis (best-effort; reseta a cada cold start do Worker).
 // - Por (IP+session): 12/min → uso legítimo.
@@ -212,38 +209,42 @@ async function callGemini(
   contents: GeminiContent[],
   signal: AbortSignal,
 ): Promise<{ ok: true; text: string } | { ok: false; status: number; error: string }> {
-  // SEGURANÇA: passa a chave no header `x-goog-api-key` em vez da URL,
-  // para que erros de fetch/undici (que costumam incluir a URL) nunca
-  // exponham a GEMINI_API_KEY em logs do Cloudflare Worker.
-  const body = JSON.stringify({
-    systemInstruction: { role: "system", parts: [{ text: systemPrompt }] },
-    contents,
-    generationConfig: {
-      temperature: 0.7,
-      maxOutputTokens: 1024,
-    },
-  });
+  // Converte o histórico no formato Gemini nativo para o formato
+  // OpenAI-compatível esperado pelo Lovable AI Gateway.
+  const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
+    { role: "system", content: systemPrompt },
+    ...contents.map((c) => ({
+      role: (c.role === "model" ? "assistant" : "user") as "user" | "assistant",
+      content: c.parts.map((p) => p.text ?? "").join(""),
+    })),
+  ];
 
-  async function callEndpoint(endpoint: string) {
-    return fetch(endpoint, {
+  async function callWithModel(model: string) {
+    return fetch(AI_GATEWAY_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-goog-api-key": apiKey,
+        // Gateway aceita ambos: header dedicado e Bearer. Usamos o header
+        // dedicado para não vazar a chave em traces genéricos de HTTP.
+        "Lovable-API-Key": apiKey,
       },
-      body,
+      body: JSON.stringify({
+        model,
+        messages,
+        temperature: 0.7,
+        max_tokens: 1024,
+      }),
       signal,
     });
   }
 
-  let res = await callEndpoint(GEMINI_ENDPOINT);
-
-  // Fallback automático quando o modelo primário estoura cota (429).
-  if (res.status === 429) {
+  let res = await callWithModel(AI_MODEL);
+  // 429/503: rotaciona para o modelo lite antes de propagar erro.
+  if (res.status === 429 || res.status === 503) {
     try {
-      res = await callEndpoint(GEMINI_ENDPOINT_FALLBACK);
+      res = await callWithModel(AI_MODEL_FALLBACK);
     } catch {
-      /* mantém a resposta 429 original */
+      /* mantém a resposta original */
     }
   }
 
@@ -258,9 +259,9 @@ async function callGemini(
   }
 
   const data = (await res.json()) as {
-    candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+    choices?: Array<{ message?: { content?: string } }>;
   };
-  const text = data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("") ?? "";
+  const text = data.choices?.[0]?.message?.content ?? "";
   return { ok: true, text };
 }
 
@@ -1333,7 +1334,7 @@ export const Route = createFileRoute("/api/chat")({
         try {
           // Validação de variáveis de ambiente obrigatórias no servidor
           const requiredEnv = {
-            GEMINI_API_KEY: getRuntimeEnv(request, ["GEMINI_API_KEY", "GOOGLE_API_KEY"]),
+            LOVABLE_API_KEY: getRuntimeEnv(request, ["LOVABLE_API_KEY"]),
             SUPABASE_URL: getRuntimeEnv(request, [
               "SUPABASE_URL",
               "PROJECT_SUPABASE_URL",
@@ -1362,11 +1363,11 @@ export const Route = createFileRoute("/api/chat")({
             );
           }
           const env: RequiredChatEnv = {
-            GEMINI_API_KEY: requiredEnv.GEMINI_API_KEY!,
+            LOVABLE_API_KEY: requiredEnv.LOVABLE_API_KEY!,
             SUPABASE_URL: requiredEnv.SUPABASE_URL!,
             SUPABASE_SERVICE_ROLE_KEY: requiredEnv.SUPABASE_SERVICE_ROLE_KEY!,
           };
-          const apiKey = env.GEMINI_API_KEY;
+          const apiKey = env.LOVABLE_API_KEY;
 
           const body = (await request.json()) as ChatRequest;
           const { sessionId, message } = body;
@@ -1509,7 +1510,7 @@ export const Route = createFileRoute("/api/chat")({
               result = await attempt();
             }
             if (!result.ok) {
-              throw new Error(`Gemini API ${result.status}: ${result.error}`);
+              throw new Error(`Lovable AI ${result.status}: ${result.error}`);
             }
             return result.text;
           }
@@ -1521,14 +1522,14 @@ export const Route = createFileRoute("/api/chat")({
             const errMsg = (err as Error)?.message ?? "";
             const isAbort = (err as Error)?.name === "AbortError";
             const isQuota = /429|RESOURCE_EXHAUSTED|quota/i.test(errMsg);
-            return fallbackChatResponse(
+              return fallbackChatResponse(
               supabaseAdmin,
               conversationId,
               isAbort
-                ? `Timeout (>${AI_TIMEOUT_MS}ms) ao chamar Gemini`
+                  ? `Timeout (>${AI_TIMEOUT_MS}ms) ao chamar Lovable AI`
                 : isQuota
-                  ? "Cota diária do Gemini API esgotada (free tier)"
-                  : "Falha ao chamar Gemini API",
+                    ? "Cota da Lovable AI esgotada — adicione créditos ao workspace."
+                    : "Falha ao chamar Lovable AI",
               err,
             );
           }
@@ -1538,7 +1539,7 @@ export const Route = createFileRoute("/api/chat")({
             return fallbackChatResponse(
               supabaseAdmin,
               conversationId,
-              "Gemini retornou resposta vazia",
+              "Lovable AI retornou resposta vazia",
               null,
             );
           }
