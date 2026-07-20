@@ -230,7 +230,9 @@ async function callGroq(
   }
 
   let res = await callWithModel(AI_MODEL);
-  if (res.status === 429 || res.status === 503) {
+  // 413 = payload maior que o TPM do modelo primário (free tier: 12000 tokens).
+  // O `llama-3.1-8b-instant` tem TPM bem maior, então cai para ele nesses casos.
+  if (res.status === 429 || res.status === 503 || res.status === 413) {
     try {
       res = await callWithModel(AI_MODEL_FALLBACK);
     } catch {
