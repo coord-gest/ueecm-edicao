@@ -64,7 +64,7 @@ const toneClass: Record<string, string> = {
 const tooltipStyle = {
   background: "hsl(var(--card))",
   border: "1px solid hsl(var(--border))",
-  borderRadius: 12,
+  borderRadius: 5,
   color: "hsl(var(--foreground))",
   fontSize: 12,
 } as const;

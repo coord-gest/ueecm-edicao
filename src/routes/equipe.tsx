@@ -278,7 +278,7 @@ function ProfissionalCard({
   const anos = tempoDeProfissao(p);
 
   return (
-    <article className="group relative isolate flex flex-col overflow-hidden rounded-[2rem] border border-border/60 bg-card shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.08)] transition-all duration-500 hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_20px_60px_-20px_rgba(15,23,42,0.25)]">
+    <article className="group relative isolate flex flex-col overflow-hidden rounded-[5px] border border-border/60 bg-card shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.08)] transition-all duration-500 hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_20px_60px_-20px_rgba(15,23,42,0.25)]">
       {/* Cover: gradient + soft radial glow + gold thread */}
       <div className="relative h-32 overflow-hidden bg-gradient-to-br from-primary via-primary/85 to-primary/60">
         <div className="absolute -left-10 -top-10 size-40 rounded-full bg-gold/25 blur-3xl" />
