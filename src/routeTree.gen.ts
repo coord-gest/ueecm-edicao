@@ -85,6 +85,7 @@ import { Route as EscolaIndexRouteImport } from './routes/escola.index'
 import { Route as PostsIdRouteImport } from './routes/posts.$id'
 import { Route as PainelPostsNovoRouteImport } from './routes/painel-posts.novo'
 import { Route as PainelPostsIdRouteImport } from './routes/painel-posts.$id'
+import { Route as PainelArquivosPlanejamentosRouteImport } from './routes/painel-arquivos.planejamentos'
 import { Route as PainelArquivosTemplateIdRouteImport } from './routes/painel-arquivos.$templateId'
 import { Route as MinhasTurmasTurmaIdRouteImport } from './routes/minhas-turmas.$turmaId'
 import { Route as MeusFilhosIdRouteImport } from './routes/meus-filhos.$id'
@@ -498,6 +499,12 @@ const PainelPostsIdRoute = PainelPostsIdRouteImport.update({
   path: '/painel-posts/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PainelArquivosPlanejamentosRoute =
+  PainelArquivosPlanejamentosRouteImport.update({
+    id: '/planejamentos',
+    path: '/planejamentos',
+    getParentRoute: () => PainelArquivosRoute,
+  } as any)
 const PainelArquivosTemplateIdRoute =
   PainelArquivosTemplateIdRouteImport.update({
     id: '/$templateId',
@@ -746,6 +753,7 @@ export interface FileRoutesByFullPath {
   '/meus-filhos/$id': typeof MeusFilhosIdRoute
   '/minhas-turmas/$turmaId': typeof MinhasTurmasTurmaIdRoute
   '/painel-arquivos/$templateId': typeof PainelArquivosTemplateIdRoute
+  '/painel-arquivos/planejamentos': typeof PainelArquivosPlanejamentosRoute
   '/painel-posts/$id': typeof PainelPostsIdRoute
   '/painel-posts/novo': typeof PainelPostsNovoRoute
   '/posts/$id': typeof PostsIdRoute
@@ -854,6 +862,7 @@ export interface FileRoutesByTo {
   '/meus-filhos/$id': typeof MeusFilhosIdRoute
   '/minhas-turmas/$turmaId': typeof MinhasTurmasTurmaIdRoute
   '/painel-arquivos/$templateId': typeof PainelArquivosTemplateIdRoute
+  '/painel-arquivos/planejamentos': typeof PainelArquivosPlanejamentosRoute
   '/painel-posts/$id': typeof PainelPostsIdRoute
   '/painel-posts/novo': typeof PainelPostsNovoRoute
   '/posts/$id': typeof PostsIdRoute
@@ -964,6 +973,7 @@ export interface FileRoutesById {
   '/meus-filhos/$id': typeof MeusFilhosIdRoute
   '/minhas-turmas/$turmaId': typeof MinhasTurmasTurmaIdRoute
   '/painel-arquivos/$templateId': typeof PainelArquivosTemplateIdRoute
+  '/painel-arquivos/planejamentos': typeof PainelArquivosPlanejamentosRoute
   '/painel-posts/$id': typeof PainelPostsIdRoute
   '/painel-posts/novo': typeof PainelPostsNovoRoute
   '/posts/$id': typeof PostsIdRoute
@@ -1075,6 +1085,7 @@ export interface FileRouteTypes {
     | '/meus-filhos/$id'
     | '/minhas-turmas/$turmaId'
     | '/painel-arquivos/$templateId'
+    | '/painel-arquivos/planejamentos'
     | '/painel-posts/$id'
     | '/painel-posts/novo'
     | '/posts/$id'
@@ -1183,6 +1194,7 @@ export interface FileRouteTypes {
     | '/meus-filhos/$id'
     | '/minhas-turmas/$turmaId'
     | '/painel-arquivos/$templateId'
+    | '/painel-arquivos/planejamentos'
     | '/painel-posts/$id'
     | '/painel-posts/novo'
     | '/posts/$id'
@@ -1292,6 +1304,7 @@ export interface FileRouteTypes {
     | '/meus-filhos/$id'
     | '/minhas-turmas/$turmaId'
     | '/painel-arquivos/$templateId'
+    | '/painel-arquivos/planejamentos'
     | '/painel-posts/$id'
     | '/painel-posts/novo'
     | '/posts/$id'
@@ -1953,6 +1966,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PainelPostsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/painel-arquivos/planejamentos': {
+      id: '/painel-arquivos/planejamentos'
+      path: '/planejamentos'
+      fullPath: '/painel-arquivos/planejamentos'
+      preLoaderRoute: typeof PainelArquivosPlanejamentosRouteImport
+      parentRoute: typeof PainelArquivosRoute
+    }
     '/painel-arquivos/$templateId': {
       id: '/painel-arquivos/$templateId'
       path: '/$templateId'
@@ -2245,11 +2265,13 @@ const MinhasTurmasRouteWithChildren = MinhasTurmasRoute._addFileChildren(
 
 interface PainelArquivosRouteChildren {
   PainelArquivosTemplateIdRoute: typeof PainelArquivosTemplateIdRoute
+  PainelArquivosPlanejamentosRoute: typeof PainelArquivosPlanejamentosRoute
   PainelArquivosIndexRoute: typeof PainelArquivosIndexRoute
 }
 
 const PainelArquivosRouteChildren: PainelArquivosRouteChildren = {
   PainelArquivosTemplateIdRoute: PainelArquivosTemplateIdRoute,
+  PainelArquivosPlanejamentosRoute: PainelArquivosPlanejamentosRoute,
   PainelArquivosIndexRoute: PainelArquivosIndexRoute,
 }
 
