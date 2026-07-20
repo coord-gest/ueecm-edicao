@@ -257,8 +257,8 @@ a[href*="lovable.dev"][target="_blank"] {
 
   --gradient-primary: linear-gradient(
     135deg,
-    oklch(0.3 0.06 245) 0%,
-    oklch(0.38 0.09 240) 100%
+    oklch(0.36 0.09 250) 0%,
+    oklch(0.52 0.13 220) 100%
   );
   --gradient-subtle: linear-gradient(180deg, oklch(0.235 0.022 250) 0%, oklch(0.19 0.02 250) 100%);
   --gradient-gold: linear-gradient(135deg, oklch(0.82 0.12 80) 0%, oklch(0.7 0.11 75) 100%);
@@ -270,8 +270,9 @@ a[href*="lovable.dev"][target="_blank"] {
   );
   --gradient-hero: linear-gradient(
     135deg,
-    oklch(0.22 0.025 250) 0%,
-    oklch(0.32 0.07 240) 100%
+    oklch(0.28 0.05 255) 0%,
+    oklch(0.42 0.11 210) 55%,
+    oklch(0.5 0.13 195) 100%
   );
   --gradient-surface: linear-gradient(160deg, oklch(0.19 0.02 250) 0%, oklch(0.26 0.035 248) 100%);
   --shadow-gold: 0 8px 24px -10px oklch(0.82 0.12 80 / 0.3), 0 2px 6px oklch(0.82 0.12 80 / 0.18);
