@@ -195,7 +195,7 @@ function Home() {
       <SiteHeader />
 
       <section
-        className="mx-auto mb-16 w-full max-w-7xl px-4 pt-6 sm:px-6 lg:px-8"
+        className="mx-auto mb-10 w-full max-w-7xl px-4 pt-4 sm:px-6 sm:pt-6 md:mb-16 lg:px-8"
         aria-label="Notícias em destaque"
       >
         {isLoading ? (
@@ -207,7 +207,7 @@ function Home() {
         )}
       </section>
 
-      <div className="mx-auto w-full max-w-7xl px-4 pb-20 pt-6 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-7xl px-4 pb-16 pt-4 sm:px-6 sm:pb-20 sm:pt-6 lg:px-8">
         <h1 className="sr-only">
           Portal U.E. Evaristo Campelo de Matos — notícias e comunicados da comunidade escolar
         </h1>
@@ -233,7 +233,7 @@ function Home() {
         </RevealSection>
 
         {/* Faixa: Mais lidas + Opinião */}
-        <RevealSection className="mb-16 grid grid-cols-1 gap-10 lg:grid-cols-12">
+        <RevealSection className="mb-10 grid grid-cols-1 gap-8 md:mb-16 md:gap-10 lg:grid-cols-12">
           <div className="lg:col-span-8">
             <SectionHeader title="Mais Lidas" />
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-3">
@@ -346,7 +346,7 @@ function Home() {
         )}
 
         {/* Push inline */}
-        <RevealSection className="mt-16">
+        <RevealSection className="mt-10 md:mt-16">
           <PushInline />
         </RevealSection>
 
@@ -366,7 +366,7 @@ function Home() {
         </RevealSection>
 
         {/* Nossos Patrocinadores (visível quando um evento estiver ativo) */}
-        <RevealSection className="mt-16 md:mt-24" delay={120}>
+        <RevealSection className="mt-10 md:mt-24" delay={120}>
           <Patrocinadores />
         </RevealSection>
 
