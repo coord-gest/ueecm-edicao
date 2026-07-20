@@ -171,7 +171,7 @@ function PainelAlertas() {
     const runOne = async (index: number) => {
       if (burstCancelRef.current.cancelled) return;
       try {
-        await sendPushNow({ data: { alertId: burstAlertId } });
+        await sendPushNow({ data: { alertId: burstAlertId, origin: "burst" } });
         setBurstProgress((p) =>
           p ? { ...p, sent: index + 1, nextAt: Date.now() + burstInterval * 60_000 } : p,
         );

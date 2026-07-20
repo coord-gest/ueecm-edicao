@@ -27,10 +27,15 @@ export const sendAlertPushNow = createServerFn({ method: "POST" })
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    // --- Rate limit (10/h por admin, 30/h global) ---
+    // --- Rate limit ---
+    // Rajadas legítimas podem enviar até 20 pushes em minutos,
+    // então o cap por usuário precisa acomodar esse cenário sem bloquear.
+    const isBurst = data.origin === "burst";
+    const perUserMax = isBurst ? 100 : 20;
+    const globalMax = isBurst ? 200 : 60;
     const { data: perUser } = await context.supabase.rpc("check_rate_limit", {
       _key: `alert-push:${context.userId}`,
-      _max_requests: 10,
+      _max_requests: perUserMax,
       _window_seconds: 3600,
     });
     if (perUser === false) {
@@ -38,15 +43,15 @@ export const sendAlertPushNow = createServerFn({ method: "POST" })
         _alert_id: (data.alertId ?? null) as unknown as string,
         _action: "rate_limited",
         _result: "rate_limited",
-        _details: { scope: "per_user", limit: 10, window_seconds: 3600 },
+        _details: { scope: "per_user", limit: perUserMax, window_seconds: 3600 },
       });
       throw new Error(
-        "Limite atingido: você já enviou 10 pushes na última hora. Aguarde antes de reenviar.",
+        `Limite atingido: você já enviou ${perUserMax} pushes na última hora. Aguarde antes de reenviar.`,
       );
     }
     const { data: global } = await context.supabase.rpc("check_rate_limit", {
       _key: "alert-push:__global__",
-      _max_requests: 30,
+      _max_requests: globalMax,
       _window_seconds: 3600,
     });
     if (global === false) {
@@ -54,10 +59,10 @@ export const sendAlertPushNow = createServerFn({ method: "POST" })
         _alert_id: (data.alertId ?? null) as unknown as string,
         _action: "rate_limited",
         _result: "rate_limited",
-        _details: { scope: "global", limit: 30, window_seconds: 3600 },
+        _details: { scope: "global", limit: globalMax, window_seconds: 3600 },
       });
       throw new Error(
-        "Limite global atingido: já foram enviados 30 pushes de alerta na última hora.",
+        `Limite global atingido: já foram enviados ${globalMax} pushes de alerta na última hora.`,
       );
     }
 
