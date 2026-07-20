@@ -20,14 +20,14 @@ type ChatRequest = {
 type RuntimeEnv = Record<string, string | undefined>;
 
 type RequiredChatEnv = {
-  GEMINI_API_KEY: string;
+  GROQ_API_KEY: string;
   SUPABASE_URL: string;
   SUPABASE_SERVICE_ROLE_KEY: string;
 };
 
-type GeminiContent = {
-  role: "user" | "model";
-  parts: Array<{ text: string }>;
+type ChatMessage = {
+  role: "system" | "user" | "assistant";
+  content: string;
 };
 
 const CHAT_FALLBACK_REPLY =
@@ -36,12 +36,12 @@ const CHAT_FALLBACK_REPLY =
 // 45s cobre latências de cauda longa sob carga; menor que isso gerava
 // timeouts frequentes que eram registrados como erros em system_errors.
 const AI_TIMEOUT_MS = 45_000;
-// API pública do Google Generative Language (gratuita no free tier).
-// `gemini-2.0-flash` é o modelo mais barato/rápido disponível para novos
-// consumidores; `gemini-2.0-flash-lite` é usado como fallback.
-const GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
-const AI_MODEL = "gemini-2.0-flash";
-const AI_MODEL_FALLBACK = "gemini-2.0-flash-lite";
+// Groq (API OpenAI-compatível, free tier generoso).
+// `llama-3.3-70b-versatile` entrega ótima qualidade em PT-BR com latência baixa.
+// `llama-3.1-8b-instant` é usado como fallback em caso de 429/503.
+const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+const AI_MODEL = "llama-3.3-70b-versatile";
+const AI_MODEL_FALLBACK = "llama-3.1-8b-instant";
 
 // Rate limit em memória em dois níveis (best-effort; reseta a cada cold start do Worker).
 // - Por (IP+session): 12/min → uso legítimo.
