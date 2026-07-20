@@ -97,12 +97,12 @@ function EventoCard({ ev }: { ev: Evento }) {
   return (
     <Link
       to="/calendario"
-      className="group relative flex overflow-hidden border-2 border-border bg-[image:var(--gradient-hero)] text-primary-foreground shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:border-gold hover:shadow-xl"
+      className="group relative flex overflow-hidden border-2 border-border bg-[image:var(--gradient-hero)] text-white shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:border-gold hover:shadow-xl"
     >
       <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-gold via-gold/70 to-transparent" />
       <span className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-gold/20 blur-2xl transition-transform group-hover:scale-125" />
       <div
-        className="relative flex w-24 shrink-0 flex-col items-center justify-center border-r border-primary-foreground/15 bg-gold text-gold-foreground"
+        className="relative flex w-24 shrink-0 flex-col items-center justify-center border-r border-white/15 bg-gold text-gold-foreground"
         style={cor ? { backgroundColor: cor } : undefined}
       >
         <span className="font-display text-3xl leading-none tabular-nums">{dia}</span>
@@ -114,10 +114,10 @@ function EventoCard({ ev }: { ev: Evento }) {
             {ev.categoria}
           </span>
         )}
-        <h3 className="line-clamp-2 font-display text-base leading-snug text-primary-foreground transition-colors group-hover:text-gold sm:text-lg">
+        <h3 className="line-clamp-2 font-display text-base leading-snug text-white transition-colors group-hover:text-gold sm:text-lg">
           {ev.titulo}
         </h3>
-        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-primary-foreground/80">
+        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-white/80">
           {ev.horario && (
             <span className="inline-flex items-center gap-1">
               <Clock className="size-3" aria-hidden /> {ev.horario}

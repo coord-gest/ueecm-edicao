@@ -702,7 +702,7 @@ function OpinionCard() {
   const label = entry.type === "citacao" ? "Citação" : "Opinião";
 
   return (
-    <div className="relative h-full overflow-hidden bg-[image:var(--gradient-primary)] p-8 text-primary-foreground">
+    <div className="relative h-full overflow-hidden bg-[image:var(--gradient-primary)] p-8 text-white">
       <span className="absolute right-4 top-2 font-display text-[8rem] leading-none text-gold/30">
         "
       </span>
