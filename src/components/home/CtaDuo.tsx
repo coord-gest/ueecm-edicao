@@ -22,7 +22,7 @@ export function CtaDuo() {
             <h3 className="mt-1 font-display text-xl leading-tight sm:text-2xl">
               Agende um horário com a equipe
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-primary-foreground/85">
+            <p className="mt-2 text-sm leading-relaxed text-white/85">
               Fale com direção, coordenação ou secretaria em um horário reservado.
             </p>
             <span className="mt-4 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-gold">

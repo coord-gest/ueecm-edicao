@@ -712,7 +712,7 @@ function OpinionCard() {
       <p className="relative mb-6 font-display text-xl italic leading-snug sm:text-2xl">
         {entry.text}
       </p>
-      <div className="relative flex items-center gap-3 border-t border-primary-foreground/20 pt-4">
+      <div className="relative flex items-center gap-3 border-t border-white/20 pt-4">
         <div className="grid size-10 place-items-center rounded-full bg-gold font-display text-base text-gold-foreground">
           {entry.initials}
         </div>
@@ -856,7 +856,7 @@ function SchoolHighlights() {
           <Link
             key={c.titulo}
             to={c.to}
-            className="group relative flex flex-col overflow-hidden border border-accent/25 bg-gradient-to-br from-primary via-primary to-accent p-6 text-primary-foreground shadow-elegant ring-1 ring-black/5 transition-all hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-2xl"
+            className="group relative flex flex-col overflow-hidden border border-accent/25 bg-gradient-to-br from-primary via-primary to-accent p-6 text-white shadow-elegant ring-1 ring-black/5 transition-all hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-2xl"
           >
             <span
               aria-hidden
@@ -870,8 +870,8 @@ function SchoolHighlights() {
             <div className="relative mb-4 inline-flex size-12 items-center justify-center bg-gold text-gold-foreground shadow-gold transition-transform group-hover:scale-110">
               <c.icon className="size-6" />
             </div>
-            <h3 className="relative font-display text-xl text-primary-foreground">{c.titulo}</h3>
-            <p className="relative mt-2 flex-1 text-sm leading-relaxed text-primary-foreground/80">
+            <h3 className="relative font-display text-xl text-white">{c.titulo}</h3>
+            <p className="relative mt-2 flex-1 text-sm leading-relaxed text-white/80">
               {c.resumo}
             </p>
             <span className="relative mt-4 inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-widest text-gold transition-transform group-hover:translate-x-1">
