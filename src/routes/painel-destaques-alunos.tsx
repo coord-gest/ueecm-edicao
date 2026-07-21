@@ -676,14 +676,18 @@ function DestaqueCard({
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Excluir indicação?</AlertDialogTitle>
+                    <AlertDialogTitle>Excluir indicação de destaque?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Esta ação é permanente e não pode ser desfeita.
+                      Somente esta indicação de <strong>{d.aluno_nome}</strong> ({mesLabel(d.mes)})
+                      será removida. O cadastro do aluno permanece intacto no sistema e pode
+                      receber novas indicações depois.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => onExcluir(d.id)}>Excluir</AlertDialogAction>
+                    <AlertDialogAction onClick={() => onExcluir(d.id)}>
+                      Excluir indicação
+                    </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
