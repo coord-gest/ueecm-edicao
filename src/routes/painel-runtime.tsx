@@ -2,19 +2,34 @@ import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { MetricsPanel } from "@/components/painel-runtime/MetricsPanel";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect } from "react";
-import { ArrowLeft, CheckCircle2, XCircle, Copy, Send, Loader2, ShieldAlert } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  XCircle,
+  Copy,
+  Send,
+  Loader2,
+  ShieldAlert,
+  Trash2,
+  Stethoscope,
+  RefreshCw,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
+import { getCurrentUserRoles } from "@/lib/auth.functions";
+import { roleLabels } from "@/lib/roles";
+import { primaryRole, painelPathForRoles } from "@/lib/role-panels";
 import { checkRuntimeEnv } from "@/lib/runtime-check.functions";
 import { triggerPushDispatch } from "@/lib/push-dispatch.functions";
 import {
   getFcmTokenStats,
   listFcmDiagnostics,
   listPushDispatchLogs,
+  clearFcmHistory,
 } from "@/lib/fcm-diagnostics.functions";
 
 import { PainelLayout } from "@/components/PainelLayout";
@@ -108,11 +123,60 @@ type DispatchResult = {
 };
 
 function PainelRuntime() {
-  const { isDeveloper } = useAuth();
+  const { isDeveloper, user, roles, rolesError, refreshRoles } = useAuth();
   const checkFn = useServerFn(checkRuntimeEnv);
   const dispatchFn = useServerFn(triggerPushDispatch);
   const fcmStatsFn = useServerFn(getFcmTokenStats);
   const fcmDiagsFn = useServerFn(listFcmDiagnostics);
+  const clearFn = useServerFn(clearFcmHistory);
+  const fetchRoles = useServerFn(getCurrentUserRoles);
+
+  const [session, setSession] = useState<{
+    access_token_prefix?: string;
+    expires_at?: number | null;
+  }>({});
+  const [serverRoles, setServerRoles] = useState<{
+    status: "idle" | "loading" | "ok" | "error";
+    roles?: string[];
+    raw?: string;
+    message?: string;
+  }>({ status: "idle" });
+  const [refreshingRoles, setRefreshingRoles] = useState(false);
+
+  useEffect(() => {
+    if (!isDeveloper) return;
+    supabase.auth.getSession().then(({ data }) => {
+      const tok = data.session?.access_token;
+      setSession({
+        access_token_prefix: tok ? `${tok.slice(0, 12)}…${tok.slice(-6)}` : undefined,
+        expires_at: data.session?.expires_at ?? null,
+      });
+    });
+  }, [isDeveloper]);
+
+  const callServerRoles = async () => {
+    setServerRoles({ status: "loading" });
+    try {
+      const result = await fetchRoles();
+      const list: string[] = Array.isArray(result?.roles) ? result.roles : [];
+      setServerRoles({ status: "ok", roles: list, raw: JSON.stringify(result, null, 2) });
+    } catch (err) {
+      setServerRoles({
+        status: "error",
+        message: err instanceof Error ? err.message : String(err),
+      });
+    }
+  };
+
+  const handleRefreshRoles = async () => {
+    setRefreshingRoles(true);
+    try {
+      await refreshRoles();
+      await callServerRoles();
+    } finally {
+      setRefreshingRoles(false);
+    }
+  };
 
   const envQuery = useQuery({
     queryKey: ["runtime-env-check"],
@@ -141,6 +205,39 @@ function PainelRuntime() {
     refetchOnWindowFocus: false,
     enabled: false,
   });
+
+  const clearMutation = useMutation<
+    { ok: boolean; deleted: Record<string, number> },
+    Error,
+    { scope: "diagnostics" | "dispatch_logs" | "all"; olderThanDays?: number }
+  >({
+    mutationFn: async (input) =>
+      (await clearFn({ data: input })) as { ok: boolean; deleted: Record<string, number> },
+    onSuccess: (r) => {
+      const total = Object.values(r.deleted).reduce((a, b) => a + b, 0);
+      toast.success(`Histórico limpo — ${total} registro(s) removidos`, {
+        description: Object.entries(r.deleted)
+          .map(([k, v]) => `${k}: ${v}`)
+          .join(" · "),
+      });
+      fcmDiags.refetch();
+      fcmStats.refetch();
+      dispatchLogs.refetch();
+    },
+    onError: (e) => toast.error("Falha ao limpar histórico", { description: e.message }),
+  });
+
+  const confirmAndClear = (
+    scope: "diagnostics" | "dispatch_logs" | "all",
+    label: string,
+  ) => {
+    if (typeof window === "undefined") return;
+    const ok = window.confirm(
+      `Tem certeza que deseja apagar ${label}? Esta ação é definitiva e apaga direto no banco de dados do Supabase.`,
+    );
+    if (!ok) return;
+    clearMutation.mutate({ scope });
+  };
 
   const dispatchMutation = useMutation<DispatchResult, Error, void>({
     // S2: agora usamos server fn autenticada em vez do endpoint público
@@ -357,6 +454,7 @@ function PainelRuntime() {
       fcmStats.refetch();
       fcmDiags.refetch();
       dispatchLogs.refetch();
+      callServerRoles();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDeveloper]);
