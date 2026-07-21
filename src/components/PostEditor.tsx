@@ -216,6 +216,14 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
           disciplina: disciplina === "nenhuma" ? null : disciplina,
           destaque,
           geral,
+          autor:
+            autorModo === "institucional"
+              ? "conectaueecm.com"
+              : autorModo === "cargo"
+                ? (cargoRole ? roleLabels[cargoRole] : "Equipe")
+                : (user?.user_metadata?.display_name ??
+                  (user?.email ? user.email.split("@")[0] : "Equipe")),
+          autor_modo: autorModo,
         })
         .eq("id", post.id);
       setAutosaving(false);
@@ -225,7 +233,7 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
     }, 3000);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [titulo, resumo, conteudo, imagem, turma, disciplina, destaque, geral]);
+  }, [titulo, resumo, conteudo, imagem, turma, disciplina, destaque, geral, autorModo]);
 
   // Sincroniza dropdowns em tempo real quando o painel acadêmico muda
   useRealtimeInvalidate("post-editor-academic", [
