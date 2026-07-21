@@ -221,7 +221,7 @@ function ChatAlunoThread() {
               variant="ghost"
               size="icon"
               onClick={() => fileRef.current?.click()}
-              disabled={uploading}
+              disabled={uploading || !janela.aberta}
               aria-label="Anexar"
             >
               {uploading ? (
@@ -243,7 +243,12 @@ function ChatAlunoThread() {
               className="max-h-32 min-h-[42px] flex-1 resize-none"
               rows={1}
             />
-            <Button onClick={handleSend} disabled={!texto.trim() || sending} size="icon" aria-label="Enviar mensagem">
+            <Button
+              onClick={handleSend}
+              disabled={!texto.trim() || sending || !janela.aberta}
+              size="icon"
+              aria-label="Enviar mensagem"
+            >
               {sending ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
