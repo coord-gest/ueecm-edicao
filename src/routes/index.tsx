@@ -376,7 +376,9 @@ function Home() {
 
         {/* Nossos Patrocinadores (visível quando um evento estiver ativo) */}
         <RevealSection className="mt-10 md:mt-24" delay={120}>
-          <Patrocinadores />
+          <Suspense fallback={null}>
+            <Patrocinadores />
+          </Suspense>
         </RevealSection>
 
         {/* Equipe em destaque */}
