@@ -12,6 +12,9 @@ import {
   uploadAnexo,
   getAnexoUrl,
   type ChatMensagem,
+  getChatModeration,
+  janelaChatAberta,
+  type ChatModerationConfig,
 } from "@/lib/chat-aluno";
 import { PainelLayout } from "@/components/PainelLayout";
 import { Button } from "@/components/ui/button";
@@ -47,6 +50,13 @@ function ChatAlunoThread() {
   const [uploading, setUploading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const { data: moderacao } = useQuery<ChatModerationConfig>({
+    queryKey: ["chat-moderation"],
+    queryFn: getChatModeration,
+    staleTime: 60_000,
+  });
+  const janela = moderacao ? janelaChatAberta(moderacao) : { aberta: true };
 
   const { data: thread } = useQuery<ThreadFull | null>({
     queryKey: ["chat-thread-info", id],
@@ -168,6 +178,22 @@ function ChatAlunoThread() {
             </Link>
           </Button>
         </div>
+
+        {moderacao?.ativo && (
+          <div
+            className={cn(
+              "border-b px-3 py-2 text-xs",
+              janela.aberta
+                ? "bg-emerald-50 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200"
+                : "bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-200",
+            )}
+            role="status"
+          >
+            {janela.aberta
+              ? `🟢 Chat aberto — janela ${moderacao.janela_inicio}–${moderacao.janela_fim} · limite ${moderacao.max_msgs_dia} msg/dia por conversa.`
+              : `🟡 ${janela.motivo} Você ainda pode ler mensagens anteriores.`}
+          </div>
+        )}
 
         <div ref={scrollRef} className="flex-1 space-y-2 overflow-y-auto p-4">
           {mensagens.length === 0 ? (
