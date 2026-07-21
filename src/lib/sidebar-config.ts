@@ -416,6 +416,12 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       ],
     },
     {
+      label: "Reconhecimento",
+      items: [
+        { title: "Selo de Presença", url: "/painel-presenca-parental", icon: Award },
+      ],
+    },
+    {
       label: "Produtividade",
       items: [
         { title: "Anotações & Lembretes", url: "/painel-anotacoes", icon: NotebookPen },
