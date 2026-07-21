@@ -232,14 +232,34 @@ async function callGemini(
     });
   }
 
+  let modelUsed = AI_MODEL;
   let res = await callWithModel(AI_MODEL);
   if (res.status === 429 || res.status === 503 || res.status === 500) {
+    const primaryStatus = res.status;
+    let primaryError = "";
+    try {
+      primaryError = (await res.clone().text()).slice(0, 300);
+    } catch {
+      /* noop */
+    }
+    logger.warn(
+      `[api/chat] Modelo primário ${AI_MODEL} retornou ${primaryStatus}, tentando fallback ${AI_MODEL_FALLBACK}`,
+      primaryError,
+    );
+    void logSystemError({
+      source: "api:chat",
+      severity: "warning",
+      message: `Gemini fallback ${AI_MODEL} -> ${AI_MODEL_FALLBACK} (status ${primaryStatus})`,
+      context: { primaryModel: AI_MODEL, fallbackModel: AI_MODEL_FALLBACK, primaryStatus, primaryError },
+    });
     try {
       res = await callWithModel(AI_MODEL_FALLBACK);
+      modelUsed = AI_MODEL_FALLBACK;
     } catch {
       /* mantém a resposta original */
     }
   }
+  logger.info(`[api/chat] Gemini modelo utilizado: ${modelUsed}`);
 
   if (!res.ok) {
     let errText = "";
