@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VaquinhasRouteImport } from './routes/vaquinhas'
 import { Route as UsuariosRouteImport } from './routes/usuarios'
 import { Route as UsoDeImagemRouteImport } from './routes/uso-de-imagem'
 import { Route as TvRouteImport } from './routes/tv'
@@ -17,12 +18,15 @@ import { Route as SolicitarDadosRouteImport } from './routes/solicitar-dados'
 import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
+import { Route as RedeApoioRouteImport } from './routes/rede-apoio'
 import { Route as PrivacidadeRouteImport } from './routes/privacidade'
+import { Route as PainelVaquinhasRouteImport } from './routes/painel-vaquinhas'
 import { Route as PainelTemaRouteImport } from './routes/painel-tema'
 import { Route as PainelSocialMediaRouteImport } from './routes/painel-social-media'
 import { Route as PainelSecretarioRouteImport } from './routes/painel-secretario'
 import { Route as PainelRuntimeRouteImport } from './routes/painel-runtime'
 import { Route as PainelResponsavelRouteImport } from './routes/painel-responsavel'
+import { Route as PainelRedeApoioRouteImport } from './routes/painel-rede-apoio'
 import { Route as PainelRadarFilhoRouteImport } from './routes/painel-radar-filho'
 import { Route as PainelProfissionaisRouteImport } from './routes/painel-profissionais'
 import { Route as PainelProfessorRouteImport } from './routes/painel-professor'
@@ -98,6 +102,7 @@ import { Route as PostsIndexRouteImport } from './routes/posts.index'
 import { Route as PainelPostsIndexRouteImport } from './routes/painel-posts.index'
 import { Route as PainelArquivosIndexRouteImport } from './routes/painel-arquivos.index'
 import { Route as EscolaIndexRouteImport } from './routes/escola.index'
+import { Route as VaquinhasIdRouteImport } from './routes/vaquinhas.$id'
 import { Route as PostsIdRouteImport } from './routes/posts.$id'
 import { Route as PainelPostsNovoRouteImport } from './routes/painel-posts.novo'
 import { Route as PainelPostsIdRouteImport } from './routes/painel-posts.$id'
@@ -136,6 +141,11 @@ import { Route as ApiDebugFcmDiagnosticsRouteImport } from './routes/api/debug/f
 import { Route as ApiPublicMomentosFotoIdRouteImport } from './routes/api/public/momentos-foto.$id'
 import { Route as ApiPublicDriveFotoIdRouteImport } from './routes/api/public/drive-foto.$id'
 
+const VaquinhasRoute = VaquinhasRouteImport.update({
+  id: '/vaquinhas',
+  path: '/vaquinhas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UsuariosRoute = UsuariosRouteImport.update({
   id: '/usuarios',
   path: '/usuarios',
@@ -176,9 +186,19 @@ const RssDotxmlRoute = RssDotxmlRouteImport.update({
   path: '/rss.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RedeApoioRoute = RedeApoioRouteImport.update({
+  id: '/rede-apoio',
+  path: '/rede-apoio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacidadeRoute = PrivacidadeRouteImport.update({
   id: '/privacidade',
   path: '/privacidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelVaquinhasRoute = PainelVaquinhasRouteImport.update({
+  id: '/painel-vaquinhas',
+  path: '/painel-vaquinhas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelTemaRoute = PainelTemaRouteImport.update({
@@ -204,6 +224,11 @@ const PainelRuntimeRoute = PainelRuntimeRouteImport.update({
 const PainelResponsavelRoute = PainelResponsavelRouteImport.update({
   id: '/painel-responsavel',
   path: '/painel-responsavel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelRedeApoioRoute = PainelRedeApoioRouteImport.update({
+  id: '/painel-rede-apoio',
+  path: '/painel-rede-apoio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelRadarFilhoRoute = PainelRadarFilhoRouteImport.update({
@@ -584,6 +609,11 @@ const EscolaIndexRoute = EscolaIndexRouteImport.update({
   path: '/escola/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VaquinhasIdRoute = VaquinhasIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => VaquinhasRoute,
+} as any)
 const PostsIdRoute = PostsIdRouteImport.update({
   id: '/posts/$id',
   path: '/posts/$id',
@@ -851,12 +881,15 @@ export interface FileRoutesByFullPath {
   '/painel-professor': typeof PainelProfessorRoute
   '/painel-profissionais': typeof PainelProfissionaisRoute
   '/painel-radar-filho': typeof PainelRadarFilhoRoute
+  '/painel-rede-apoio': typeof PainelRedeApoioRoute
   '/painel-responsavel': typeof PainelResponsavelRoute
   '/painel-runtime': typeof PainelRuntimeRoute
   '/painel-secretario': typeof PainelSecretarioRoute
   '/painel-social-media': typeof PainelSocialMediaRoute
   '/painel-tema': typeof PainelTemaRoute
+  '/painel-vaquinhas': typeof PainelVaquinhasRoute
   '/privacidade': typeof PrivacidadeRoute
+  '/rede-apoio': typeof RedeApoioRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sobre': typeof SobreRoute
@@ -865,6 +898,7 @@ export interface FileRoutesByFullPath {
   '/tv': typeof TvRoute
   '/uso-de-imagem': typeof UsoDeImagemRoute
   '/usuarios': typeof UsuariosRoute
+  '/vaquinhas': typeof VaquinhasRouteWithChildren
   '/api/chat': typeof ApiChatRoute
   '/api/health': typeof ApiHealthRoute
   '/chat-aluno/$id': typeof ChatAlunoIdRoute
@@ -886,6 +920,7 @@ export interface FileRoutesByFullPath {
   '/painel-posts/$id': typeof PainelPostsIdRoute
   '/painel-posts/novo': typeof PainelPostsNovoRoute
   '/posts/$id': typeof PostsIdRoute
+  '/vaquinhas/$id': typeof VaquinhasIdRoute
   '/escola/': typeof EscolaIndexRoute
   '/painel-arquivos/': typeof PainelArquivosIndexRoute
   '/painel-posts/': typeof PainelPostsIndexRoute
@@ -978,12 +1013,15 @@ export interface FileRoutesByTo {
   '/painel-professor': typeof PainelProfessorRoute
   '/painel-profissionais': typeof PainelProfissionaisRoute
   '/painel-radar-filho': typeof PainelRadarFilhoRoute
+  '/painel-rede-apoio': typeof PainelRedeApoioRoute
   '/painel-responsavel': typeof PainelResponsavelRoute
   '/painel-runtime': typeof PainelRuntimeRoute
   '/painel-secretario': typeof PainelSecretarioRoute
   '/painel-social-media': typeof PainelSocialMediaRoute
   '/painel-tema': typeof PainelTemaRoute
+  '/painel-vaquinhas': typeof PainelVaquinhasRoute
   '/privacidade': typeof PrivacidadeRoute
+  '/rede-apoio': typeof RedeApoioRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sobre': typeof SobreRoute
@@ -992,6 +1030,7 @@ export interface FileRoutesByTo {
   '/tv': typeof TvRoute
   '/uso-de-imagem': typeof UsoDeImagemRoute
   '/usuarios': typeof UsuariosRoute
+  '/vaquinhas': typeof VaquinhasRouteWithChildren
   '/api/chat': typeof ApiChatRoute
   '/api/health': typeof ApiHealthRoute
   '/chat-aluno/$id': typeof ChatAlunoIdRoute
@@ -1013,6 +1052,7 @@ export interface FileRoutesByTo {
   '/painel-posts/$id': typeof PainelPostsIdRoute
   '/painel-posts/novo': typeof PainelPostsNovoRoute
   '/posts/$id': typeof PostsIdRoute
+  '/vaquinhas/$id': typeof VaquinhasIdRoute
   '/escola': typeof EscolaIndexRoute
   '/painel-arquivos': typeof PainelArquivosIndexRoute
   '/painel-posts': typeof PainelPostsIndexRoute
@@ -1107,12 +1147,15 @@ export interface FileRoutesById {
   '/painel-professor': typeof PainelProfessorRoute
   '/painel-profissionais': typeof PainelProfissionaisRoute
   '/painel-radar-filho': typeof PainelRadarFilhoRoute
+  '/painel-rede-apoio': typeof PainelRedeApoioRoute
   '/painel-responsavel': typeof PainelResponsavelRoute
   '/painel-runtime': typeof PainelRuntimeRoute
   '/painel-secretario': typeof PainelSecretarioRoute
   '/painel-social-media': typeof PainelSocialMediaRoute
   '/painel-tema': typeof PainelTemaRoute
+  '/painel-vaquinhas': typeof PainelVaquinhasRoute
   '/privacidade': typeof PrivacidadeRoute
+  '/rede-apoio': typeof RedeApoioRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sobre': typeof SobreRoute
@@ -1121,6 +1164,7 @@ export interface FileRoutesById {
   '/tv': typeof TvRoute
   '/uso-de-imagem': typeof UsoDeImagemRoute
   '/usuarios': typeof UsuariosRoute
+  '/vaquinhas': typeof VaquinhasRouteWithChildren
   '/api/chat': typeof ApiChatRoute
   '/api/health': typeof ApiHealthRoute
   '/chat-aluno/$id': typeof ChatAlunoIdRoute
@@ -1142,6 +1186,7 @@ export interface FileRoutesById {
   '/painel-posts/$id': typeof PainelPostsIdRoute
   '/painel-posts/novo': typeof PainelPostsNovoRoute
   '/posts/$id': typeof PostsIdRoute
+  '/vaquinhas/$id': typeof VaquinhasIdRoute
   '/escola/': typeof EscolaIndexRoute
   '/painel-arquivos/': typeof PainelArquivosIndexRoute
   '/painel-posts/': typeof PainelPostsIndexRoute
@@ -1237,12 +1282,15 @@ export interface FileRouteTypes {
     | '/painel-professor'
     | '/painel-profissionais'
     | '/painel-radar-filho'
+    | '/painel-rede-apoio'
     | '/painel-responsavel'
     | '/painel-runtime'
     | '/painel-secretario'
     | '/painel-social-media'
     | '/painel-tema'
+    | '/painel-vaquinhas'
     | '/privacidade'
+    | '/rede-apoio'
     | '/rss.xml'
     | '/sitemap.xml'
     | '/sobre'
@@ -1251,6 +1299,7 @@ export interface FileRouteTypes {
     | '/tv'
     | '/uso-de-imagem'
     | '/usuarios'
+    | '/vaquinhas'
     | '/api/chat'
     | '/api/health'
     | '/chat-aluno/$id'
@@ -1272,6 +1321,7 @@ export interface FileRouteTypes {
     | '/painel-posts/$id'
     | '/painel-posts/novo'
     | '/posts/$id'
+    | '/vaquinhas/$id'
     | '/escola/'
     | '/painel-arquivos/'
     | '/painel-posts/'
@@ -1364,12 +1414,15 @@ export interface FileRouteTypes {
     | '/painel-professor'
     | '/painel-profissionais'
     | '/painel-radar-filho'
+    | '/painel-rede-apoio'
     | '/painel-responsavel'
     | '/painel-runtime'
     | '/painel-secretario'
     | '/painel-social-media'
     | '/painel-tema'
+    | '/painel-vaquinhas'
     | '/privacidade'
+    | '/rede-apoio'
     | '/rss.xml'
     | '/sitemap.xml'
     | '/sobre'
@@ -1378,6 +1431,7 @@ export interface FileRouteTypes {
     | '/tv'
     | '/uso-de-imagem'
     | '/usuarios'
+    | '/vaquinhas'
     | '/api/chat'
     | '/api/health'
     | '/chat-aluno/$id'
@@ -1399,6 +1453,7 @@ export interface FileRouteTypes {
     | '/painel-posts/$id'
     | '/painel-posts/novo'
     | '/posts/$id'
+    | '/vaquinhas/$id'
     | '/escola'
     | '/painel-arquivos'
     | '/painel-posts'
@@ -1492,12 +1547,15 @@ export interface FileRouteTypes {
     | '/painel-professor'
     | '/painel-profissionais'
     | '/painel-radar-filho'
+    | '/painel-rede-apoio'
     | '/painel-responsavel'
     | '/painel-runtime'
     | '/painel-secretario'
     | '/painel-social-media'
     | '/painel-tema'
+    | '/painel-vaquinhas'
     | '/privacidade'
+    | '/rede-apoio'
     | '/rss.xml'
     | '/sitemap.xml'
     | '/sobre'
@@ -1506,6 +1564,7 @@ export interface FileRouteTypes {
     | '/tv'
     | '/uso-de-imagem'
     | '/usuarios'
+    | '/vaquinhas'
     | '/api/chat'
     | '/api/health'
     | '/chat-aluno/$id'
@@ -1527,6 +1586,7 @@ export interface FileRouteTypes {
     | '/painel-posts/$id'
     | '/painel-posts/novo'
     | '/posts/$id'
+    | '/vaquinhas/$id'
     | '/escola/'
     | '/painel-arquivos/'
     | '/painel-posts/'
@@ -1621,12 +1681,15 @@ export interface RootRouteChildren {
   PainelProfessorRoute: typeof PainelProfessorRoute
   PainelProfissionaisRoute: typeof PainelProfissionaisRoute
   PainelRadarFilhoRoute: typeof PainelRadarFilhoRoute
+  PainelRedeApoioRoute: typeof PainelRedeApoioRoute
   PainelResponsavelRoute: typeof PainelResponsavelRoute
   PainelRuntimeRoute: typeof PainelRuntimeRoute
   PainelSecretarioRoute: typeof PainelSecretarioRoute
   PainelSocialMediaRoute: typeof PainelSocialMediaRoute
   PainelTemaRoute: typeof PainelTemaRoute
+  PainelVaquinhasRoute: typeof PainelVaquinhasRoute
   PrivacidadeRoute: typeof PrivacidadeRoute
+  RedeApoioRoute: typeof RedeApoioRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SobreRoute: typeof SobreRoute
@@ -1635,6 +1698,7 @@ export interface RootRouteChildren {
   TvRoute: typeof TvRoute
   UsoDeImagemRoute: typeof UsoDeImagemRoute
   UsuariosRoute: typeof UsuariosRoute
+  VaquinhasRoute: typeof VaquinhasRouteWithChildren
   ApiChatRoute: typeof ApiChatRoute
   ApiHealthRoute: typeof ApiHealthRoute
   EscolaAlunosRoute: typeof EscolaAlunosRoute
@@ -1669,6 +1733,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vaquinhas': {
+      id: '/vaquinhas'
+      path: '/vaquinhas'
+      fullPath: '/vaquinhas'
+      preLoaderRoute: typeof VaquinhasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/usuarios': {
       id: '/usuarios'
       path: '/usuarios'
@@ -1725,11 +1796,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RssDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rede-apoio': {
+      id: '/rede-apoio'
+      path: '/rede-apoio'
+      fullPath: '/rede-apoio'
+      preLoaderRoute: typeof RedeApoioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacidade': {
       id: '/privacidade'
       path: '/privacidade'
       fullPath: '/privacidade'
       preLoaderRoute: typeof PrivacidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-vaquinhas': {
+      id: '/painel-vaquinhas'
+      path: '/painel-vaquinhas'
+      fullPath: '/painel-vaquinhas'
+      preLoaderRoute: typeof PainelVaquinhasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-tema': {
@@ -1765,6 +1850,13 @@ declare module '@tanstack/react-router' {
       path: '/painel-responsavel'
       fullPath: '/painel-responsavel'
       preLoaderRoute: typeof PainelResponsavelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-rede-apoio': {
+      id: '/painel-rede-apoio'
+      path: '/painel-rede-apoio'
+      fullPath: '/painel-rede-apoio'
+      preLoaderRoute: typeof PainelRedeApoioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-radar-filho': {
@@ -2292,6 +2384,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EscolaIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/vaquinhas/$id': {
+      id: '/vaquinhas/$id'
+      path: '/$id'
+      fullPath: '/vaquinhas/$id'
+      preLoaderRoute: typeof VaquinhasIdRouteImport
+      parentRoute: typeof VaquinhasRoute
+    }
     '/posts/$id': {
       id: '/posts/$id'
       path: '/posts/$id'
@@ -2665,6 +2764,18 @@ const PainelAtividadesRankingRouteWithChildren =
     PainelAtividadesRankingRouteChildren,
   )
 
+interface VaquinhasRouteChildren {
+  VaquinhasIdRoute: typeof VaquinhasIdRoute
+}
+
+const VaquinhasRouteChildren: VaquinhasRouteChildren = {
+  VaquinhasIdRoute: VaquinhasIdRoute,
+}
+
+const VaquinhasRouteWithChildren = VaquinhasRoute._addFileChildren(
+  VaquinhasRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AgendarRoute: AgendarRoute,
@@ -2737,12 +2848,15 @@ const rootRouteChildren: RootRouteChildren = {
   PainelProfessorRoute: PainelProfessorRoute,
   PainelProfissionaisRoute: PainelProfissionaisRoute,
   PainelRadarFilhoRoute: PainelRadarFilhoRoute,
+  PainelRedeApoioRoute: PainelRedeApoioRoute,
   PainelResponsavelRoute: PainelResponsavelRoute,
   PainelRuntimeRoute: PainelRuntimeRoute,
   PainelSecretarioRoute: PainelSecretarioRoute,
   PainelSocialMediaRoute: PainelSocialMediaRoute,
   PainelTemaRoute: PainelTemaRoute,
+  PainelVaquinhasRoute: PainelVaquinhasRoute,
   PrivacidadeRoute: PrivacidadeRoute,
+  RedeApoioRoute: RedeApoioRoute,
   RssDotxmlRoute: RssDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SobreRoute: SobreRoute,
@@ -2751,6 +2865,7 @@ const rootRouteChildren: RootRouteChildren = {
   TvRoute: TvRoute,
   UsoDeImagemRoute: UsoDeImagemRoute,
   UsuariosRoute: UsuariosRoute,
+  VaquinhasRoute: VaquinhasRouteWithChildren,
   ApiChatRoute: ApiChatRoute,
   ApiHealthRoute: ApiHealthRoute,
   EscolaAlunosRoute: EscolaAlunosRoute,
