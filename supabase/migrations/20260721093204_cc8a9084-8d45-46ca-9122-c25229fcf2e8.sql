@@ -1,0 +1,1 @@
+GRANT SELECT ON public.configuracoes_tema_public TO anon, authenticated;
