@@ -243,6 +243,29 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
       (await supabase.from("disciplinas").select("nome").order("nome")).data ?? [],
   });
 
+  // Cargo principal do usuário (para exibir na opção "Cargo")
+  const ROLE_PRIORITY: AppRole[] = [
+    "diretor",
+    "coordenador",
+    "secretario",
+    "professor",
+    "social_media",
+    "admin",
+    "desenvolvedor",
+    "leitor",
+  ];
+  const cargoRole: AppRole | null =
+    ROLE_PRIORITY.find((r) => roles.includes(r)) ?? roles[0] ?? null;
+  const cargoLabel = cargoRole ? roleLabels[cargoRole] : "Equipe";
+  const nomeReal =
+    user?.user_metadata?.display_name ?? (user?.email ? user.email.split("@")[0] : "Equipe");
+  const computedAutor =
+    autorModo === "institucional"
+      ? "conectaueecm.com"
+      : autorModo === "cargo"
+        ? cargoLabel
+        : nomeReal;
+
   const save = useMutation({
     mutationFn: async (newStatus: "rascunho" | "em_revisao") => {
       const payload = {
@@ -255,8 +278,8 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
         destaque,
         geral,
         status: newStatus,
-        autor:
-          user?.user_metadata?.display_name ?? (user?.email ? user.email.split("@")[0] : "Equipe"),
+        autor: computedAutor,
+        autor_modo: autorModo,
         autor_id: user?.id,
       };
       if (post) {
@@ -291,8 +314,8 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
         status: "publicado" as const,
         aprovado_por: user?.id,
         aprovado_em: new Date().toISOString(),
-        autor:
-          user?.user_metadata?.display_name ?? (user?.email ? user.email.split("@")[0] : "Equipe"),
+        autor: computedAutor,
+        autor_modo: autorModo,
         autor_id: user?.id,
       };
       if (post) {
