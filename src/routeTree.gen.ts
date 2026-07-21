@@ -23,6 +23,7 @@ import { Route as PainelSocialMediaRouteImport } from './routes/painel-social-me
 import { Route as PainelSecretarioRouteImport } from './routes/painel-secretario'
 import { Route as PainelRuntimeRouteImport } from './routes/painel-runtime'
 import { Route as PainelResponsavelRouteImport } from './routes/painel-responsavel'
+import { Route as PainelRadarFilhoRouteImport } from './routes/painel-radar-filho'
 import { Route as PainelProfissionaisRouteImport } from './routes/painel-profissionais'
 import { Route as PainelProfessorRouteImport } from './routes/painel-professor'
 import { Route as PainelPatrocinadoresRouteImport } from './routes/painel-patrocinadores'
@@ -194,6 +195,11 @@ const PainelRuntimeRoute = PainelRuntimeRouteImport.update({
 const PainelResponsavelRoute = PainelResponsavelRouteImport.update({
   id: '/painel-responsavel',
   path: '/painel-responsavel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelRadarFilhoRoute = PainelRadarFilhoRouteImport.update({
+  id: '/painel-radar-filho',
+  path: '/painel-radar-filho',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelProfissionaisRoute = PainelProfissionaisRouteImport.update({
@@ -780,6 +786,7 @@ export interface FileRoutesByFullPath {
   '/painel-patrocinadores': typeof PainelPatrocinadoresRoute
   '/painel-professor': typeof PainelProfessorRoute
   '/painel-profissionais': typeof PainelProfissionaisRoute
+  '/painel-radar-filho': typeof PainelRadarFilhoRoute
   '/painel-responsavel': typeof PainelResponsavelRoute
   '/painel-runtime': typeof PainelRuntimeRoute
   '/painel-secretario': typeof PainelSecretarioRoute
@@ -897,6 +904,7 @@ export interface FileRoutesByTo {
   '/painel-patrocinadores': typeof PainelPatrocinadoresRoute
   '/painel-professor': typeof PainelProfessorRoute
   '/painel-profissionais': typeof PainelProfissionaisRoute
+  '/painel-radar-filho': typeof PainelRadarFilhoRoute
   '/painel-responsavel': typeof PainelResponsavelRoute
   '/painel-runtime': typeof PainelRuntimeRoute
   '/painel-secretario': typeof PainelSecretarioRoute
@@ -1016,6 +1024,7 @@ export interface FileRoutesById {
   '/painel-patrocinadores': typeof PainelPatrocinadoresRoute
   '/painel-professor': typeof PainelProfessorRoute
   '/painel-profissionais': typeof PainelProfissionaisRoute
+  '/painel-radar-filho': typeof PainelRadarFilhoRoute
   '/painel-responsavel': typeof PainelResponsavelRoute
   '/painel-runtime': typeof PainelRuntimeRoute
   '/painel-secretario': typeof PainelSecretarioRoute
@@ -1136,6 +1145,7 @@ export interface FileRouteTypes {
     | '/painel-patrocinadores'
     | '/painel-professor'
     | '/painel-profissionais'
+    | '/painel-radar-filho'
     | '/painel-responsavel'
     | '/painel-runtime'
     | '/painel-secretario'
@@ -1253,6 +1263,7 @@ export interface FileRouteTypes {
     | '/painel-patrocinadores'
     | '/painel-professor'
     | '/painel-profissionais'
+    | '/painel-radar-filho'
     | '/painel-responsavel'
     | '/painel-runtime'
     | '/painel-secretario'
@@ -1371,6 +1382,7 @@ export interface FileRouteTypes {
     | '/painel-patrocinadores'
     | '/painel-professor'
     | '/painel-profissionais'
+    | '/painel-radar-filho'
     | '/painel-responsavel'
     | '/painel-runtime'
     | '/painel-secretario'
@@ -1490,6 +1502,7 @@ export interface RootRouteChildren {
   PainelPatrocinadoresRoute: typeof PainelPatrocinadoresRoute
   PainelProfessorRoute: typeof PainelProfessorRoute
   PainelProfissionaisRoute: typeof PainelProfissionaisRoute
+  PainelRadarFilhoRoute: typeof PainelRadarFilhoRoute
   PainelResponsavelRoute: typeof PainelResponsavelRoute
   PainelRuntimeRoute: typeof PainelRuntimeRoute
   PainelSecretarioRoute: typeof PainelSecretarioRoute
@@ -1634,6 +1647,13 @@ declare module '@tanstack/react-router' {
       path: '/painel-responsavel'
       fullPath: '/painel-responsavel'
       preLoaderRoute: typeof PainelResponsavelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-radar-filho': {
+      id: '/painel-radar-filho'
+      path: '/painel-radar-filho'
+      fullPath: '/painel-radar-filho'
+      preLoaderRoute: typeof PainelRadarFilhoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-profissionais': {
@@ -2526,6 +2546,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelPatrocinadoresRoute: PainelPatrocinadoresRoute,
   PainelProfessorRoute: PainelProfessorRoute,
   PainelProfissionaisRoute: PainelProfissionaisRoute,
+  PainelRadarFilhoRoute: PainelRadarFilhoRoute,
   PainelResponsavelRoute: PainelResponsavelRoute,
   PainelRuntimeRoute: PainelRuntimeRoute,
   PainelSecretarioRoute: PainelSecretarioRoute,

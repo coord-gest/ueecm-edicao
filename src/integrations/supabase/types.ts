@@ -3713,6 +3713,7 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      calcular_radar_aluno: { Args: { _aluno_id: string }; Returns: Json }
       can_delete_arquivo_preenchimento: {
         Args: { _user_id: string }
         Returns: boolean
@@ -3802,6 +3803,14 @@ export type Database = {
         Returns: boolean
       }
       is_school_admin: { Args: { _user_id: string }; Returns: boolean }
+      listar_meus_filhos_radar: {
+        Args: never
+        Returns: {
+          aluno_id: string
+          nome: string
+          turma_nome: string
+        }[]
+      }
       log_alert_action: {
         Args: {
           _action: string
