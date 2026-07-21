@@ -503,10 +503,132 @@ function PainelRuntime() {
             </Link>
             <h1 className="mt-1 text-2xl font-semibold tracking-tight">Runtime & Secrets</h1>
             <p className="text-sm text-muted-foreground">
-              Configuração de Supabase externo e diagnóstico do envio de Web Push.
+              Configuração de Supabase externo, diagnóstico de papéis e histórico do envio de Web
+              Push.
             </p>
           </div>
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={() => confirmAndClear("all", "TODO o histórico (diagnósticos + telemetria)")}
+            disabled={clearMutation.isPending}
+            className="shrink-0"
+          >
+            {clearMutation.isPending ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <Trash2 className="size-4" />
+            )}
+            Limpar todo o histórico
+          </Button>
         </div>
+
+        {/* Diagnóstico de papéis (integrado do antigo /painel-diagnostico) */}
+        <section className="mt-6 rounded-2xl border border-border bg-card p-5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Stethoscope className="size-5 text-primary" />
+              <h2 className="text-base font-semibold">Diagnóstico de papéis</h2>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleRefreshRoles}
+              disabled={refreshingRoles}
+            >
+              <RefreshCw className={`size-3.5 ${refreshingRoles ? "animate-spin" : ""}`} />
+              {refreshingRoles ? "Atualizando…" : "Recarregar"}
+            </Button>
+          </div>
+
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <div className="rounded-lg border border-border/70 bg-background/50 p-3">
+              <p className="text-[11px] font-semibold uppercase text-muted-foreground">Sessão</p>
+              <dl className="mt-2 space-y-1 text-xs">
+                <div className="flex gap-2">
+                  <dt className="w-28 shrink-0 text-muted-foreground">Usuário</dt>
+                  <dd className="break-all font-medium">{user?.email ?? "-"}</dd>
+                </div>
+                <div className="flex gap-2">
+                  <dt className="w-28 shrink-0 text-muted-foreground">User ID</dt>
+                  <dd className="break-all font-mono">{user?.id ?? "-"}</dd>
+                </div>
+                <div className="flex gap-2">
+                  <dt className="w-28 shrink-0 text-muted-foreground">Token</dt>
+                  <dd className="break-all font-mono">
+                    {session.access_token_prefix ?? "(nenhum)"}
+                  </dd>
+                </div>
+                <div className="flex gap-2">
+                  <dt className="w-28 shrink-0 text-muted-foreground">Expira</dt>
+                  <dd>
+                    {session.expires_at
+                      ? new Date(session.expires_at * 1000).toLocaleString("pt-BR")
+                      : "—"}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className="rounded-lg border border-border/70 bg-background/50 p-3">
+              <p className="text-[11px] font-semibold uppercase text-muted-foreground">
+                Papéis (useAuth)
+              </p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {roles.length === 0 ? (
+                  <span className="text-xs text-muted-foreground">Nenhum papel</span>
+                ) : (
+                  roles.map((r) => (
+                    <Badge key={r} variant="secondary" className="text-[10px]">
+                      {roleLabels[r]}
+                    </Badge>
+                  ))
+                )}
+              </div>
+              <p className="mt-2 text-[11px] text-muted-foreground">
+                Principal: <strong>{primaryRole(roles) ?? "(nenhum)"}</strong> — destino:{" "}
+                <code className="font-mono">{painelPathForRoles(roles)}</code>
+              </p>
+              {rolesError && (
+                <p className="mt-2 rounded border border-destructive/40 bg-destructive/10 p-2 text-[11px] text-destructive">
+                  {rolesError}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-3">
+            <p className="text-[11px] font-semibold uppercase text-muted-foreground">
+              Resposta bruta do servidor
+            </p>
+            {serverRoles.status === "loading" && (
+              <p className="mt-1 text-xs text-muted-foreground">Consultando…</p>
+            )}
+            {serverRoles.status === "ok" && (
+              <>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {(serverRoles.roles ?? []).length === 0 ? (
+                    <span className="text-xs text-muted-foreground">Nenhum papel retornado</span>
+                  ) : (
+                    (serverRoles.roles ?? []).map((r) => (
+                      <Badge key={r} variant="outline" className="text-[10px]">
+                        {r}
+                      </Badge>
+                    ))
+                  )}
+                </div>
+                <pre className="mt-2 max-h-40 overflow-auto rounded bg-muted/60 p-2 text-[11px]">
+                  {serverRoles.raw}
+                </pre>
+              </>
+            )}
+            {serverRoles.status === "error" && (
+              <p className="mt-1 rounded border border-destructive/40 bg-destructive/10 p-2 text-[11px] text-destructive">
+                {serverRoles.message}
+              </p>
+            )}
+          </div>
+        </section>
 
         {/* Status ao vivo */}
         <section className="rounded-2xl border border-border bg-card p-5">
