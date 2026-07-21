@@ -370,6 +370,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Minhas turmas", url: "/minhas-turmas", icon: BookOpen },
         { title: "Atividades e Trabalhos", url: "/painel-atividades", icon: ClipboardList },
         { title: "Diário de Bordo", url: "/painel-diario-bordo", icon: NotebookPen },
+        { title: "Méritos e Ocorrências", url: "/painel-meritos", icon: AwardIcon },
         { title: "Arquivos", url: "/painel-arquivos", icon: FolderOpen },
         { title: "Enviar p/ o Drive", url: "/painel-enviar-drive", icon: FolderOpen },
       ],
