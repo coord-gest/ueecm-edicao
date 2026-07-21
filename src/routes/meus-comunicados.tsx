@@ -48,6 +48,7 @@ type Comunicado = {
   turma_id: string | null;
   aluno_id: string | null;
   created_at: string;
+  requer_confirmacao: boolean;
 };
 
 function MeusComunicadosPage() {
@@ -96,9 +97,13 @@ function MeusComunicadosPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from("comunicado_leituras")
-        .select("comunicado_id")
+        .select("comunicado_id, confirmado_em")
         .eq("usuario_id", user!.id);
-      return new Set((data ?? []).map((d) => d.comunicado_id));
+      const lidos = new Set((data ?? []).map((d) => d.comunicado_id));
+      const confirmados = new Set(
+        (data ?? []).filter((d) => d.confirmado_em).map((d) => d.comunicado_id),
+      );
+      return { lidos, confirmados };
     },
   });
 
@@ -110,7 +115,7 @@ function MeusComunicadosPage() {
       page,
       filtro,
       filtroExpr,
-      Array.from(lidosQuery.data ?? []).length,
+      lidosQuery.data?.lidos.size ?? 0,
     ],
     enabled: !!user && !!filtroExpr && !!lidosQuery.data,
     queryFn: async () => {
@@ -118,13 +123,14 @@ function MeusComunicadosPage() {
       const to = from + PAGE_SIZE - 1;
       let q = supabase
         .from("comunicados")
-        .select("id, tipo, titulo, mensagem, anexos, turma_id, aluno_id, created_at", {
-          count: "exact",
-        })
+        .select(
+          "id, tipo, titulo, mensagem, anexos, turma_id, aluno_id, created_at, requer_confirmacao",
+          { count: "exact" },
+        )
         .or(filtroExpr!)
         .order("created_at", { ascending: false });
-      if (filtro === "nao_lidos" && lidosQuery.data && lidosQuery.data.size > 0) {
-        q = q.not("id", "in", `(${Array.from(lidosQuery.data).join(",")})`);
+      if (filtro === "nao_lidos" && lidosQuery.data && lidosQuery.data.lidos.size > 0) {
+        q = q.not("id", "in", `(${Array.from(lidosQuery.data.lidos).join(",")})`);
       }
       const { data, error, count } = await q.range(from, to);
       if (error) throw error;
@@ -149,11 +155,33 @@ function MeusComunicadosPage() {
     onError: (e: Error) => toast.error("Falha ao marcar como lido", { description: e.message }),
   });
 
+  const confirmarCompreensao = useMutation({
+    mutationFn: async (comunicadoId: string) => {
+      const { error } = await supabase
+        .from("comunicado_leituras")
+        .upsert(
+          {
+            comunicado_id: comunicadoId,
+            usuario_id: user!.id,
+            confirmado_em: new Date().toISOString(),
+          },
+          { onConflict: "comunicado_id,usuario_id" },
+        );
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Confirmação registrada. Obrigado!");
+      qc.invalidateQueries({ queryKey: ["meus-comunicados"] });
+    },
+    onError: (e: Error) => toast.error("Falha ao confirmar", { description: e.message }),
+  });
+
   if (loading) return null;
 
   const total = lista.data?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-  const lidos = lidosQuery.data ?? new Set<string>();
+  const lidos = lidosQuery.data?.lidos ?? new Set<string>();
+  const confirmados = lidosQuery.data?.confirmados ?? new Set<string>();
   const naoLidosCount = (lista.data?.rows ?? []).filter((r) => !lidos.has(r.id)).length;
 
   return (
@@ -215,8 +243,13 @@ function MeusComunicadosPage() {
                   key={c.id}
                   c={c}
                   lido={lidos.has(c.id)}
+                  confirmado={confirmados.has(c.id)}
                   onMarcarLido={() => marcarLido.mutate(c.id)}
+                  onConfirmar={() => confirmarCompreensao.mutate(c.id)}
                   marcando={marcarLido.isPending && marcarLido.variables === c.id}
+                  confirmando={
+                    confirmarCompreensao.isPending && confirmarCompreensao.variables === c.id
+                  }
                 />
               ))}
             </ul>
