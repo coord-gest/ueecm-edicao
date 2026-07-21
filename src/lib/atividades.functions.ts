@@ -492,11 +492,51 @@ export type RankingGeral = {
   };
   alunos: RankingAluno[];
   turmas: RankingTurma[];
+  serie: SerieSemana[];
+  periodo: { data_inicio: string | null; data_fim: string | null };
 };
+
+export type SerieSemana = {
+  semana: string; // YYYY-WW
+  inicio: string; // ISO date (segunda-feira)
+  atribuidas: number;
+  entregues: number;
+  taxa: number;
+};
+
+function parseDateFilter(raw: unknown): { data_inicio: string | null; data_fim: string | null } {
+  if (typeof raw !== "object" || raw === null) return { data_inicio: null, data_fim: null };
+  const d = raw as Record<string, unknown>;
+  const di = String(d.data_inicio ?? "").trim();
+  const df = String(d.data_fim ?? "").trim();
+  return {
+    data_inicio: /^\d{4}-\d{2}-\d{2}$/.test(di) ? di : null,
+    data_fim: /^\d{4}-\d{2}-\d{2}$/.test(df) ? df : null,
+  };
+}
+
+function isoWeekKey(dateStr: string): { semana: string; inicio: string } {
+  const d = new Date(dateStr + (dateStr.length === 10 ? "T00:00:00Z" : ""));
+  // ISO week: Thursday-based
+  const tmp = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+  const day = tmp.getUTCDay() || 7;
+  tmp.setUTCDate(tmp.getUTCDate() + 4 - day);
+  const year = tmp.getUTCFullYear();
+  const yearStart = new Date(Date.UTC(year, 0, 1));
+  const week = Math.ceil(((tmp.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  const monday = new Date(d);
+  const dow = monday.getUTCDay() || 7;
+  monday.setUTCDate(monday.getUTCDate() - (dow - 1));
+  return {
+    semana: `${year}-${String(week).padStart(2, "0")}`,
+    inicio: monday.toISOString().slice(0, 10),
+  };
+}
 
 export const rankingAtividades = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<RankingGeral> => {
+  .validator(parseDateFilter)
+  .handler(async ({ data, context }): Promise<RankingGeral> => {
     // 1) Verifica papel (gestão escolar)
     const { data: roleRows, error: roleErr } = await context.supabase
       .from("user_roles")
@@ -517,9 +557,15 @@ export const rankingAtividades = createServerFn({ method: "GET" })
     }
 
     // 2) Carrega atividades ativas, alunos ativos, turmas e entregas
+    let ativsQuery = context.supabase
+      .from("atividades")
+      .select("id, turma_id, data_entrega")
+      .eq("ativo", true);
+    if (data.data_inicio) ativsQuery = ativsQuery.gte("data_entrega", data.data_inicio);
+    if (data.data_fim) ativsQuery = ativsQuery.lte("data_entrega", data.data_fim);
     const [{ data: ativs, error: aErr }, { data: alunos, error: alErr }, { data: turmas }] =
       await Promise.all([
-        context.supabase.from("atividades").select("id, turma_id").eq("ativo", true),
+        ativsQuery,
         context.supabase
           .from("alunos")
           .select("id, nome_completo, matricula, turma_id")
@@ -529,7 +575,7 @@ export const rankingAtividades = createServerFn({ method: "GET" })
     if (aErr) throw aErr;
     if (alErr) throw alErr;
 
-    const atividades = ativs ?? [];
+    const atividades = (ativs ?? []) as Array<{ id: string; turma_id: string; data_entrega: string }>;
     const alunosAtivos = alunos ?? [];
     const turmasRows = turmas ?? [];
 
@@ -537,10 +583,10 @@ export const rankingAtividades = createServerFn({ method: "GET" })
     const { data: entregas, error: entErr } = atividadeIds.length
       ? await context.supabase
           .from("atividade_entregas")
-          .select("atividade_id, aluno_id, entregue")
+          .select("atividade_id, aluno_id, entregue, entregue_em")
           .in("atividade_id", atividadeIds)
           .eq("entregue", true)
-      : { data: [] as Array<{ atividade_id: string; aluno_id: string; entregue: boolean }>, error: null };
+      : { data: [] as Array<{ atividade_id: string; aluno_id: string; entregue: boolean; entregue_em: string | null }>, error: null };
     if (entErr) throw entErr;
 
     // 3) Mapas auxiliares
@@ -621,6 +667,42 @@ export const rankingAtividades = createServerFn({ method: "GET" })
     const totalAtribuidas = alunosRanking.reduce((s, r) => s + r.total_atribuidas, 0);
     const totalEntregues = alunosRanking.reduce((s, r) => s + r.total_entregues, 0);
 
+    // 6) Série semanal (tendência)
+    const atribPorSemana = new Map<string, { inicio: string; count: number }>();
+    atividades.forEach((a) => {
+      if (!a.data_entrega) return;
+      const alunosNaTurma = alunosPorTurmaCount.get(a.turma_id) ?? 0;
+      const { semana, inicio } = isoWeekKey(a.data_entrega);
+      const cur = atribPorSemana.get(semana) ?? { inicio, count: 0 };
+      cur.count += alunosNaTurma;
+      atribPorSemana.set(semana, cur);
+    });
+    const entrPorSemana = new Map<string, { inicio: string; count: number }>();
+    (entregas ?? []).forEach((e) => {
+      const ref = (e.entregue_em as string) ?? null;
+      if (!ref) return;
+      const { semana, inicio } = isoWeekKey(ref.slice(0, 10));
+      const cur = entrPorSemana.get(semana) ?? { inicio, count: 0 };
+      cur.count += 1;
+      entrPorSemana.set(semana, cur);
+    });
+    const semanas = new Set<string>([...atribPorSemana.keys(), ...entrPorSemana.keys()]);
+    const serie: SerieSemana[] = Array.from(semanas)
+      .sort()
+      .map((s) => {
+        const at = atribPorSemana.get(s);
+        const en = entrPorSemana.get(s);
+        const atribuidas = at?.count ?? 0;
+        const entregues = en?.count ?? 0;
+        return {
+          semana: s,
+          inicio: at?.inicio ?? en?.inicio ?? "",
+          atribuidas,
+          entregues,
+          taxa: atribuidas > 0 ? entregues / atribuidas : 0,
+        };
+      });
+
     return {
       totais: {
         atividades: atividades.length,
@@ -631,5 +713,209 @@ export const rankingAtividades = createServerFn({ method: "GET" })
       },
       alunos: alunosRanking,
       turmas: turmasRanking,
+      serie,
+      periodo: { data_inicio: data.data_inicio, data_fim: data.data_fim },
+    };
+  });
+
+// ==================== DETALHE POR ALUNO ==================== //
+export type DetalheAtividadeAluno = {
+  atividade_id: string;
+  titulo: string;
+  disciplina: string | null;
+  data_entrega: string;
+  entregue: boolean;
+  entregue_em: string | null;
+  atrasado: boolean; // não entregue e data_entrega já passou, ou entregue após data_entrega
+  observacao: string | null;
+};
+
+export type DetalheAlunoRanking = {
+  aluno: {
+    id: string;
+    nome: string;
+    matricula: string | null;
+    turma_id: string | null;
+    turma_nome: string | null;
+  };
+  totais: {
+    atribuidas: number;
+    entregues: number;
+    pendentes: number;
+    atrasadas: number;
+    taxa: number;
+  };
+  atividades: DetalheAtividadeAluno[];
+  turma_taxa: number; // taxa média da turma no período
+  serie: SerieSemana[];
+};
+
+export const detalhesAlunoRanking = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .validator((raw: unknown) => {
+    const base = parseDateFilter(raw);
+    const d = (raw ?? {}) as Record<string, unknown>;
+    const aluno_id = String(d.aluno_id ?? "").trim();
+    if (!aluno_id) throw new Error("aluno_id obrigatório");
+    return { aluno_id, ...base };
+  })
+  .handler(async ({ data, context }): Promise<DetalheAlunoRanking> => {
+    const { data: roleRows, error: roleErr } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId);
+    if (roleErr) throw roleErr;
+    const roles = normalizeRoles((roleRows ?? []).map((r) => r.role as string));
+    if (
+      !hasAnyRole(roles, ["desenvolvedor", "admin", "diretor", "coordenador", "secretario"])
+    ) {
+      throw new Error("Acesso restrito à gestão escolar.");
+    }
+
+    const { data: aluno, error: alErr } = await context.supabase
+      .from("alunos")
+      .select("id, nome_completo, matricula, turma_id")
+      .eq("id", data.aluno_id)
+      .maybeSingle();
+    if (alErr) throw alErr;
+    if (!aluno) throw new Error("Aluno não encontrado");
+
+    const turmaId = (aluno.turma_id as string) ?? null;
+    const { data: turma } = turmaId
+      ? await context.supabase.from("turmas_escolares").select("nome").eq("id", turmaId).maybeSingle()
+      : { data: null };
+
+    let ativsQuery = context.supabase
+      .from("atividades")
+      .select("id, titulo, disciplina, data_entrega")
+      .eq("ativo", true);
+    if (turmaId) ativsQuery = ativsQuery.eq("turma_id", turmaId);
+    if (data.data_inicio) ativsQuery = ativsQuery.gte("data_entrega", data.data_inicio);
+    if (data.data_fim) ativsQuery = ativsQuery.lte("data_entrega", data.data_fim);
+    const { data: ativs, error: aErr } = await ativsQuery.order("data_entrega", { ascending: false });
+    if (aErr) throw aErr;
+
+    const atividades = (ativs ?? []) as Array<{
+      id: string;
+      titulo: string;
+      disciplina: string | null;
+      data_entrega: string;
+    }>;
+    const atividadeIds = atividades.map((a) => a.id);
+
+    const { data: entregasAluno } = atividadeIds.length
+      ? await context.supabase
+          .from("atividade_entregas")
+          .select("atividade_id, entregue, entregue_em, observacao")
+          .in("atividade_id", atividadeIds)
+          .eq("aluno_id", data.aluno_id)
+      : { data: [] as Array<{ atividade_id: string; entregue: boolean; entregue_em: string | null; observacao: string | null }> };
+
+    const entregaMap = new Map<string, { entregue: boolean; entregue_em: string | null; observacao: string | null }>();
+    (entregasAluno ?? []).forEach((e) =>
+      entregaMap.set(e.atividade_id as string, {
+        entregue: Boolean(e.entregue),
+        entregue_em: (e.entregue_em as string) ?? null,
+        observacao: (e.observacao as string) ?? null,
+      }),
+    );
+
+    const hoje = new Date().toISOString().slice(0, 10);
+    let entregues = 0;
+    let atrasadas = 0;
+    const detalhes: DetalheAtividadeAluno[] = atividades.map((a) => {
+      const e = entregaMap.get(a.id);
+      const entregue = e?.entregue ?? false;
+      let atrasado = false;
+      if (entregue && e?.entregue_em) {
+        atrasado = e.entregue_em.slice(0, 10) > a.data_entrega;
+      } else if (!entregue) {
+        atrasado = a.data_entrega < hoje;
+      }
+      if (entregue) entregues += 1;
+      if (atrasado) atrasadas += 1;
+      return {
+        atividade_id: a.id,
+        titulo: a.titulo,
+        disciplina: a.disciplina,
+        data_entrega: a.data_entrega,
+        entregue,
+        entregue_em: e?.entregue_em ?? null,
+        atrasado,
+        observacao: e?.observacao ?? null,
+      };
+    });
+    const atribuidas = atividades.length;
+    const pendentes = atribuidas - entregues;
+
+    // Taxa média da turma no período
+    let turmaTaxa = 0;
+    if (turmaId && atividadeIds.length) {
+      const { data: alunosTurma } = await context.supabase
+        .from("alunos")
+        .select("id")
+        .eq("turma_id", turmaId)
+        .eq("ativo", true);
+      const totalAlunos = (alunosTurma ?? []).length;
+      const { data: entTurma } = await context.supabase
+        .from("atividade_entregas")
+        .select("atividade_id")
+        .in("atividade_id", atividadeIds)
+        .eq("entregue", true);
+      const denom = totalAlunos * atividadeIds.length;
+      turmaTaxa = denom > 0 ? (entTurma ?? []).length / denom : 0;
+    }
+
+    // Série semanal do aluno
+    const atribPorSemana = new Map<string, { inicio: string; count: number }>();
+    atividades.forEach((a) => {
+      const { semana, inicio } = isoWeekKey(a.data_entrega);
+      const cur = atribPorSemana.get(semana) ?? { inicio, count: 0 };
+      cur.count += 1;
+      atribPorSemana.set(semana, cur);
+    });
+    const entrPorSemana = new Map<string, { inicio: string; count: number }>();
+    detalhes.forEach((d) => {
+      if (!d.entregue || !d.entregue_em) return;
+      const { semana, inicio } = isoWeekKey(d.entregue_em.slice(0, 10));
+      const cur = entrPorSemana.get(semana) ?? { inicio, count: 0 };
+      cur.count += 1;
+      entrPorSemana.set(semana, cur);
+    });
+    const semanas = new Set<string>([...atribPorSemana.keys(), ...entrPorSemana.keys()]);
+    const serie: SerieSemana[] = Array.from(semanas)
+      .sort()
+      .map((s) => {
+        const at = atribPorSemana.get(s);
+        const en = entrPorSemana.get(s);
+        const atr = at?.count ?? 0;
+        const ent = en?.count ?? 0;
+        return {
+          semana: s,
+          inicio: at?.inicio ?? en?.inicio ?? "",
+          atribuidas: atr,
+          entregues: ent,
+          taxa: atr > 0 ? ent / atr : 0,
+        };
+      });
+
+    return {
+      aluno: {
+        id: aluno.id as string,
+        nome: (aluno.nome_completo as string) ?? "",
+        matricula: (aluno.matricula as string) ?? null,
+        turma_id: turmaId,
+        turma_nome: (turma?.nome as string) ?? null,
+      },
+      totais: {
+        atribuidas,
+        entregues,
+        pendentes,
+        atrasadas,
+        taxa: atribuidas > 0 ? entregues / atribuidas : 0,
+      },
+      atividades: detalhes,
+      turma_taxa: turmaTaxa,
+      serie,
     };
   });

@@ -89,6 +89,7 @@ import { Route as PostsIdRouteImport } from './routes/posts.$id'
 import { Route as PainelPostsNovoRouteImport } from './routes/painel-posts.novo'
 import { Route as PainelPostsIdRouteImport } from './routes/painel-posts.$id'
 import { Route as PainelAtividadesIdRouteImport } from './routes/painel-atividades.$id'
+import { Route as PainelAtividadesRankingAlunoIdRouteImport } from './routes/painel-atividades-ranking.$alunoId'
 import { Route as PainelArquivosPlanejamentosRouteImport } from './routes/painel-arquivos.planejamentos'
 import { Route as PainelArquivosTemplateIdRouteImport } from './routes/painel-arquivos.$templateId'
 import { Route as MinhasTurmasTurmaIdRouteImport } from './routes/minhas-turmas.$turmaId'
@@ -523,6 +524,12 @@ const PainelAtividadesIdRoute = PainelAtividadesIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => PainelAtividadesRoute,
 } as any)
+const PainelAtividadesRankingAlunoIdRoute =
+  PainelAtividadesRankingAlunoIdRouteImport.update({
+    id: '/$alunoId',
+    path: '/$alunoId',
+    getParentRoute: () => PainelAtividadesRankingRoute,
+  } as any)
 const PainelArquivosPlanejamentosRoute =
   PainelArquivosPlanejamentosRouteImport.update({
     id: '/planejamentos',
@@ -727,7 +734,7 @@ export interface FileRoutesByFullPath {
   '/painel-arquivos': typeof PainelArquivosRouteWithChildren
   '/painel-atividades': typeof PainelAtividadesRouteWithChildren
   '/painel-atividades-filhos': typeof PainelAtividadesFilhosRoute
-  '/painel-atividades-ranking': typeof PainelAtividadesRankingRoute
+  '/painel-atividades-ranking': typeof PainelAtividadesRankingRouteWithChildren
   '/painel-auditoria': typeof PainelAuditoriaRoute
   '/painel-autorizacoes': typeof PainelAutorizacoesRoute
   '/painel-cards': typeof PainelCardsRoute
@@ -781,6 +788,7 @@ export interface FileRoutesByFullPath {
   '/minhas-turmas/$turmaId': typeof MinhasTurmasTurmaIdRoute
   '/painel-arquivos/$templateId': typeof PainelArquivosTemplateIdRoute
   '/painel-arquivos/planejamentos': typeof PainelArquivosPlanejamentosRoute
+  '/painel-atividades-ranking/$alunoId': typeof PainelAtividadesRankingAlunoIdRoute
   '/painel-atividades/$id': typeof PainelAtividadesIdRoute
   '/painel-posts/$id': typeof PainelPostsIdRoute
   '/painel-posts/novo': typeof PainelPostsNovoRoute
@@ -840,7 +848,7 @@ export interface FileRoutesByTo {
   '/painel-aprovacao': typeof PainelAprovacaoRoute
   '/painel-atividades': typeof PainelAtividadesRouteWithChildren
   '/painel-atividades-filhos': typeof PainelAtividadesFilhosRoute
-  '/painel-atividades-ranking': typeof PainelAtividadesRankingRoute
+  '/painel-atividades-ranking': typeof PainelAtividadesRankingRouteWithChildren
   '/painel-auditoria': typeof PainelAuditoriaRoute
   '/painel-autorizacoes': typeof PainelAutorizacoesRoute
   '/painel-cards': typeof PainelCardsRoute
@@ -894,6 +902,7 @@ export interface FileRoutesByTo {
   '/minhas-turmas/$turmaId': typeof MinhasTurmasTurmaIdRoute
   '/painel-arquivos/$templateId': typeof PainelArquivosTemplateIdRoute
   '/painel-arquivos/planejamentos': typeof PainelArquivosPlanejamentosRoute
+  '/painel-atividades-ranking/$alunoId': typeof PainelAtividadesRankingAlunoIdRoute
   '/painel-atividades/$id': typeof PainelAtividadesIdRoute
   '/painel-posts/$id': typeof PainelPostsIdRoute
   '/painel-posts/novo': typeof PainelPostsNovoRoute
@@ -955,7 +964,7 @@ export interface FileRoutesById {
   '/painel-arquivos': typeof PainelArquivosRouteWithChildren
   '/painel-atividades': typeof PainelAtividadesRouteWithChildren
   '/painel-atividades-filhos': typeof PainelAtividadesFilhosRoute
-  '/painel-atividades-ranking': typeof PainelAtividadesRankingRoute
+  '/painel-atividades-ranking': typeof PainelAtividadesRankingRouteWithChildren
   '/painel-auditoria': typeof PainelAuditoriaRoute
   '/painel-autorizacoes': typeof PainelAutorizacoesRoute
   '/painel-cards': typeof PainelCardsRoute
@@ -1009,6 +1018,7 @@ export interface FileRoutesById {
   '/minhas-turmas/$turmaId': typeof MinhasTurmasTurmaIdRoute
   '/painel-arquivos/$templateId': typeof PainelArquivosTemplateIdRoute
   '/painel-arquivos/planejamentos': typeof PainelArquivosPlanejamentosRoute
+  '/painel-atividades-ranking/$alunoId': typeof PainelAtividadesRankingAlunoIdRoute
   '/painel-atividades/$id': typeof PainelAtividadesIdRoute
   '/painel-posts/$id': typeof PainelPostsIdRoute
   '/painel-posts/novo': typeof PainelPostsNovoRoute
@@ -1125,6 +1135,7 @@ export interface FileRouteTypes {
     | '/minhas-turmas/$turmaId'
     | '/painel-arquivos/$templateId'
     | '/painel-arquivos/planejamentos'
+    | '/painel-atividades-ranking/$alunoId'
     | '/painel-atividades/$id'
     | '/painel-posts/$id'
     | '/painel-posts/novo'
@@ -1238,6 +1249,7 @@ export interface FileRouteTypes {
     | '/minhas-turmas/$turmaId'
     | '/painel-arquivos/$templateId'
     | '/painel-arquivos/planejamentos'
+    | '/painel-atividades-ranking/$alunoId'
     | '/painel-atividades/$id'
     | '/painel-posts/$id'
     | '/painel-posts/novo'
@@ -1352,6 +1364,7 @@ export interface FileRouteTypes {
     | '/minhas-turmas/$turmaId'
     | '/painel-arquivos/$templateId'
     | '/painel-arquivos/planejamentos'
+    | '/painel-atividades-ranking/$alunoId'
     | '/painel-atividades/$id'
     | '/painel-posts/$id'
     | '/painel-posts/novo'
@@ -1413,7 +1426,7 @@ export interface RootRouteChildren {
   PainelArquivosRoute: typeof PainelArquivosRouteWithChildren
   PainelAtividadesRoute: typeof PainelAtividadesRouteWithChildren
   PainelAtividadesFilhosRoute: typeof PainelAtividadesFilhosRoute
-  PainelAtividadesRankingRoute: typeof PainelAtividadesRankingRoute
+  PainelAtividadesRankingRoute: typeof PainelAtividadesRankingRouteWithChildren
   PainelAuditoriaRoute: typeof PainelAuditoriaRoute
   PainelAutorizacoesRoute: typeof PainelAutorizacoesRoute
   PainelCardsRoute: typeof PainelCardsRoute
@@ -2045,6 +2058,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PainelAtividadesIdRouteImport
       parentRoute: typeof PainelAtividadesRoute
     }
+    '/painel-atividades-ranking/$alunoId': {
+      id: '/painel-atividades-ranking/$alunoId'
+      path: '/$alunoId'
+      fullPath: '/painel-atividades-ranking/$alunoId'
+      preLoaderRoute: typeof PainelAtividadesRankingAlunoIdRouteImport
+      parentRoute: typeof PainelAtividadesRankingRoute
+    }
     '/painel-arquivos/planejamentos': {
       id: '/painel-arquivos/planejamentos'
       path: '/planejamentos'
@@ -2369,6 +2389,20 @@ const PainelAtividadesRouteChildren: PainelAtividadesRouteChildren = {
 const PainelAtividadesRouteWithChildren =
   PainelAtividadesRoute._addFileChildren(PainelAtividadesRouteChildren)
 
+interface PainelAtividadesRankingRouteChildren {
+  PainelAtividadesRankingAlunoIdRoute: typeof PainelAtividadesRankingAlunoIdRoute
+}
+
+const PainelAtividadesRankingRouteChildren: PainelAtividadesRankingRouteChildren =
+  {
+    PainelAtividadesRankingAlunoIdRoute: PainelAtividadesRankingAlunoIdRoute,
+  }
+
+const PainelAtividadesRankingRouteWithChildren =
+  PainelAtividadesRankingRoute._addFileChildren(
+    PainelAtividadesRankingRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AgendarRoute: AgendarRoute,
@@ -2404,7 +2438,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelArquivosRoute: PainelArquivosRouteWithChildren,
   PainelAtividadesRoute: PainelAtividadesRouteWithChildren,
   PainelAtividadesFilhosRoute: PainelAtividadesFilhosRoute,
-  PainelAtividadesRankingRoute: PainelAtividadesRankingRoute,
+  PainelAtividadesRankingRoute: PainelAtividadesRankingRouteWithChildren,
   PainelAuditoriaRoute: PainelAuditoriaRoute,
   PainelAutorizacoesRoute: PainelAutorizacoesRoute,
   PainelCardsRoute: PainelCardsRoute,
