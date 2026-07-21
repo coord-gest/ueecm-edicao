@@ -1243,6 +1243,123 @@ export type Database = {
         }
         Relationships: []
       }
+      contrato_checkpoints: {
+        Row: {
+          autor_id: string
+          contrato_id: string
+          created_at: string
+          data: string
+          id: string
+          observacao: string | null
+          status: Database["public"]["Enums"]["checkpoint_status"]
+        }
+        Insert: {
+          autor_id: string
+          contrato_id: string
+          created_at?: string
+          data?: string
+          id?: string
+          observacao?: string | null
+          status: Database["public"]["Enums"]["checkpoint_status"]
+        }
+        Update: {
+          autor_id?: string
+          contrato_id?: string
+          created_at?: string
+          data?: string
+          id?: string
+          observacao?: string | null
+          status?: Database["public"]["Enums"]["checkpoint_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contrato_checkpoints_contrato_id_fkey"
+            columns: ["contrato_id"]
+            isOneToOne: false
+            referencedRelation: "contratos_compromisso"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contratos_compromisso: {
+        Row: {
+          aluno_id: string
+          assinado_aluno_em: string | null
+          assinado_professor_em: string | null
+          assinado_responsavel_em: string | null
+          assinado_responsavel_id: string | null
+          autor_id: string
+          created_at: string
+          id: string
+          motivo: string | null
+          objetivos: Json
+          observacoes: string | null
+          prazo: string | null
+          status: Database["public"]["Enums"]["contrato_status"]
+          titulo: string
+          turma_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          aluno_id: string
+          assinado_aluno_em?: string | null
+          assinado_professor_em?: string | null
+          assinado_responsavel_em?: string | null
+          assinado_responsavel_id?: string | null
+          autor_id: string
+          created_at?: string
+          id?: string
+          motivo?: string | null
+          objetivos?: Json
+          observacoes?: string | null
+          prazo?: string | null
+          status?: Database["public"]["Enums"]["contrato_status"]
+          titulo: string
+          turma_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          aluno_id?: string
+          assinado_aluno_em?: string | null
+          assinado_professor_em?: string | null
+          assinado_responsavel_em?: string | null
+          assinado_responsavel_id?: string | null
+          autor_id?: string
+          created_at?: string
+          id?: string
+          motivo?: string | null
+          objetivos?: Json
+          observacoes?: string | null
+          prazo?: string | null
+          status?: Database["public"]["Enums"]["contrato_status"]
+          titulo?: string
+          turma_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contratos_compromisso_aluno_id_fkey"
+            columns: ["aluno_id"]
+            isOneToOne: false
+            referencedRelation: "alunos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contratos_compromisso_aluno_id_fkey"
+            columns: ["aluno_id"]
+            isOneToOne: false
+            referencedRelation: "alunos_destaque_publicos"
+            referencedColumns: ["aluno_id"]
+          },
+          {
+            foreignKeyName: "contratos_compromisso_turma_id_fkey"
+            columns: ["turma_id"]
+            isOneToOne: false
+            referencedRelation: "turmas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       data_subject_requests: {
         Row: {
           admin_notes: string | null
@@ -3790,6 +3907,10 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      assinar_contrato_responsavel: {
+        Args: { _contrato_id: string }
+        Returns: undefined
+      }
       calcular_radar_aluno: { Args: { _aluno_id: string }; Returns: Json }
       calcular_risco_evasao: { Args: { _aluno_id: string }; Returns: Json }
       can_delete_arquivo_preenchimento: {
@@ -3990,6 +4111,13 @@ export type Database = {
         | "student"
         | "family"
         | "social_media"
+      checkpoint_status: "cumprido" | "parcial" | "nao_cumprido"
+      contrato_status:
+        | "rascunho"
+        | "aguardando_assinaturas"
+        | "ativo"
+        | "concluido"
+        | "cancelado"
       diario_bordo_tipo:
         | "elogio"
         | "participacao"
@@ -4178,6 +4306,14 @@ export const Constants = {
         "student",
         "family",
         "social_media",
+      ],
+      checkpoint_status: ["cumprido", "parcial", "nao_cumprido"],
+      contrato_status: [
+        "rascunho",
+        "aguardando_assinaturas",
+        "ativo",
+        "concluido",
+        "cancelado",
       ],
       diario_bordo_tipo: [
         "elogio",
