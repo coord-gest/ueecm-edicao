@@ -25,6 +25,8 @@ import {
   Wrench,
   NotebookPen,
   MessageCircle,
+  HandCoins,
+  HeartHandshake,
   type LucideIcon,
 } from "lucide-react";
 import { ClipboardList } from "lucide-react";
