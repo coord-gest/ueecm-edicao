@@ -47,6 +47,7 @@ import { Route as PainelDestaquesAlunosRouteImport } from './routes/painel-desta
 import { Route as PainelDestaquesRouteImport } from './routes/painel-destaques'
 import { Route as PainelDesenvolvedorRouteImport } from './routes/painel-desenvolvedor'
 import { Route as PainelCoordenadorRouteImport } from './routes/painel-coordenador'
+import { Route as PainelContratosRouteImport } from './routes/painel-contratos'
 import { Route as PainelConsentimentosRouteImport } from './routes/painel-consentimentos'
 import { Route as PainelComentariosRouteImport } from './routes/painel-comentarios'
 import { Route as PainelCardsRouteImport } from './routes/painel-cards'
@@ -319,6 +320,11 @@ const PainelDesenvolvedorRoute = PainelDesenvolvedorRouteImport.update({
 const PainelCoordenadorRoute = PainelCoordenadorRouteImport.update({
   id: '/painel-coordenador',
   path: '/painel-coordenador',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelContratosRoute = PainelContratosRouteImport.update({
+  id: '/painel-contratos',
+  path: '/painel-contratos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelConsentimentosRoute = PainelConsentimentosRouteImport.update({
@@ -784,6 +790,7 @@ export interface FileRoutesByFullPath {
   '/painel-cards': typeof PainelCardsRoute
   '/painel-comentarios': typeof PainelComentariosRoute
   '/painel-consentimentos': typeof PainelConsentimentosRoute
+  '/painel-contratos': typeof PainelContratosRoute
   '/painel-coordenador': typeof PainelCoordenadorRoute
   '/painel-desenvolvedor': typeof PainelDesenvolvedorRoute
   '/painel-destaques': typeof PainelDestaquesRoute
@@ -905,6 +912,7 @@ export interface FileRoutesByTo {
   '/painel-cards': typeof PainelCardsRoute
   '/painel-comentarios': typeof PainelComentariosRoute
   '/painel-consentimentos': typeof PainelConsentimentosRoute
+  '/painel-contratos': typeof PainelContratosRoute
   '/painel-coordenador': typeof PainelCoordenadorRoute
   '/painel-desenvolvedor': typeof PainelDesenvolvedorRoute
   '/painel-destaques': typeof PainelDestaquesRoute
@@ -1028,6 +1036,7 @@ export interface FileRoutesById {
   '/painel-cards': typeof PainelCardsRoute
   '/painel-comentarios': typeof PainelComentariosRoute
   '/painel-consentimentos': typeof PainelConsentimentosRoute
+  '/painel-contratos': typeof PainelContratosRoute
   '/painel-coordenador': typeof PainelCoordenadorRoute
   '/painel-desenvolvedor': typeof PainelDesenvolvedorRoute
   '/painel-destaques': typeof PainelDestaquesRoute
@@ -1152,6 +1161,7 @@ export interface FileRouteTypes {
     | '/painel-cards'
     | '/painel-comentarios'
     | '/painel-consentimentos'
+    | '/painel-contratos'
     | '/painel-coordenador'
     | '/painel-desenvolvedor'
     | '/painel-destaques'
@@ -1273,6 +1283,7 @@ export interface FileRouteTypes {
     | '/painel-cards'
     | '/painel-comentarios'
     | '/painel-consentimentos'
+    | '/painel-contratos'
     | '/painel-coordenador'
     | '/painel-desenvolvedor'
     | '/painel-destaques'
@@ -1395,6 +1406,7 @@ export interface FileRouteTypes {
     | '/painel-cards'
     | '/painel-comentarios'
     | '/painel-consentimentos'
+    | '/painel-contratos'
     | '/painel-coordenador'
     | '/painel-desenvolvedor'
     | '/painel-destaques'
@@ -1518,6 +1530,7 @@ export interface RootRouteChildren {
   PainelCardsRoute: typeof PainelCardsRoute
   PainelComentariosRoute: typeof PainelComentariosRoute
   PainelConsentimentosRoute: typeof PainelConsentimentosRoute
+  PainelContratosRoute: typeof PainelContratosRoute
   PainelCoordenadorRoute: typeof PainelCoordenadorRoute
   PainelDesenvolvedorRoute: typeof PainelDesenvolvedorRoute
   PainelDestaquesRoute: typeof PainelDestaquesRoute
@@ -1854,6 +1867,13 @@ declare module '@tanstack/react-router' {
       path: '/painel-coordenador'
       fullPath: '/painel-coordenador'
       preLoaderRoute: typeof PainelCoordenadorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-contratos': {
+      id: '/painel-contratos'
+      path: '/painel-contratos'
+      fullPath: '/painel-contratos'
+      preLoaderRoute: typeof PainelContratosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-consentimentos': {
@@ -2586,6 +2606,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelCardsRoute: PainelCardsRoute,
   PainelComentariosRoute: PainelComentariosRoute,
   PainelConsentimentosRoute: PainelConsentimentosRoute,
+  PainelContratosRoute: PainelContratosRoute,
   PainelCoordenadorRoute: PainelCoordenadorRoute,
   PainelDesenvolvedorRoute: PainelDesenvolvedorRoute,
   PainelDestaquesRoute: PainelDestaquesRoute,

@@ -372,6 +372,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Atividades e Trabalhos", url: "/painel-atividades", icon: ClipboardList },
         { title: "Diário de Bordo", url: "/painel-diario-bordo", icon: NotebookPen },
         { title: "Méritos e Ocorrências", url: "/painel-meritos", icon: AwardIcon },
+        { title: "Contratos de Compromisso", url: "/painel-contratos", icon: ScrollText },
         { title: "Arquivos", url: "/painel-arquivos", icon: FolderOpen },
         { title: "Enviar p/ o Drive", url: "/painel-enviar-drive", icon: FolderOpen },
       ],
@@ -411,6 +412,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Atividades e Trabalhos", url: "/painel-atividades-filhos", icon: ClipboardList },
         { title: "Diário de Bordo", url: "/painel-diario-filho", icon: NotebookPen },
         { title: "Reconhecimentos", url: "/painel-meritos-filhos", icon: AwardIcon },
+        { title: "Contratos de Compromisso", url: "/painel-contratos-filhos", icon: ScrollText },
       ],
     },
     {
