@@ -1,0 +1,1 @@
+ALTER TABLE public.posts ADD COLUMN IF NOT EXISTS autor_modo TEXT NOT NULL DEFAULT 'real' CHECK (autor_modo IN ('real','cargo','institucional'));

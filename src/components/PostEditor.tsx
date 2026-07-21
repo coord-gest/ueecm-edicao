@@ -36,6 +36,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
+import { roleLabels, type AppRole } from "@/lib/roles";
 import { gerarPostComIA, type GerarOutput } from "@/lib/post-ai.functions";
 import { sanitizeHtml } from "@/lib/sanitize";
 const RichEditor = lazy(() =>
@@ -68,6 +69,7 @@ type PostRow = {
   imagem: string | null;
   autor: string;
   autor_id: string | null;
+  autor_modo?: string | null;
   turma: string | null;
   disciplina: string | null;
   destaque: boolean;
@@ -91,7 +93,7 @@ const statusLabel: Record<string, string> = {
 };
 
 export function PostEditor({ title, post, onSaved, onCancel }: Props) {
-  const { user, hasRole } = useAuth();
+  const { user, hasRole, roles } = useAuth();
   const qc = useQueryClient();
   const canApprove = hasRole("desenvolvedor") || hasRole("diretor") || hasRole("coordenador");
 
@@ -103,6 +105,9 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
   const [disciplina, setDisciplina] = useState<string>(post?.disciplina ?? "nenhuma");
   const [destaque, setDestaque] = useState(post?.destaque ?? false);
   const [geral, setGeral] = useState(post?.geral ?? false);
+  const [autorModo, setAutorModo] = useState<"real" | "cargo" | "institucional">(
+    (post?.autor_modo as "real" | "cargo" | "institucional" | null) ?? "real",
+  );
   const [uploadingCover, setUploadingCover] = useState(false);
   const [lastAutosave, setLastAutosave] = useState<Date | null>(null);
   const [autosaving, setAutosaving] = useState(false);
