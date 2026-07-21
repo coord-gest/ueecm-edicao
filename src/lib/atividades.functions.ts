@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { hasAnyRole, normalizeRoles } from "@/lib/roles";
 
 export type Atividade = {
   id: string;
