@@ -25,6 +25,8 @@ import {
   Wrench,
   NotebookPen,
   MessageCircle,
+  HandCoins,
+  HeartHandshake,
   type LucideIcon,
 } from "lucide-react";
 import { ClipboardList } from "lucide-react";
@@ -144,6 +146,10 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       items: [
         { title: "Mural da Comunidade", url: "/mural", icon: Users },
         { title: "Moderação do Mural", url: "/painel-mural-moderacao", icon: Shield },
+        { title: "Rede de Apoio", url: "/rede-apoio", icon: HeartHandshake },
+        { title: "Moderação — Apoio", url: "/painel-rede-apoio", icon: Shield },
+        { title: "Vaquinhas", url: "/vaquinhas", icon: HandCoins },
+        { title: "Gestão de Vaquinhas", url: "/painel-vaquinhas", icon: HandCoins },
       ],
     },
   ],
@@ -229,6 +235,10 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       items: [
         { title: "Mural da Comunidade", url: "/mural", icon: Users },
         { title: "Moderação do Mural", url: "/painel-mural-moderacao", icon: Shield },
+        { title: "Rede de Apoio", url: "/rede-apoio", icon: HeartHandshake },
+        { title: "Moderação — Apoio", url: "/painel-rede-apoio", icon: Shield },
+        { title: "Vaquinhas", url: "/vaquinhas", icon: HandCoins },
+        { title: "Gestão de Vaquinhas", url: "/painel-vaquinhas", icon: HandCoins },
       ],
     },
   ],
@@ -312,6 +322,10 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       items: [
         { title: "Mural da Comunidade", url: "/mural", icon: Users },
         { title: "Moderação do Mural", url: "/painel-mural-moderacao", icon: Shield },
+        { title: "Rede de Apoio", url: "/rede-apoio", icon: HeartHandshake },
+        { title: "Moderação — Apoio", url: "/painel-rede-apoio", icon: Shield },
+        { title: "Vaquinhas", url: "/vaquinhas", icon: HandCoins },
+        { title: "Gestão de Vaquinhas", url: "/painel-vaquinhas", icon: HandCoins },
       ],
     },
   ],
@@ -372,6 +386,8 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       label: "Comunidade",
       items: [
         { title: "Mural da Comunidade", url: "/mural", icon: Users },
+        { title: "Rede de Apoio", url: "/rede-apoio", icon: HeartHandshake },
+        { title: "Vaquinhas", url: "/vaquinhas", icon: HandCoins },
       ],
     },
   ],
@@ -428,6 +444,8 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       items: [
         { title: "Mural da Comunidade", url: "/mural", icon: Users },
         { title: "Chat com Famílias", url: "/chat-aluno", icon: MessageCircle },
+        { title: "Rede de Apoio", url: "/rede-apoio", icon: HeartHandshake },
+        { title: "Vaquinhas", url: "/vaquinhas", icon: HandCoins },
       ],
     },
   ],
@@ -478,6 +496,8 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       items: [
         { title: "Mural da Comunidade", url: "/mural", icon: Users },
         { title: "Chat com Professor", url: "/chat-aluno", icon: MessageCircle },
+        { title: "Rede de Apoio", url: "/rede-apoio", icon: HeartHandshake },
+        { title: "Vaquinhas", url: "/vaquinhas", icon: HandCoins },
       ],
     },
   ],
