@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Pencil, Trash2, Loader2, Clock } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2, Clock, Coffee } from "lucide-react";
 import { toast } from "sonner";
 
 import { SiteHeader } from "@/components/SiteHeader";
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -604,6 +605,7 @@ function HorarioDialog({
   const [professor, setProfessor] = useState("");
   const [horaInicio, setHoraInicio] = useState("07:30");
   const [horaFim, setHoraFim] = useState("08:20");
+  const [isIntervalo, setIsIntervalo] = useState(false);
 
   useMemoSync(open, () => {
     if (horario) {
@@ -614,6 +616,9 @@ function HorarioDialog({
       setProfessor(horario.professor);
       setHoraInicio((horario.hora_inicio ?? "07:30").slice(0, 5));
       setHoraFim((horario.hora_fim ?? "08:20").slice(0, 5));
+      setIsIntervalo(
+        (horario.disciplina ?? "").toLowerCase() === "intervalo" && !horario.disciplina_id,
+      );
     } else {
       setTurmaId(defaultTurmaId);
       setTurno(defaultTurno);
@@ -624,13 +629,46 @@ function HorarioDialog({
         defaultTurno === "tarde" ? "13:30" : defaultTurno === "noite" ? "19:00" : "07:30",
       );
       setHoraFim(defaultTurno === "tarde" ? "14:20" : defaultTurno === "noite" ? "19:50" : "08:20");
+      setIsIntervalo(false);
     }
   });
 
   const save = useMutation({
     mutationFn: async () => {
-      if (!turmaId || !disciplinaId || !professor.trim())
-        throw new Error("Preencha turma, disciplina e professor");
+      if (!turmaId) throw new Error("Selecione a turma");
+      if (isIntervalo) {
+        const base = {
+          turma_id: turmaId,
+          disciplina_id: null as string | null,
+          disciplina: "Intervalo",
+          professor: "Intervalo",
+          turno,
+          hora_inicio: horaInicio,
+          hora_fim: horaFim,
+        };
+        if (horario) {
+          const { error } = await supabase
+            .from("horarios")
+            .update({ ...base, dia_semana: horario.dia_semana })
+            .eq("id", horario.id);
+          if (error) throw error;
+        } else {
+          await supabase
+            .from("horarios")
+            .delete()
+            .eq("turma_id", turmaId)
+            .eq("turno", turno)
+            .eq("hora_inicio", horaInicio)
+            .eq("hora_fim", horaFim)
+            .is("disciplina_id", null);
+          const rows = DIAS.map((d) => ({ ...base, dia_semana: d.v }));
+          const { error } = await supabase.from("horarios").insert(rows);
+          if (error) throw error;
+        }
+        return;
+      }
+      if (!disciplinaId || !professor.trim())
+        throw new Error("Preencha disciplina e professor");
       const payload = {
         turma_id: turmaId,
         disciplina_id: disciplinaId,
@@ -649,7 +687,15 @@ function HorarioDialog({
       }
     },
     onSuccess: () => {
-      toast.success(horario ? "Aula atualizada" : "Aula cadastrada");
+      toast.success(
+        horario
+          ? isIntervalo
+            ? "Intervalo atualizado"
+            : "Aula atualizada"
+          : isIntervalo
+            ? "Intervalo aplicado a todos os dias"
+            : "Aula cadastrada",
+      );
       qc.invalidateQueries({ queryKey: ["horarios"] });
       onOpenChange(false);
     },
@@ -670,6 +716,23 @@ function HorarioDialog({
           <DialogDescription>Defina turma, dia, horário, disciplina e professor.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-3">
+          <label className="flex items-start gap-2 rounded-[5px] border border-dashed border-border bg-muted/30 p-3 text-sm">
+            <Checkbox
+              checked={isIntervalo}
+              onCheckedChange={(v) => setIsIntervalo(v === true)}
+              className="mt-0.5"
+            />
+            <span className="flex-1">
+              <span className="flex items-center gap-1.5 font-medium">
+                <Coffee className="size-3.5" /> Cadastrar como intervalo
+              </span>
+              <span className="mt-0.5 block text-xs text-muted-foreground">
+                Aplica automaticamente o mesmo horário de intervalo a todos os dias da semana
+                (segunda a sexta) no turno selecionado.
+              </span>
+            </span>
+          </label>
+
           <div className="grid grid-cols-2 gap-3">
             <div>
               <Label>Turma *</Label>
@@ -702,22 +765,24 @@ function HorarioDialog({
               </Select>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-3">
-            <div>
-              <Label>Dia *</Label>
-              <Select value={diaSemana} onValueChange={setDiaSemana}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {DIAS.map((d) => (
-                    <SelectItem key={d.v} value={String(d.v)}>
-                      {d.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+          <div className={cn("grid gap-3", isIntervalo ? "grid-cols-2" : "grid-cols-3")}>
+            {!isIntervalo && (
+              <div>
+                <Label>Dia *</Label>
+                <Select value={diaSemana} onValueChange={setDiaSemana}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {DIAS.map((d) => (
+                      <SelectItem key={d.v} value={String(d.v)}>
+                        {d.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <div>
               <Label>Início *</Label>
               <Input
@@ -737,43 +802,54 @@ function HorarioDialog({
               />
             </div>
           </div>
-          <div>
-            <Label>Disciplina *</Label>
-            <Select value={disciplinaId} onValueChange={setDisciplinaId}>
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione" />
-              </SelectTrigger>
-              <SelectContent>
-                {disciplinas.map((d) => (
-                  <SelectItem key={d.id} value={d.id}>
-                    {d.nome}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {disciplinas.length === 0 && (
-              <p className="mt-1 text-xs text-muted-foreground">
-                Cadastre disciplinas no Painel do Desenvolvedor.
-              </p>
-            )}
-          </div>
-          <div>
-            <Label>Professor *</Label>
-            <Input
-              value={professor}
-              onChange={(e) => setProfessor(e.target.value)}
-              placeholder="Nome do professor"
-              required
-              maxLength={120}
-            />
-          </div>
+          {!isIntervalo && (
+            <>
+              <div>
+                <Label>Disciplina *</Label>
+                <Select value={disciplinaId} onValueChange={setDisciplinaId}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {disciplinas.map((d) => (
+                      <SelectItem key={d.id} value={d.id}>
+                        {d.nome}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {disciplinas.length === 0 && (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Cadastre disciplinas no Painel do Desenvolvedor.
+                  </p>
+                )}
+              </div>
+              <div>
+                <Label>Professor *</Label>
+                <Input
+                  value={professor}
+                  onChange={(e) => setProfessor(e.target.value)}
+                  placeholder="Nome do professor"
+                  required
+                  maxLength={120}
+                />
+              </div>
+            </>
+          )}
           {/* Badges */}
           <div className="flex flex-wrap gap-1">
             <Badge variant="outline">{TURNOS.find((t) => t.v === turno)?.label}</Badge>
-            <Badge variant="outline">{DIAS.find((d) => String(d.v) === diaSemana)?.label}</Badge>
+            <Badge variant="outline">
+              {isIntervalo ? "Seg a Sex" : DIAS.find((d) => String(d.v) === diaSemana)?.label}
+            </Badge>
             <Badge variant="outline">
               {horaInicio} – {horaFim}
             </Badge>
+            {isIntervalo && (
+              <Badge className="bg-amber-500/15 text-amber-700 dark:text-amber-300">
+                <Coffee className="mr-1 size-3" /> Intervalo
+              </Badge>
+            )}
           </div>
           <DialogFooter>
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
