@@ -133,13 +133,13 @@ export const listarContratosProfessor = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("contratos_compromisso")
-      .select("*, alunos:aluno_id(nome), turmas:turma_id(nome)")
+      .select("*, alunos:aluno_id(nome_completo), turmas:turma_id(nome)")
       .order("created_at", { ascending: false })
       .limit(100);
     if (error) throw new Error(error.message);
     return (data ?? []).map((r: any) => ({
       ...r,
-      aluno_nome: r.alunos?.nome,
+      aluno_nome: r.alunos?.nome_completo,
       turma_nome: r.turmas?.nome,
     })) as Contrato[];
   });
@@ -149,13 +149,13 @@ export const listarContratosResponsavel = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("contratos_compromisso")
-      .select("*, alunos:aluno_id(nome), turmas:turma_id(nome)")
+      .select("*, alunos:aluno_id(nome_completo), turmas:turma_id(nome)")
       .order("created_at", { ascending: false })
       .limit(100);
     if (error) throw new Error(error.message);
     return (data ?? []).map((r: any) => ({
       ...r,
-      aluno_nome: r.alunos?.nome,
+      aluno_nome: r.alunos?.nome_completo,
       turma_nome: r.turmas?.nome,
     })) as Contrato[];
   });
