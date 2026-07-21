@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Dialog,
@@ -123,15 +124,55 @@ function DetalheAtividadePage() {
   const [busca, setBusca] = useState("");
   const [tab, setTab] = useState<Categoria>("andamento");
   const [openNotif, setOpenNotif] = useState(false);
-  const [mensagemExtra, setMensagemExtra] = useState("");
+  const [notifTitulo, setNotifTitulo] = useState("");
+  const [notifPrazoTexto, setNotifPrazoTexto] = useState("");
+  const [notifCorpo, setNotifCorpo] = useState("");
+  const [notifShowPreview, setNotifShowPreview] = useState(false);
+
+  const atividade = atividadeData?.atividade;
+
+  useEffect(() => {
+    if (!openNotif || !atividade) return;
+    const prazoFmt = new Date(atividade.data_entrega).toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    setNotifTitulo(`📚 Nova atividade: ${atividade.titulo}`);
+    setNotifPrazoTexto(`Prazo de entrega: ${prazoFmt}`);
+    const partes: string[] = [];
+    if (atividade.disciplina) partes.push(`Disciplina: ${atividade.disciplina}`);
+    partes.push(`Prazo de entrega: ${prazoFmt}`);
+    if (atividade.descricao) partes.push(`\n${atividade.descricao}`);
+    partes.push(
+      "\nPor favor, acompanhe a realização da tarefa com seu(sua) filho(a).",
+    );
+    setNotifCorpo(partes.join("\n"));
+    setNotifShowPreview(false);
+  }, [openNotif, atividade]);
+
+  const handlePrazoChange = (novo: string) => {
+    const anterior = notifPrazoTexto;
+    setNotifPrazoTexto(novo);
+    if (anterior && notifCorpo.includes(anterior)) {
+      setNotifCorpo(notifCorpo.split(anterior).join(novo));
+    }
+  };
 
   const notificarMut = useMutation({
     mutationFn: () =>
-      notificarFn({ data: { atividade_id: id, mensagem: mensagemExtra || null } }),
+      notificarFn({
+        data: {
+          atividade_id: id,
+          titulo: notifTitulo.trim(),
+          mensagem: notifCorpo.trim(),
+        },
+      }),
     onSuccess: () => {
       toast.success("Comunicado enviado aos responsáveis da turma");
       setOpenNotif(false);
-      setMensagemExtra("");
     },
     onError: (e: unknown) =>
       toast.error(e instanceof Error ? e.message : "Erro ao notificar"),
@@ -268,26 +309,81 @@ function DetalheAtividadePage() {
               <Send className="size-4" /> Notificar pais
             </Button>
           </DialogTrigger>
-          <DialogContent className="rounded-[5px] sm:max-w-lg">
+          <DialogContent className="rounded-[5px] sm:max-w-2xl">
             <DialogHeader>
               <DialogTitle>Notificar responsáveis</DialogTitle>
               <DialogDescription>
-                Um comunicado será enviado a todos os responsáveis da turma com o
-                título, prazo e descrição desta atividade.
+                Personalize o título, o prazo e a mensagem antes de enviar. O
+                comunicado será entregue a todos os responsáveis da turma.
               </DialogDescription>
             </DialogHeader>
-            <div>
-              <label className="mb-1 block text-sm font-medium" htmlFor="msg-extra">
-                Mensagem adicional (opcional)
-              </label>
-              <Textarea
-                id="msg-extra"
-                rows={3}
-                value={mensagemExtra}
-                onChange={(e) => setMensagemExtra(e.target.value)}
-                placeholder="Ex.: Lembrem-se de trazer o material impresso."
-              />
-            </div>
+
+            {notifShowPreview ? (
+              <div className="space-y-3">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                  Pré-visualização do comunicado
+                </p>
+                <div className="rounded-[5px] border bg-muted/30 p-4">
+                  <p className="text-base font-semibold">
+                    {notifTitulo || "(sem título)"}
+                  </p>
+                  <p className="mt-2 whitespace-pre-wrap text-sm text-foreground/90">
+                    {notifCorpo || "(sem mensagem)"}
+                  </p>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Enviado para: responsáveis de{" "}
+                  <strong>{atividadeData?.turma_nome ?? "a turma"}</strong>
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div>
+                  <label className="mb-1 block text-sm font-medium" htmlFor="notif-titulo">
+                    Título
+                  </label>
+                  <Input
+                    id="notif-titulo"
+                    value={notifTitulo}
+                    maxLength={200}
+                    onChange={(e) => setNotifTitulo(e.target.value)}
+                    placeholder="Título do comunicado"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium" htmlFor="notif-prazo">
+                    Prazo (texto exibido)
+                  </label>
+                  <Input
+                    id="notif-prazo"
+                    value={notifPrazoTexto}
+                    maxLength={200}
+                    onChange={(e) => handlePrazoChange(e.target.value)}
+                    placeholder="Ex.: Prazo de entrega: 25 de julho de 2026, 18:00"
+                  />
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Ajustar aqui atualiza a linha correspondente na mensagem.
+                  </p>
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium" htmlFor="notif-msg">
+                    Mensagem
+                  </label>
+                  <Textarea
+                    id="notif-msg"
+                    rows={8}
+                    maxLength={4000}
+                    value={notifCorpo}
+                    onChange={(e) => setNotifCorpo(e.target.value)}
+                    placeholder="Escreva a mensagem que será enviada aos responsáveis."
+                  />
+                  <p className="mt-1 text-right text-xs text-muted-foreground">
+                    {notifCorpo.length}/4000
+                  </p>
+                </div>
+              </div>
+            )}
+
             <DialogFooter>
               <Button
                 variant="ghost"
@@ -297,8 +393,19 @@ function DetalheAtividadePage() {
                 Cancelar
               </Button>
               <Button
-                onClick={() => notificarMut.mutate()}
+                variant="outline"
+                onClick={() => setNotifShowPreview((v) => !v)}
                 disabled={notificarMut.isPending}
+              >
+                {notifShowPreview ? "Editar" : "Pré-visualizar"}
+              </Button>
+              <Button
+                onClick={() => notificarMut.mutate()}
+                disabled={
+                  notificarMut.isPending ||
+                  !notifTitulo.trim() ||
+                  !notifCorpo.trim()
+                }
                 className="gap-2"
               >
                 {notificarMut.isPending && <Loader2 className="size-4 animate-spin" />}
