@@ -421,6 +421,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
     },
   ],
   leitor: [
+
     {
       label: "Geral",
       items: [
