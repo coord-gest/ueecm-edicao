@@ -175,8 +175,47 @@ function Home() {
   // Modo de exibição do grid: editorial (cards grandes) vs compacto (lista).
   const [modoGrid, setModoGrid] = useState<"editorial" | "compacto">("editorial");
 
+  const [agora, setAgora] = useState<{ data: string; hora: string } | null>(null);
+  useEffect(() => {
+    const fmt = () => {
+      const d = new Date();
+      setAgora({
+        data: d.toLocaleDateString("pt-BR", {
+          weekday: "long",
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        }),
+        hora: d.toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      });
+    };
+    fmt();
+    const id = window.setInterval(fmt, 30_000);
+    return () => window.clearInterval(id);
+  }, []);
+
   return (
     <div className="min-h-dvh bg-background text-foreground">
+      <div className="w-full border-b border-border bg-card">
+        <div className="mx-auto flex w-full max-w-none items-center justify-between gap-4 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-accent sm:px-6 lg:px-8">
+          <span className="capitalize" suppressHydrationWarning>
+            {agora ? `${agora.data} · ${agora.hora}` : "\u00a0"}
+          </span>
+          <div className="hidden items-center gap-6 sm:flex">
+            <span className="text-muted-foreground">Edição Digital</span>
+            <Link
+              to="/posts"
+              className="bg-primary px-3 py-1 text-primary-foreground transition-colors hover:bg-accent"
+            >
+              Ver Edição
+            </Link>
+          </div>
+        </div>
+      </div>
+
       <SiteHeader />
 
       <section
