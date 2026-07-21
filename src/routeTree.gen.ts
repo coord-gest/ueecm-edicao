@@ -72,6 +72,7 @@ import { Route as FamiliasRouteImport } from './routes/familias'
 import { Route as EquipeRouteImport } from './routes/equipe'
 import { Route as EnquetesRouteImport } from './routes/enquetes'
 import { Route as DiagnosticarNotificacoesRouteImport } from './routes/diagnosticar-notificacoes'
+import { Route as ConsultarAgendamentoRouteImport } from './routes/consultar-agendamento'
 import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
 import { Route as ChatAlunoRouteImport } from './routes/chat-aluno'
 import { Route as CalendarioRouteImport } from './routes/calendario'
@@ -435,6 +436,11 @@ const DiagnosticarNotificacoesRoute =
     path: '/diagnosticar-notificacoes',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ConsultarAgendamentoRoute = ConsultarAgendamentoRouteImport.update({
+  id: '/consultar-agendamento',
+  path: '/consultar-agendamento',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ConfiguracoesRoute = ConfiguracoesRouteImport.update({
   id: '/configuracoes',
   path: '/configuracoes',
@@ -681,6 +687,7 @@ export interface FileRoutesByFullPath {
   '/calendario': typeof CalendarioRoute
   '/chat-aluno': typeof ChatAlunoRouteWithChildren
   '/configuracoes': typeof ConfiguracoesRoute
+  '/consultar-agendamento': typeof ConsultarAgendamentoRoute
   '/diagnosticar-notificacoes': typeof DiagnosticarNotificacoesRoute
   '/enquetes': typeof EnquetesRouteWithChildren
   '/equipe': typeof EquipeRouteWithChildren
@@ -792,6 +799,7 @@ export interface FileRoutesByTo {
   '/calendario': typeof CalendarioRoute
   '/chat-aluno': typeof ChatAlunoRouteWithChildren
   '/configuracoes': typeof ConfiguracoesRoute
+  '/consultar-agendamento': typeof ConsultarAgendamentoRoute
   '/diagnosticar-notificacoes': typeof DiagnosticarNotificacoesRoute
   '/enquetes': typeof EnquetesRouteWithChildren
   '/equipe': typeof EquipeRouteWithChildren
@@ -903,6 +911,7 @@ export interface FileRoutesById {
   '/calendario': typeof CalendarioRoute
   '/chat-aluno': typeof ChatAlunoRouteWithChildren
   '/configuracoes': typeof ConfiguracoesRoute
+  '/consultar-agendamento': typeof ConsultarAgendamentoRoute
   '/diagnosticar-notificacoes': typeof DiagnosticarNotificacoesRoute
   '/enquetes': typeof EnquetesRouteWithChildren
   '/equipe': typeof EquipeRouteWithChildren
@@ -1016,6 +1025,7 @@ export interface FileRouteTypes {
     | '/calendario'
     | '/chat-aluno'
     | '/configuracoes'
+    | '/consultar-agendamento'
     | '/diagnosticar-notificacoes'
     | '/enquetes'
     | '/equipe'
@@ -1127,6 +1137,7 @@ export interface FileRouteTypes {
     | '/calendario'
     | '/chat-aluno'
     | '/configuracoes'
+    | '/consultar-agendamento'
     | '/diagnosticar-notificacoes'
     | '/enquetes'
     | '/equipe'
@@ -1237,6 +1248,7 @@ export interface FileRouteTypes {
     | '/calendario'
     | '/chat-aluno'
     | '/configuracoes'
+    | '/consultar-agendamento'
     | '/diagnosticar-notificacoes'
     | '/enquetes'
     | '/equipe'
@@ -1349,6 +1361,7 @@ export interface RootRouteChildren {
   CalendarioRoute: typeof CalendarioRoute
   ChatAlunoRoute: typeof ChatAlunoRouteWithChildren
   ConfiguracoesRoute: typeof ConfiguracoesRoute
+  ConsultarAgendamentoRoute: typeof ConsultarAgendamentoRoute
   DiagnosticarNotificacoesRoute: typeof DiagnosticarNotificacoesRoute
   EnquetesRoute: typeof EnquetesRouteWithChildren
   EquipeRoute: typeof EquipeRouteWithChildren
@@ -1887,6 +1900,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DiagnosticarNotificacoesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/consultar-agendamento': {
+      id: '/consultar-agendamento'
+      path: '/consultar-agendamento'
+      fullPath: '/consultar-agendamento'
+      preLoaderRoute: typeof ConsultarAgendamentoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/configuracoes': {
       id: '/configuracoes'
       path: '/configuracoes'
@@ -2316,6 +2336,7 @@ const rootRouteChildren: RootRouteChildren = {
   CalendarioRoute: CalendarioRoute,
   ChatAlunoRoute: ChatAlunoRouteWithChildren,
   ConfiguracoesRoute: ConfiguracoesRoute,
+  ConsultarAgendamentoRoute: ConsultarAgendamentoRoute,
   DiagnosticarNotificacoesRoute: DiagnosticarNotificacoesRoute,
   EnquetesRoute: EnquetesRouteWithChildren,
   EquipeRoute: EquipeRouteWithChildren,

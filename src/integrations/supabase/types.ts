@@ -2894,6 +2894,8 @@ export type Database = {
           source: string | null
           source_id: string | null
           status: string
+          target_roles: string[] | null
+          target_user_ids: string[] | null
           title: string
           url: string | null
         }
@@ -2907,6 +2909,8 @@ export type Database = {
           source?: string | null
           source_id?: string | null
           status?: string
+          target_roles?: string[] | null
+          target_user_ids?: string[] | null
           title: string
           url?: string | null
         }
@@ -2920,6 +2924,8 @@ export type Database = {
           source?: string | null
           source_id?: string | null
           status?: string
+          target_roles?: string[] | null
+          target_user_ids?: string[] | null
           title?: string
           url?: string | null
         }
@@ -3621,6 +3627,20 @@ export type Database = {
       cleanup_performance_metrics: { Args: never; Returns: undefined }
       cleanup_rate_limits: { Args: never; Returns: undefined }
       cleanup_system_errors: { Args: never; Returns: undefined }
+      consultar_agendamento: {
+        Args: { _contato: string; _protocolo: string }
+        Returns: {
+          alvo_cargo: string
+          created_at: string
+          fim_at: string
+          inicio_at: string
+          motivo: string
+          observacoes_staff: string
+          profissional_nome: string
+          protocolo: string
+          status: string
+        }[]
+      }
       criar_agendamento: {
         Args: {
           p_alvo_cargo?: string
