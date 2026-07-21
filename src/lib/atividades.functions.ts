@@ -494,13 +494,6 @@ export type RankingGeral = {
   turmas: RankingTurma[];
 };
 
-async function ensureGestor(supabase: ReturnType<typeof requireSupabaseAuth>[never] extends never ? never : never, userId: string) {
-  // placeholder to satisfy TS; real check below
-  void supabase;
-  void userId;
-}
-void ensureGestor;
-
 export const rankingAtividades = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<RankingGeral> => {
