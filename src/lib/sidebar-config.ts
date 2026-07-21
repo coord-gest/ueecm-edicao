@@ -92,6 +92,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Arquivos", url: "/painel-arquivos", icon: FolderOpen },
         { title: "Atividades e Trabalhos", url: "/painel-atividades", icon: ClipboardList },
         { title: "Ranking de Atividades", url: "/painel-atividades-ranking", icon: Award },
+        { title: "Diário de Bordo", url: "/painel-diario-bordo-supervisao", icon: NotebookPen },
       ],
     },
     {
@@ -173,6 +174,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Comunicados", url: "/escola/comunicados", icon: Megaphone },
         { title: "Agendamentos", url: "/painel-agendamentos", icon: CalendarClock },
         { title: "Arquivos", url: "/painel-arquivos", icon: FolderOpen },
+        { title: "Diário de Bordo", url: "/painel-diario-bordo-supervisao", icon: NotebookPen },
       ],
     },
     {
@@ -316,6 +318,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Agendamentos", url: "/painel-agendamentos", icon: CalendarClock },
         { title: "Atividades e Trabalhos", url: "/painel-atividades", icon: ClipboardList },
         { title: "Ranking de Atividades", url: "/painel-atividades-ranking", icon: Award },
+        { title: "Diário de Bordo", url: "/painel-diario-bordo-supervisao", icon: NotebookPen },
       ],
     },
     {
@@ -364,6 +367,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Horários", url: "/horarios", icon: Clock },
         { title: "Minhas turmas", url: "/minhas-turmas", icon: BookOpen },
         { title: "Atividades e Trabalhos", url: "/painel-atividades", icon: ClipboardList },
+        { title: "Diário de Bordo", url: "/painel-diario-bordo", icon: NotebookPen },
         { title: "Arquivos", url: "/painel-arquivos", icon: FolderOpen },
         { title: "Enviar p/ o Drive", url: "/painel-enviar-drive", icon: FolderOpen },
       ],
@@ -400,6 +404,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       label: "Acadêmico",
       items: [
         { title: "Atividades e Trabalhos", url: "/painel-atividades-filhos", icon: ClipboardList },
+        { title: "Diário de Bordo", url: "/painel-diario-filho", icon: NotebookPen },
       ],
     },
     {
