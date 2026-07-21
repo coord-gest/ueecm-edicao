@@ -108,6 +108,11 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const { data: patrosData } = useQuery(
+    patrocinadoresQueryOptions(() => listPatrocinadoresPublicos()),
+  );
+  const hasPatrocinadores =
+    (patrosData?.eventos?.length ?? 0) > 0 && (patrosData?.patrocinadores?.length ?? 0) > 0;
   const { data: posts, isLoading } = useQuery({
     queryKey: ["posts-publicos"],
     queryFn: async () => {
@@ -375,11 +380,13 @@ function Home() {
         </RevealSection>
 
         {/* Nossos Patrocinadores (visível quando um evento estiver ativo) */}
-        <RevealSection className="mt-10 md:mt-24" delay={120}>
-          <Suspense fallback={null}>
-            <Patrocinadores />
-          </Suspense>
-        </RevealSection>
+        {hasPatrocinadores && (
+          <RevealSection className="mt-10 md:mt-24" delay={120}>
+            <Suspense fallback={null}>
+              <Patrocinadores />
+            </Suspense>
+          </RevealSection>
+        )}
 
         {/* Equipe em destaque */}
         <RevealSection delay={80}>
