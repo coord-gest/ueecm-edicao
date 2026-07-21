@@ -44,12 +44,6 @@ function papelDeRole(roles: string[] | null | undefined): "familia" | "escola" |
   return "familia";
 }
 
-async function nomeDoUsuario(supabase: ReturnType<typeof requireGetAuthenticatedClient>): Promise<string> {
-  // helper is inline; caller uses context.supabase
-  return "Usuário";
-}
-function requireGetAuthenticatedClient(): never { throw new Error("stub"); }
-
 export const listarMuralFeed = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { limite?: number; offset?: number; categoria?: string | null }) => ({
