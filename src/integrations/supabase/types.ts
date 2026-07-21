@@ -3680,6 +3680,10 @@ export type Database = {
         Returns: boolean
       }
       is_professor_or_staff: { Args: { _user_id: string }; Returns: boolean }
+      is_responsavel_da_turma: {
+        Args: { _turma_id: string; _user_id: string }
+        Returns: boolean
+      }
       is_responsavel_do_aluno: {
         Args: { _aluno_id: string; _user_id: string }
         Returns: boolean

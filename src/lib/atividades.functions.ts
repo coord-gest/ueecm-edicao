@@ -351,3 +351,112 @@ export const listTurmasParaAtividade = createServerFn({ method: "GET" })
       turno: string | null;
     }>;
   });
+
+// ==================== RESPONSÁVEIS: atividades dos filhos ==================== //
+export type AtividadeFilho = {
+  atividade_id: string;
+  titulo: string;
+  descricao: string | null;
+  disciplina: string | null;
+  data_entrega: string;
+  turma_id: string;
+  turma_nome: string | null;
+  aluno_id: string;
+  aluno_nome: string;
+  entregue: boolean;
+  entregue_em: string | null;
+  observacao: string | null;
+};
+
+export const listAtividadesDoResponsavel = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<AtividadeFilho[]> => {
+    // 1. Descobre os alunos vinculados ao responsável logado
+    const { data: resp, error: respErr } = await context.supabase
+      .from("responsaveis")
+      .select("id")
+      .eq("user_id", context.userId);
+    if (respErr) throw respErr;
+    const responsavelIds = (resp ?? []).map((r) => r.id as string);
+    if (responsavelIds.length === 0) return [];
+
+    const { data: vinculos, error: vErr } = await context.supabase
+      .from("aluno_responsavel")
+      .select("aluno_id")
+      .in("responsavel_id", responsavelIds);
+    if (vErr) throw vErr;
+    const alunoIds = Array.from(new Set((vinculos ?? []).map((v) => v.aluno_id as string)));
+    if (alunoIds.length === 0) return [];
+
+    const { data: alunos, error: alunosErr } = await context.supabase
+      .from("alunos")
+      .select("id, nome_completo, turma_id, ativo")
+      .in("id", alunoIds)
+      .eq("ativo", true);
+    if (alunosErr) throw alunosErr;
+    const alunosAtivos = alunos ?? [];
+    if (alunosAtivos.length === 0) return [];
+
+    const turmaIds = Array.from(new Set(alunosAtivos.map((a) => a.turma_id as string).filter(Boolean)));
+    if (turmaIds.length === 0) return [];
+
+    // 2. Busca atividades e turmas em paralelo
+    const [{ data: atividades, error: atErr }, { data: turmas }] = await Promise.all([
+      context.supabase
+        .from("atividades")
+        .select("id, titulo, descricao, disciplina, data_entrega, turma_id")
+        .in("turma_id", turmaIds)
+        .eq("ativo", true)
+        .order("data_entrega", { ascending: false }),
+      context.supabase.from("turmas_escolares").select("id, nome").in("id", turmaIds),
+    ]);
+    if (atErr) throw atErr;
+    const listaAtividades = atividades ?? [];
+    if (listaAtividades.length === 0) return [];
+
+    // 3. Busca entregas dos filhos para essas atividades
+    const atividadeIds = listaAtividades.map((a) => a.id as string);
+    const { data: entregas, error: entErr } = await context.supabase
+      .from("atividade_entregas")
+      .select("atividade_id, aluno_id, entregue, entregue_em, observacao")
+      .in("atividade_id", atividadeIds)
+      .in("aluno_id", alunosAtivos.map((a) => a.id as string));
+    if (entErr) throw entErr;
+
+    const turmaNome = new Map<string, string>();
+    (turmas ?? []).forEach((t) => turmaNome.set(t.id as string, t.nome as string));
+
+    const entregaKey = (atId: string, alId: string) => `${atId}|${alId}`;
+    const entregasMap = new Map<string, { entregue: boolean; entregue_em: string | null; observacao: string | null }>();
+    (entregas ?? []).forEach((e) => {
+      entregasMap.set(entregaKey(e.atividade_id as string, e.aluno_id as string), {
+        entregue: Boolean(e.entregue),
+        entregue_em: (e.entregue_em as string) ?? null,
+        observacao: (e.observacao as string) ?? null,
+      });
+    });
+
+    // 4. Cross-join filho × atividade da sua turma
+    const result: AtividadeFilho[] = [];
+    for (const aluno of alunosAtivos) {
+      for (const at of listaAtividades) {
+        if (at.turma_id !== aluno.turma_id) continue;
+        const e = entregasMap.get(entregaKey(at.id as string, aluno.id as string));
+        result.push({
+          atividade_id: at.id as string,
+          titulo: at.titulo as string,
+          descricao: (at.descricao as string) ?? null,
+          disciplina: (at.disciplina as string) ?? null,
+          data_entrega: at.data_entrega as string,
+          turma_id: at.turma_id as string,
+          turma_nome: turmaNome.get(at.turma_id as string) ?? null,
+          aluno_id: aluno.id as string,
+          aluno_nome: aluno.nome_completo as string,
+          entregue: e?.entregue ?? false,
+          entregue_em: e?.entregue_em ?? null,
+          observacao: e?.observacao ?? null,
+        });
+      }
+    }
+    return result;
+  });
