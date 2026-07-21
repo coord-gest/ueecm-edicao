@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -27,7 +27,11 @@ import { Testimonials } from "@/components/home/Testimonials";
 import { AlunosDestaque } from "@/components/home/AlunosDestaque";
 import { QuickContact } from "@/components/home/QuickContact";
 import { MomentsGallery } from "@/components/home/MomentsGallery";
-import { Patrocinadores } from "@/components/home/Patrocinadores";
+import { patrocinadoresQueryOptions } from "@/components/home/Patrocinadores";
+import { listPatrocinadoresPublicos } from "@/lib/patrocinadores.functions";
+const Patrocinadores = lazy(() =>
+  import("@/components/home/Patrocinadores").then((m) => ({ default: m.Patrocinadores })),
+);
 import { SobreEscola } from "@/components/home/SobreEscola";
 import { LayoutGrid, List } from "lucide-react";
 import type { Post } from "@/data/mock";
