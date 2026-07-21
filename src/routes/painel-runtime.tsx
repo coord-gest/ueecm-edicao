@@ -992,6 +992,16 @@ function PainelRuntime() {
                 "Atualizar"
               )}
             </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() =>
+                confirmAndClear("diagnostics", "o histórico de diagnósticos FCM (fcm_diagnostics)")
+              }
+              disabled={clearMutation.isPending}
+            >
+              <Trash2 className="size-3.5" /> Limpar
+            </Button>
           </div>
 
           {fcmStats.data && (
@@ -1152,6 +1162,16 @@ function PainelRuntime() {
             >
               {dispatchLogs.isFetching ? <Loader2 className="mr-2 size-3.5 animate-spin" /> : null}
               Atualizar
+            </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() =>
+                confirmAndClear("dispatch_logs", "a telemetria de envios (fcm_dispatch_logs)")
+              }
+              disabled={clearMutation.isPending}
+            >
+              <Trash2 className="mr-1 size-3.5" /> Limpar
             </Button>
           </div>
 
