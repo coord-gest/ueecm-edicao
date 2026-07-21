@@ -419,9 +419,14 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Meus agendamentos", url: "/meus-agendamentos", icon: CalendarClock },
       ],
     },
+    {
+      label: "Comunidade",
+      items: [
+        { title: "Mural da Comunidade", url: "/mural", icon: Users },
+      ],
+    },
   ],
   leitor: [
-
     {
       label: "Geral",
       items: [
