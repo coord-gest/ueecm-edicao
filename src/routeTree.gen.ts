@@ -37,6 +37,7 @@ import { Route as PainelErrosRouteImport } from './routes/painel-erros'
 import { Route as PainelEnviarDriveRouteImport } from './routes/painel-enviar-drive'
 import { Route as PainelEnquetesRouteImport } from './routes/painel-enquetes'
 import { Route as PainelDiretorRouteImport } from './routes/painel-diretor'
+import { Route as PainelDiarioFilhoRouteImport } from './routes/painel-diario-filho'
 import { Route as PainelDiarioBordoRouteImport } from './routes/painel-diario-bordo'
 import { Route as PainelDestaquesAlunosRouteImport } from './routes/painel-destaques-alunos'
 import { Route as PainelDestaquesRouteImport } from './routes/painel-destaques'
@@ -262,6 +263,11 @@ const PainelEnquetesRoute = PainelEnquetesRouteImport.update({
 const PainelDiretorRoute = PainelDiretorRouteImport.update({
   id: '/painel-diretor',
   path: '/painel-diretor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelDiarioFilhoRoute = PainelDiarioFilhoRouteImport.update({
+  id: '/painel-diario-filho',
+  path: '/painel-diario-filho',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelDiarioBordoRoute = PainelDiarioBordoRouteImport.update({
@@ -751,6 +757,7 @@ export interface FileRoutesByFullPath {
   '/painel-destaques': typeof PainelDestaquesRoute
   '/painel-destaques-alunos': typeof PainelDestaquesAlunosRoute
   '/painel-diario-bordo': typeof PainelDiarioBordoRoute
+  '/painel-diario-filho': typeof PainelDiarioFilhoRoute
   '/painel-diretor': typeof PainelDiretorRoute
   '/painel-enquetes': typeof PainelEnquetesRoute
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
@@ -866,6 +873,7 @@ export interface FileRoutesByTo {
   '/painel-destaques': typeof PainelDestaquesRoute
   '/painel-destaques-alunos': typeof PainelDestaquesAlunosRoute
   '/painel-diario-bordo': typeof PainelDiarioBordoRoute
+  '/painel-diario-filho': typeof PainelDiarioFilhoRoute
   '/painel-diretor': typeof PainelDiretorRoute
   '/painel-enquetes': typeof PainelEnquetesRoute
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
@@ -983,6 +991,7 @@ export interface FileRoutesById {
   '/painel-destaques': typeof PainelDestaquesRoute
   '/painel-destaques-alunos': typeof PainelDestaquesAlunosRoute
   '/painel-diario-bordo': typeof PainelDiarioBordoRoute
+  '/painel-diario-filho': typeof PainelDiarioFilhoRoute
   '/painel-diretor': typeof PainelDiretorRoute
   '/painel-enquetes': typeof PainelEnquetesRoute
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
@@ -1101,6 +1110,7 @@ export interface FileRouteTypes {
     | '/painel-destaques'
     | '/painel-destaques-alunos'
     | '/painel-diario-bordo'
+    | '/painel-diario-filho'
     | '/painel-diretor'
     | '/painel-enquetes'
     | '/painel-enviar-drive'
@@ -1216,6 +1226,7 @@ export interface FileRouteTypes {
     | '/painel-destaques'
     | '/painel-destaques-alunos'
     | '/painel-diario-bordo'
+    | '/painel-diario-filho'
     | '/painel-diretor'
     | '/painel-enquetes'
     | '/painel-enviar-drive'
@@ -1332,6 +1343,7 @@ export interface FileRouteTypes {
     | '/painel-destaques'
     | '/painel-destaques-alunos'
     | '/painel-diario-bordo'
+    | '/painel-diario-filho'
     | '/painel-diretor'
     | '/painel-enquetes'
     | '/painel-enviar-drive'
@@ -1449,6 +1461,7 @@ export interface RootRouteChildren {
   PainelDestaquesRoute: typeof PainelDestaquesRoute
   PainelDestaquesAlunosRoute: typeof PainelDestaquesAlunosRoute
   PainelDiarioBordoRoute: typeof PainelDiarioBordoRoute
+  PainelDiarioFilhoRoute: typeof PainelDiarioFilhoRoute
   PainelDiretorRoute: typeof PainelDiretorRoute
   PainelEnquetesRoute: typeof PainelEnquetesRoute
   PainelEnviarDriveRoute: typeof PainelEnviarDriveRoute
@@ -1705,6 +1718,13 @@ declare module '@tanstack/react-router' {
       path: '/painel-diretor'
       fullPath: '/painel-diretor'
       preLoaderRoute: typeof PainelDiretorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-diario-filho': {
+      id: '/painel-diario-filho'
+      path: '/painel-diario-filho'
+      fullPath: '/painel-diario-filho'
+      preLoaderRoute: typeof PainelDiarioFilhoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-diario-bordo': {
@@ -2469,6 +2489,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelDestaquesRoute: PainelDestaquesRoute,
   PainelDestaquesAlunosRoute: PainelDestaquesAlunosRoute,
   PainelDiarioBordoRoute: PainelDiarioBordoRoute,
+  PainelDiarioFilhoRoute: PainelDiarioFilhoRoute,
   PainelDiretorRoute: PainelDiretorRoute,
   PainelEnquetesRoute: PainelEnquetesRoute,
   PainelEnviarDriveRoute: PainelEnviarDriveRoute,
