@@ -26,6 +26,7 @@ import { Route as PainelResponsavelRouteImport } from './routes/painel-responsav
 import { Route as PainelRadarFilhoRouteImport } from './routes/painel-radar-filho'
 import { Route as PainelProfissionaisRouteImport } from './routes/painel-profissionais'
 import { Route as PainelProfessorRouteImport } from './routes/painel-professor'
+import { Route as PainelPresencaParentalRouteImport } from './routes/painel-presenca-parental'
 import { Route as PainelPatrocinadoresRouteImport } from './routes/painel-patrocinadores'
 import { Route as PainelMeritosFilhosRouteImport } from './routes/painel-meritos-filhos'
 import { Route as PainelMeritosRouteImport } from './routes/painel-meritos'
@@ -215,6 +216,11 @@ const PainelProfissionaisRoute = PainelProfissionaisRouteImport.update({
 const PainelProfessorRoute = PainelProfessorRouteImport.update({
   id: '/painel-professor',
   path: '/painel-professor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelPresencaParentalRoute = PainelPresencaParentalRouteImport.update({
+  id: '/painel-presenca-parental',
+  path: '/painel-presenca-parental',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelPatrocinadoresRoute = PainelPatrocinadoresRouteImport.update({
@@ -819,6 +825,7 @@ export interface FileRoutesByFullPath {
   '/painel-meritos': typeof PainelMeritosRoute
   '/painel-meritos-filhos': typeof PainelMeritosFilhosRoute
   '/painel-patrocinadores': typeof PainelPatrocinadoresRoute
+  '/painel-presenca-parental': typeof PainelPresencaParentalRoute
   '/painel-professor': typeof PainelProfessorRoute
   '/painel-profissionais': typeof PainelProfissionaisRoute
   '/painel-radar-filho': typeof PainelRadarFilhoRoute
@@ -942,6 +949,7 @@ export interface FileRoutesByTo {
   '/painel-meritos': typeof PainelMeritosRoute
   '/painel-meritos-filhos': typeof PainelMeritosFilhosRoute
   '/painel-patrocinadores': typeof PainelPatrocinadoresRoute
+  '/painel-presenca-parental': typeof PainelPresencaParentalRoute
   '/painel-professor': typeof PainelProfessorRoute
   '/painel-profissionais': typeof PainelProfissionaisRoute
   '/painel-radar-filho': typeof PainelRadarFilhoRoute
@@ -1067,6 +1075,7 @@ export interface FileRoutesById {
   '/painel-meritos': typeof PainelMeritosRoute
   '/painel-meritos-filhos': typeof PainelMeritosFilhosRoute
   '/painel-patrocinadores': typeof PainelPatrocinadoresRoute
+  '/painel-presenca-parental': typeof PainelPresencaParentalRoute
   '/painel-professor': typeof PainelProfessorRoute
   '/painel-profissionais': typeof PainelProfissionaisRoute
   '/painel-radar-filho': typeof PainelRadarFilhoRoute
@@ -1193,6 +1202,7 @@ export interface FileRouteTypes {
     | '/painel-meritos'
     | '/painel-meritos-filhos'
     | '/painel-patrocinadores'
+    | '/painel-presenca-parental'
     | '/painel-professor'
     | '/painel-profissionais'
     | '/painel-radar-filho'
@@ -1316,6 +1326,7 @@ export interface FileRouteTypes {
     | '/painel-meritos'
     | '/painel-meritos-filhos'
     | '/painel-patrocinadores'
+    | '/painel-presenca-parental'
     | '/painel-professor'
     | '/painel-profissionais'
     | '/painel-radar-filho'
@@ -1440,6 +1451,7 @@ export interface FileRouteTypes {
     | '/painel-meritos'
     | '/painel-meritos-filhos'
     | '/painel-patrocinadores'
+    | '/painel-presenca-parental'
     | '/painel-professor'
     | '/painel-profissionais'
     | '/painel-radar-filho'
@@ -1565,6 +1577,7 @@ export interface RootRouteChildren {
   PainelMeritosRoute: typeof PainelMeritosRoute
   PainelMeritosFilhosRoute: typeof PainelMeritosFilhosRoute
   PainelPatrocinadoresRoute: typeof PainelPatrocinadoresRoute
+  PainelPresencaParentalRoute: typeof PainelPresencaParentalRoute
   PainelProfessorRoute: typeof PainelProfessorRoute
   PainelProfissionaisRoute: typeof PainelProfissionaisRoute
   PainelRadarFilhoRoute: typeof PainelRadarFilhoRoute
@@ -1733,6 +1746,13 @@ declare module '@tanstack/react-router' {
       path: '/painel-professor'
       fullPath: '/painel-professor'
       preLoaderRoute: typeof PainelProfessorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-presenca-parental': {
+      id: '/painel-presenca-parental'
+      path: '/painel-presenca-parental'
+      fullPath: '/painel-presenca-parental'
+      preLoaderRoute: typeof PainelPresencaParentalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-patrocinadores': {
@@ -2649,6 +2669,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelMeritosRoute: PainelMeritosRoute,
   PainelMeritosFilhosRoute: PainelMeritosFilhosRoute,
   PainelPatrocinadoresRoute: PainelPatrocinadoresRoute,
+  PainelPresencaParentalRoute: PainelPresencaParentalRoute,
   PainelProfessorRoute: PainelProfessorRoute,
   PainelProfissionaisRoute: PainelProfissionaisRoute,
   PainelRadarFilhoRoute: PainelRadarFilhoRoute,
