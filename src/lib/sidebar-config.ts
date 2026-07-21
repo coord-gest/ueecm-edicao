@@ -235,6 +235,10 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       items: [
         { title: "Mural da Comunidade", url: "/mural", icon: Users },
         { title: "Moderação do Mural", url: "/painel-mural-moderacao", icon: Shield },
+        { title: "Rede de Apoio", url: "/rede-apoio", icon: HeartHandshake },
+        { title: "Moderação — Apoio", url: "/painel-rede-apoio", icon: Shield },
+        { title: "Vaquinhas", url: "/vaquinhas", icon: HandCoins },
+        { title: "Gestão de Vaquinhas", url: "/painel-vaquinhas", icon: HandCoins },
       ],
     },
   ],
