@@ -175,18 +175,6 @@ function Home() {
   // Modo de exibição do grid: editorial (cards grandes) vs compacto (lista).
   const [modoGrid, setModoGrid] = useState<"editorial" | "compacto">("editorial");
 
-  const [hoje, setHoje] = useState<string | null>(null);
-  useEffect(() => {
-    setHoje(
-      new Date().toLocaleDateString("pt-BR", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      }),
-    );
-  }, []);
-
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <SiteHeader />
