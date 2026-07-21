@@ -11,7 +11,7 @@ export const Route = createFileRoute("/sobre")({
       {
         name: "description",
         content:
-          "Fundada em 1982 em Assunção do Piauí, a Unidade Escolar Evaristo Campelo de Matos forma gerações com ensino de qualidade, valores humanos e compromisso com a comunidade.",
+          "Fundada em 1982 em Assunção do Piauí, a U.E. Evaristo Campelo de Matos forma gerações com ensino de qualidade e valores humanos.",
       },
       { property: "og:title", content: "Sobre a U.E. Evaristo Campelo de Matos" },
       {
@@ -110,7 +110,9 @@ function SobrePage() {
         </section>
 
         {/* Identidade */}
-        <section className="mb-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <section aria-labelledby="identidade-heading" className="mb-14">
+          <h2 id="identidade-heading" className="sr-only">Identidade</h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <IdentityCard
             icon={Calendar}
             title="Fundada em 1982"
@@ -126,10 +128,13 @@ function SobrePage() {
             title="Ensino público de qualidade"
             text="Educação Infantil, Anos Iniciais e Anos Finais do Ensino Fundamental, com projetos pedagógicos e culturais durante todo o ano."
           />
+          </div>
         </section>
 
         {/* Missão, Visão, Valores */}
-        <section className="mb-14 grid gap-6 lg:grid-cols-3">
+        <section aria-labelledby="pilares-heading" className="mb-14">
+          <h2 id="pilares-heading" className="sr-only">Missão, visão e valores</h2>
+          <div className="grid gap-6 lg:grid-cols-3">
           <PillarCard
             icon={Target}
             title="Missão"
@@ -145,6 +150,7 @@ function SobrePage() {
             title="Valores"
             text="Respeito, responsabilidade, empatia, disciplina, valorização do saber, cuidado com o outro e compromisso com a transformação social pela educação."
           />
+          </div>
         </section>
 
         {/* História */}

@@ -32,6 +32,8 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/alunos-destaque", lastmod: today, changefreq: "weekly", priority: "0.7" },
           { path: "/familias", lastmod: today, changefreq: "monthly", priority: "0.6" },
           { path: "/momentos", lastmod: today, changefreq: "weekly", priority: "0.7" },
+          { path: "/enquetes", lastmod: today, changefreq: "weekly", priority: "0.6" },
+          { path: "/galeria", lastmod: today, changefreq: "weekly", priority: "0.6" },
           { path: "/solicitar-dados", lastmod: today, changefreq: "yearly", priority: "0.4" },
           { path: "/privacidade", lastmod: today, changefreq: "yearly", priority: "0.4" },
           { path: "/uso-de-imagem", lastmod: today, changefreq: "yearly", priority: "0.5" },

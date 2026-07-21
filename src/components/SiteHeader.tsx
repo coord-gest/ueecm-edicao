@@ -129,7 +129,7 @@ export function SiteHeader() {
               >
                 <SheetHeader className="border-b border-border/60 px-5 py-4">
                   <SheetTitle className="flex items-center gap-2">
-                    <img src={logo} alt="UEECM" className="h-10 w-auto" />
+                    <img src={logo} alt="Logo U.E. Evaristo Campelo de Matos" className="h-10 w-auto" />
                     <span className="text-base font-bold">Menu</span>
                   </SheetTitle>
                 </SheetHeader>
