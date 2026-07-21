@@ -8,7 +8,7 @@ export const Route = createFileRoute("/privacidade")({
   head: () => ({
     meta: [
       {
-        title: "Política de Privacidade (LGPD) — U.E. Evaristo Campelo de Matos",
+        title: "Política de Privacidade (LGPD) — UEECM",
       },
       {
         name: "description",

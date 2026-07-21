@@ -11,7 +11,7 @@ export const Route = createFileRoute("/sobre")({
       {
         name: "description",
         content:
-          "Fundada em 1982 em Assunção do Piauí, a Unidade Escolar Evaristo Campelo de Matos forma gerações com ensino de qualidade, valores humanos e compromisso com a comunidade.",
+          "Fundada em 1982 em Assunção do Piauí, a U.E. Evaristo Campelo de Matos forma gerações com ensino de qualidade e valores humanos.",
       },
       { property: "og:title", content: "Sobre a U.E. Evaristo Campelo de Matos" },
       {
