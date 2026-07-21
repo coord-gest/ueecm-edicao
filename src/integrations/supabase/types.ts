@@ -1080,18 +1080,21 @@ export type Database = {
       comunicado_leituras: {
         Row: {
           comunicado_id: string
+          confirmado_em: string | null
           id: string
           lido_em: string
           usuario_id: string
         }
         Insert: {
           comunicado_id: string
+          confirmado_em?: string | null
           id?: string
           lido_em?: string
           usuario_id: string
         }
         Update: {
           comunicado_id?: string
+          confirmado_em?: string | null
           id?: string
           lido_em?: string
           usuario_id?: string
@@ -1142,6 +1145,7 @@ export type Database = {
       comunicados: {
         Row: {
           agendado_para: string | null
+          alerta_gestao_apos_horas: number | null
           aluno_id: string | null
           anexos: Json
           autor_id: string
@@ -1151,12 +1155,14 @@ export type Database = {
           lembrete_enviado: boolean
           mensagem: string
           push_enfileirado: boolean
+          requer_confirmacao: boolean
           tipo: string
           titulo: string
           turma_id: string | null
         }
         Insert: {
           agendado_para?: string | null
+          alerta_gestao_apos_horas?: number | null
           aluno_id?: string | null
           anexos?: Json
           autor_id: string
@@ -1166,12 +1172,14 @@ export type Database = {
           lembrete_enviado?: boolean
           mensagem: string
           push_enfileirado?: boolean
+          requer_confirmacao?: boolean
           tipo: string
           titulo: string
           turma_id?: string | null
         }
         Update: {
           agendado_para?: string | null
+          alerta_gestao_apos_horas?: number | null
           aluno_id?: string | null
           anexos?: Json
           autor_id?: string
@@ -1181,6 +1189,7 @@ export type Database = {
           lembrete_enviado?: boolean
           mensagem?: string
           push_enfileirado?: boolean
+          requer_confirmacao?: boolean
           tipo?: string
           titulo?: string
           turma_id?: string | null

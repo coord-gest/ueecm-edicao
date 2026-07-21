@@ -72,6 +72,8 @@ function NovoComunicadoPage() {
   const [agendadoPara, setAgendadoPara] = useState<string>("");
   const [lembreteAtivo, setLembreteAtivo] = useState(false);
   const [lembreteHoras, setLembreteHoras] = useState<number>(24);
+  const [requerConfirmacao, setRequerConfirmacao] = useState(false);
+  const [alertaGestaoHoras, setAlertaGestaoHoras] = useState<number>(48);
   const [submitting, setSubmitting] = useState(false);
   const [templateId, setTemplateId] = useState<string>("");
 
@@ -253,6 +255,12 @@ function NovoComunicadoPage() {
             ...(agendadoIso ? { agendado_para: agendadoIso } : {}),
             ...(lembreteAtivo && lembreteHoras > 0
               ? { lembrete_apos_horas: Math.min(lembreteHoras, 720) }
+              : {}),
+            ...(requerConfirmacao
+              ? {
+                  requer_confirmacao: true,
+                  alerta_gestao_apos_horas: Math.max(1, Math.min(alertaGestaoHoras, 720)),
+                }
               : {}),
           } as never)
           .select("id")
@@ -549,6 +557,35 @@ function NovoComunicadoPage() {
               />
               <p className="text-xs text-muted-foreground">
                 Se ninguém abrir o comunicado até esse prazo, um push de lembrete será enviado.
+              </p>
+            </div>
+          )}
+        </div>
+
+        <div className="space-y-3 rounded-md border p-4">
+          <label className="flex items-center gap-2 text-sm font-medium">
+            <Checkbox
+              checked={requerConfirmacao}
+              onCheckedChange={(v) => setRequerConfirmacao(v === true)}
+            />
+            Exigir confirmação de compreensão do responsável
+          </label>
+          {requerConfirmacao && (
+            <div className="space-y-1">
+              <Label htmlFor="alerta_gestao_horas">Alertar gestão após (horas sem confirmação)</Label>
+              <Input
+                id="alerta_gestao_horas"
+                type="number"
+                min={1}
+                max={720}
+                step={1}
+                value={alertaGestaoHoras}
+                onChange={(e) => setAlertaGestaoHoras(Number(e.target.value) || 0)}
+                className="max-w-[120px]"
+              />
+              <p className="text-xs text-muted-foreground">
+                Além de "Marcar como lido", o responsável deverá confirmar que entendeu.
+                Comunicados sem confirmação após o prazo aparecem no painel de gestão.
               </p>
             </div>
           )}
