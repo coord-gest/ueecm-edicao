@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, queryOptions } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import Autoplay from "embla-carousel-autoplay";
 import {
@@ -23,6 +23,20 @@ import {
   type Patrocinador,
   type EventoPatrocinio,
 } from "@/lib/patrocinadores.functions";
+
+export const patrocinadoresQueryOptions = (
+  fetchFn: () => Promise<{ eventos: EventoPatrocinio[]; patrocinadores: Patrocinador[] }>,
+) =>
+  queryOptions({
+    queryKey: ["home-patrocinadores"],
+    queryFn: fetchFn,
+    staleTime: 10 * 60_000,
+    gcTime: 30 * 60_000,
+    retry: 2,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 5000),
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
 import { useReveal } from "@/hooks/use-reveal";
 import { trackEvent } from "@/lib/analytics";
 import {
@@ -52,11 +66,7 @@ function ctaFromUrl(url: string): CtaInfo {
 export function Patrocinadores() {
   const ref = useReveal<HTMLElement>();
   const fetchPatros = useServerFn(listPatrocinadoresPublicos);
-  const { data, isLoading } = useQuery({
-    queryKey: ["home-patrocinadores"],
-    queryFn: () => fetchPatros(),
-    staleTime: 5 * 60_000,
-  });
+  const { data, isLoading } = useQuery(patrocinadoresQueryOptions(() => fetchPatros()));
 
   const patros = data?.patrocinadores ?? [];
   const eventos = data?.eventos ?? [];
