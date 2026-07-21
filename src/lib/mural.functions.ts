@@ -55,13 +55,13 @@ export const listarMuralFeed = createServerFn({ method: "GET" })
   .inputValidator((d: { limite?: number; offset?: number; categoria?: string | null }) => ({
     limite: Math.min(Math.max(d?.limite ?? 30, 1), 60),
     offset: Math.max(d?.offset ?? 0, 0),
-    categoria: d?.categoria ?? null,
+    categoria: d?.categoria ?? undefined,
   }))
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await context.supabase.rpc("mural_listar_feed", {
       _limite: data.limite,
       _offset: data.offset,
-      _categoria: data.categoria,
+      _categoria: data.categoria ?? undefined,
     });
     if (error) throw new Error(error.message);
     return (rows ?? []) as MuralFeedItem[];
