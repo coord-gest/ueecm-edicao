@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   ArrowLeft,
+  ArrowRight,
   ClipboardList,
   Loader2,
   Plus,
@@ -411,7 +412,7 @@ function AtividadeCard({
         </div>
       </CardHeader>
       <CardContent className="pt-0">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-1 text-sm">
             <Users className="size-4 text-muted-foreground" />
             <span className="font-medium">
@@ -419,13 +420,22 @@ function AtividadeCard({
             </span>
             <span className="text-muted-foreground">entregaram</span>
           </div>
-          <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+          <div className="h-2 flex-1 min-w-[120px] overflow-hidden rounded-full bg-muted">
             <div
               className="h-full bg-emerald-500 transition-all"
               style={{ width: `${pct}%` }}
             />
           </div>
           <span className="text-xs text-muted-foreground">{pct}%</span>
+          <Button
+            asChild
+            size="sm"
+            className="ml-auto gap-1 rounded-[5px]"
+          >
+            <Link to="/painel-atividades/$id" params={{ id: atividade.id }}>
+              Ver entregas <ArrowRight className="size-4" />
+            </Link>
+          </Button>
         </div>
       </CardContent>
     </Card>
