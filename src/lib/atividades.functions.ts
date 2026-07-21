@@ -353,6 +353,59 @@ export const listTurmasParaAtividade = createServerFn({ method: "GET" })
     }>;
   });
 
+// ==================== NOTIFICAR RESPONSÁVEIS ==================== //
+export const notificarPaisAtividade = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((raw: unknown) => {
+    if (typeof raw !== "object" || raw === null) throw new Error("Payload inválido");
+    const d = raw as Record<string, unknown>;
+    const atividade_id = String(d.atividade_id ?? "").trim();
+    if (!atividade_id) throw new Error("atividade_id obrigatório");
+    const mensagemExtra = (d.mensagem as string)?.trim() || null;
+    return { atividade_id, mensagemExtra };
+  })
+  .handler(async ({ data, context }) => {
+    const { data: atividade, error: aErr } = await context.supabase
+      .from("atividades")
+      .select("id, titulo, descricao, disciplina, data_entrega, turma_id")
+      .eq("id", data.atividade_id)
+      .maybeSingle();
+    if (aErr) throw aErr;
+    if (!atividade) throw new Error("Atividade não encontrada");
+
+    const prazo = new Date(atividade.data_entrega as string).toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const titulo = `📚 Nova atividade: ${atividade.titulo}`;
+    const partes: string[] = [];
+    if (atividade.disciplina) partes.push(`Disciplina: ${atividade.disciplina}`);
+    partes.push(`Prazo de entrega: ${prazo}`);
+    if (atividade.descricao) partes.push(`\n${atividade.descricao}`);
+    if (data.mensagemExtra) partes.push(`\n${data.mensagemExtra}`);
+    partes.push(
+      "\nPor favor, acompanhe a realização da tarefa com seu(sua) filho(a).",
+    );
+    const mensagem = partes.join("\n");
+
+    const { error: insErr } = await context.supabase.from("comunicados").insert({
+      titulo,
+      mensagem,
+      autor_id: context.userId,
+      tipo: "turma",
+      turma_id: atividade.turma_id as string,
+      aluno_id: null,
+      anexos: [],
+    });
+    if (insErr) throw insErr;
+
+    return { ok: true };
+  });
+
 // ==================== RESPONSÁVEIS: atividades dos filhos ==================== //
 export type AtividadeFilho = {
   atividade_id: string;
