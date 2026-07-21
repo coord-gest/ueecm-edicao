@@ -675,6 +675,118 @@ export type Database = {
           },
         ]
       }
+      atividade_entregas: {
+        Row: {
+          aluno_id: string
+          atividade_id: string
+          created_at: string
+          entregue: boolean
+          entregue_em: string
+          id: string
+          marcado_por: string | null
+          observacao: string | null
+          updated_at: string
+        }
+        Insert: {
+          aluno_id: string
+          atividade_id: string
+          created_at?: string
+          entregue?: boolean
+          entregue_em?: string
+          id?: string
+          marcado_por?: string | null
+          observacao?: string | null
+          updated_at?: string
+        }
+        Update: {
+          aluno_id?: string
+          atividade_id?: string
+          created_at?: string
+          entregue?: boolean
+          entregue_em?: string
+          id?: string
+          marcado_por?: string | null
+          observacao?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "atividade_entregas_aluno_id_fkey"
+            columns: ["aluno_id"]
+            isOneToOne: false
+            referencedRelation: "alunos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "atividade_entregas_aluno_id_fkey"
+            columns: ["aluno_id"]
+            isOneToOne: false
+            referencedRelation: "alunos_destaque_publicos"
+            referencedColumns: ["aluno_id"]
+          },
+          {
+            foreignKeyName: "atividade_entregas_atividade_id_fkey"
+            columns: ["atividade_id"]
+            isOneToOne: false
+            referencedRelation: "atividades"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      atividades: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          data_entrega: string
+          descricao: string | null
+          disciplina: string | null
+          id: string
+          professor_id: string
+          titulo: string
+          turma_id: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          data_entrega: string
+          descricao?: string | null
+          disciplina?: string | null
+          id?: string
+          professor_id: string
+          titulo: string
+          turma_id: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          data_entrega?: string
+          descricao?: string | null
+          disciplina?: string | null
+          id?: string
+          professor_id?: string
+          titulo?: string
+          turma_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "atividades_turma_id_fkey"
+            columns: ["turma_id"]
+            isOneToOne: false
+            referencedRelation: "alunos_destaque_publicos"
+            referencedColumns: ["turma_id"]
+          },
+          {
+            foreignKeyName: "atividades_turma_id_fkey"
+            columns: ["turma_id"]
+            isOneToOne: false
+            referencedRelation: "turmas_escolares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           action: string

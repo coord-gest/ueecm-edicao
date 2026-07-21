@@ -2,6 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import {
   BookOpen,
   Calendar,
+  ClipboardList,
   Clock,
   FileText,
   FolderOpen,
@@ -47,6 +48,11 @@ function PainelProfessor() {
         icon={<BookOpen className="size-5 text-primary" />}
         items={[
           { label: "Minhas turmas", to: "/minhas-turmas", icon: <BookOpen className="size-4" /> },
+          {
+            label: "Atividades e Trabalhos",
+            to: "/painel-atividades",
+            icon: <ClipboardList className="size-4" />,
+          },
           { label: "Calendário", to: "/calendario", icon: <Calendar className="size-4" /> },
           { label: "Horários", to: "/horarios", icon: <Clock className="size-4" /> },
         ]}
