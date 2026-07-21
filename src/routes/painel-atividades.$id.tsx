@@ -463,26 +463,41 @@ function DetalheAtividadePage() {
                               </p>
                             )}
                           </div>
-                          <Button
-                            size="sm"
-                            variant={e.entregue ? "outline" : "default"}
-                            className="gap-1 rounded-[5px]"
-                            disabled={isBusy}
-                            onClick={() =>
-                              toggleMut.mutate({
-                                aluno_id: e.aluno_id,
-                                entregue: !e.entregue,
-                              })
-                            }
-                          >
-                            {isBusy ? (
-                              <Loader2 className="size-4 animate-spin" />
-                            ) : e.entregue ? (
-                              "Desmarcar"
-                            ) : (
-                              "Marcar realizado"
+                          <div className="flex items-center gap-2">
+                            {isBusy && (
+                              <Loader2 className="size-4 animate-spin text-muted-foreground" />
                             )}
-                          </Button>
+                            <Button
+                              size="sm"
+                              variant={e.entregue ? "default" : "outline"}
+                              className={`gap-1 rounded-[5px] ${e.entregue ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "border-emerald-300 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-950"}`}
+                              disabled={isBusy}
+                              onClick={() =>
+                                toggleMut.mutate({
+                                  aluno_id: e.aluno_id,
+                                  entregue: true,
+                                })
+                              }
+                              aria-pressed={e.entregue}
+                            >
+                              <CheckCircle2 className="size-4" /> Fez
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant={!e.entregue ? "default" : "outline"}
+                              className={`gap-1 rounded-[5px] ${!e.entregue ? "bg-red-600 hover:bg-red-700 text-white" : "border-red-300 text-red-700 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950"}`}
+                              disabled={isBusy}
+                              onClick={() =>
+                                toggleMut.mutate({
+                                  aluno_id: e.aluno_id,
+                                  entregue: false,
+                                })
+                              }
+                              aria-pressed={!e.entregue}
+                            >
+                              <CircleAlert className="size-4" /> Não fez
+                            </Button>
+                          </div>
                         </CardContent>
                       </Card>
                     );
