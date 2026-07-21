@@ -175,37 +175,8 @@ function Home() {
   // Modo de exibição do grid: editorial (cards grandes) vs compacto (lista).
   const [modoGrid, setModoGrid] = useState<"editorial" | "compacto">("editorial");
 
-  const [hoje, setHoje] = useState<string | null>(null);
-  useEffect(() => {
-    setHoje(
-      new Date().toLocaleDateString("pt-BR", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      }),
-    );
-  }, []);
-
   return (
     <div className="min-h-dvh bg-background text-foreground">
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between border-b border-border py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-accent">
-          <span className="capitalize" suppressHydrationWarning>
-            {hoje ?? "\u00a0"}
-          </span>
-          <div className="hidden items-center gap-6 sm:flex">
-            <span className="text-muted-foreground">Edição Digital</span>
-            <Link
-              to="/posts"
-              className="bg-primary px-3 py-1 text-primary-foreground transition-colors hover:bg-accent"
-            >
-              Ver Edição
-            </Link>
-          </div>
-        </div>
-      </div>
-
       <SiteHeader />
 
       <section
