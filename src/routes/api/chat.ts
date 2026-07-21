@@ -20,7 +20,7 @@ type ChatRequest = {
 type RuntimeEnv = Record<string, string | undefined>;
 
 type RequiredChatEnv = {
-  GROQ_API_KEY: string;
+  GEMINI_API_KEY: string;
   SUPABASE_URL: string;
   SUPABASE_SERVICE_ROLE_KEY: string;
 };
@@ -36,12 +36,12 @@ const CHAT_FALLBACK_REPLY =
 // 45s cobre latências de cauda longa sob carga; menor que isso gerava
 // timeouts frequentes que eram registrados como erros em system_errors.
 const AI_TIMEOUT_MS = 45_000;
-// Groq (API OpenAI-compatível, free tier generoso).
-// `llama-3.3-70b-versatile` entrega ótima qualidade em PT-BR com latência baixa.
-// `llama-3.1-8b-instant` é usado como fallback em caso de 429/503.
-const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
-const AI_MODEL = "llama-3.3-70b-versatile";
-const AI_MODEL_FALLBACK = "llama-3.1-8b-instant";
+// Google Generative Language (Gemini) — API direta com GEMINI_API_KEY.
+// `gemini-2.0-flash` entrega baixa latência e boa qualidade em PT-BR.
+// `gemini-flash-latest` (alias estável do Flash mais recente) é o fallback.
+const GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
+const AI_MODEL = "gemini-2.0-flash";
+const AI_MODEL_FALLBACK = "gemini-flash-latest";
 
 // Rate limit em memória em dois níveis (best-effort; reseta a cada cold start do Worker).
 // - Por (IP+session): 12/min → uso legítimo.
@@ -204,35 +204,36 @@ function createSupabaseAdminForChat(
   });
 }
 
-async function callGroq(
+async function callGemini(
   apiKey: string,
   systemPrompt: string,
   history: ChatMessage[],
   signal: AbortSignal,
 ): Promise<{ ok: true; text: string } | { ok: false; status: number; error: string }> {
-  const messages: ChatMessage[] = [{ role: "system", content: systemPrompt }, ...history];
+  const contents = history.map((m) => ({
+    role: m.role === "assistant" ? "model" : "user",
+    parts: [{ text: m.content }],
+  }));
 
   async function callWithModel(model: string) {
-    return fetch(GROQ_API_URL, {
+    const url = `${GEMINI_API_BASE}/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    return fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model,
-        messages,
-        temperature: 0.7,
-        max_tokens: 800,
+        systemInstruction: { role: "system", parts: [{ text: systemPrompt }] },
+        contents,
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 800,
+        },
       }),
       signal,
     });
   }
 
   let res = await callWithModel(AI_MODEL);
-  // 413 = payload maior que o TPM do modelo primário (free tier: 12000 tokens).
-  // O `llama-3.1-8b-instant` tem TPM bem maior, então cai para ele nesses casos.
-  if (res.status === 429 || res.status === 503 || res.status === 413) {
+  if (res.status === 429 || res.status === 503 || res.status === 500) {
     try {
       res = await callWithModel(AI_MODEL_FALLBACK);
     } catch {
@@ -251,9 +252,10 @@ async function callGroq(
   }
 
   const data = (await res.json()) as {
-    choices?: Array<{ message?: { content?: string } }>;
+    candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
   };
-  const text = data.choices?.[0]?.message?.content ?? "";
+  const text =
+    data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("") ?? "";
   return { ok: true, text };
 }
 
