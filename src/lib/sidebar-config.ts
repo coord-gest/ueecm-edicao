@@ -27,6 +27,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { ClipboardList } from "lucide-react";
+import { Radar } from "lucide-react";
 
 import type { AppRole } from "@/lib/roles";
 
@@ -403,6 +404,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
     {
       label: "Acadêmico",
       items: [
+        { title: "Radar do Filho", url: "/painel-radar-filho", icon: Radar },
         { title: "Atividades e Trabalhos", url: "/painel-atividades-filhos", icon: ClipboardList },
         { title: "Diário de Bordo", url: "/painel-diario-filho", icon: NotebookPen },
       ],
