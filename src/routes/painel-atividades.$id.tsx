@@ -10,11 +10,24 @@ import {
   CircleAlert,
   Eraser,
   Loader2,
+  Send,
+  Users,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,6 +46,7 @@ import {
   limparEntregas,
   listEntregas,
   marcarTodosEntregues,
+  notificarPaisAtividade,
   upsertEntrega,
   type EntregaAluno,
 } from "@/lib/atividades.functions";
@@ -47,31 +61,15 @@ export const Route = createFileRoute("/painel-atividades/$id")({
   component: DetalheAtividadePage,
 });
 
-type Status = "entregue" | "pendente" | "aberto";
+type Categoria = "andamento" | "realizados" | "encerrados" | "inadimplentes";
 
-function computeStatus(e: EntregaAluno, prazo: string): Status {
-  if (e.entregue) return "entregue";
-  return new Date(prazo).getTime() < Date.now() ? "pendente" : "aberto";
-}
-
-function StatusBadge({ status }: { status: Status }) {
-  if (status === "entregue")
-    return (
-      <Badge className="gap-1 rounded-[5px] bg-emerald-500/15 text-emerald-700 hover:bg-emerald-500/25 dark:text-emerald-300">
-        <CheckCircle2 className="size-3.5" /> Entregue
-      </Badge>
-    );
-  if (status === "pendente")
-    return (
-      <Badge className="gap-1 rounded-[5px] bg-red-500/15 text-red-700 hover:bg-red-500/25 dark:text-red-300">
-        <CircleAlert className="size-3.5" /> Pendente
-      </Badge>
-    );
-  return (
-    <Badge className="gap-1 rounded-[5px] bg-muted text-muted-foreground hover:bg-muted">
-      <Circle className="size-3.5" /> Em aberto
-    </Badge>
-  );
+function categorize(e: EntregaAluno, prazo: string): Categoria {
+  const prazoTs = new Date(prazo).getTime();
+  if (e.entregue) {
+    const dentro = e.entregue_em ? new Date(e.entregue_em).getTime() <= prazoTs : true;
+    return dentro ? "encerrados" : "realizados";
+  }
+  return prazoTs < Date.now() ? "inadimplentes" : "andamento";
 }
 
 function DetalheAtividadePage() {
@@ -83,6 +81,7 @@ function DetalheAtividadePage() {
   const upsertFn = useServerFn(upsertEntrega);
   const marcarTodosFn = useServerFn(marcarTodosEntregues);
   const limparFn = useServerFn(limparEntregas);
+  const notificarFn = useServerFn(notificarPaisAtividade);
 
   const { data: atividadeData, isLoading: loadingAt } = useQuery({
     queryKey: ["atividade", id],
@@ -122,6 +121,21 @@ function DetalheAtividadePage() {
   const prazo = atividadeData?.atividade.data_entrega;
 
   const [busca, setBusca] = useState("");
+  const [tab, setTab] = useState<Categoria>("andamento");
+  const [openNotif, setOpenNotif] = useState(false);
+  const [mensagemExtra, setMensagemExtra] = useState("");
+
+  const notificarMut = useMutation({
+    mutationFn: () =>
+      notificarFn({ data: { atividade_id: id, mensagem: mensagemExtra || null } }),
+    onSuccess: () => {
+      toast.success("Comunicado enviado aos responsáveis da turma");
+      setOpenNotif(false);
+      setMensagemExtra("");
+    },
+    onError: (e: unknown) =>
+      toast.error(e instanceof Error ? e.message : "Erro ao notificar"),
+  });
 
   const filtered = useMemo(() => {
     const q = busca.trim().toLowerCase();
@@ -133,22 +147,35 @@ function DetalheAtividadePage() {
     );
   }, [entregas, busca]);
 
-  const resumo = useMemo(() => {
-    if (!prazo) return { entregues: 0, pendentes: 0, abertos: 0 };
-    let entregues = 0;
-    let pendentes = 0;
-    let abertos = 0;
-    entregas.forEach((e) => {
-      const s = computeStatus(e, prazo);
-      if (s === "entregue") entregues++;
-      else if (s === "pendente") pendentes++;
-      else abertos++;
-    });
-    return { entregues, pendentes, abertos };
+  const buckets = useMemo(() => {
+    const acc: Record<Categoria, EntregaAluno[]> = {
+      andamento: [],
+      realizados: [],
+      encerrados: [],
+      inadimplentes: [],
+    };
+    if (!prazo) return acc;
+    for (const e of filtered) acc[categorize(e, prazo)].push(e);
+    return acc;
+  }, [filtered, prazo]);
+
+  const counts = useMemo(() => {
+    const c: Record<Categoria, number> = {
+      andamento: 0,
+      realizados: 0,
+      encerrados: 0,
+      inadimplentes: 0,
+    };
+    if (!prazo) return c;
+    for (const e of entregas) c[categorize(e, prazo)]++;
+    return c;
   }, [entregas, prazo]);
 
   const total = entregas.length;
-  const pct = total ? Math.round((resumo.entregues / total) * 100) : 0;
+  const entreguesTotal = counts.realizados + counts.encerrados;
+  const pct = total ? Math.round((entreguesTotal / total) * 100) : 0;
+
+  const listaAtiva = buckets[tab];
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
@@ -178,6 +205,13 @@ function DetalheAtividadePage() {
             {atividadeData.atividade.descricao}
           </p>
         )}
+        <div className="mt-3 rounded-[5px] border border-primary/20 bg-primary/5 p-3 text-sm text-muted-foreground">
+          <strong className="text-foreground">Objetivo:</strong> acompanhar e
+          controlar as entregas de atividades e trabalhos. O professor notifica os
+          responsáveis sobre a criação e o prazo, e marca o status individual de
+          cada aluno como <em>realizado</em>. Alunos que não entregarem dentro do
+          prazo aparecem em <strong>Inadimplentes</strong>.
+        </div>
       </div>
 
       {/* Resumo */}
@@ -187,22 +221,22 @@ function DetalheAtividadePage() {
             <div>
               <p className="text-xs text-muted-foreground">Entregaram</p>
               <p className="text-2xl font-bold">
-                {resumo.entregues}
+                {entreguesTotal}
                 <span className="text-base font-normal text-muted-foreground">
                   /{total}
                 </span>
               </p>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">Pendentes</p>
+              <p className="text-xs text-muted-foreground">Inadimplentes</p>
               <p className="text-2xl font-bold text-red-600 dark:text-red-400">
-                {resumo.pendentes}
+                {counts.inadimplentes}
               </p>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">Em aberto</p>
+              <p className="text-xs text-muted-foreground">Em andamento</p>
               <p className="text-2xl font-bold text-muted-foreground">
-                {resumo.abertos}
+                {counts.andamento}
               </p>
             </div>
             <div className="ml-auto min-w-[180px] flex-1">
@@ -227,6 +261,52 @@ function DetalheAtividadePage() {
           onChange={(e) => setBusca(e.target.value)}
           className="h-9 flex-1 min-w-[180px] rounded-[5px] border bg-background px-3 text-sm"
         />
+
+        <Dialog open={openNotif} onOpenChange={setOpenNotif}>
+          <DialogTrigger asChild>
+            <Button className="gap-2 rounded-[5px]">
+              <Send className="size-4" /> Notificar pais
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="rounded-[5px] sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Notificar responsáveis</DialogTitle>
+              <DialogDescription>
+                Um comunicado será enviado a todos os responsáveis da turma com o
+                título, prazo e descrição desta atividade.
+              </DialogDescription>
+            </DialogHeader>
+            <div>
+              <label className="mb-1 block text-sm font-medium" htmlFor="msg-extra">
+                Mensagem adicional (opcional)
+              </label>
+              <Textarea
+                id="msg-extra"
+                rows={3}
+                value={mensagemExtra}
+                onChange={(e) => setMensagemExtra(e.target.value)}
+                placeholder="Ex.: Lembrem-se de trazer o material impresso."
+              />
+            </div>
+            <DialogFooter>
+              <Button
+                variant="ghost"
+                onClick={() => setOpenNotif(false)}
+                disabled={notificarMut.isPending}
+              >
+                Cancelar
+              </Button>
+              <Button
+                onClick={() => notificarMut.mutate()}
+                disabled={notificarMut.isPending}
+                className="gap-2"
+              >
+                {notificarMut.isPending && <Loader2 className="size-4 animate-spin" />}
+                Enviar comunicado
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         <AlertDialog>
           <AlertDialogTrigger asChild>
@@ -261,7 +341,7 @@ function DetalheAtividadePage() {
             <Button
               variant="ghost"
               className="gap-2 rounded-[5px] text-muted-foreground"
-              disabled={limparMut.isPending || resumo.entregues === 0}
+              disabled={limparMut.isPending || entreguesTotal === 0}
             >
               <Eraser className="size-4" />
               Limpar marcações
@@ -285,74 +365,134 @@ function DetalheAtividadePage() {
         </AlertDialog>
       </div>
 
-      {/* Lista de alunos */}
-      <div className="mt-4 grid gap-2">
-        {loadingE ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="size-6 animate-spin text-muted-foreground" />
-          </div>
-        ) : filtered.length === 0 ? (
-          <Card className="rounded-[5px]">
-            <CardContent className="py-12 text-center text-sm text-muted-foreground">
-              {total === 0
-                ? "Esta turma não possui alunos ativos."
-                : "Nenhum aluno encontrado com este filtro."}
-            </CardContent>
-          </Card>
-        ) : (
-          filtered.map((e) => {
-            const status = prazo ? computeStatus(e, prazo) : "aberto";
-            const isBusy =
-              toggleMut.isPending && toggleMut.variables?.aluno_id === e.aluno_id;
-            return (
-              <Card key={e.aluno_id} className="rounded-[5px]">
-                <CardContent className="flex flex-wrap items-center gap-3 py-3">
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate font-medium">{e.aluno_nome}</p>
-                    {e.aluno_matricula && (
-                      <p className="text-xs text-muted-foreground">
-                        Matrícula: {e.aluno_matricula}
-                      </p>
-                    )}
-                    {e.entregue && e.entregue_em && (
-                      <p className="text-xs text-emerald-700 dark:text-emerald-400">
-                        Marcado em{" "}
-                        {new Date(e.entregue_em).toLocaleString("pt-BR", {
-                          day: "2-digit",
-                          month: "short",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                    )}
+      {/* Abas */}
+      <Tabs
+        value={tab}
+        onValueChange={(v) => setTab(v as Categoria)}
+        className="mt-4"
+      >
+        <TabsList className="grid w-full grid-cols-2 rounded-[5px] sm:grid-cols-4">
+          <TabsTrigger value="andamento" className="rounded-[5px] gap-1">
+            <Circle className="size-3.5" /> Em Andamento
+            <Badge variant="secondary" className="ml-1 rounded-[5px]">
+              {counts.andamento}
+            </Badge>
+          </TabsTrigger>
+          <TabsTrigger value="realizados" className="rounded-[5px] gap-1">
+            <CheckCircle2 className="size-3.5" /> Realizados
+            <Badge variant="secondary" className="ml-1 rounded-[5px]">
+              {counts.realizados + counts.encerrados}
+            </Badge>
+          </TabsTrigger>
+          <TabsTrigger value="encerrados" className="rounded-[5px] gap-1">
+            <Users className="size-3.5" /> Encerrados
+            <Badge variant="secondary" className="ml-1 rounded-[5px]">
+              {counts.encerrados}
+            </Badge>
+          </TabsTrigger>
+          <TabsTrigger value="inadimplentes" className="rounded-[5px] gap-1">
+            <CircleAlert className="size-3.5" /> Inadimplentes
+            <Badge variant="secondary" className="ml-1 rounded-[5px]">
+              {counts.inadimplentes}
+            </Badge>
+          </TabsTrigger>
+        </TabsList>
+
+        {(["andamento", "realizados", "encerrados", "inadimplentes"] as Categoria[]).map(
+          (t) => (
+            <TabsContent key={t} value={t} className="mt-4">
+              {t === "andamento" && (
+                <p className="mb-2 text-xs text-muted-foreground">
+                  Alunos da turma que ainda precisam concluir a tarefa.
+                </p>
+              )}
+              {t === "realizados" && (
+                <p className="mb-2 text-xs text-muted-foreground">
+                  Alunos já marcados como <strong>Realizado</strong> pelo professor.
+                </p>
+              )}
+              {t === "encerrados" && (
+                <p className="mb-2 text-xs text-muted-foreground">
+                  Alunos que cumpriram a entrega <strong>dentro do prazo</strong>.
+                </p>
+              )}
+              {t === "inadimplentes" && (
+                <p className="mb-2 text-xs text-muted-foreground">
+                  Alunos que <strong>não entregaram</strong> dentro do prazo
+                  estipulado.
+                </p>
+              )}
+
+              <div className="grid gap-2">
+                {loadingE ? (
+                  <div className="flex items-center justify-center py-16">
+                    <Loader2 className="size-6 animate-spin text-muted-foreground" />
                   </div>
-                  <StatusBadge status={status} />
-                  <Button
-                    size="sm"
-                    variant={e.entregue ? "outline" : "default"}
-                    className="gap-1 rounded-[5px]"
-                    disabled={isBusy}
-                    onClick={() =>
-                      toggleMut.mutate({
-                        aluno_id: e.aluno_id,
-                        entregue: !e.entregue,
-                      })
-                    }
-                  >
-                    {isBusy ? (
-                      <Loader2 className="size-4 animate-spin" />
-                    ) : e.entregue ? (
-                      "Desmarcar"
-                    ) : (
-                      "Marcar entregue"
-                    )}
-                  </Button>
-                </CardContent>
-              </Card>
-            );
-          })
+                ) : tab === t && listaAtiva.length === 0 ? (
+                  <Card className="rounded-[5px]">
+                    <CardContent className="py-12 text-center text-sm text-muted-foreground">
+                      {total === 0
+                        ? "Esta turma não possui alunos ativos."
+                        : "Nenhum aluno nesta aba."}
+                    </CardContent>
+                  </Card>
+                ) : (
+                  (tab === t ? listaAtiva : []).map((e) => {
+                    const isBusy =
+                      toggleMut.isPending &&
+                      toggleMut.variables?.aluno_id === e.aluno_id;
+                    return (
+                      <Card key={e.aluno_id} className="rounded-[5px]">
+                        <CardContent className="flex flex-wrap items-center gap-3 py-3">
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate font-medium">{e.aluno_nome}</p>
+                            {e.aluno_matricula && (
+                              <p className="text-xs text-muted-foreground">
+                                Matrícula: {e.aluno_matricula}
+                              </p>
+                            )}
+                            {e.entregue && e.entregue_em && (
+                              <p className="text-xs text-emerald-700 dark:text-emerald-400">
+                                Marcado em{" "}
+                                {new Date(e.entregue_em).toLocaleString("pt-BR", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })}
+                              </p>
+                            )}
+                          </div>
+                          <Button
+                            size="sm"
+                            variant={e.entregue ? "outline" : "default"}
+                            className="gap-1 rounded-[5px]"
+                            disabled={isBusy}
+                            onClick={() =>
+                              toggleMut.mutate({
+                                aluno_id: e.aluno_id,
+                                entregue: !e.entregue,
+                              })
+                            }
+                          >
+                            {isBusy ? (
+                              <Loader2 className="size-4 animate-spin" />
+                            ) : e.entregue ? (
+                              "Desmarcar"
+                            ) : (
+                              "Marcar realizado"
+                            )}
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    );
+                  })
+                )}
+              </div>
+            </TabsContent>
+          ),
         )}
-      </div>
+      </Tabs>
     </main>
   );
 }
