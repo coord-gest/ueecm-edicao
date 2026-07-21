@@ -321,6 +321,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Atividades e Trabalhos", url: "/painel-atividades", icon: ClipboardList },
         { title: "Ranking de Atividades", url: "/painel-atividades-ranking", icon: Award },
         { title: "Diário de Bordo", url: "/painel-diario-bordo-supervisao", icon: NotebookPen },
+        { title: "Alerta de Evasão", url: "/painel-alertas-evasao", icon: AlertTriangle },
       ],
     },
     {
