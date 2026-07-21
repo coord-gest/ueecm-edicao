@@ -99,6 +99,11 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
+  loader: ({ context }) => {
+    void context.queryClient.prefetchQuery(
+      patrocinadoresQueryOptions(() => listPatrocinadoresPublicos()),
+    );
+  },
   component: Home,
 });
 
