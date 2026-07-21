@@ -2534,6 +2534,127 @@ export type Database = {
           },
         ]
       }
+      mural_comentarios: {
+        Row: {
+          autor_nome: string
+          conteudo: string
+          created_at: string
+          id: string
+          oculto: boolean
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          autor_nome: string
+          conteudo: string
+          created_at?: string
+          id?: string
+          oculto?: boolean
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          autor_nome?: string
+          conteudo?: string
+          created_at?: string
+          id?: string
+          oculto?: boolean
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mural_comentarios_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "mural_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mural_posts: {
+        Row: {
+          aprovado: boolean
+          aprovado_em: string | null
+          aprovado_por: string | null
+          autor_id: string
+          autor_nome: string
+          autor_papel: string
+          categoria: string
+          conteudo: string
+          created_at: string
+          fixado: boolean
+          id: string
+          imagem_url: string | null
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          aprovado?: boolean
+          aprovado_em?: string | null
+          aprovado_por?: string | null
+          autor_id: string
+          autor_nome: string
+          autor_papel?: string
+          categoria: string
+          conteudo: string
+          created_at?: string
+          fixado?: boolean
+          id?: string
+          imagem_url?: string | null
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          aprovado?: boolean
+          aprovado_em?: string | null
+          aprovado_por?: string | null
+          autor_id?: string
+          autor_nome?: string
+          autor_papel?: string
+          categoria?: string
+          conteudo?: string
+          created_at?: string
+          fixado?: boolean
+          id?: string
+          imagem_url?: string | null
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mural_reacoes: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          tipo: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          tipo: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          tipo?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mural_reacoes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "mural_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notas: {
         Row: {
           aluno_id: string
@@ -4069,6 +4190,25 @@ export type Database = {
           p95: number
           p99: number
           samples: number
+        }[]
+      }
+      mural_listar_feed: {
+        Args: { _categoria?: string; _limite?: number; _offset?: number }
+        Returns: {
+          aprovado: boolean
+          autor_id: string
+          autor_nome: string
+          autor_papel: string
+          categoria: string
+          conteudo: string
+          created_at: string
+          fixado: boolean
+          id: string
+          imagem_url: string
+          minhas_reacoes: string[]
+          titulo: string
+          total_comentarios: number
+          total_reacoes: number
         }[]
       }
       normalize_turma_name: { Args: { input: string }; Returns: string }
