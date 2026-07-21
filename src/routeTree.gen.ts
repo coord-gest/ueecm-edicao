@@ -27,6 +27,7 @@ import { Route as PainelRadarFilhoRouteImport } from './routes/painel-radar-filh
 import { Route as PainelProfissionaisRouteImport } from './routes/painel-profissionais'
 import { Route as PainelProfessorRouteImport } from './routes/painel-professor'
 import { Route as PainelPatrocinadoresRouteImport } from './routes/painel-patrocinadores'
+import { Route as PainelMeritosRouteImport } from './routes/painel-meritos'
 import { Route as PainelMensagensRouteImport } from './routes/painel-mensagens'
 import { Route as PainelManutencaoRouteImport } from './routes/painel-manutencao'
 import { Route as PainelLgpdRouteImport } from './routes/painel-lgpd'
@@ -215,6 +216,11 @@ const PainelProfessorRoute = PainelProfessorRouteImport.update({
 const PainelPatrocinadoresRoute = PainelPatrocinadoresRouteImport.update({
   id: '/painel-patrocinadores',
   path: '/painel-patrocinadores',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelMeritosRoute = PainelMeritosRouteImport.update({
+  id: '/painel-meritos',
+  path: '/painel-meritos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelMensagensRoute = PainelMensagensRouteImport.update({
@@ -783,6 +789,7 @@ export interface FileRoutesByFullPath {
   '/painel-lgpd': typeof PainelLgpdRoute
   '/painel-manutencao': typeof PainelManutencaoRoute
   '/painel-mensagens': typeof PainelMensagensRoute
+  '/painel-meritos': typeof PainelMeritosRoute
   '/painel-patrocinadores': typeof PainelPatrocinadoresRoute
   '/painel-professor': typeof PainelProfessorRoute
   '/painel-profissionais': typeof PainelProfissionaisRoute
@@ -901,6 +908,7 @@ export interface FileRoutesByTo {
   '/painel-lgpd': typeof PainelLgpdRoute
   '/painel-manutencao': typeof PainelManutencaoRoute
   '/painel-mensagens': typeof PainelMensagensRoute
+  '/painel-meritos': typeof PainelMeritosRoute
   '/painel-patrocinadores': typeof PainelPatrocinadoresRoute
   '/painel-professor': typeof PainelProfessorRoute
   '/painel-profissionais': typeof PainelProfissionaisRoute
@@ -1021,6 +1029,7 @@ export interface FileRoutesById {
   '/painel-lgpd': typeof PainelLgpdRoute
   '/painel-manutencao': typeof PainelManutencaoRoute
   '/painel-mensagens': typeof PainelMensagensRoute
+  '/painel-meritos': typeof PainelMeritosRoute
   '/painel-patrocinadores': typeof PainelPatrocinadoresRoute
   '/painel-professor': typeof PainelProfessorRoute
   '/painel-profissionais': typeof PainelProfissionaisRoute
@@ -1142,6 +1151,7 @@ export interface FileRouteTypes {
     | '/painel-lgpd'
     | '/painel-manutencao'
     | '/painel-mensagens'
+    | '/painel-meritos'
     | '/painel-patrocinadores'
     | '/painel-professor'
     | '/painel-profissionais'
@@ -1260,6 +1270,7 @@ export interface FileRouteTypes {
     | '/painel-lgpd'
     | '/painel-manutencao'
     | '/painel-mensagens'
+    | '/painel-meritos'
     | '/painel-patrocinadores'
     | '/painel-professor'
     | '/painel-profissionais'
@@ -1379,6 +1390,7 @@ export interface FileRouteTypes {
     | '/painel-lgpd'
     | '/painel-manutencao'
     | '/painel-mensagens'
+    | '/painel-meritos'
     | '/painel-patrocinadores'
     | '/painel-professor'
     | '/painel-profissionais'
@@ -1499,6 +1511,7 @@ export interface RootRouteChildren {
   PainelLgpdRoute: typeof PainelLgpdRoute
   PainelManutencaoRoute: typeof PainelManutencaoRoute
   PainelMensagensRoute: typeof PainelMensagensRoute
+  PainelMeritosRoute: typeof PainelMeritosRoute
   PainelPatrocinadoresRoute: typeof PainelPatrocinadoresRoute
   PainelProfessorRoute: typeof PainelProfessorRoute
   PainelProfissionaisRoute: typeof PainelProfissionaisRoute
@@ -1675,6 +1688,13 @@ declare module '@tanstack/react-router' {
       path: '/painel-patrocinadores'
       fullPath: '/painel-patrocinadores'
       preLoaderRoute: typeof PainelPatrocinadoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-meritos': {
+      id: '/painel-meritos'
+      path: '/painel-meritos'
+      fullPath: '/painel-meritos'
+      preLoaderRoute: typeof PainelMeritosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-mensagens': {
@@ -2543,6 +2563,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelLgpdRoute: PainelLgpdRoute,
   PainelManutencaoRoute: PainelManutencaoRoute,
   PainelMensagensRoute: PainelMensagensRoute,
+  PainelMeritosRoute: PainelMeritosRoute,
   PainelPatrocinadoresRoute: PainelPatrocinadoresRoute,
   PainelProfessorRoute: PainelProfessorRoute,
   PainelProfissionaisRoute: PainelProfissionaisRoute,
