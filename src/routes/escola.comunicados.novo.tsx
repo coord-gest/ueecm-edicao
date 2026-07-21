@@ -72,6 +72,8 @@ function NovoComunicadoPage() {
   const [agendadoPara, setAgendadoPara] = useState<string>("");
   const [lembreteAtivo, setLembreteAtivo] = useState(false);
   const [lembreteHoras, setLembreteHoras] = useState<number>(24);
+  const [requerConfirmacao, setRequerConfirmacao] = useState(false);
+  const [alertaGestaoHoras, setAlertaGestaoHoras] = useState<number>(48);
   const [submitting, setSubmitting] = useState(false);
   const [templateId, setTemplateId] = useState<string>("");
 
@@ -253,6 +255,12 @@ function NovoComunicadoPage() {
             ...(agendadoIso ? { agendado_para: agendadoIso } : {}),
             ...(lembreteAtivo && lembreteHoras > 0
               ? { lembrete_apos_horas: Math.min(lembreteHoras, 720) }
+              : {}),
+            ...(requerConfirmacao
+              ? {
+                  requer_confirmacao: true,
+                  alerta_gestao_apos_horas: Math.max(1, Math.min(alertaGestaoHoras, 720)),
+                }
               : {}),
           } as never)
           .select("id")
