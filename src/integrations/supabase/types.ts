@@ -3911,6 +3911,10 @@ export type Database = {
         Args: { _contrato_id: string }
         Returns: undefined
       }
+      calcular_presenca_parental: {
+        Args: { _dias?: number; _user_id: string }
+        Returns: Json
+      }
       calcular_radar_aluno: { Args: { _aluno_id: string }; Returns: Json }
       calcular_risco_evasao: { Args: { _aluno_id: string }; Returns: Json }
       can_delete_arquivo_preenchimento: {
@@ -4073,6 +4077,15 @@ export type Database = {
         Returns: {
           enqueued: number
           processed: number
+        }[]
+      }
+      ranking_presenca_parental: {
+        Args: { _dias?: number; _limite?: number }
+        Returns: {
+          iniciais: string
+          is_you: boolean
+          pontos: number
+          posicao: number
         }[]
       }
       rl_key: { Args: { _scope: string; _subject: string }; Returns: string }
