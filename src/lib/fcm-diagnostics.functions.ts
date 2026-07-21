@@ -177,3 +177,55 @@ export const listPushDispatchLogs = createServerFn({ method: "GET" })
     if (error) throw error;
     return data ?? [];
   });
+
+// ============ Developer purge ============
+
+async function assertDeveloper(context: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any;
+  userId: string;
+}) {
+  const { data, error } = await context.supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", context.userId)
+    .in("role", ["desenvolvedor", "developer"])
+    .maybeSingle();
+  if (error) throw new Error("Não foi possível verificar permissão.");
+  if (!data) throw new Error("Apenas o Desenvolvedor pode limpar históricos de diagnóstico.");
+}
+
+const clearScopeSchema = z.object({
+  scope: z.enum(["diagnostics", "dispatch_logs", "all"]),
+  olderThanDays: z.number().int().min(0).max(365).optional(),
+});
+
+export const clearFcmHistory = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .validator((input: unknown) => clearScopeSchema.parse(input))
+  .handler(async ({ data, context }) => {
+    await assertDeveloper(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const cutoff =
+      data.olderThanDays && data.olderThanDays > 0
+        ? new Date(Date.now() - data.olderThanDays * 24 * 3600 * 1000).toISOString()
+        : null;
+
+    const targets =
+      data.scope === "all"
+        ? (["fcm_diagnostics", "fcm_dispatch_logs"] as const)
+        : data.scope === "diagnostics"
+          ? (["fcm_diagnostics"] as const)
+          : (["fcm_dispatch_logs"] as const);
+
+    const results: Record<string, number> = {};
+    for (const table of targets) {
+      let q = supabaseAdmin.from(table).delete({ count: "exact" }).not("id", "is", null);
+      if (cutoff) q = q.lt("created_at", cutoff);
+      const { error, count } = await q;
+      if (error) throw new Error(`${table}: ${error.message}`);
+      results[table] = count ?? 0;
+    }
+    return { ok: true, deleted: results };
+  });
