@@ -353,6 +353,9 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       label: "Acadêmico",
       items: [
         { title: "Calendário", url: "/calendario", icon: Calendar },
+        { title: "Horários", url: "/horarios", icon: Clock },
+        { title: "Minhas turmas", url: "/minhas-turmas", icon: BookOpen },
+        { title: "Atividades e Trabalhos", url: "/painel-atividades", icon: ClipboardList },
         { title: "Arquivos", url: "/painel-arquivos", icon: FolderOpen },
         { title: "Enviar p/ o Drive", url: "/painel-enviar-drive", icon: FolderOpen },
       ],
