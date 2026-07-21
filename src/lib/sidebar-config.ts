@@ -386,6 +386,8 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       label: "Comunidade",
       items: [
         { title: "Mural da Comunidade", url: "/mural", icon: Users },
+        { title: "Rede de Apoio", url: "/rede-apoio", icon: HeartHandshake },
+        { title: "Vaquinhas", url: "/vaquinhas", icon: HandCoins },
       ],
     },
   ],
