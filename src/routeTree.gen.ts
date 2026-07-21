@@ -46,6 +46,7 @@ import { Route as PainelComentariosRouteImport } from './routes/painel-comentari
 import { Route as PainelCardsRouteImport } from './routes/painel-cards'
 import { Route as PainelAutorizacoesRouteImport } from './routes/painel-autorizacoes'
 import { Route as PainelAuditoriaRouteImport } from './routes/painel-auditoria'
+import { Route as PainelAtividadesRankingRouteImport } from './routes/painel-atividades-ranking'
 import { Route as PainelAtividadesFilhosRouteImport } from './routes/painel-atividades-filhos'
 import { Route as PainelAtividadesRouteImport } from './routes/painel-atividades'
 import { Route as PainelArquivosRouteImport } from './routes/painel-arquivos'
@@ -304,6 +305,11 @@ const PainelAutorizacoesRoute = PainelAutorizacoesRouteImport.update({
 const PainelAuditoriaRoute = PainelAuditoriaRouteImport.update({
   id: '/painel-auditoria',
   path: '/painel-auditoria',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelAtividadesRankingRoute = PainelAtividadesRankingRouteImport.update({
+  id: '/painel-atividades-ranking',
+  path: '/painel-atividades-ranking',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelAtividadesFilhosRoute = PainelAtividadesFilhosRouteImport.update({
@@ -721,6 +727,7 @@ export interface FileRoutesByFullPath {
   '/painel-arquivos': typeof PainelArquivosRouteWithChildren
   '/painel-atividades': typeof PainelAtividadesRouteWithChildren
   '/painel-atividades-filhos': typeof PainelAtividadesFilhosRoute
+  '/painel-atividades-ranking': typeof PainelAtividadesRankingRoute
   '/painel-auditoria': typeof PainelAuditoriaRoute
   '/painel-autorizacoes': typeof PainelAutorizacoesRoute
   '/painel-cards': typeof PainelCardsRoute
@@ -833,6 +840,7 @@ export interface FileRoutesByTo {
   '/painel-aprovacao': typeof PainelAprovacaoRoute
   '/painel-atividades': typeof PainelAtividadesRouteWithChildren
   '/painel-atividades-filhos': typeof PainelAtividadesFilhosRoute
+  '/painel-atividades-ranking': typeof PainelAtividadesRankingRoute
   '/painel-auditoria': typeof PainelAuditoriaRoute
   '/painel-autorizacoes': typeof PainelAutorizacoesRoute
   '/painel-cards': typeof PainelCardsRoute
@@ -947,6 +955,7 @@ export interface FileRoutesById {
   '/painel-arquivos': typeof PainelArquivosRouteWithChildren
   '/painel-atividades': typeof PainelAtividadesRouteWithChildren
   '/painel-atividades-filhos': typeof PainelAtividadesFilhosRoute
+  '/painel-atividades-ranking': typeof PainelAtividadesRankingRoute
   '/painel-auditoria': typeof PainelAuditoriaRoute
   '/painel-autorizacoes': typeof PainelAutorizacoesRoute
   '/painel-cards': typeof PainelCardsRoute
@@ -1062,6 +1071,7 @@ export interface FileRouteTypes {
     | '/painel-arquivos'
     | '/painel-atividades'
     | '/painel-atividades-filhos'
+    | '/painel-atividades-ranking'
     | '/painel-auditoria'
     | '/painel-autorizacoes'
     | '/painel-cards'
@@ -1174,6 +1184,7 @@ export interface FileRouteTypes {
     | '/painel-aprovacao'
     | '/painel-atividades'
     | '/painel-atividades-filhos'
+    | '/painel-atividades-ranking'
     | '/painel-auditoria'
     | '/painel-autorizacoes'
     | '/painel-cards'
@@ -1287,6 +1298,7 @@ export interface FileRouteTypes {
     | '/painel-arquivos'
     | '/painel-atividades'
     | '/painel-atividades-filhos'
+    | '/painel-atividades-ranking'
     | '/painel-auditoria'
     | '/painel-autorizacoes'
     | '/painel-cards'
@@ -1401,6 +1413,7 @@ export interface RootRouteChildren {
   PainelArquivosRoute: typeof PainelArquivosRouteWithChildren
   PainelAtividadesRoute: typeof PainelAtividadesRouteWithChildren
   PainelAtividadesFilhosRoute: typeof PainelAtividadesFilhosRoute
+  PainelAtividadesRankingRoute: typeof PainelAtividadesRankingRoute
   PainelAuditoriaRoute: typeof PainelAuditoriaRoute
   PainelAutorizacoesRoute: typeof PainelAutorizacoesRoute
   PainelCardsRoute: typeof PainelCardsRoute
@@ -1729,6 +1742,13 @@ declare module '@tanstack/react-router' {
       path: '/painel-auditoria'
       fullPath: '/painel-auditoria'
       preLoaderRoute: typeof PainelAuditoriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-atividades-ranking': {
+      id: '/painel-atividades-ranking'
+      path: '/painel-atividades-ranking'
+      fullPath: '/painel-atividades-ranking'
+      preLoaderRoute: typeof PainelAtividadesRankingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-atividades-filhos': {
@@ -2384,6 +2404,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelArquivosRoute: PainelArquivosRouteWithChildren,
   PainelAtividadesRoute: PainelAtividadesRouteWithChildren,
   PainelAtividadesFilhosRoute: PainelAtividadesFilhosRoute,
+  PainelAtividadesRankingRoute: PainelAtividadesRankingRoute,
   PainelAuditoriaRoute: PainelAuditoriaRoute,
   PainelAutorizacoesRoute: PainelAutorizacoesRoute,
   PainelCardsRoute: PainelCardsRoute,

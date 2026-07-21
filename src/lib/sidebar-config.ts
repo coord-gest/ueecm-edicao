@@ -90,6 +90,8 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Comunicados", url: "/escola/comunicados", icon: Megaphone },
         { title: "Agendamentos", url: "/painel-agendamentos", icon: CalendarClock },
         { title: "Arquivos", url: "/painel-arquivos", icon: FolderOpen },
+        { title: "Atividades e Trabalhos", url: "/painel-atividades", icon: ClipboardList },
+        { title: "Ranking de Atividades", url: "/painel-atividades-ranking", icon: Award },
       ],
     },
     {
@@ -248,6 +250,8 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Agendamentos", url: "/painel-agendamentos", icon: CalendarClock },
         { title: "Arquivos", url: "/painel-arquivos", icon: FolderOpen },
         { title: "Enviar p/ o Drive", url: "/painel-enviar-drive", icon: FolderOpen },
+        { title: "Atividades e Trabalhos", url: "/painel-atividades", icon: ClipboardList },
+        { title: "Ranking de Atividades", url: "/painel-atividades-ranking", icon: Award },
       ],
     },
     {
@@ -308,7 +312,11 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
     },
     {
       label: "Acadêmico",
-      items: [{ title: "Agendamentos", url: "/painel-agendamentos", icon: CalendarClock }],
+      items: [
+        { title: "Agendamentos", url: "/painel-agendamentos", icon: CalendarClock },
+        { title: "Atividades e Trabalhos", url: "/painel-atividades", icon: ClipboardList },
+        { title: "Ranking de Atividades", url: "/painel-atividades-ranking", icon: Award },
+      ],
     },
     {
       label: "Responsáveis",
