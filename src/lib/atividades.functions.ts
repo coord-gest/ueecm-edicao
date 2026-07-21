@@ -170,7 +170,12 @@ export const updateAtividade = createServerFn({ method: "POST" })
     };
   })
   .handler(async ({ data, context }) => {
-    const patch: Record<string, unknown> = {};
+    const patch: {
+      titulo?: string;
+      descricao?: string | null;
+      disciplina?: string | null;
+      data_entrega?: string;
+    } = {};
     if (data.titulo) patch.titulo = data.titulo;
     if (data.descricao !== null) patch.descricao = data.descricao || null;
     if (data.disciplina !== null) patch.disciplina = data.disciplina || null;
