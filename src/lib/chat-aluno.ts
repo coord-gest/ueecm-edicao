@@ -1,5 +1,73 @@
 import { supabase } from "@/integrations/supabase/client";
 
+export type ChatModerationConfig = {
+  janela_inicio: string; // "HH:MM"
+  janela_fim: string; // "HH:MM"
+  dias: number[]; // 0=Dom..6=Sáb
+  max_msgs_dia: number;
+  ativo: boolean;
+  tz: string;
+};
+
+const DEFAULT_MODERATION: ChatModerationConfig = {
+  janela_inicio: "18:00",
+  janela_fim: "20:00",
+  dias: [1, 2, 3, 4, 5],
+  max_msgs_dia: 20,
+  ativo: true,
+  tz: "America/Sao_Paulo",
+};
+
+export async function getChatModeration(): Promise<ChatModerationConfig> {
+  const { data } = await supabase
+    .from("app_settings")
+    .select("value")
+    .eq("key", "chat_pai_professor_config")
+    .maybeSingle();
+  if (!data?.value) return DEFAULT_MODERATION;
+  try {
+    return { ...DEFAULT_MODERATION, ...(JSON.parse(data.value) as Partial<ChatModerationConfig>) };
+  } catch {
+    return DEFAULT_MODERATION;
+  }
+}
+
+function nowInTz(tz: string): { hhmm: string; dow: number; ymd: string } {
+  const fmt = new Intl.DateTimeFormat("en-US", {
+    timeZone: tz,
+    hour: "2-digit",
+    minute: "2-digit",
+    weekday: "short",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour12: false,
+  });
+  const parts = Object.fromEntries(fmt.formatToParts(new Date()).map((p) => [p.type, p.value]));
+  const dowMap: Record<string, number> = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  return {
+    hhmm: `${parts.hour}:${parts.minute}`,
+    dow: dowMap[parts.weekday] ?? 0,
+    ymd: `${parts.year}-${parts.month}-${parts.day}`,
+  };
+}
+
+export function janelaChatAberta(cfg: ChatModerationConfig): {
+  aberta: boolean;
+  motivo?: string;
+} {
+  if (!cfg.ativo) return { aberta: true };
+  const { hhmm, dow } = nowInTz(cfg.tz);
+  if (!cfg.dias.includes(dow))
+    return { aberta: false, motivo: `Chat disponível apenas em dias úteis.` };
+  if (hhmm < cfg.janela_inicio || hhmm > cfg.janela_fim)
+    return {
+      aberta: false,
+      motivo: `Chat aberto das ${cfg.janela_inicio} às ${cfg.janela_fim}.`,
+    };
+  return { aberta: true };
+}
+
 export type ChatThread = {
   id: string;
   aluno_id: string;
@@ -177,6 +245,27 @@ export async function enviarMensagem(params: {
   const { data: userRes } = await supabase.auth.getUser();
   const uid = userRes.user?.id;
   if (!uid) throw new Error("Sessão expirada.");
+
+  // Moderação: janela + limite diário
+  const cfg = await getChatModeration();
+  const janela = janelaChatAberta(cfg);
+  if (!janela.aberta) throw new Error(janela.motivo ?? "Fora do horário permitido.");
+
+  if (cfg.ativo && cfg.max_msgs_dia > 0) {
+    const { ymd } = nowInTz(cfg.tz);
+    const inicioDia = new Date(`${ymd}T00:00:00`);
+    const { count } = await supabase
+      .from("chat_alunos_mensagens")
+      .select("id", { count: "exact", head: true })
+      .eq("thread_id", params.thread_id)
+      .eq("autor_user_id", uid)
+      .gte("created_at", inicioDia.toISOString());
+    if ((count ?? 0) >= cfg.max_msgs_dia) {
+      throw new Error(
+        `Limite diário de ${cfg.max_msgs_dia} mensagens atingido nesta conversa. Retome amanhã.`,
+      );
+    }
+  }
 
   const { data: t, error: et } = await supabase
     .from("chat_alunos_threads")
