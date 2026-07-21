@@ -123,7 +123,6 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Acessos administrativos", url: "/painel-acessos", icon: Shield },
         { title: "Painel de erros", url: "/painel-erros", icon: AlertTriangle },
         { title: "Runtime & diagnóstico", url: "/painel-runtime", icon: Activity },
-        { title: "Diagnóstico", url: "/painel-diagnostico", icon: Activity },
         { title: "Animações do tema", url: "/painel-tema", icon: Sparkles },
         { title: "Solicitações LGPD", url: "/painel-lgpd", icon: ScrollText },
         { title: "FAQ do desenvolvedor", url: "/painel-desenvolvedor", icon: HelpCircle },

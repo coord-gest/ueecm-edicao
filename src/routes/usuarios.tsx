@@ -252,7 +252,7 @@ function Usuarios() {
           <Button
             variant="ghost"
             className="rounded-full"
-            onClick={() => navigate({ to: "/painel-diagnostico" })}
+            onClick={() => navigate({ to: "/painel-runtime" })}
           >
             Diagnóstico
           </Button>

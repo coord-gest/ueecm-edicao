@@ -2,19 +2,34 @@ import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { MetricsPanel } from "@/components/painel-runtime/MetricsPanel";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect } from "react";
-import { ArrowLeft, CheckCircle2, XCircle, Copy, Send, Loader2, ShieldAlert } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  XCircle,
+  Copy,
+  Send,
+  Loader2,
+  ShieldAlert,
+  Trash2,
+  Stethoscope,
+  RefreshCw,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
+import { getCurrentUserRoles } from "@/lib/auth.functions";
+import { roleLabels } from "@/lib/roles";
+import { primaryRole, painelPathForRoles } from "@/lib/role-panels";
 import { checkRuntimeEnv } from "@/lib/runtime-check.functions";
 import { triggerPushDispatch } from "@/lib/push-dispatch.functions";
 import {
   getFcmTokenStats,
   listFcmDiagnostics,
   listPushDispatchLogs,
+  clearFcmHistory,
 } from "@/lib/fcm-diagnostics.functions";
 
 import { PainelLayout } from "@/components/PainelLayout";
@@ -108,11 +123,60 @@ type DispatchResult = {
 };
 
 function PainelRuntime() {
-  const { isDeveloper } = useAuth();
+  const { isDeveloper, user, roles, rolesError, refreshRoles } = useAuth();
   const checkFn = useServerFn(checkRuntimeEnv);
   const dispatchFn = useServerFn(triggerPushDispatch);
   const fcmStatsFn = useServerFn(getFcmTokenStats);
   const fcmDiagsFn = useServerFn(listFcmDiagnostics);
+  const clearFn = useServerFn(clearFcmHistory);
+  const fetchRoles = useServerFn(getCurrentUserRoles);
+
+  const [session, setSession] = useState<{
+    access_token_prefix?: string;
+    expires_at?: number | null;
+  }>({});
+  const [serverRoles, setServerRoles] = useState<{
+    status: "idle" | "loading" | "ok" | "error";
+    roles?: string[];
+    raw?: string;
+    message?: string;
+  }>({ status: "idle" });
+  const [refreshingRoles, setRefreshingRoles] = useState(false);
+
+  useEffect(() => {
+    if (!isDeveloper) return;
+    supabase.auth.getSession().then(({ data }) => {
+      const tok = data.session?.access_token;
+      setSession({
+        access_token_prefix: tok ? `${tok.slice(0, 12)}…${tok.slice(-6)}` : undefined,
+        expires_at: data.session?.expires_at ?? null,
+      });
+    });
+  }, [isDeveloper]);
+
+  const callServerRoles = async () => {
+    setServerRoles({ status: "loading" });
+    try {
+      const result = await fetchRoles();
+      const list: string[] = Array.isArray(result?.roles) ? result.roles : [];
+      setServerRoles({ status: "ok", roles: list, raw: JSON.stringify(result, null, 2) });
+    } catch (err) {
+      setServerRoles({
+        status: "error",
+        message: err instanceof Error ? err.message : String(err),
+      });
+    }
+  };
+
+  const handleRefreshRoles = async () => {
+    setRefreshingRoles(true);
+    try {
+      await refreshRoles();
+      await callServerRoles();
+    } finally {
+      setRefreshingRoles(false);
+    }
+  };
 
   const envQuery = useQuery({
     queryKey: ["runtime-env-check"],
@@ -141,6 +205,39 @@ function PainelRuntime() {
     refetchOnWindowFocus: false,
     enabled: false,
   });
+
+  const clearMutation = useMutation<
+    { ok: boolean; deleted: Record<string, number> },
+    Error,
+    { scope: "diagnostics" | "dispatch_logs" | "all"; olderThanDays?: number }
+  >({
+    mutationFn: async (input) =>
+      (await clearFn({ data: input })) as { ok: boolean; deleted: Record<string, number> },
+    onSuccess: (r) => {
+      const total = Object.values(r.deleted).reduce((a, b) => a + b, 0);
+      toast.success(`Histórico limpo — ${total} registro(s) removidos`, {
+        description: Object.entries(r.deleted)
+          .map(([k, v]) => `${k}: ${v}`)
+          .join(" · "),
+      });
+      fcmDiags.refetch();
+      fcmStats.refetch();
+      dispatchLogs.refetch();
+    },
+    onError: (e) => toast.error("Falha ao limpar histórico", { description: e.message }),
+  });
+
+  const confirmAndClear = (
+    scope: "diagnostics" | "dispatch_logs" | "all",
+    label: string,
+  ) => {
+    if (typeof window === "undefined") return;
+    const ok = window.confirm(
+      `Tem certeza que deseja apagar ${label}? Esta ação é definitiva e apaga direto no banco de dados do Supabase.`,
+    );
+    if (!ok) return;
+    clearMutation.mutate({ scope });
+  };
 
   const dispatchMutation = useMutation<DispatchResult, Error, void>({
     // S2: agora usamos server fn autenticada em vez do endpoint público
@@ -357,6 +454,7 @@ function PainelRuntime() {
       fcmStats.refetch();
       fcmDiags.refetch();
       dispatchLogs.refetch();
+      callServerRoles();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDeveloper]);
@@ -405,10 +503,132 @@ function PainelRuntime() {
             </Link>
             <h1 className="mt-1 text-2xl font-semibold tracking-tight">Runtime & Secrets</h1>
             <p className="text-sm text-muted-foreground">
-              Configuração de Supabase externo e diagnóstico do envio de Web Push.
+              Configuração de Supabase externo, diagnóstico de papéis e histórico do envio de Web
+              Push.
             </p>
           </div>
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={() => confirmAndClear("all", "TODO o histórico (diagnósticos + telemetria)")}
+            disabled={clearMutation.isPending}
+            className="shrink-0"
+          >
+            {clearMutation.isPending ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <Trash2 className="size-4" />
+            )}
+            Limpar todo o histórico
+          </Button>
         </div>
+
+        {/* Diagnóstico de papéis (integrado do antigo /painel-diagnostico) */}
+        <section className="mt-6 rounded-2xl border border-border bg-card p-5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Stethoscope className="size-5 text-primary" />
+              <h2 className="text-base font-semibold">Diagnóstico de papéis</h2>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleRefreshRoles}
+              disabled={refreshingRoles}
+            >
+              <RefreshCw className={`size-3.5 ${refreshingRoles ? "animate-spin" : ""}`} />
+              {refreshingRoles ? "Atualizando…" : "Recarregar"}
+            </Button>
+          </div>
+
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <div className="rounded-lg border border-border/70 bg-background/50 p-3">
+              <p className="text-[11px] font-semibold uppercase text-muted-foreground">Sessão</p>
+              <dl className="mt-2 space-y-1 text-xs">
+                <div className="flex gap-2">
+                  <dt className="w-28 shrink-0 text-muted-foreground">Usuário</dt>
+                  <dd className="break-all font-medium">{user?.email ?? "-"}</dd>
+                </div>
+                <div className="flex gap-2">
+                  <dt className="w-28 shrink-0 text-muted-foreground">User ID</dt>
+                  <dd className="break-all font-mono">{user?.id ?? "-"}</dd>
+                </div>
+                <div className="flex gap-2">
+                  <dt className="w-28 shrink-0 text-muted-foreground">Token</dt>
+                  <dd className="break-all font-mono">
+                    {session.access_token_prefix ?? "(nenhum)"}
+                  </dd>
+                </div>
+                <div className="flex gap-2">
+                  <dt className="w-28 shrink-0 text-muted-foreground">Expira</dt>
+                  <dd>
+                    {session.expires_at
+                      ? new Date(session.expires_at * 1000).toLocaleString("pt-BR")
+                      : "—"}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className="rounded-lg border border-border/70 bg-background/50 p-3">
+              <p className="text-[11px] font-semibold uppercase text-muted-foreground">
+                Papéis (useAuth)
+              </p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {roles.length === 0 ? (
+                  <span className="text-xs text-muted-foreground">Nenhum papel</span>
+                ) : (
+                  roles.map((r) => (
+                    <Badge key={r} variant="secondary" className="text-[10px]">
+                      {roleLabels[r]}
+                    </Badge>
+                  ))
+                )}
+              </div>
+              <p className="mt-2 text-[11px] text-muted-foreground">
+                Principal: <strong>{primaryRole(roles) ?? "(nenhum)"}</strong> — destino:{" "}
+                <code className="font-mono">{painelPathForRoles(roles)}</code>
+              </p>
+              {rolesError && (
+                <p className="mt-2 rounded border border-destructive/40 bg-destructive/10 p-2 text-[11px] text-destructive">
+                  {rolesError}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-3">
+            <p className="text-[11px] font-semibold uppercase text-muted-foreground">
+              Resposta bruta do servidor
+            </p>
+            {serverRoles.status === "loading" && (
+              <p className="mt-1 text-xs text-muted-foreground">Consultando…</p>
+            )}
+            {serverRoles.status === "ok" && (
+              <>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {(serverRoles.roles ?? []).length === 0 ? (
+                    <span className="text-xs text-muted-foreground">Nenhum papel retornado</span>
+                  ) : (
+                    (serverRoles.roles ?? []).map((r) => (
+                      <Badge key={r} variant="outline" className="text-[10px]">
+                        {r}
+                      </Badge>
+                    ))
+                  )}
+                </div>
+                <pre className="mt-2 max-h-40 overflow-auto rounded bg-muted/60 p-2 text-[11px]">
+                  {serverRoles.raw}
+                </pre>
+              </>
+            )}
+            {serverRoles.status === "error" && (
+              <p className="mt-1 rounded border border-destructive/40 bg-destructive/10 p-2 text-[11px] text-destructive">
+                {serverRoles.message}
+              </p>
+            )}
+          </div>
+        </section>
 
         {/* Status ao vivo */}
         <section className="rounded-2xl border border-border bg-card p-5">
@@ -772,6 +992,16 @@ function PainelRuntime() {
                 "Atualizar"
               )}
             </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() =>
+                confirmAndClear("diagnostics", "o histórico de diagnósticos FCM (fcm_diagnostics)")
+              }
+              disabled={clearMutation.isPending}
+            >
+              <Trash2 className="size-3.5" /> Limpar
+            </Button>
           </div>
 
           {fcmStats.data && (
@@ -932,6 +1162,16 @@ function PainelRuntime() {
             >
               {dispatchLogs.isFetching ? <Loader2 className="mr-2 size-3.5 animate-spin" /> : null}
               Atualizar
+            </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() =>
+                confirmAndClear("dispatch_logs", "a telemetria de envios (fcm_dispatch_logs)")
+              }
+              disabled={clearMutation.isPending}
+            >
+              <Trash2 className="mr-1 size-3.5" /> Limpar
             </Button>
           </div>
 

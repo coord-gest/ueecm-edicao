@@ -62,7 +62,7 @@ export function RolesFallback() {
               <LogOut className="size-4" /> Sair e entrar de novo
             </Button>
             <Button asChild variant="ghost" size="sm" className="rounded-full">
-              <Link to="/painel-diagnostico">
+              <Link to="/painel-runtime">
                 <Stethoscope className="size-4" /> Diagnóstico
               </Link>
             </Button>
