@@ -461,3 +461,182 @@ export const listAtividadesDoResponsavel = createServerFn({ method: "GET" })
     }
     return result;
   });
+// ==================== GESTÃO ESCOLAR: RANKING DE ALUNOS ==================== //
+export type RankingAluno = {
+  aluno_id: string;
+  aluno_nome: string;
+  matricula: string | null;
+  turma_id: string | null;
+  turma_nome: string | null;
+  total_atribuidas: number;
+  total_entregues: number;
+  taxa: number; // 0..1
+};
+
+export type RankingTurma = {
+  turma_id: string;
+  turma_nome: string;
+  total_alunos: number;
+  total_atribuidas: number; // atividades ativas x alunos
+  total_entregues: number;
+  taxa: number; // 0..1
+};
+
+export type RankingGeral = {
+  totais: {
+    atividades: number;
+    entregas: number;
+    alunos: number;
+    turmas: number;
+    taxa: number;
+  };
+  alunos: RankingAluno[];
+  turmas: RankingTurma[];
+};
+
+async function ensureGestor(supabase: ReturnType<typeof requireSupabaseAuth>[never] extends never ? never : never, userId: string) {
+  // placeholder to satisfy TS; real check below
+  void supabase;
+  void userId;
+}
+void ensureGestor;
+
+export const rankingAtividades = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<RankingGeral> => {
+    // 1) Verifica papel (gestão escolar)
+    const { data: roleRows, error: roleErr } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId);
+    if (roleErr) throw roleErr;
+    const roles = normalizeRoles((roleRows ?? []).map((r) => r.role as string));
+    if (
+      !hasAnyRole(roles, [
+        "desenvolvedor",
+        "admin",
+        "diretor",
+        "coordenador",
+        "secretario",
+      ])
+    ) {
+      throw new Error("Acesso restrito à gestão escolar.");
+    }
+
+    // 2) Carrega atividades ativas, alunos ativos, turmas e entregas
+    const [{ data: ativs, error: aErr }, { data: alunos, error: alErr }, { data: turmas }] =
+      await Promise.all([
+        context.supabase.from("atividades").select("id, turma_id").eq("ativo", true),
+        context.supabase
+          .from("alunos")
+          .select("id, nome_completo, matricula, turma_id")
+          .eq("ativo", true),
+        context.supabase.from("turmas_escolares").select("id, nome"),
+      ]);
+    if (aErr) throw aErr;
+    if (alErr) throw alErr;
+
+    const atividades = ativs ?? [];
+    const alunosAtivos = alunos ?? [];
+    const turmasRows = turmas ?? [];
+
+    const atividadeIds = atividades.map((a) => a.id as string);
+    const { data: entregas, error: entErr } = atividadeIds.length
+      ? await context.supabase
+          .from("atividade_entregas")
+          .select("atividade_id, aluno_id, entregue")
+          .in("atividade_id", atividadeIds)
+          .eq("entregue", true)
+      : { data: [] as Array<{ atividade_id: string; aluno_id: string; entregue: boolean }>, error: null };
+    if (entErr) throw entErr;
+
+    // 3) Mapas auxiliares
+    const turmaNome = new Map<string, string>();
+    turmasRows.forEach((t) => turmaNome.set(t.id as string, (t.nome as string) ?? ""));
+
+    // atividades por turma
+    const ativsPorTurma = new Map<string, number>();
+    atividades.forEach((a) => {
+      const k = a.turma_id as string;
+      ativsPorTurma.set(k, (ativsPorTurma.get(k) ?? 0) + 1);
+    });
+
+    // entregas por aluno
+    const entregasPorAluno = new Map<string, number>();
+    (entregas ?? []).forEach((e) => {
+      const k = e.aluno_id as string;
+      entregasPorAluno.set(k, (entregasPorAluno.get(k) ?? 0) + 1);
+    });
+
+    // 4) Ranking por aluno
+    const alunosRanking: RankingAluno[] = alunosAtivos.map((al) => {
+      const turmaId = (al.turma_id as string) ?? null;
+      const atribuidas = turmaId ? ativsPorTurma.get(turmaId) ?? 0 : 0;
+      const entreguesN = entregasPorAluno.get(al.id as string) ?? 0;
+      return {
+        aluno_id: al.id as string,
+        aluno_nome: (al.nome_completo as string) ?? "",
+        matricula: (al.matricula as string) ?? null,
+        turma_id: turmaId,
+        turma_nome: turmaId ? turmaNome.get(turmaId) ?? null : null,
+        total_atribuidas: atribuidas,
+        total_entregues: entreguesN,
+        taxa: atribuidas > 0 ? entreguesN / atribuidas : 0,
+      };
+    });
+
+    alunosRanking.sort((a, b) => {
+      if (b.total_entregues !== a.total_entregues) return b.total_entregues - a.total_entregues;
+      if (b.taxa !== a.taxa) return b.taxa - a.taxa;
+      return a.aluno_nome.localeCompare(b.aluno_nome, "pt-BR");
+    });
+
+    // 5) Ranking por turma
+    const alunosPorTurmaCount = new Map<string, number>();
+    const entreguesPorTurma = new Map<string, number>();
+    alunosAtivos.forEach((al) => {
+      const k = (al.turma_id as string) ?? "";
+      if (!k) return;
+      alunosPorTurmaCount.set(k, (alunosPorTurmaCount.get(k) ?? 0) + 1);
+      entreguesPorTurma.set(
+        k,
+        (entreguesPorTurma.get(k) ?? 0) + (entregasPorAluno.get(al.id as string) ?? 0),
+      );
+    });
+
+    const turmasRanking: RankingTurma[] = Array.from(alunosPorTurmaCount.keys()).map((tid) => {
+      const alunosN = alunosPorTurmaCount.get(tid) ?? 0;
+      const ativsN = ativsPorTurma.get(tid) ?? 0;
+      const atribuidas = alunosN * ativsN;
+      const entreguesN = entreguesPorTurma.get(tid) ?? 0;
+      return {
+        turma_id: tid,
+        turma_nome: turmaNome.get(tid) ?? "",
+        total_alunos: alunosN,
+        total_atribuidas: atribuidas,
+        total_entregues: entreguesN,
+        taxa: atribuidas > 0 ? entreguesN / atribuidas : 0,
+      };
+    });
+
+    turmasRanking.sort((a, b) => {
+      if (b.taxa !== a.taxa) return b.taxa - a.taxa;
+      if (b.total_entregues !== a.total_entregues) return b.total_entregues - a.total_entregues;
+      return a.turma_nome.localeCompare(b.turma_nome, "pt-BR");
+    });
+
+    const totalAtribuidas = alunosRanking.reduce((s, r) => s + r.total_atribuidas, 0);
+    const totalEntregues = alunosRanking.reduce((s, r) => s + r.total_entregues, 0);
+
+    return {
+      totais: {
+        atividades: atividades.length,
+        entregas: totalEntregues,
+        alunos: alunosAtivos.length,
+        turmas: alunosPorTurmaCount.size,
+        taxa: totalAtribuidas > 0 ? totalEntregues / totalAtribuidas : 0,
+      },
+      alunos: alunosRanking,
+      turmas: turmasRanking,
+    };
+  });
