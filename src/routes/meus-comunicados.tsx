@@ -274,13 +274,19 @@ function EmptyState({ text }: { text: string }) {
 function ComunicadoItem({
   c,
   lido,
+  confirmado,
   onMarcarLido,
+  onConfirmar,
   marcando,
+  confirmando,
 }: {
   c: Comunicado;
   lido: boolean;
+  confirmado: boolean;
   onMarcarLido: () => void;
+  onConfirmar: () => void;
   marcando: boolean;
+  confirmando: boolean;
 }) {
   return (
     <li
@@ -334,6 +340,34 @@ function ComunicadoItem({
             )}
             Marcar como lido
           </Button>
+        </div>
+      )}
+
+      {c.requer_confirmacao && lido && !confirmado && (
+        <div className="mt-4 rounded-xl border border-amber-500/40 bg-amber-500/5 p-3">
+          <p className="text-xs text-amber-700 dark:text-amber-300">
+            Este comunicado exige sua confirmação de que você leu <strong>e entendeu</strong> o
+            conteúdo (prazos, autorizações, etc.).
+          </p>
+          <Button
+            size="sm"
+            className="mt-2 rounded-full"
+            onClick={onConfirmar}
+            disabled={confirmando}
+          >
+            {confirmando ? (
+              <Loader2 className="size-3 animate-spin" />
+            ) : (
+              <CheckCircle2 className="size-3" />
+            )}
+            Confirmar que entendi
+          </Button>
+        </div>
+      )}
+
+      {c.requer_confirmacao && confirmado && (
+        <div className="mt-3 inline-flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
+          <CheckCircle2 className="size-3" /> Você confirmou que entendeu.
         </div>
       )}
     </li>
