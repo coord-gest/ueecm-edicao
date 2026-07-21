@@ -389,6 +389,12 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       ],
     },
     {
+      label: "Acadêmico",
+      items: [
+        { title: "Atividades e Trabalhos", url: "/painel-atividades-filhos", icon: ClipboardList },
+      ],
+    },
+    {
       label: "Produtividade",
       items: [
         { title: "Anotações & Lembretes", url: "/painel-anotacoes", icon: NotebookPen },
