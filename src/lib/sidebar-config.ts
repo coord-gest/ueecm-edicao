@@ -26,6 +26,7 @@ import {
   NotebookPen,
   type LucideIcon,
 } from "lucide-react";
+import { ClipboardList } from "lucide-react";
 
 import type { AppRole } from "@/lib/roles";
 
