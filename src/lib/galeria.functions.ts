@@ -74,7 +74,7 @@ export const listAlbunsPublicos = createServerFn({ method: "GET" }).handler(
 );
 
 export const getAlbumPublico = createServerFn({ method: "POST" })
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data }): Promise<{ album: GaleriaAlbum | null; fotos: GaleriaFoto[] }> => {
     const sb = getServerPublicClient();
     const { data: album } = await sb
@@ -156,7 +156,7 @@ const upsertSchema = z.object({
 
 export const upsertAlbum = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => upsertSchema.parse(data))
+  .validator((data) => upsertSchema.parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as unknown as { supabase: any; userId: string };
     await assertStaff(ctx);
@@ -187,7 +187,7 @@ export const upsertAlbum = createServerFn({ method: "POST" })
 
 export const deleteAlbum = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as unknown as { supabase: any; userId: string };
     await assertStaff(ctx);
@@ -226,7 +226,7 @@ const fotoInsertSchema = z.object({
 
 export const registrarFotos = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => fotoInsertSchema.parse(data))
+  .validator((data) => fotoInsertSchema.parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as unknown as { supabase: any; userId: string };
     await assertStaff(ctx);
@@ -270,7 +270,7 @@ export const registrarFotos = createServerFn({ method: "POST" })
 
 export const deleteFoto = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as unknown as { supabase: any; userId: string };
     await assertStaff(ctx);
@@ -290,7 +290,7 @@ export const deleteFoto = createServerFn({ method: "POST" })
 
 export const definirCapa = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) =>
+  .validator((data) =>
     z.object({ album_id: z.string().uuid(), url: z.string().url() }).parse(data),
   )
   .handler(async ({ data, context }) => {

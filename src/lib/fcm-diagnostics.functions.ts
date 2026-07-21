@@ -36,7 +36,7 @@ export type LogFcmDiagnosticInput = z.infer<typeof logSchema>;
  * limita a apenas INSERT nesta tabela e RLS impede SELECT sem role.
  */
 export const logFcmDiagnostic = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => logSchema.parse(data))
+  .validator((data: unknown) => logSchema.parse(data))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.from("fcm_diagnostics").insert({

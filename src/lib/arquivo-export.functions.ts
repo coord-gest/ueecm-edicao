@@ -407,7 +407,7 @@ function boletimDeAluno(input: BoletimInput, aluno: AlunoInput, pageBreakBefore:
 
 export const exportBoletimOficial = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: BoletimInput) => {
+  .validator((data: BoletimInput) => {
     // S3: limites anti-DoS. Sem cap, um payload malicioso com 10k alunos
     // travaria o Worker por segundos gerando DOCX.
     if (!data || typeof data !== "object") throw new Error("Payload inválido");
@@ -563,7 +563,7 @@ function txtCell(
 
 export const exportNotasPorArea = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: NotasAreaInput) => {
+  .validator((data: NotasAreaInput) => {
     if (!data || typeof data !== "object") throw new Error("Payload inválido");
     if (!Array.isArray(data.alunos) || data.alunos.length === 0) {
       throw new Error("Lista de alunos vazia");

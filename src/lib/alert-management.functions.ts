@@ -14,7 +14,7 @@ async function requireAdmin(ctx: { supabase: { rpc: (fn: string, args: Record<st
  * os pushes na hora certa — funciona mesmo com a aba do painel fechada.
  */
 export const scheduleAlertBurst = createServerFn({ method: "POST" })
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         alertId: z.string().uuid(),
@@ -79,7 +79,7 @@ export const scheduleAlertBurst = createServerFn({ method: "POST" })
   });
 
 export const cancelAlertBurst = createServerFn({ method: "POST" })
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .middleware([requireSupabaseAuth])
   .handler(async ({ data, context }) => {
     await requireAdmin(context as never);
@@ -113,7 +113,7 @@ export const cancelAlertBurst = createServerFn({ method: "POST" })
  * auditoria. Chamado do cliente após uma mutação bem-sucedida via Supabase.
  */
 export const logAlertClientAction = createServerFn({ method: "POST" })
-  .inputValidator((input) =>
+  .validator((input) =>
     z
       .object({
         alertId: z.string().uuid().nullable(),
@@ -137,7 +137,7 @@ export const logAlertClientAction = createServerFn({ method: "POST" })
   });
 
 export const listAlertAuditLogs = createServerFn({ method: "GET" })
-  .inputValidator((input) =>
+  .validator((input) =>
     z
       .object({
         alertId: z.string().uuid().optional(),

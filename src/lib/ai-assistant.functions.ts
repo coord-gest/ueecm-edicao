@@ -70,7 +70,7 @@ export type ComunicadoIAOutput = { titulo: string; mensagem: string };
 
 export const gerarComunicadoIA = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => {
+  .validator((d: unknown) => {
     const o = (d ?? {}) as Record<string, unknown>;
     const tema = typeof o.tema === "string" ? o.tema.trim() : "";
     if (tema.length < 10) throw new Error("Descreva o assunto (mín. 10 caracteres)");
@@ -120,7 +120,7 @@ export type FeedbackIAOutput = {
 
 export const sugerirFeedbackAluno = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => {
+  .validator((d: unknown) => {
     const o = (d ?? {}) as Record<string, unknown>;
     const aluno_id = typeof o.aluno_id === "string" ? o.aluno_id : "";
     if (!aluno_id) throw new Error("aluno_id obrigatório");
@@ -189,7 +189,7 @@ export type ResumoIAOutput = { resumo: string; acoes: string[]; participantes: s
 
 export const resumirConversa = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => {
+  .validator((d: unknown) => {
     const o = (d ?? {}) as Record<string, unknown>;
     const mensagens = Array.isArray(o.mensagens) ? o.mensagens : [];
     if (mensagens.length === 0) throw new Error("Nenhuma mensagem para resumir");

@@ -60,7 +60,7 @@ export const listBackups = createServerFn({ method: "GET" })
 
 export const getBackupDownloadUrl = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { path: string }) => data)
+  .validator((data: { path: string }) => data)
   .handler(async ({ data, context }) => {
     await assertPrivileged(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -73,7 +73,7 @@ export const getBackupDownloadUrl = createServerFn({ method: "POST" })
 
 export const deleteBackup = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { path: string }) => data)
+  .validator((data: { path: string }) => data)
   .handler(async ({ data, context }) => {
     await assertPrivileged(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -167,7 +167,7 @@ export type LargeImage = {
 /** Lista imagens > threshold em buckets públicos, para compressão retroativa. */
 export const listLargeImages = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { minKB?: number; buckets?: string[] }) => data)
+  .validator((data: { minKB?: number; buckets?: string[] }) => data)
   .handler(async ({ data, context }): Promise<LargeImage[]> => {
     await assertPrivileged(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -208,7 +208,7 @@ export const listLargeImages = createServerFn({ method: "POST" })
 /** Substitui um arquivo do storage por uma versão comprimida. */
 export const replaceImageWithCompressed = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(
+  .validator(
     (data: { bucket: string; path: string; base64: string; contentType: string }) => data,
   )
   .handler(async ({ data, context }) => {

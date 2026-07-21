@@ -62,7 +62,7 @@ function extractIp(headers: Headers): string | null {
  */
 export const logAlunoParentalConsent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) => schema.parse(raw))
+  .validator((raw: unknown) => schema.parse(raw))
   .handler(async ({ data, context }) => {
     // Autorização: apenas equipe escolar pode registrar consentimento em nome
     // do responsável durante a matrícula. Consulta `user_roles` sob a RLS do
@@ -123,7 +123,7 @@ export const logAlunoParentalConsent = createServerFn({ method: "POST" })
  */
 export const hasAlunoParentalConsent = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) => z.object({ aluno_id: z.string().uuid() }).parse(raw))
+  .validator((raw: unknown) => z.object({ aluno_id: z.string().uuid() }).parse(raw))
   .handler(async ({ data, context }) => {
     const { count, error } = await context.supabase
       .from("parental_consents")
@@ -139,7 +139,7 @@ export const hasAlunoParentalConsent = createServerFn({ method: "GET" })
  */
 export const listAlunoConsents = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) =>
+  .validator((raw: unknown) =>
     z
       .object({
         search: z.string().trim().max(120).optional().nullable(),
@@ -181,7 +181,7 @@ export const listAlunoConsents = createServerFn({ method: "GET" })
  */
 export const listAlunoConsentBadges = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) =>
+  .validator((raw: unknown) =>
     z.object({ aluno_ids: z.array(z.string().uuid()).max(500) }).parse(raw),
   )
   .handler(async ({ data, context }) => {
@@ -224,7 +224,7 @@ export type ConsentBadge = {
  */
 export const notifyGuardianConsent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) =>
+  .validator((raw: unknown) =>
     z
       .object({
         guardian_email: z.string().email(),

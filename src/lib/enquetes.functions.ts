@@ -68,7 +68,7 @@ export const listEnquetesPublicas = createServerFn({ method: "GET" }).handler(
 );
 
 export const getEnquetePublica = createServerFn({ method: "POST" })
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(
     async ({
       data,
@@ -105,7 +105,7 @@ const votarSchema = z.object({
 
 export const votarEnquete = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => votarSchema.parse(data))
+  .validator((data) => votarSchema.parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as unknown as {
       supabase: ReturnType<typeof createClient>;
@@ -134,7 +134,7 @@ export const votarEnquete = createServerFn({ method: "POST" })
 
 export const getMeuVoto = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ enquete_id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ enquete_id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }): Promise<{ opcao_ids: string[] }> => {
     const ctx = context as unknown as {
       supabase: ReturnType<typeof createClient>;
@@ -198,7 +198,7 @@ const upsertSchema = z.object({
 
 export const upsertEnquete = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => upsertSchema.parse(data))
+  .validator((data) => upsertSchema.parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as unknown as { supabase: any; userId: string };
     await assertAdmin(ctx);
@@ -240,7 +240,7 @@ export const upsertEnquete = createServerFn({ method: "POST" })
 
 export const toggleEnqueteAtivo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ id: z.string().uuid(), ativo: z.boolean() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid(), ativo: z.boolean() }).parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as unknown as { supabase: any; userId: string };
     await assertAdmin(ctx);
@@ -254,7 +254,7 @@ export const toggleEnqueteAtivo = createServerFn({ method: "POST" })
 
 export const deleteEnquete = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as unknown as { supabase: any; userId: string };
     await assertAdmin(ctx);
@@ -265,7 +265,7 @@ export const deleteEnquete = createServerFn({ method: "POST" })
 
 export const getEnqueteAdmin = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(
     async ({ data, context }): Promise<{ enquete: Enquete | null; opcoes: EnqueteOpcao[] }> => {
       const ctx = context as unknown as { supabase: any; userId: string };

@@ -127,7 +127,7 @@ export const seedSchoolUsers = createServerFn({ method: "POST" })
 
 export const wipeSchoolUsers = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) => z.object({ confirm: z.literal(true) }).parse(input))
+  .validator((input) => z.object({ confirm: z.literal(true) }).parse(input))
   .handler(async ({ context }) => {
     const supabaseAdmin = await getAdmin();
     await assertDeveloper(context.userId, supabaseAdmin);

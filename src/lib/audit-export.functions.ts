@@ -13,7 +13,7 @@ const inputSchema = z.object({
 /** Gera um PDF com os eventos de auditoria filtrados. */
 export const exportAuditPdf = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => inputSchema.parse(d))
+  .validator((d) => inputSchema.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
 

@@ -94,7 +94,7 @@ function firstOfMonth(input?: string | null): string {
 
 // ---------- Público (com filtros + paginação + busca) ----------
 export const listDestaquesPublicos = createServerFn({ method: "GET" })
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         mes: z.string().optional().nullable(),
@@ -155,7 +155,7 @@ export const listDestaquesPublicos = createServerFn({ method: "GET" })
 
 // Lista distinct de turmas do mês para popular filtros públicos
 export const listTurmasComDestaques = createServerFn({ method: "GET" })
-  .inputValidator((data) => z.object({ mes: z.string().optional().nullable() }).parse(data ?? {}))
+  .validator((data) => z.object({ mes: z.string().optional().nullable() }).parse(data ?? {}))
   .handler(async ({ data }): Promise<string[]> => {
     const supabase = getServerPublicClient();
     const mes = firstOfMonth(data.mes);
@@ -173,7 +173,7 @@ export const listTurmasComDestaques = createServerFn({ method: "GET" })
 
 // Lista distinct de disciplinas do mês para filtro público
 export const listDisciplinasComDestaques = createServerFn({ method: "GET" })
-  .inputValidator((data) => z.object({ mes: z.string().optional().nullable() }).parse(data ?? {}))
+  .validator((data) => z.object({ mes: z.string().optional().nullable() }).parse(data ?? {}))
   .handler(async ({ data }): Promise<string[]> => {
     const supabase = getServerPublicClient();
     const mes = firstOfMonth(data.mes);
@@ -192,7 +192,7 @@ export const listDisciplinasComDestaques = createServerFn({ method: "GET" })
 export const listDestaquesAdmin = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
 
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         mes: z.string().optional().nullable(),
@@ -281,7 +281,7 @@ const indicarSchema = z.object({
 
 export const indicarDestaque = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => indicarSchema.parse(data))
+  .validator((data) => indicarSchema.parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as never as {
       supabase: ReturnType<typeof createClient>;
@@ -330,7 +330,7 @@ const editarSchema = z.object({
 
 export const editarDestaque = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => editarSchema.parse(data))
+  .validator((data) => editarSchema.parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as never as {
       supabase: ReturnType<typeof createClient>;
@@ -372,7 +372,7 @@ export const editarDestaque = createServerFn({ method: "POST" })
 // ---------- Cancelar (autor enquanto indicado) ----------
 export const cancelarDestaque = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         id: z.string().uuid(),
@@ -418,7 +418,7 @@ export type HistoricoRow = {
 
 export const listHistoricoDestaque = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ destaque_id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ destaque_id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }): Promise<HistoricoRow[]> => {
     const ctx = context as never as { supabase: ReturnType<typeof createClient> };
     const { data: rows, error } = await ctx.supabase
@@ -434,7 +434,7 @@ export const listHistoricoDestaque = createServerFn({ method: "POST" })
 // ---------- Moderar ----------
 export const aprovarDestaque = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     await assertGestor(context as never);
     const ctx = context as never as {
@@ -461,7 +461,7 @@ export const aprovarDestaque = createServerFn({ method: "POST" })
 
 export const rejeitarDestaque = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         id: z.string().uuid(),
@@ -496,7 +496,7 @@ export const rejeitarDestaque = createServerFn({ method: "POST" })
 
 export const excluirDestaque = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     await assertGestor(context as never);
     const ctx = context as never as {

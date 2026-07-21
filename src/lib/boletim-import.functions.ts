@@ -121,7 +121,7 @@ function normalizeParsed(raw: unknown, filename: string): ParsedBoletim {
 
 export const importarBoletinsPdf = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => InputSchema.parse(data))
+  .validator((data: unknown) => InputSchema.parse(data))
   .handler(async ({ data, context }): Promise<{ results: ParsedBoletim[] }> => {
     const { data: isStaff, error: roleError } = await context.supabase.rpc(
       "is_professor_or_staff",
@@ -254,7 +254,7 @@ const InputTextoSchema = z.object({
 
 export const importarBoletinsTexto = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => InputTextoSchema.parse(data))
+  .validator((data: unknown) => InputTextoSchema.parse(data))
   .handler(async ({ data, context }): Promise<{ results: ParsedBoletim[] }> => {
     const { data: isStaff, error: roleError } = await context.supabase.rpc(
       "is_professor_or_staff",

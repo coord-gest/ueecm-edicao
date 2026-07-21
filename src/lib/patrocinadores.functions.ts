@@ -125,7 +125,7 @@ export const listEventosAdmin = createServerFn({ method: "GET" })
 
 export const listPatrocinadoresAdmin = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ evento_id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ evento_id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }): Promise<Patrocinador[]> => {
     const ctx = context as unknown as {
       supabase: ReturnType<typeof createClient>;
@@ -155,7 +155,7 @@ const eventoUpsertSchema = z.object({
 
 export const upsertEvento = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => eventoUpsertSchema.parse(data))
+  .validator((data) => eventoUpsertSchema.parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as unknown as {
       supabase: ReturnType<typeof createClient>;
@@ -190,7 +190,7 @@ export const upsertEvento = createServerFn({ method: "POST" })
 
 export const toggleEventoAtivo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ id: z.string().uuid(), ativo: z.boolean() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid(), ativo: z.boolean() }).parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as unknown as {
       supabase: ReturnType<typeof createClient>;
@@ -207,7 +207,7 @@ export const toggleEventoAtivo = createServerFn({ method: "POST" })
 
 export const deleteEvento = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as unknown as {
       supabase: ReturnType<typeof createClient>;
@@ -239,7 +239,7 @@ const patroUpsertSchema = z.object({
 
 export const upsertPatrocinador = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => patroUpsertSchema.parse(data))
+  .validator((data) => patroUpsertSchema.parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as unknown as {
       supabase: ReturnType<typeof createClient>;
@@ -278,7 +278,7 @@ export const upsertPatrocinador = createServerFn({ method: "POST" })
 
 export const togglePatrocinadorAtivo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ id: z.string().uuid(), ativo: z.boolean() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid(), ativo: z.boolean() }).parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as unknown as {
       supabase: ReturnType<typeof createClient>;
@@ -295,7 +295,7 @@ export const togglePatrocinadorAtivo = createServerFn({ method: "POST" })
 
 export const reorderPatrocinador = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         id: z.string().uuid(),
@@ -352,7 +352,7 @@ export const reorderPatrocinador = createServerFn({ method: "POST" })
 
 export const setPatrocinadoresOrdem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         evento_id: z.string().uuid(),
@@ -383,7 +383,7 @@ export const setPatrocinadoresOrdem = createServerFn({ method: "POST" })
 
 export const bulkTogglePatrocinadoresAtivo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         ids: z.array(z.string().uuid()).min(1).max(100),
@@ -407,7 +407,7 @@ export const bulkTogglePatrocinadoresAtivo = createServerFn({ method: "POST" })
 
 export const deletePatrocinador = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     const ctx = context as unknown as {
       supabase: ReturnType<typeof createClient>;
@@ -428,7 +428,7 @@ export type PatroStat = {
 
 export const getPatrocinadoresStats = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         evento_id: z.string().uuid(),

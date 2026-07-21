@@ -16,7 +16,7 @@ async function assertDeveloper(userId: string) {
 
 export const clearAuditLogs = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) => z.object({ confirm: z.literal(true) }).parse(input))
+  .validator((input) => z.object({ confirm: z.literal(true) }).parse(input))
   .handler(async ({ context }) => {
     await assertDeveloper(context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
