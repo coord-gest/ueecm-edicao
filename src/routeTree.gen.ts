@@ -37,6 +37,9 @@ import { Route as PainelErrosRouteImport } from './routes/painel-erros'
 import { Route as PainelEnviarDriveRouteImport } from './routes/painel-enviar-drive'
 import { Route as PainelEnquetesRouteImport } from './routes/painel-enquetes'
 import { Route as PainelDiretorRouteImport } from './routes/painel-diretor'
+import { Route as PainelDiarioFilhoRouteImport } from './routes/painel-diario-filho'
+import { Route as PainelDiarioBordoSupervisaoRouteImport } from './routes/painel-diario-bordo-supervisao'
+import { Route as PainelDiarioBordoRouteImport } from './routes/painel-diario-bordo'
 import { Route as PainelDestaquesAlunosRouteImport } from './routes/painel-destaques-alunos'
 import { Route as PainelDestaquesRouteImport } from './routes/painel-destaques'
 import { Route as PainelDesenvolvedorRouteImport } from './routes/painel-desenvolvedor'
@@ -261,6 +264,22 @@ const PainelEnquetesRoute = PainelEnquetesRouteImport.update({
 const PainelDiretorRoute = PainelDiretorRouteImport.update({
   id: '/painel-diretor',
   path: '/painel-diretor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelDiarioFilhoRoute = PainelDiarioFilhoRouteImport.update({
+  id: '/painel-diario-filho',
+  path: '/painel-diario-filho',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelDiarioBordoSupervisaoRoute =
+  PainelDiarioBordoSupervisaoRouteImport.update({
+    id: '/painel-diario-bordo-supervisao',
+    path: '/painel-diario-bordo-supervisao',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const PainelDiarioBordoRoute = PainelDiarioBordoRouteImport.update({
+  id: '/painel-diario-bordo',
+  path: '/painel-diario-bordo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelDestaquesAlunosRoute = PainelDestaquesAlunosRouteImport.update({
@@ -744,6 +763,9 @@ export interface FileRoutesByFullPath {
   '/painel-desenvolvedor': typeof PainelDesenvolvedorRoute
   '/painel-destaques': typeof PainelDestaquesRoute
   '/painel-destaques-alunos': typeof PainelDestaquesAlunosRoute
+  '/painel-diario-bordo': typeof PainelDiarioBordoRoute
+  '/painel-diario-bordo-supervisao': typeof PainelDiarioBordoSupervisaoRoute
+  '/painel-diario-filho': typeof PainelDiarioFilhoRoute
   '/painel-diretor': typeof PainelDiretorRoute
   '/painel-enquetes': typeof PainelEnquetesRoute
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
@@ -858,6 +880,9 @@ export interface FileRoutesByTo {
   '/painel-desenvolvedor': typeof PainelDesenvolvedorRoute
   '/painel-destaques': typeof PainelDestaquesRoute
   '/painel-destaques-alunos': typeof PainelDestaquesAlunosRoute
+  '/painel-diario-bordo': typeof PainelDiarioBordoRoute
+  '/painel-diario-bordo-supervisao': typeof PainelDiarioBordoSupervisaoRoute
+  '/painel-diario-filho': typeof PainelDiarioFilhoRoute
   '/painel-diretor': typeof PainelDiretorRoute
   '/painel-enquetes': typeof PainelEnquetesRoute
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
@@ -974,6 +999,9 @@ export interface FileRoutesById {
   '/painel-desenvolvedor': typeof PainelDesenvolvedorRoute
   '/painel-destaques': typeof PainelDestaquesRoute
   '/painel-destaques-alunos': typeof PainelDestaquesAlunosRoute
+  '/painel-diario-bordo': typeof PainelDiarioBordoRoute
+  '/painel-diario-bordo-supervisao': typeof PainelDiarioBordoSupervisaoRoute
+  '/painel-diario-filho': typeof PainelDiarioFilhoRoute
   '/painel-diretor': typeof PainelDiretorRoute
   '/painel-enquetes': typeof PainelEnquetesRoute
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
@@ -1091,6 +1119,9 @@ export interface FileRouteTypes {
     | '/painel-desenvolvedor'
     | '/painel-destaques'
     | '/painel-destaques-alunos'
+    | '/painel-diario-bordo'
+    | '/painel-diario-bordo-supervisao'
+    | '/painel-diario-filho'
     | '/painel-diretor'
     | '/painel-enquetes'
     | '/painel-enviar-drive'
@@ -1205,6 +1236,9 @@ export interface FileRouteTypes {
     | '/painel-desenvolvedor'
     | '/painel-destaques'
     | '/painel-destaques-alunos'
+    | '/painel-diario-bordo'
+    | '/painel-diario-bordo-supervisao'
+    | '/painel-diario-filho'
     | '/painel-diretor'
     | '/painel-enquetes'
     | '/painel-enviar-drive'
@@ -1320,6 +1354,9 @@ export interface FileRouteTypes {
     | '/painel-desenvolvedor'
     | '/painel-destaques'
     | '/painel-destaques-alunos'
+    | '/painel-diario-bordo'
+    | '/painel-diario-bordo-supervisao'
+    | '/painel-diario-filho'
     | '/painel-diretor'
     | '/painel-enquetes'
     | '/painel-enviar-drive'
@@ -1436,6 +1473,9 @@ export interface RootRouteChildren {
   PainelDesenvolvedorRoute: typeof PainelDesenvolvedorRoute
   PainelDestaquesRoute: typeof PainelDestaquesRoute
   PainelDestaquesAlunosRoute: typeof PainelDestaquesAlunosRoute
+  PainelDiarioBordoRoute: typeof PainelDiarioBordoRoute
+  PainelDiarioBordoSupervisaoRoute: typeof PainelDiarioBordoSupervisaoRoute
+  PainelDiarioFilhoRoute: typeof PainelDiarioFilhoRoute
   PainelDiretorRoute: typeof PainelDiretorRoute
   PainelEnquetesRoute: typeof PainelEnquetesRoute
   PainelEnviarDriveRoute: typeof PainelEnviarDriveRoute
@@ -1692,6 +1732,27 @@ declare module '@tanstack/react-router' {
       path: '/painel-diretor'
       fullPath: '/painel-diretor'
       preLoaderRoute: typeof PainelDiretorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-diario-filho': {
+      id: '/painel-diario-filho'
+      path: '/painel-diario-filho'
+      fullPath: '/painel-diario-filho'
+      preLoaderRoute: typeof PainelDiarioFilhoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-diario-bordo-supervisao': {
+      id: '/painel-diario-bordo-supervisao'
+      path: '/painel-diario-bordo-supervisao'
+      fullPath: '/painel-diario-bordo-supervisao'
+      preLoaderRoute: typeof PainelDiarioBordoSupervisaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-diario-bordo': {
+      id: '/painel-diario-bordo'
+      path: '/painel-diario-bordo'
+      fullPath: '/painel-diario-bordo'
+      preLoaderRoute: typeof PainelDiarioBordoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-destaques-alunos': {
@@ -2448,6 +2509,9 @@ const rootRouteChildren: RootRouteChildren = {
   PainelDesenvolvedorRoute: PainelDesenvolvedorRoute,
   PainelDestaquesRoute: PainelDestaquesRoute,
   PainelDestaquesAlunosRoute: PainelDestaquesAlunosRoute,
+  PainelDiarioBordoRoute: PainelDiarioBordoRoute,
+  PainelDiarioBordoSupervisaoRoute: PainelDiarioBordoSupervisaoRoute,
+  PainelDiarioFilhoRoute: PainelDiarioFilhoRoute,
   PainelDiretorRoute: PainelDiretorRoute,
   PainelEnquetesRoute: PainelEnquetesRoute,
   PainelEnviarDriveRoute: PainelEnviarDriveRoute,

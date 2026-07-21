@@ -1366,6 +1366,112 @@ export type Database = {
         }
         Relationships: []
       }
+      diario_bordo: {
+        Row: {
+          aluno_id: string
+          autor_id: string
+          autor_nome: string | null
+          created_at: string
+          data_registro: string
+          descricao: string | null
+          disciplina: string | null
+          id: string
+          tipo: Database["public"]["Enums"]["diario_tipo"]
+          titulo: string
+          turma_id: string
+          updated_at: string
+          visivel_pais: boolean
+        }
+        Insert: {
+          aluno_id: string
+          autor_id: string
+          autor_nome?: string | null
+          created_at?: string
+          data_registro?: string
+          descricao?: string | null
+          disciplina?: string | null
+          id?: string
+          tipo: Database["public"]["Enums"]["diario_tipo"]
+          titulo: string
+          turma_id: string
+          updated_at?: string
+          visivel_pais?: boolean
+        }
+        Update: {
+          aluno_id?: string
+          autor_id?: string
+          autor_nome?: string | null
+          created_at?: string
+          data_registro?: string
+          descricao?: string | null
+          disciplina?: string | null
+          id?: string
+          tipo?: Database["public"]["Enums"]["diario_tipo"]
+          titulo?: string
+          turma_id?: string
+          updated_at?: string
+          visivel_pais?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diario_bordo_aluno_id_fkey"
+            columns: ["aluno_id"]
+            isOneToOne: false
+            referencedRelation: "alunos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "diario_bordo_aluno_id_fkey"
+            columns: ["aluno_id"]
+            isOneToOne: false
+            referencedRelation: "alunos_destaque_publicos"
+            referencedColumns: ["aluno_id"]
+          },
+          {
+            foreignKeyName: "diario_bordo_turma_id_fkey"
+            columns: ["turma_id"]
+            isOneToOne: false
+            referencedRelation: "alunos_destaque_publicos"
+            referencedColumns: ["turma_id"]
+          },
+          {
+            foreignKeyName: "diario_bordo_turma_id_fkey"
+            columns: ["turma_id"]
+            isOneToOne: false
+            referencedRelation: "turmas_escolares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      diario_bordo_leituras: {
+        Row: {
+          id: string
+          lido_em: string
+          registro_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          lido_em?: string
+          registro_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          lido_em?: string
+          registro_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diario_bordo_leituras_registro_id_fkey"
+            columns: ["registro_id"]
+            isOneToOne: false
+            referencedRelation: "diario_bordo"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       disciplinas: {
         Row: {
           ativo: boolean
@@ -3641,6 +3747,13 @@ export type Database = {
           status: string
         }[]
       }
+      contar_diario_nao_lidos: {
+        Args: never
+        Returns: {
+          aluno_id: string
+          nao_lidos: number
+        }[]
+      }
       criar_agendamento: {
         Args: {
           p_alvo_cargo?: string
@@ -3775,6 +3888,12 @@ export type Database = {
         | "student"
         | "family"
         | "social_media"
+      diario_tipo:
+        | "elogio"
+        | "participacao"
+        | "avanco"
+        | "observacao"
+        | "atencao"
       dsr_status: "pendente" | "em_analise" | "concluida" | "rejeitada"
       dsr_type:
         | "acesso"
@@ -3950,6 +4069,13 @@ export const Constants = {
         "student",
         "family",
         "social_media",
+      ],
+      diario_tipo: [
+        "elogio",
+        "participacao",
+        "avanco",
+        "observacao",
+        "atencao",
       ],
       dsr_status: ["pendente", "em_analise", "concluida", "rejeitada"],
       dsr_type: [
