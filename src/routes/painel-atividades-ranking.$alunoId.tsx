@@ -22,9 +22,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { z } from "zod";
-import { fallback, zodValidator } from "@tanstack/zod-adapter";
-
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -32,14 +29,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { detalhesAlunoRanking } from "@/lib/atividades.functions";
 import { exportRowsAsCsv } from "@/lib/csv-export";
 
-const searchSchema = z.object({
-  data_inicio: fallback(z.string().optional(), undefined),
-  data_fim: fallback(z.string().optional(), undefined),
-});
+type DetalheSearch = { data_inicio?: string; data_fim?: string };
+
+function parseSearch(raw: Record<string, unknown>): DetalheSearch {
+  const di = typeof raw.data_inicio === "string" && /^\d{4}-\d{2}-\d{2}$/.test(raw.data_inicio) ? raw.data_inicio : undefined;
+  const df = typeof raw.data_fim === "string" && /^\d{4}-\d{2}-\d{2}$/.test(raw.data_fim) ? raw.data_fim : undefined;
+  return { data_inicio: di, data_fim: df };
+}
 
 export const Route = createFileRoute("/painel-atividades-ranking/$alunoId")({
   ssr: false,
-  validateSearch: zodValidator(searchSchema),
+  validateSearch: parseSearch,
   head: () => ({ meta: [{ title: "Detalhe do aluno | Ranking de Atividades" }] }),
   beforeLoad: async () => {
     const { data, error } = await supabase.auth.getUser();
