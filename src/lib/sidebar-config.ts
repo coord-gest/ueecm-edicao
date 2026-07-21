@@ -24,6 +24,7 @@ import {
   HelpCircle,
   Wrench,
   NotebookPen,
+  MessageCircle,
   type LucideIcon,
 } from "lucide-react";
 import { ClipboardList } from "lucide-react";
@@ -475,6 +476,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       label: "Comunidade",
       items: [
         { title: "Mural da Comunidade", url: "/mural", icon: Users },
+        { title: "Chat com Professor", url: "/chat-aluno", icon: MessageCircle },
       ],
     },
   ],
