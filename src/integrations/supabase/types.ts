@@ -3412,6 +3412,156 @@ export type Database = {
         }
         Relationships: []
       }
+      rede_apoio_matches: {
+        Row: {
+          created_at: string
+          id: string
+          iniciado_por: string
+          observacoes: string | null
+          oferta_id: string | null
+          pedido_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          iniciado_por: string
+          observacoes?: string | null
+          oferta_id?: string | null
+          pedido_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          iniciado_por?: string
+          observacoes?: string | null
+          oferta_id?: string | null
+          pedido_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rede_apoio_matches_oferta_id_fkey"
+            columns: ["oferta_id"]
+            isOneToOne: false
+            referencedRelation: "rede_apoio_ofertas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rede_apoio_matches_pedido_id_fkey"
+            columns: ["pedido_id"]
+            isOneToOne: false
+            referencedRelation: "rede_apoio_pedidos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rede_apoio_ofertas: {
+        Row: {
+          autor_user_id: string
+          bairro: string | null
+          categoria: string
+          contato: string | null
+          created_at: string
+          descricao: string
+          disponibilidade: string | null
+          id: string
+          moderado_em: string | null
+          moderado_por: string | null
+          motivo_moderacao: string | null
+          status: string
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          autor_user_id: string
+          bairro?: string | null
+          categoria: string
+          contato?: string | null
+          created_at?: string
+          descricao: string
+          disponibilidade?: string | null
+          id?: string
+          moderado_em?: string | null
+          moderado_por?: string | null
+          motivo_moderacao?: string | null
+          status?: string
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          autor_user_id?: string
+          bairro?: string | null
+          categoria?: string
+          contato?: string | null
+          created_at?: string
+          descricao?: string
+          disponibilidade?: string | null
+          id?: string
+          moderado_em?: string | null
+          moderado_por?: string | null
+          motivo_moderacao?: string | null
+          status?: string
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      rede_apoio_pedidos: {
+        Row: {
+          anonimo: boolean
+          autor_user_id: string
+          categoria: string
+          contato_reserva: string | null
+          created_at: string
+          descricao: string
+          id: string
+          moderado_em: string | null
+          moderado_por: string | null
+          motivo_moderacao: string | null
+          status: string
+          titulo: string
+          updated_at: string
+          urgencia: string
+        }
+        Insert: {
+          anonimo?: boolean
+          autor_user_id: string
+          categoria: string
+          contato_reserva?: string | null
+          created_at?: string
+          descricao: string
+          id?: string
+          moderado_em?: string | null
+          moderado_por?: string | null
+          motivo_moderacao?: string | null
+          status?: string
+          titulo: string
+          updated_at?: string
+          urgencia?: string
+        }
+        Update: {
+          anonimo?: boolean
+          autor_user_id?: string
+          categoria?: string
+          contato_reserva?: string | null
+          created_at?: string
+          descricao?: string
+          id?: string
+          moderado_em?: string | null
+          moderado_por?: string | null
+          motivo_moderacao?: string | null
+          status?: string
+          titulo?: string
+          updated_at?: string
+          urgencia?: string
+        }
+        Relationships: []
+      }
       reminders: {
         Row: {
           concluido: boolean
@@ -3649,6 +3799,110 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      vaquinha_contribuicoes: {
+        Row: {
+          anonimo: boolean
+          comprovante_url: string | null
+          confirmado: boolean
+          confirmado_em: string | null
+          confirmado_por: string | null
+          contribuinte_nome: string | null
+          contribuinte_user_id: string | null
+          created_at: string
+          id: string
+          mensagem: string | null
+          valor_centavos: number
+          vaquinha_id: string
+        }
+        Insert: {
+          anonimo?: boolean
+          comprovante_url?: string | null
+          confirmado?: boolean
+          confirmado_em?: string | null
+          confirmado_por?: string | null
+          contribuinte_nome?: string | null
+          contribuinte_user_id?: string | null
+          created_at?: string
+          id?: string
+          mensagem?: string | null
+          valor_centavos: number
+          vaquinha_id: string
+        }
+        Update: {
+          anonimo?: boolean
+          comprovante_url?: string | null
+          confirmado?: boolean
+          confirmado_em?: string | null
+          confirmado_por?: string | null
+          contribuinte_nome?: string | null
+          contribuinte_user_id?: string | null
+          created_at?: string
+          id?: string
+          mensagem?: string | null
+          valor_centavos?: number
+          vaquinha_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vaquinha_contribuicoes_vaquinha_id_fkey"
+            columns: ["vaquinha_id"]
+            isOneToOne: false
+            referencedRelation: "vaquinhas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vaquinhas: {
+        Row: {
+          arrecadado_centavos: number
+          beneficiario: string
+          chave_pix: string | null
+          created_at: string
+          criado_por: string
+          descricao: string
+          destaque: boolean
+          foto_url: string | null
+          id: string
+          meta_centavos: number
+          prazo: string | null
+          status: string
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          arrecadado_centavos?: number
+          beneficiario: string
+          chave_pix?: string | null
+          created_at?: string
+          criado_por: string
+          descricao: string
+          destaque?: boolean
+          foto_url?: string | null
+          id?: string
+          meta_centavos: number
+          prazo?: string | null
+          status?: string
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          arrecadado_centavos?: number
+          beneficiario?: string
+          chave_pix?: string | null
+          created_at?: string
+          criado_por?: string
+          descricao?: string
+          destaque?: boolean
+          foto_url?: string | null
+          id?: string
+          meta_centavos?: number
+          prazo?: string | null
+          status?: string
+          titulo?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -4118,6 +4372,7 @@ export type Database = {
         }[]
       }
       increment_post_views: { Args: { _post_id: string }; Returns: undefined }
+      is_apoio_staff: { Args: { _uid: string }; Returns: boolean }
       is_professor_da_turma: {
         Args: { _turma_id: string; _user_id: string }
         Returns: boolean
