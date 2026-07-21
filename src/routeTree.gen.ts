@@ -28,6 +28,7 @@ import { Route as PainelProfissionaisRouteImport } from './routes/painel-profiss
 import { Route as PainelProfessorRouteImport } from './routes/painel-professor'
 import { Route as PainelPresencaParentalRouteImport } from './routes/painel-presenca-parental'
 import { Route as PainelPatrocinadoresRouteImport } from './routes/painel-patrocinadores'
+import { Route as PainelMuralModeracaoRouteImport } from './routes/painel-mural-moderacao'
 import { Route as PainelMeritosFilhosRouteImport } from './routes/painel-meritos-filhos'
 import { Route as PainelMeritosRouteImport } from './routes/painel-meritos'
 import { Route as PainelMensagensRouteImport } from './routes/painel-mensagens'
@@ -70,6 +71,7 @@ import { Route as PainelAcademicoRouteImport } from './routes/painel-academico'
 import { Route as PainelRouteImport } from './routes/painel'
 import { Route as OfflineRouteImport } from './routes/offline'
 import { Route as NotificacoesRouteImport } from './routes/notificacoes'
+import { Route as MuralRouteImport } from './routes/mural'
 import { Route as MomentosRouteImport } from './routes/momentos'
 import { Route as MinhasTurmasRouteImport } from './routes/minhas-turmas'
 import { Route as MeusFilhosRouteImport } from './routes/meus-filhos'
@@ -226,6 +228,11 @@ const PainelPresencaParentalRoute = PainelPresencaParentalRouteImport.update({
 const PainelPatrocinadoresRoute = PainelPatrocinadoresRouteImport.update({
   id: '/painel-patrocinadores',
   path: '/painel-patrocinadores',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelMuralModeracaoRoute = PainelMuralModeracaoRouteImport.update({
+  id: '/painel-mural-moderacao',
+  path: '/painel-mural-moderacao',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelMeritosFilhosRoute = PainelMeritosFilhosRouteImport.update({
@@ -437,6 +444,11 @@ const OfflineRoute = OfflineRouteImport.update({
 const NotificacoesRoute = NotificacoesRouteImport.update({
   id: '/notificacoes',
   path: '/notificacoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MuralRoute = MuralRouteImport.update({
+  id: '/mural',
+  path: '/mural',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MomentosRoute = MomentosRouteImport.update({
@@ -782,6 +794,7 @@ export interface FileRoutesByFullPath {
   '/meus-filhos': typeof MeusFilhosRouteWithChildren
   '/minhas-turmas': typeof MinhasTurmasRouteWithChildren
   '/momentos': typeof MomentosRoute
+  '/mural': typeof MuralRoute
   '/notificacoes': typeof NotificacoesRoute
   '/offline': typeof OfflineRoute
   '/painel': typeof PainelRoute
@@ -824,6 +837,7 @@ export interface FileRoutesByFullPath {
   '/painel-mensagens': typeof PainelMensagensRoute
   '/painel-meritos': typeof PainelMeritosRoute
   '/painel-meritos-filhos': typeof PainelMeritosFilhosRoute
+  '/painel-mural-moderacao': typeof PainelMuralModeracaoRoute
   '/painel-patrocinadores': typeof PainelPatrocinadoresRoute
   '/painel-presenca-parental': typeof PainelPresencaParentalRoute
   '/painel-professor': typeof PainelProfessorRoute
@@ -907,6 +921,7 @@ export interface FileRoutesByTo {
   '/meus-filhos': typeof MeusFilhosRouteWithChildren
   '/minhas-turmas': typeof MinhasTurmasRouteWithChildren
   '/momentos': typeof MomentosRoute
+  '/mural': typeof MuralRoute
   '/notificacoes': typeof NotificacoesRoute
   '/offline': typeof OfflineRoute
   '/painel': typeof PainelRoute
@@ -948,6 +963,7 @@ export interface FileRoutesByTo {
   '/painel-mensagens': typeof PainelMensagensRoute
   '/painel-meritos': typeof PainelMeritosRoute
   '/painel-meritos-filhos': typeof PainelMeritosFilhosRoute
+  '/painel-mural-moderacao': typeof PainelMuralModeracaoRoute
   '/painel-patrocinadores': typeof PainelPatrocinadoresRoute
   '/painel-presenca-parental': typeof PainelPresencaParentalRoute
   '/painel-professor': typeof PainelProfessorRoute
@@ -1032,6 +1048,7 @@ export interface FileRoutesById {
   '/meus-filhos': typeof MeusFilhosRouteWithChildren
   '/minhas-turmas': typeof MinhasTurmasRouteWithChildren
   '/momentos': typeof MomentosRoute
+  '/mural': typeof MuralRoute
   '/notificacoes': typeof NotificacoesRoute
   '/offline': typeof OfflineRoute
   '/painel': typeof PainelRoute
@@ -1074,6 +1091,7 @@ export interface FileRoutesById {
   '/painel-mensagens': typeof PainelMensagensRoute
   '/painel-meritos': typeof PainelMeritosRoute
   '/painel-meritos-filhos': typeof PainelMeritosFilhosRoute
+  '/painel-mural-moderacao': typeof PainelMuralModeracaoRoute
   '/painel-patrocinadores': typeof PainelPatrocinadoresRoute
   '/painel-presenca-parental': typeof PainelPresencaParentalRoute
   '/painel-professor': typeof PainelProfessorRoute
@@ -1159,6 +1177,7 @@ export interface FileRouteTypes {
     | '/meus-filhos'
     | '/minhas-turmas'
     | '/momentos'
+    | '/mural'
     | '/notificacoes'
     | '/offline'
     | '/painel'
@@ -1201,6 +1220,7 @@ export interface FileRouteTypes {
     | '/painel-mensagens'
     | '/painel-meritos'
     | '/painel-meritos-filhos'
+    | '/painel-mural-moderacao'
     | '/painel-patrocinadores'
     | '/painel-presenca-parental'
     | '/painel-professor'
@@ -1284,6 +1304,7 @@ export interface FileRouteTypes {
     | '/meus-filhos'
     | '/minhas-turmas'
     | '/momentos'
+    | '/mural'
     | '/notificacoes'
     | '/offline'
     | '/painel'
@@ -1325,6 +1346,7 @@ export interface FileRouteTypes {
     | '/painel-mensagens'
     | '/painel-meritos'
     | '/painel-meritos-filhos'
+    | '/painel-mural-moderacao'
     | '/painel-patrocinadores'
     | '/painel-presenca-parental'
     | '/painel-professor'
@@ -1408,6 +1430,7 @@ export interface FileRouteTypes {
     | '/meus-filhos'
     | '/minhas-turmas'
     | '/momentos'
+    | '/mural'
     | '/notificacoes'
     | '/offline'
     | '/painel'
@@ -1450,6 +1473,7 @@ export interface FileRouteTypes {
     | '/painel-mensagens'
     | '/painel-meritos'
     | '/painel-meritos-filhos'
+    | '/painel-mural-moderacao'
     | '/painel-patrocinadores'
     | '/painel-presenca-parental'
     | '/painel-professor'
@@ -1534,6 +1558,7 @@ export interface RootRouteChildren {
   MeusFilhosRoute: typeof MeusFilhosRouteWithChildren
   MinhasTurmasRoute: typeof MinhasTurmasRouteWithChildren
   MomentosRoute: typeof MomentosRoute
+  MuralRoute: typeof MuralRoute
   NotificacoesRoute: typeof NotificacoesRoute
   OfflineRoute: typeof OfflineRoute
   PainelRoute: typeof PainelRoute
@@ -1576,6 +1601,7 @@ export interface RootRouteChildren {
   PainelMensagensRoute: typeof PainelMensagensRoute
   PainelMeritosRoute: typeof PainelMeritosRoute
   PainelMeritosFilhosRoute: typeof PainelMeritosFilhosRoute
+  PainelMuralModeracaoRoute: typeof PainelMuralModeracaoRoute
   PainelPatrocinadoresRoute: typeof PainelPatrocinadoresRoute
   PainelPresencaParentalRoute: typeof PainelPresencaParentalRoute
   PainelProfessorRoute: typeof PainelProfessorRoute
@@ -1760,6 +1786,13 @@ declare module '@tanstack/react-router' {
       path: '/painel-patrocinadores'
       fullPath: '/painel-patrocinadores'
       preLoaderRoute: typeof PainelPatrocinadoresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-mural-moderacao': {
+      id: '/painel-mural-moderacao'
+      path: '/painel-mural-moderacao'
+      fullPath: '/painel-mural-moderacao'
+      preLoaderRoute: typeof PainelMuralModeracaoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-meritos-filhos': {
@@ -2054,6 +2087,13 @@ declare module '@tanstack/react-router' {
       path: '/notificacoes'
       fullPath: '/notificacoes'
       preLoaderRoute: typeof NotificacoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mural': {
+      id: '/mural'
+      path: '/mural'
+      fullPath: '/mural'
+      preLoaderRoute: typeof MuralRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/momentos': {
@@ -2626,6 +2666,7 @@ const rootRouteChildren: RootRouteChildren = {
   MeusFilhosRoute: MeusFilhosRouteWithChildren,
   MinhasTurmasRoute: MinhasTurmasRouteWithChildren,
   MomentosRoute: MomentosRoute,
+  MuralRoute: MuralRoute,
   NotificacoesRoute: NotificacoesRoute,
   OfflineRoute: OfflineRoute,
   PainelRoute: PainelRoute,
@@ -2668,6 +2709,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelMensagensRoute: PainelMensagensRoute,
   PainelMeritosRoute: PainelMeritosRoute,
   PainelMeritosFilhosRoute: PainelMeritosFilhosRoute,
+  PainelMuralModeracaoRoute: PainelMuralModeracaoRoute,
   PainelPatrocinadoresRoute: PainelPatrocinadoresRoute,
   PainelPresencaParentalRoute: PainelPresencaParentalRoute,
   PainelProfessorRoute: PainelProfessorRoute,

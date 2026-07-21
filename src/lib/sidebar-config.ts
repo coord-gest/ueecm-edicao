@@ -137,6 +137,13 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Enviar p/ o Drive", url: "/painel-enviar-drive", icon: FolderOpen },
       ],
     },
+    {
+      label: "Comunidade",
+      items: [
+        { title: "Mural da Comunidade", url: "/mural", icon: Users },
+        { title: "Moderação do Mural", url: "/painel-mural-moderacao", icon: Shield },
+      ],
+    },
   ],
   diretor: [
     {
@@ -214,6 +221,13 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Enviar p/ o Drive", url: "/painel-enviar-drive", icon: FolderOpen },
       ],
     },
+    {
+      label: "Comunidade",
+      items: [
+        { title: "Mural da Comunidade", url: "/mural", icon: Users },
+        { title: "Moderação do Mural", url: "/painel-mural-moderacao", icon: Shield },
+      ],
+    },
   ],
   coordenador: [
     {
@@ -289,6 +303,13 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Solicitações LGPD", url: "/painel-lgpd", icon: ScrollText },
       ],
     },
+    {
+      label: "Comunidade",
+      items: [
+        { title: "Mural da Comunidade", url: "/mural", icon: Users },
+        { title: "Moderação do Mural", url: "/painel-mural-moderacao", icon: Shield },
+      ],
+    },
   ],
 
   secretario: [
@@ -343,6 +364,12 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       label: "Compliance",
       items: [{ title: "Solicitações LGPD", url: "/painel-lgpd", icon: ScrollText }],
     },
+    {
+      label: "Comunidade",
+      items: [
+        { title: "Mural da Comunidade", url: "/mural", icon: Users },
+      ],
+    },
   ],
   professor: [
     {
@@ -392,6 +419,12 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Meus agendamentos", url: "/meus-agendamentos", icon: CalendarClock },
       ],
     },
+    {
+      label: "Comunidade",
+      items: [
+        { title: "Mural da Comunidade", url: "/mural", icon: Users },
+      ],
+    },
   ],
   leitor: [
     {
@@ -433,6 +466,12 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Meus filhos", url: "/meus-filhos", icon: GraduationCap },
         { title: "Meus comunicados", url: "/meus-comunicados", icon: FileText },
         { title: "Meus agendamentos", url: "/meus-agendamentos", icon: CalendarClock },
+      ],
+    },
+    {
+      label: "Comunidade",
+      items: [
+        { title: "Mural da Comunidade", url: "/mural", icon: Users },
       ],
     },
   ],
