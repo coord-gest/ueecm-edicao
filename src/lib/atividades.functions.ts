@@ -91,7 +91,7 @@ export const listAtividades = createServerFn({ method: "GET" })
 // ==================== GET ==================== //
 export const getAtividade = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) => ({ id: ensureId(raw) }))
+  .validator((raw: unknown) => ({ id: ensureId(raw) }))
   .handler(async ({ data, context }): Promise<{ atividade: Atividade; turma_nome: string | null }> => {
     const { data: row, error } = await context.supabase
       .from("atividades")
@@ -119,7 +119,7 @@ type CreateInput = {
 
 export const createAtividade = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown): CreateInput => {
+  .validator((raw: unknown): CreateInput => {
     if (typeof raw !== "object" || raw === null) throw new Error("Payload inválido");
     const d = raw as Record<string, unknown>;
     const titulo = String(d.titulo ?? "").trim();
@@ -156,7 +156,7 @@ export const createAtividade = createServerFn({ method: "POST" })
 // ==================== UPDATE ==================== //
 export const updateAtividade = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) => {
+  .validator((raw: unknown) => {
     if (typeof raw !== "object" || raw === null) throw new Error("Payload inválido");
     const d = raw as Record<string, unknown>;
     const id = String(d.id ?? "").trim();
@@ -188,7 +188,7 @@ export const updateAtividade = createServerFn({ method: "POST" })
 // ==================== DELETE ==================== //
 export const deleteAtividade = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) => ({ id: ensureId(raw) }))
+  .validator((raw: unknown) => ({ id: ensureId(raw) }))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("atividades").delete().eq("id", data.id);
     if (error) throw error;
@@ -198,7 +198,7 @@ export const deleteAtividade = createServerFn({ method: "POST" })
 // ==================== LIST ENTREGAS ==================== //
 export const listEntregas = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) => ({ atividade_id: ensureId(raw, "atividade_id") }))
+  .validator((raw: unknown) => ({ atividade_id: ensureId(raw, "atividade_id") }))
   .handler(async ({ data, context }): Promise<EntregaAluno[]> => {
     const { data: atividade, error: aErr } = await context.supabase
       .from("atividades")
@@ -252,7 +252,7 @@ export const listEntregas = createServerFn({ method: "GET" })
 // ==================== UPSERT ENTREGA ==================== //
 export const upsertEntrega = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) => {
+  .validator((raw: unknown) => {
     if (typeof raw !== "object" || raw === null) throw new Error("Payload inválido");
     const d = raw as Record<string, unknown>;
     return {
@@ -291,7 +291,7 @@ export const upsertEntrega = createServerFn({ method: "POST" })
 // ==================== AÇÕES EM LOTE ==================== //
 export const marcarTodosEntregues = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) => ({ atividade_id: ensureId(raw, "atividade_id") }))
+  .validator((raw: unknown) => ({ atividade_id: ensureId(raw, "atividade_id") }))
   .handler(async ({ data, context }) => {
     const { data: atividade, error: aErr } = await context.supabase
       .from("atividades")
@@ -325,7 +325,7 @@ export const marcarTodosEntregues = createServerFn({ method: "POST" })
 
 export const limparEntregas = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) => ({ atividade_id: ensureId(raw, "atividade_id") }))
+  .validator((raw: unknown) => ({ atividade_id: ensureId(raw, "atividade_id") }))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
       .from("atividade_entregas")

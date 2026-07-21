@@ -83,7 +83,7 @@ export async function enforceRateLimit({
  * NÃO registra tentativa — apenas conta.
  */
 export const peekRateLimit = createServerFn({ method: "POST" })
-  .inputValidator((raw: unknown) => {
+  .validator((raw: unknown) => {
     const o = (raw ?? {}) as Record<string, unknown>;
     return {
       scope: String(o.scope ?? ""),

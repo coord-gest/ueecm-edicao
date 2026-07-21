@@ -56,7 +56,7 @@ type CreateInput = {
 
 export const criarPlanejamento = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown): CreateInput => {
+  .validator((raw: unknown): CreateInput => {
     if (typeof raw !== "object" || raw === null) throw new Error("Payload inválido");
     const d = raw as Record<string, unknown>;
     const tipo = String(d.tipo ?? "") as PlanejamentoTipo;
@@ -128,7 +128,7 @@ export const criarPlanejamento = createServerFn({ method: "POST" })
 // ==================== DELETE (gestão) ==================== //
 export const excluirPlanejamento = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown): { id: string } => {
+  .validator((raw: unknown): { id: string } => {
     if (typeof raw !== "object" || raw === null) throw new Error("Payload inválido");
     const id = String((raw as { id?: unknown }).id ?? "").trim();
     if (!id) throw new Error("ID obrigatório");
@@ -155,7 +155,7 @@ const GEMINI_TIMEOUT_MS = 30_000;
 
 export const gerarPlanejamentoIA = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown): GerarPlanejamentoInput => {
+  .validator((raw: unknown): GerarPlanejamentoInput => {
     if (typeof raw !== "object" || raw === null) throw new Error("Payload inválido");
     const d = raw as Record<string, unknown>;
     const tipo = String(d.tipo ?? "") as PlanejamentoTipo;

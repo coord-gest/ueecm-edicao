@@ -67,7 +67,7 @@ export const getDriveStatus = createServerFn({ method: "GET" })
 /** Lista arquivos/pastas. Se folderId não vier, lista a raiz. */
 export const listDriveFiles = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw) =>
+  .validator((raw) =>
     z
       .object({
         folderId: z.string().optional(),
@@ -109,7 +109,7 @@ export const listDriveFiles = createServerFn({ method: "POST" })
 /** Cria uma pasta. Se parentId não vier, cria na raiz. */
 export const createDriveFolder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw) =>
+  .validator((raw) =>
     z
       .object({
         name: z.string().min(1).max(200),
@@ -135,7 +135,7 @@ export const createDriveFolder = createServerFn({ method: "POST" })
 /** Upload multipart. Content vem base64 (limite prático ~15 MB por chamada). */
 export const uploadFileToDrive = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw) =>
+  .validator((raw) =>
     z
       .object({
         name: z.string().min(1).max(255),
@@ -187,7 +187,7 @@ export const uploadFileToDrive = createServerFn({ method: "POST" })
 /** Move para lixeira. */
 export const deleteDriveFile = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw) => z.object({ fileId: z.string().min(1) }).parse(raw))
+  .validator((raw) => z.object({ fileId: z.string().min(1) }).parse(raw))
   .handler(async ({ data, context }) => {
     await assertPrivileged(context);
     await driveFetch(`/drive/v3/files/${encodeURIComponent(data.fileId)}`, {
@@ -239,7 +239,7 @@ export const ensureUEECMFolders = createServerFn({ method: "POST" })
  */
 export const uploadToUEECM = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw) =>
+  .validator((raw) =>
     z
       .object({
         destino: z.enum(["momentos", "backups"]),
@@ -289,7 +289,7 @@ export const uploadToUEECM = createServerFn({ method: "POST" })
  */
 export const listDrivePicker = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw) => z.object({ folderId: z.string().optional() }).parse(raw))
+  .validator((raw) => z.object({ folderId: z.string().optional() }).parse(raw))
   .handler(async ({ data, context }) => {
     await assertStaff(context);
     const { isDriveConfigured, ensureUEECMTree, listChildren, getDriveFileMeta } =
@@ -336,7 +336,7 @@ export const listDrivePicker = createServerFn({ method: "POST" })
  */
 export const verifyDriveFiles = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw) =>
+  .validator((raw) =>
     z.object({ fileIds: z.array(z.string().min(10).max(200)).max(50) }).parse(raw),
   )
   .handler(async ({ data, context }) => {

@@ -7,7 +7,7 @@ import { createServerFn } from "@tanstack/react-start";
  * comentário público, voto anônimo, agendamento, etc).
  */
 export const verifyCaptchaToken = createServerFn({ method: "POST" })
-  .inputValidator((raw: unknown) => {
+  .validator((raw: unknown) => {
     const o = (raw ?? {}) as Record<string, unknown>;
     return {
       token: typeof o.token === "string" ? o.token : "",

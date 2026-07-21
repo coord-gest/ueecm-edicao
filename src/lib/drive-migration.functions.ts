@@ -106,7 +106,7 @@ async function listBucketRecursive(
 /** Migra um lote de objetos de UM bucket para UEECM/Backups/<bucket>/... */
 export const migrateStorageBatch = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw) =>
+  .validator((raw) =>
     z
       .object({
         bucket: z.enum(MIGRATABLE_BUCKETS),
@@ -183,7 +183,7 @@ export const migrateStorageBatch = createServerFn({ method: "POST" })
 /** Lote de migração de Momentos: baixa imagens dos posts e envia p/ Drive. */
 export const migrateMomentosBatch = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw) =>
+  .validator((raw) =>
     z
       .object({
         offset: z.number().int().min(0).default(0),

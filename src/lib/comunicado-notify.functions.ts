@@ -7,7 +7,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 // dados sensíveis); o link leva para /meus-comunicados onde o RLS
 // filtra o que cada responsável pode ver.
 export const notifyComunicadoCreated = createServerFn({ method: "POST" })
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         titulo: z.string().min(1).max(140),

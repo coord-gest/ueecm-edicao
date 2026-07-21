@@ -23,7 +23,7 @@ export type ModeracaoResultado = {
  * só atua sobre comentários que ainda estão pendentes.
  */
 export const moderarComentarioIA = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => {
+  .validator((d: unknown) => {
     const o = (d ?? {}) as Record<string, unknown>;
     const id = typeof o.comentario_id === "string" ? o.comentario_id : "";
     if (!/^[0-9a-f-]{36}$/i.test(id)) throw new Error("comentario_id inválido");

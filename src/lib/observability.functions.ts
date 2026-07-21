@@ -17,7 +17,7 @@ const errorSchema = z.object({
 });
 
 export const reportClientError = createServerFn({ method: "POST" })
-  .inputValidator((raw: unknown) => errorSchema.parse(raw))
+  .validator((raw: unknown) => errorSchema.parse(raw))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.from("system_errors").insert({
@@ -45,7 +45,7 @@ const metricSchema = z.object({
 });
 
 export const recordServerMetric = createServerFn({ method: "POST" })
-  .inputValidator((raw: unknown) => metricSchema.parse(raw))
+  .validator((raw: unknown) => metricSchema.parse(raw))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     await supabaseAdmin.from("performance_metrics").insert({
@@ -103,7 +103,7 @@ const metricsQuerySchema = z.object({
 });
 
 export const getMetricsPercentiles = createServerFn({ method: "POST" })
-  .inputValidator((raw: unknown) => metricsQuerySchema.parse(raw))
+  .validator((raw: unknown) => metricsQuerySchema.parse(raw))
   .handler(async ({ data }) => {
     const { supabase } = await import("@/integrations/supabase/client");
     const { data: rows, error } = await supabase.rpc("metrics_percentiles", {

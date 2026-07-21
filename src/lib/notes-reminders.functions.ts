@@ -63,7 +63,7 @@ const upsertNoteSchema = z.object({
 
 export const upsertNote = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => upsertNoteSchema.parse(input))
+  .validator((input: unknown) => upsertNoteSchema.parse(input))
   .handler(async ({ data, context }) => {
     const payload = {
       user_id: context.userId,
@@ -99,7 +99,7 @@ export const upsertNote = createServerFn({ method: "POST" })
 
 export const deleteNote = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
+  .validator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -112,7 +112,7 @@ export const deleteNote = createServerFn({ method: "POST" })
 
 export const toggleNotePin = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) =>
+  .validator((input: unknown) =>
     z.object({ id: z.string().uuid(), fixado: z.boolean() }).parse(input),
   )
   .handler(async ({ data, context }) => {
@@ -135,7 +135,7 @@ const reminderFilterSchema = z.object({
 
 export const listReminders = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => reminderFilterSchema.parse(input ?? {}))
+  .validator((input: unknown) => reminderFilterSchema.parse(input ?? {}))
   .handler(async ({ data, context }) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let q = context.supabase.from("reminders" as any).select("*");
@@ -155,7 +155,7 @@ const upsertReminderSchema = z.object({
 
 export const upsertReminder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => upsertReminderSchema.parse(input))
+  .validator((input: unknown) => upsertReminderSchema.parse(input))
   .handler(async ({ data, context }) => {
     if (data.id) {
       const { data: row, error } = await context.supabase
@@ -192,7 +192,7 @@ export const upsertReminder = createServerFn({ method: "POST" })
 
 export const toggleReminderDone = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) =>
+  .validator((input: unknown) =>
     z.object({ id: z.string().uuid(), concluido: z.boolean() }).parse(input),
   )
   .handler(async ({ data, context }) => {
@@ -207,7 +207,7 @@ export const toggleReminderDone = createServerFn({ method: "POST" })
 
 export const deleteReminder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
+  .validator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

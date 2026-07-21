@@ -46,7 +46,7 @@ function extractJson(text: string): unknown {
 
 export const gerarPostComIA = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown): GerarInput => {
+  .validator((data: unknown): GerarInput => {
     if (typeof data !== "object" || data === null) throw new Error("Payload inválido");
     const d = data as Record<string, unknown>;
     const tema = typeof d.tema === "string" ? d.tema.trim() : "";

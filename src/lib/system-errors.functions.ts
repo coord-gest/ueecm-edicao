@@ -10,7 +10,7 @@ type CleanupInput = {
 
 export const cleanupSystemErrors = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: CleanupInput) => input)
+  .validator((input: CleanupInput) => input)
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
 

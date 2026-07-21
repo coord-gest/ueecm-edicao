@@ -43,7 +43,7 @@ export type SemanticPost = {
 /** Busca semântica em posts via pgvector + Gemini embeddings. */
 export const semanticSearchPosts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => {
+  .validator((data: unknown) => {
     const d = (data ?? {}) as Record<string, unknown>;
     const q = typeof d.q === "string" ? d.q.trim() : "";
     if (q.length < 3) throw new Error("Consulta muito curta");
@@ -79,7 +79,7 @@ export const semanticSearchPosts = createServerFn({ method: "POST" })
 /** Gera embeddings para posts publicados que ainda não têm (staff only). */
 export const backfillPostEmbeddings = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => {
+  .validator((data: unknown) => {
     const d = (data ?? {}) as Record<string, unknown>;
     const limit = typeof d.limit === "number" ? Math.min(Math.max(d.limit, 1), 50) : 20;
     return { limit };

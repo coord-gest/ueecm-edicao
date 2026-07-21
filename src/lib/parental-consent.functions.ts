@@ -65,7 +65,7 @@ function extractClientIp(headers: Headers): string | null {
  * Art. 14 e Art. 7º da LGPD.
  */
 export const logParentalConsent = createServerFn({ method: "POST" })
-  .inputValidator((raw: unknown) => parentalConsentSchema.parse(raw))
+  .validator((raw: unknown) => parentalConsentSchema.parse(raw))
   .handler(async ({ data }) => {
     // Honeypot preenchido → responde OK sem gravar (não sinaliza ao bot).
     if (data.website && data.website.length > 0) {

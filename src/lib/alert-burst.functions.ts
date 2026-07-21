@@ -6,7 +6,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 // o drain imediato. Restrito a administradores da escola, com rate-limit
 // anti-spam (10/h por admin, 30/h global) e registro em alert_audit_logs.
 export const sendAlertPushNow = createServerFn({ method: "POST" })
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         alertId: z.string().uuid().optional(),

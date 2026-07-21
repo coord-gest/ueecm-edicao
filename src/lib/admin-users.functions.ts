@@ -68,7 +68,7 @@ async function assertAcademicManager(userId: string) {
 
 export const createSchoolUser = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) => createUserSchema.parse(input))
+  .validator((input) => createUserSchema.parse(input))
   .handler(async ({ data, context }) => {
     // Aplica a autorização certa dependendo do tipo de conta que está sendo criada
     const isAdminRole = (ADMIN_ROLES as readonly string[]).includes(data.role);
@@ -219,7 +219,7 @@ const deleteUserSchema = z.object({ userId: z.string().uuid() });
 
 export const deleteSchoolUser = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) => deleteUserSchema.parse(input))
+  .validator((input) => deleteUserSchema.parse(input))
   .handler(async ({ data, context }) => {
     const callerRoles = await assertManager(context.userId);
     const isCallerDev = callerRoles.includes("desenvolvedor");
@@ -271,7 +271,7 @@ const assignRoleSchema = z.object({
 
 export const assignUserRole = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) => assignRoleSchema.parse(input))
+  .validator((input) => assignRoleSchema.parse(input))
   .handler(async ({ data, context }) => {
     const callerRoles = await getRoles(context.userId);
     if (!callerRoles.includes("desenvolvedor")) {

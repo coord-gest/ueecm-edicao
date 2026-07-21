@@ -56,7 +56,7 @@ export const listMomentosAnos = createServerFn({ method: "GET" }).handler(async 
 
 /** Lista eventos de um ano (subpastas). */
 export const listMomentosEventos = createServerFn({ method: "POST" })
-  .inputValidator((raw) => z.object({ ano: AnoZ }).parse(raw))
+  .validator((raw) => z.object({ ano: AnoZ }).parse(raw))
   .handler(async ({ data }): Promise<{ eventos: MomentoEvento[] }> => {
     const { isDriveConfigured, ensureUEECMTree, listChildren, findFolder } = await loadHelpers();
     if (!isDriveConfigured()) return { eventos: [] };
@@ -82,7 +82,7 @@ export const listMomentosEventos = createServerFn({ method: "POST" })
 
 /** Lista as fotos de um evento específico. */
 export const listMomentosFotos = createServerFn({ method: "POST" })
-  .inputValidator((raw) => z.object({ ano: AnoZ, evento: EventoZ }).parse(raw))
+  .validator((raw) => z.object({ ano: AnoZ, evento: EventoZ }).parse(raw))
   .handler(async ({ data }): Promise<{ fotos: MomentoFoto[] }> => {
     const { isDriveConfigured, ensureUEECMTree, listChildren, findFolder } = await loadHelpers();
     if (!isDriveConfigured()) return { fotos: [] };

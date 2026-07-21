@@ -35,7 +35,7 @@ const enviarSchema = z.object({
 });
 
 export const enviarDepoimento = createServerFn({ method: "POST" })
-  .inputValidator((data) => enviarSchema.parse(data))
+  .validator((data) => enviarSchema.parse(data))
   .handler(async ({ data }) => {
     const supabase = getServerPublicClient();
     const ipHash = hashIpFromRequest();
@@ -99,7 +99,7 @@ export type DepoimentoAdmin = DepoimentoPublico & {
 
 export const listarDepoimentosAdmin = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ status: statusEnum.optional() }).parse(data ?? {}))
+  .validator((data) => z.object({ status: statusEnum.optional() }).parse(data ?? {}))
   .handler(async ({ data, context }) => {
     await assertModerador(context as never);
     let query = (context as never as { supabase: ReturnType<typeof createClient> }).supabase
@@ -117,7 +117,7 @@ export const listarDepoimentosAdmin = createServerFn({ method: "POST" })
 
 export const moderarDepoimento = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         id: z.string().uuid(),
@@ -147,7 +147,7 @@ export const moderarDepoimento = createServerFn({ method: "POST" })
 
 export const excluirDepoimento = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     await assertModerador(context as never);
     const ctx = context as never as { supabase: ReturnType<typeof createClient> };
