@@ -40,7 +40,7 @@ const AI_TIMEOUT_MS = 45_000;
 // `gemini-2.0-flash` entrega baixa latência e boa qualidade em PT-BR.
 // `gemini-flash-latest` (alias estável do Flash mais recente) é o fallback.
 const GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
-const AI_MODEL = "gemini-2.0-flash";
+const AI_MODEL = "gemini-3.1-flash-lite";
 const AI_MODEL_FALLBACK = "gemini-flash-latest";
 
 // Rate limit em memória em dois níveis (best-effort; reseta a cada cold start do Worker).
