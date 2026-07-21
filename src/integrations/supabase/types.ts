@@ -3888,6 +3888,12 @@ export type Database = {
         | "student"
         | "family"
         | "social_media"
+      diario_bordo_tipo:
+        | "elogio"
+        | "participacao"
+        | "avanco"
+        | "observacao"
+        | "atencao"
       diario_tipo:
         | "elogio"
         | "participacao"
@@ -4069,6 +4075,13 @@ export const Constants = {
         "student",
         "family",
         "social_media",
+      ],
+      diario_bordo_tipo: [
+        "elogio",
+        "participacao",
+        "avanco",
+        "observacao",
+        "atencao",
       ],
       diario_tipo: [
         "elogio",
