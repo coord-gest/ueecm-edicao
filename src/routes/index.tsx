@@ -41,11 +41,11 @@ import heroImg from "@/assets/hero-school.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "U.E. Evaristo Campelo de Matos — Escola pública em Assunção do Piauí" },
+      { title: "U.E. Evaristo Campelo de Matos — Portal Oficial" },
       {
         name: "description",
         content:
-          "Portal oficial da U.E. Evaristo Campelo de Matos em Assunção do Piauí (PI): notícias, calendário escolar, eventos, comunicados, equipe pedagógica e conquistas dos alunos.",
+          "Portal oficial da U.E. Evaristo Campelo de Matos em Assunção do Piauí (PI): notícias, calendário, eventos, comunicados e conquistas dos alunos.",
       },
       {
         name: "keywords",
