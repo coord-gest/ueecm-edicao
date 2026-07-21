@@ -134,7 +134,7 @@ body[data-admin="true"] *::after {
   --ring: oklch(0.48 0.19 258);
 
   /* Charts: azul → teal → menta com acentos quentes de contraste */
-  --chart-1: oklch(0.58 0.19 255); /* blue */
+  --chart-1: oklch(0.48 0.19 258); /* blue */
   --chart-2: oklch(0.7 0.13 200); /* teal */
   --chart-3: oklch(0.78 0.14 165); /* mint */
   --chart-4: oklch(0.72 0.16 55); /* amber */
@@ -158,14 +158,14 @@ body[data-admin="true"] *::after {
     0 28px 56px -20px oklch(0.3 0.1 255 / 0.28),
     0 14px 24px -12px oklch(0.78 0.14 165 / 0.18);
   --shadow-ring-primary:
-    0 0 0 1px oklch(0.58 0.19 255 / 0.22), 0 12px 32px -12px oklch(0.58 0.19 255 / 0.32);
+    0 0 0 1px oklch(0.48 0.19 258 / 0.22), 0 12px 32px -12px oklch(0.48 0.19 258 / 0.32);
   --shadow-gold:
     0 8px 24px -10px oklch(0.78 0.14 165 / 0.45), 0 2px 6px oklch(0.78 0.14 165 / 0.28);
 
   /* Gradientes Azul → Menta */
   --gradient-primary: linear-gradient(
     135deg,
-    oklch(0.58 0.19 255) 0%,
+    oklch(0.48 0.19 258) 0%,
     oklch(0.72 0.15 195) 55%,
     oklch(0.82 0.14 165) 100%
   );
