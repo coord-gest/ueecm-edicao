@@ -444,6 +444,8 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
       items: [
         { title: "Mural da Comunidade", url: "/mural", icon: Users },
         { title: "Chat com Famílias", url: "/chat-aluno", icon: MessageCircle },
+        { title: "Rede de Apoio", url: "/rede-apoio", icon: HeartHandshake },
+        { title: "Vaquinhas", url: "/vaquinhas", icon: HandCoins },
       ],
     },
   ],
