@@ -52,6 +52,8 @@ type QueueRow = {
   title: string;
   body: string;
   url: string | null;
+  target_user_ids: string[] | null;
+  target_roles: string[] | null;
 };
 
 type TokenRow = {
@@ -268,7 +270,7 @@ export async function drainPushQueue(triggerSource: string = "queue"): Promise<{
 
   const { data: queue, error: qErr } = await supabaseAdmin
     .from("push_notifications_queue")
-    .select("id, title, body, url")
+    .select("id, title, body, url, target_user_ids, target_roles")
     .is("processed_at", null)
     .lt("attempts", 3)
     .order("created_at", { ascending: true })
@@ -306,6 +308,23 @@ export async function drainPushQueue(triggerSource: string = "queue"): Promise<{
   }
 
   const tokenRows = (tokens ?? []) as TokenRow[];
+
+  // Pré-carrega mapeamento user_id -> roles para segmentação por cargo.
+  const uniqueUserIds = Array.from(
+    new Set(tokenRows.map((t) => t.user_id).filter((v): v is string => !!v)),
+  );
+  const rolesByUser = new Map<string, string[]>();
+  if (uniqueUserIds.length > 0) {
+    const { data: roleRows } = await supabaseAdmin
+      .from("user_roles")
+      .select("user_id, role")
+      .in("user_id", uniqueUserIds);
+    for (const r of (roleRows ?? []) as Array<{ user_id: string; role: string }>) {
+      const arr = rolesByUser.get(r.user_id) ?? [];
+      arr.push(r.role);
+      rolesByUser.set(r.user_id, arr);
+    }
+  }
 
   if (tokenRows.length === 0) {
     await supabaseAdmin
@@ -358,9 +377,27 @@ export async function drainPushQueue(triggerSource: string = "queue"): Promise<{
       url: row.url ?? "/",
     };
 
+    // Segmentação: se target_user_ids ou target_roles estiver definido,
+    // envia apenas para tokens cujos donos batem com o filtro. Caso contrário,
+    // faz broadcast (compatibilidade retroativa).
+    const targetUsers = row.target_user_ids ?? null;
+    const targetRoles = row.target_roles ?? null;
+    const segmented = (targetUsers && targetUsers.length > 0) || (targetRoles && targetRoles.length > 0);
+    const allowed = segmented
+      ? tokenRows.filter((t) => {
+          if (!t.user_id) return false;
+          if (targetUsers && targetUsers.includes(t.user_id)) return true;
+          if (targetRoles && targetRoles.length > 0) {
+            const userRoles = rolesByUser.get(t.user_id) ?? [];
+            if (userRoles.some((r) => targetRoles.includes(r))) return true;
+          }
+          return false;
+        })
+      : tokenRows;
+
     // Envia em paralelo (mas limitado — FCM aceita altas taxas)
     await Promise.all(
-      tokenRows.map(async (t) => {
+      allowed.map(async (t) => {
         try {
           const result = await sendToToken(accessToken, creds.projectId, t.token, notif);
           if (result.ok) {
