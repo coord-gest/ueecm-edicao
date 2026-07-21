@@ -59,6 +59,7 @@ import { Route as PainelArquivosRouteImport } from './routes/painel-arquivos'
 import { Route as PainelAprovacaoRouteImport } from './routes/painel-aprovacao'
 import { Route as PainelAnotacoesRouteImport } from './routes/painel-anotacoes'
 import { Route as PainelAnalyticsRouteImport } from './routes/painel-analytics'
+import { Route as PainelAlertasEvasaoRouteImport } from './routes/painel-alertas-evasao'
 import { Route as PainelAlertasRouteImport } from './routes/painel-alertas'
 import { Route as PainelAgendamentosRouteImport } from './routes/painel-agendamentos'
 import { Route as PainelAcessosRouteImport } from './routes/painel-acessos'
@@ -378,6 +379,11 @@ const PainelAnotacoesRoute = PainelAnotacoesRouteImport.update({
 const PainelAnalyticsRoute = PainelAnalyticsRouteImport.update({
   id: '/painel-analytics',
   path: '/painel-analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelAlertasEvasaoRoute = PainelAlertasEvasaoRouteImport.update({
+  id: '/painel-alertas-evasao',
+  path: '/painel-alertas-evasao',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelAlertasRoute = PainelAlertasRouteImport.update({
@@ -765,6 +771,7 @@ export interface FileRoutesByFullPath {
   '/painel-acessos': typeof PainelAcessosRoute
   '/painel-agendamentos': typeof PainelAgendamentosRoute
   '/painel-alertas': typeof PainelAlertasRoute
+  '/painel-alertas-evasao': typeof PainelAlertasEvasaoRoute
   '/painel-analytics': typeof PainelAnalyticsRoute
   '/painel-anotacoes': typeof PainelAnotacoesRoute
   '/painel-aprovacao': typeof PainelAprovacaoRoute
@@ -886,6 +893,7 @@ export interface FileRoutesByTo {
   '/painel-acessos': typeof PainelAcessosRoute
   '/painel-agendamentos': typeof PainelAgendamentosRoute
   '/painel-alertas': typeof PainelAlertasRoute
+  '/painel-alertas-evasao': typeof PainelAlertasEvasaoRoute
   '/painel-analytics': typeof PainelAnalyticsRoute
   '/painel-anotacoes': typeof PainelAnotacoesRoute
   '/painel-aprovacao': typeof PainelAprovacaoRoute
@@ -1007,6 +1015,7 @@ export interface FileRoutesById {
   '/painel-acessos': typeof PainelAcessosRoute
   '/painel-agendamentos': typeof PainelAgendamentosRoute
   '/painel-alertas': typeof PainelAlertasRoute
+  '/painel-alertas-evasao': typeof PainelAlertasEvasaoRoute
   '/painel-analytics': typeof PainelAnalyticsRoute
   '/painel-anotacoes': typeof PainelAnotacoesRoute
   '/painel-aprovacao': typeof PainelAprovacaoRoute
@@ -1130,6 +1139,7 @@ export interface FileRouteTypes {
     | '/painel-acessos'
     | '/painel-agendamentos'
     | '/painel-alertas'
+    | '/painel-alertas-evasao'
     | '/painel-analytics'
     | '/painel-anotacoes'
     | '/painel-aprovacao'
@@ -1251,6 +1261,7 @@ export interface FileRouteTypes {
     | '/painel-acessos'
     | '/painel-agendamentos'
     | '/painel-alertas'
+    | '/painel-alertas-evasao'
     | '/painel-analytics'
     | '/painel-anotacoes'
     | '/painel-aprovacao'
@@ -1371,6 +1382,7 @@ export interface FileRouteTypes {
     | '/painel-acessos'
     | '/painel-agendamentos'
     | '/painel-alertas'
+    | '/painel-alertas-evasao'
     | '/painel-analytics'
     | '/painel-anotacoes'
     | '/painel-aprovacao'
@@ -1493,6 +1505,7 @@ export interface RootRouteChildren {
   PainelAcessosRoute: typeof PainelAcessosRoute
   PainelAgendamentosRoute: typeof PainelAgendamentosRoute
   PainelAlertasRoute: typeof PainelAlertasRoute
+  PainelAlertasEvasaoRoute: typeof PainelAlertasEvasaoRoute
   PainelAnalyticsRoute: typeof PainelAnalyticsRoute
   PainelAnotacoesRoute: typeof PainelAnotacoesRoute
   PainelAprovacaoRoute: typeof PainelAprovacaoRoute
@@ -1925,6 +1938,13 @@ declare module '@tanstack/react-router' {
       path: '/painel-analytics'
       fullPath: '/painel-analytics'
       preLoaderRoute: typeof PainelAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-alertas-evasao': {
+      id: '/painel-alertas-evasao'
+      path: '/painel-alertas-evasao'
+      fullPath: '/painel-alertas-evasao'
+      preLoaderRoute: typeof PainelAlertasEvasaoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-alertas': {
@@ -2553,6 +2573,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelAcessosRoute: PainelAcessosRoute,
   PainelAgendamentosRoute: PainelAgendamentosRoute,
   PainelAlertasRoute: PainelAlertasRoute,
+  PainelAlertasEvasaoRoute: PainelAlertasEvasaoRoute,
   PainelAnalyticsRoute: PainelAnalyticsRoute,
   PainelAnotacoesRoute: PainelAnotacoesRoute,
   PainelAprovacaoRoute: PainelAprovacaoRoute,

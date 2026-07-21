@@ -3791,6 +3791,7 @@ export type Database = {
         }
       }
       calcular_radar_aluno: { Args: { _aluno_id: string }; Returns: Json }
+      calcular_risco_evasao: { Args: { _aluno_id: string }; Returns: Json }
       can_delete_arquivo_preenchimento: {
         Args: { _user_id: string }
         Returns: boolean
@@ -3880,6 +3881,21 @@ export type Database = {
         Returns: boolean
       }
       is_school_admin: { Args: { _user_id: string }; Returns: boolean }
+      listar_alunos_em_risco: {
+        Args: { _nivel_min?: string }
+        Returns: {
+          aluno_id: string
+          ativ_atrasadas: number
+          frequencia_pct: number
+          media_notas: number
+          meritos_atencao: number
+          nivel: string
+          nome: string
+          score: number
+          turma_id: string
+          turma_nome: string
+        }[]
+      }
       listar_meus_filhos_radar: {
         Args: never
         Returns: {
