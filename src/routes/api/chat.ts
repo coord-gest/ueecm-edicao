@@ -1328,7 +1328,7 @@ export const Route = createFileRoute("/api/chat")({
         try {
           // Validação de variáveis de ambiente obrigatórias no servidor
           const requiredEnv = {
-            GROQ_API_KEY: getRuntimeEnv(request, ["GROQ_API_KEY"]),
+            GEMINI_API_KEY: getRuntimeEnv(request, ["GEMINI_API_KEY"]),
             SUPABASE_URL: getRuntimeEnv(request, [
               "SUPABASE_URL",
               "PROJECT_SUPABASE_URL",
@@ -1357,11 +1357,11 @@ export const Route = createFileRoute("/api/chat")({
             );
           }
           const env: RequiredChatEnv = {
-            GROQ_API_KEY: requiredEnv.GROQ_API_KEY!,
+            GEMINI_API_KEY: requiredEnv.GEMINI_API_KEY!,
             SUPABASE_URL: requiredEnv.SUPABASE_URL!,
             SUPABASE_SERVICE_ROLE_KEY: requiredEnv.SUPABASE_SERVICE_ROLE_KEY!,
           };
-          const apiKey = env.GROQ_API_KEY;
+          const apiKey = env.GEMINI_API_KEY;
 
           const body = (await request.json()) as ChatRequest;
           const { sessionId, message } = body;
@@ -1497,12 +1497,12 @@ export const Route = createFileRoute("/api/chat")({
             contents = [{ role: "user", content: message }];
           }
 
-          async function callGroqWithRetry(): Promise<string> {
+          async function callGeminiWithRetry(): Promise<string> {
             const attempt = async () => {
               const ctrl = new AbortController();
               const to = setTimeout(() => ctrl.abort(), AI_TIMEOUT_MS);
               try {
-                return await callGroq(apiKey, systemPrompt, contents, ctrl.signal);
+                return await callGemini(apiKey, systemPrompt, contents, ctrl.signal);
               } finally {
                 clearTimeout(to);
               }
@@ -1513,14 +1513,14 @@ export const Route = createFileRoute("/api/chat")({
               result = await attempt();
             }
             if (!result.ok) {
-              throw new Error(`Groq ${result.status}: ${result.error}`);
+              throw new Error(`Gemini ${result.status}: ${result.error}`);
             }
             return result.text;
           }
 
           let rawAssistantText = "";
           try {
-            rawAssistantText = await callGroqWithRetry();
+            rawAssistantText = await callGeminiWithRetry();
           } catch (err) {
             const errMsg = (err as Error)?.message ?? "";
             const isAbort = (err as Error)?.name === "AbortError";
@@ -1529,10 +1529,10 @@ export const Route = createFileRoute("/api/chat")({
               supabaseAdmin,
               conversationId,
               isAbort
-                  ? `Timeout (>${AI_TIMEOUT_MS}ms) ao chamar Groq`
+                  ? `Timeout (>${AI_TIMEOUT_MS}ms) ao chamar Gemini`
                 : isQuota
-                    ? "Cota da Groq esgotada — verifique o plano da API Key."
-                    : "Falha ao chamar Groq",
+                    ? "Cota do Gemini esgotada — verifique o plano da API Key."
+                    : "Falha ao chamar Gemini",
               err,
             );
           }
