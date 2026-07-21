@@ -37,7 +37,6 @@ import { Route as PainelErrosRouteImport } from './routes/painel-erros'
 import { Route as PainelEnviarDriveRouteImport } from './routes/painel-enviar-drive'
 import { Route as PainelEnquetesRouteImport } from './routes/painel-enquetes'
 import { Route as PainelDiretorRouteImport } from './routes/painel-diretor'
-import { Route as PainelDiagnosticoRouteImport } from './routes/painel-diagnostico'
 import { Route as PainelDestaquesAlunosRouteImport } from './routes/painel-destaques-alunos'
 import { Route as PainelDestaquesRouteImport } from './routes/painel-destaques'
 import { Route as PainelDesenvolvedorRouteImport } from './routes/painel-desenvolvedor'
@@ -258,11 +257,6 @@ const PainelEnquetesRoute = PainelEnquetesRouteImport.update({
 const PainelDiretorRoute = PainelDiretorRouteImport.update({
   id: '/painel-diretor',
   path: '/painel-diretor',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelDiagnosticoRoute = PainelDiagnosticoRouteImport.update({
-  id: '/painel-diagnostico',
-  path: '/painel-diagnostico',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelDestaquesAlunosRoute = PainelDestaquesAlunosRouteImport.update({
@@ -722,7 +716,6 @@ export interface FileRoutesByFullPath {
   '/painel-desenvolvedor': typeof PainelDesenvolvedorRoute
   '/painel-destaques': typeof PainelDestaquesRoute
   '/painel-destaques-alunos': typeof PainelDestaquesAlunosRoute
-  '/painel-diagnostico': typeof PainelDiagnosticoRoute
   '/painel-diretor': typeof PainelDiretorRoute
   '/painel-enquetes': typeof PainelEnquetesRoute
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
@@ -833,7 +826,6 @@ export interface FileRoutesByTo {
   '/painel-desenvolvedor': typeof PainelDesenvolvedorRoute
   '/painel-destaques': typeof PainelDestaquesRoute
   '/painel-destaques-alunos': typeof PainelDestaquesAlunosRoute
-  '/painel-diagnostico': typeof PainelDiagnosticoRoute
   '/painel-diretor': typeof PainelDiretorRoute
   '/painel-enquetes': typeof PainelEnquetesRoute
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
@@ -946,7 +938,6 @@ export interface FileRoutesById {
   '/painel-desenvolvedor': typeof PainelDesenvolvedorRoute
   '/painel-destaques': typeof PainelDestaquesRoute
   '/painel-destaques-alunos': typeof PainelDestaquesAlunosRoute
-  '/painel-diagnostico': typeof PainelDiagnosticoRoute
   '/painel-diretor': typeof PainelDiretorRoute
   '/painel-enquetes': typeof PainelEnquetesRoute
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
@@ -1060,7 +1051,6 @@ export interface FileRouteTypes {
     | '/painel-desenvolvedor'
     | '/painel-destaques'
     | '/painel-destaques-alunos'
-    | '/painel-diagnostico'
     | '/painel-diretor'
     | '/painel-enquetes'
     | '/painel-enviar-drive'
@@ -1171,7 +1161,6 @@ export interface FileRouteTypes {
     | '/painel-desenvolvedor'
     | '/painel-destaques'
     | '/painel-destaques-alunos'
-    | '/painel-diagnostico'
     | '/painel-diretor'
     | '/painel-enquetes'
     | '/painel-enviar-drive'
@@ -1283,7 +1272,6 @@ export interface FileRouteTypes {
     | '/painel-desenvolvedor'
     | '/painel-destaques'
     | '/painel-destaques-alunos'
-    | '/painel-diagnostico'
     | '/painel-diretor'
     | '/painel-enquetes'
     | '/painel-enviar-drive'
@@ -1396,7 +1384,6 @@ export interface RootRouteChildren {
   PainelDesenvolvedorRoute: typeof PainelDesenvolvedorRoute
   PainelDestaquesRoute: typeof PainelDestaquesRoute
   PainelDestaquesAlunosRoute: typeof PainelDestaquesAlunosRoute
-  PainelDiagnosticoRoute: typeof PainelDiagnosticoRoute
   PainelDiretorRoute: typeof PainelDiretorRoute
   PainelEnquetesRoute: typeof PainelEnquetesRoute
   PainelEnviarDriveRoute: typeof PainelEnviarDriveRoute
@@ -1653,13 +1640,6 @@ declare module '@tanstack/react-router' {
       path: '/painel-diretor'
       fullPath: '/painel-diretor'
       preLoaderRoute: typeof PainelDiretorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-diagnostico': {
-      id: '/painel-diagnostico'
-      path: '/painel-diagnostico'
-      fullPath: '/painel-diagnostico'
-      preLoaderRoute: typeof PainelDiagnosticoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-destaques-alunos': {
@@ -2371,7 +2351,6 @@ const rootRouteChildren: RootRouteChildren = {
   PainelDesenvolvedorRoute: PainelDesenvolvedorRoute,
   PainelDestaquesRoute: PainelDestaquesRoute,
   PainelDestaquesAlunosRoute: PainelDestaquesAlunosRoute,
-  PainelDiagnosticoRoute: PainelDiagnosticoRoute,
   PainelDiretorRoute: PainelDiretorRoute,
   PainelEnquetesRoute: PainelEnquetesRoute,
   PainelEnviarDriveRoute: PainelEnviarDriveRoute,
