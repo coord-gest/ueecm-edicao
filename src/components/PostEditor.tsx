@@ -713,6 +713,27 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
             </div>
 
             <div className="rounded-2xl border border-border/70 bg-card p-4 space-y-2">
+              <Label>Identificação do autor</Label>
+              <Select
+                value={autorModo}
+                onValueChange={(v) => setAutorModo(v as "real" | "cargo" | "institucional")}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="real">Nome real — {nomeReal}</SelectItem>
+                  <SelectItem value="cargo">Cargo — {cargoLabel}</SelectItem>
+                  <SelectItem value="institucional">Institucional — conectaueecm.com</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Aparecerá na publicação como:{" "}
+                <strong className="text-foreground">{computedAutor}</strong>
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-border/70 bg-card p-4 space-y-2">
               {canApprove && (
                 <p className="text-xs text-muted-foreground">
                   Seu cargo permite publicar diretamente, sem precisar de aprovação.
