@@ -50,7 +50,7 @@ export function HeroCarousel({ posts }: { posts: Post[] }) {
                 <img
                   src={p.imagem ?? heroImg}
                   alt={p.titulo}
-                  className="ken-burns absolute inset-0 size-full object-contain"
+                  className="ken-burns absolute inset-0 size-full object-cover sm:object-contain"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/10 sm:h-2/3 sm:top-auto sm:bg-gradient-to-t sm:from-black/85 sm:via-black/45 sm:to-transparent" />
 
