@@ -264,6 +264,9 @@ function AgendarPage() {
               <Button asChild variant="outline">
                 <Link to="/">Voltar ao início</Link>
               </Button>
+              <Button asChild variant="outline">
+                <Link to="/consultar-agendamento">Consultar status pelo protocolo</Link>
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -279,6 +282,9 @@ function AgendarPage() {
             <ArrowLeft className="h-4 w-4" />
             Voltar ao site
           </Link>
+        </Button>
+        <Button asChild variant="link" size="sm" className="ml-2">
+          <Link to="/consultar-agendamento">Já tenho um protocolo — consultar status</Link>
         </Button>
       </div>
       <div className="mb-8 text-center">
