@@ -2549,6 +2549,7 @@ export type Database = {
           aprovado_por: string | null
           autor: string
           autor_id: string | null
+          autor_modo: string
           autor_nome: string | null
           categoria: string | null
           conteudo: string | null
@@ -2580,6 +2581,7 @@ export type Database = {
           aprovado_por?: string | null
           autor?: string
           autor_id?: string | null
+          autor_modo?: string
           autor_nome?: string | null
           categoria?: string | null
           conteudo?: string | null
@@ -2611,6 +2613,7 @@ export type Database = {
           aprovado_por?: string | null
           autor?: string
           autor_id?: string | null
+          autor_modo?: string
           autor_nome?: string | null
           categoria?: string | null
           conteudo?: string | null

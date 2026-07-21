@@ -36,6 +36,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
+import { roleLabels, type AppRole } from "@/lib/roles";
 import { gerarPostComIA, type GerarOutput } from "@/lib/post-ai.functions";
 import { sanitizeHtml } from "@/lib/sanitize";
 const RichEditor = lazy(() =>
@@ -68,6 +69,7 @@ type PostRow = {
   imagem: string | null;
   autor: string;
   autor_id: string | null;
+  autor_modo?: string | null;
   turma: string | null;
   disciplina: string | null;
   destaque: boolean;
@@ -91,7 +93,7 @@ const statusLabel: Record<string, string> = {
 };
 
 export function PostEditor({ title, post, onSaved, onCancel }: Props) {
-  const { user, hasRole } = useAuth();
+  const { user, hasRole, roles } = useAuth();
   const qc = useQueryClient();
   const canApprove = hasRole("desenvolvedor") || hasRole("diretor") || hasRole("coordenador");
 
@@ -103,6 +105,9 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
   const [disciplina, setDisciplina] = useState<string>(post?.disciplina ?? "nenhuma");
   const [destaque, setDestaque] = useState(post?.destaque ?? false);
   const [geral, setGeral] = useState(post?.geral ?? false);
+  const [autorModo, setAutorModo] = useState<"real" | "cargo" | "institucional">(
+    (post?.autor_modo as "real" | "cargo" | "institucional" | null) ?? "real",
+  );
   const [uploadingCover, setUploadingCover] = useState(false);
   const [lastAutosave, setLastAutosave] = useState<Date | null>(null);
   const [autosaving, setAutosaving] = useState(false);
@@ -211,6 +216,14 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
           disciplina: disciplina === "nenhuma" ? null : disciplina,
           destaque,
           geral,
+          autor:
+            autorModo === "institucional"
+              ? "conectaueecm.com"
+              : autorModo === "cargo"
+                ? (cargoRole ? roleLabels[cargoRole] : "Equipe")
+                : (user?.user_metadata?.display_name ??
+                  (user?.email ? user.email.split("@")[0] : "Equipe")),
+          autor_modo: autorModo,
         })
         .eq("id", post.id);
       setAutosaving(false);
@@ -220,7 +233,7 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
     }, 3000);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [titulo, resumo, conteudo, imagem, turma, disciplina, destaque, geral]);
+  }, [titulo, resumo, conteudo, imagem, turma, disciplina, destaque, geral, autorModo]);
 
   // Sincroniza dropdowns em tempo real quando o painel acadêmico muda
   useRealtimeInvalidate("post-editor-academic", [
@@ -238,6 +251,29 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
       (await supabase.from("disciplinas").select("nome").order("nome")).data ?? [],
   });
 
+  // Cargo principal do usuário (para exibir na opção "Cargo")
+  const ROLE_PRIORITY: AppRole[] = [
+    "diretor",
+    "coordenador",
+    "secretario",
+    "professor",
+    "social_media",
+    "admin",
+    "desenvolvedor",
+    "leitor",
+  ];
+  const cargoRole: AppRole | null =
+    ROLE_PRIORITY.find((r) => roles.includes(r)) ?? roles[0] ?? null;
+  const cargoLabel = cargoRole ? roleLabels[cargoRole] : "Equipe";
+  const nomeReal =
+    user?.user_metadata?.display_name ?? (user?.email ? user.email.split("@")[0] : "Equipe");
+  const computedAutor =
+    autorModo === "institucional"
+      ? "conectaueecm.com"
+      : autorModo === "cargo"
+        ? cargoLabel
+        : nomeReal;
+
   const save = useMutation({
     mutationFn: async (newStatus: "rascunho" | "em_revisao") => {
       const payload = {
@@ -250,8 +286,8 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
         destaque,
         geral,
         status: newStatus,
-        autor:
-          user?.user_metadata?.display_name ?? (user?.email ? user.email.split("@")[0] : "Equipe"),
+        autor: computedAutor,
+        autor_modo: autorModo,
         autor_id: user?.id,
       };
       if (post) {
@@ -286,8 +322,8 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
         status: "publicado" as const,
         aprovado_por: user?.id,
         aprovado_em: new Date().toISOString(),
-        autor:
-          user?.user_metadata?.display_name ?? (user?.email ? user.email.split("@")[0] : "Equipe"),
+        autor: computedAutor,
+        autor_modo: autorModo,
         autor_id: user?.id,
       };
       if (post) {
@@ -674,6 +710,27 @@ export function PostEditor({ title, post, onSaved, onCancel }: Props) {
                 </Label>
                 <Switch id="geral" checked={geral} onCheckedChange={setGeral} />
               </div>
+            </div>
+
+            <div className="rounded-2xl border border-border/70 bg-card p-4 space-y-2">
+              <Label>Identificação do autor</Label>
+              <Select
+                value={autorModo}
+                onValueChange={(v) => setAutorModo(v as "real" | "cargo" | "institucional")}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="real">Nome real — {nomeReal}</SelectItem>
+                  <SelectItem value="cargo">Cargo — {cargoLabel}</SelectItem>
+                  <SelectItem value="institucional">Institucional — conectaueecm.com</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Aparecerá na publicação como:{" "}
+                <strong className="text-foreground">{computedAutor}</strong>
+              </p>
             </div>
 
             <div className="rounded-2xl border border-border/70 bg-card p-4 space-y-2">
