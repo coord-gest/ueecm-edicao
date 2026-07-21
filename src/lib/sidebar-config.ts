@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { ClipboardList } from "lucide-react";
 import { Radar } from "lucide-react";
+import { Award as AwardIcon } from "lucide-react";
 
 import type { AppRole } from "@/lib/roles";
 
@@ -369,6 +370,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Minhas turmas", url: "/minhas-turmas", icon: BookOpen },
         { title: "Atividades e Trabalhos", url: "/painel-atividades", icon: ClipboardList },
         { title: "Diário de Bordo", url: "/painel-diario-bordo", icon: NotebookPen },
+        { title: "Méritos e Ocorrências", url: "/painel-meritos", icon: AwardIcon },
         { title: "Arquivos", url: "/painel-arquivos", icon: FolderOpen },
         { title: "Enviar p/ o Drive", url: "/painel-enviar-drive", icon: FolderOpen },
       ],
@@ -407,6 +409,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Radar do Filho", url: "/painel-radar-filho", icon: Radar },
         { title: "Atividades e Trabalhos", url: "/painel-atividades-filhos", icon: ClipboardList },
         { title: "Diário de Bordo", url: "/painel-diario-filho", icon: NotebookPen },
+        { title: "Reconhecimentos", url: "/painel-meritos-filhos", icon: AwardIcon },
       ],
     },
     {
