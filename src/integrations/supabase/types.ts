@@ -2340,6 +2340,83 @@ export type Database = {
           },
         ]
       }
+      meritos_ocorrencias: {
+        Row: {
+          aluno_id: string
+          autor_id: string
+          autor_nome: string | null
+          created_at: string
+          disciplina: string | null
+          ia_reescreveu: boolean
+          id: string
+          nota_construtiva: string | null
+          nota_original: string
+          tipo: Database["public"]["Enums"]["merito_tipo"]
+          turma_id: string | null
+          updated_at: string
+          visivel_pais: boolean
+        }
+        Insert: {
+          aluno_id: string
+          autor_id: string
+          autor_nome?: string | null
+          created_at?: string
+          disciplina?: string | null
+          ia_reescreveu?: boolean
+          id?: string
+          nota_construtiva?: string | null
+          nota_original: string
+          tipo: Database["public"]["Enums"]["merito_tipo"]
+          turma_id?: string | null
+          updated_at?: string
+          visivel_pais?: boolean
+        }
+        Update: {
+          aluno_id?: string
+          autor_id?: string
+          autor_nome?: string | null
+          created_at?: string
+          disciplina?: string | null
+          ia_reescreveu?: boolean
+          id?: string
+          nota_construtiva?: string | null
+          nota_original?: string
+          tipo?: Database["public"]["Enums"]["merito_tipo"]
+          turma_id?: string | null
+          updated_at?: string
+          visivel_pais?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meritos_ocorrencias_aluno_id_fkey"
+            columns: ["aluno_id"]
+            isOneToOne: false
+            referencedRelation: "alunos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meritos_ocorrencias_aluno_id_fkey"
+            columns: ["aluno_id"]
+            isOneToOne: false
+            referencedRelation: "alunos_destaque_publicos"
+            referencedColumns: ["aluno_id"]
+          },
+          {
+            foreignKeyName: "meritos_ocorrencias_turma_id_fkey"
+            columns: ["turma_id"]
+            isOneToOne: false
+            referencedRelation: "alunos_destaque_publicos"
+            referencedColumns: ["turma_id"]
+          },
+          {
+            foreignKeyName: "meritos_ocorrencias_turma_id_fkey"
+            columns: ["turma_id"]
+            isOneToOne: false
+            referencedRelation: "turmas_escolares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notas: {
         Row: {
           aluno_id: string
@@ -3930,6 +4007,7 @@ export type Database = {
         | "professor"
         | "ex_aluno"
         | "comunidade"
+      merito_tipo: "elogio" | "avanco" | "atencao" | "ocorrencia"
       notificacao_tipo:
         | "comunicado"
         | "alerta"
@@ -4122,6 +4200,7 @@ export const Constants = {
         "ex_aluno",
         "comunidade",
       ],
+      merito_tipo: ["elogio", "avanco", "atencao", "ocorrencia"],
       notificacao_tipo: [
         "comunicado",
         "alerta",
