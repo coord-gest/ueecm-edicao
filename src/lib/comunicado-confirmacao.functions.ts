@@ -23,8 +23,10 @@ export const listarComunicadosSemConfirmacao = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
 
-    const { data: staffOk } = await supabase.rpc("is_school_staff", { _user_id: userId } as never);
-    if (!staffOk) throw new Error("Forbidden");
+    const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", userId);
+    const staffRoles = ["admin", "diretor", "coordenador", "secretario", "desenvolvedor"];
+    const isStaff = (roles ?? []).some((r) => staffRoles.includes(r.role as string));
+    if (!isStaff) throw new Error("Forbidden");
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
