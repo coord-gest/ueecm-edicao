@@ -347,7 +347,7 @@ function Home() {
                   : gridFiltrado.map((p) => <GridArticle key={p.id} post={p} />)}
               </div>
             ) : (
-              <ul className="divide-y divide-border border border-border bg-card">
+              <ul className="overflow-hidden rounded-[5px] border border-border bg-card divide-y divide-border">
                 {isLoading
                   ? Array.from({ length: 6 }).map((_, i) => (
                       <li key={i} className="flex items-center gap-4 p-4">
@@ -430,17 +430,17 @@ function CompactArticle({ post }: { post: Post }) {
       <Link
         to="/posts/$id"
         params={{ id: post.id }}
-        className="flex items-center gap-4 p-4 transition-colors hover:bg-accent/5"
+            className="flex items-center gap-4 rounded-[5px] p-4 transition-colors hover:bg-accent/5"
       >
         {post.imagem ? (
           <img
             src={post.imagem}
             alt=""
-            className="size-16 shrink-0 object-cover"
+            className="size-16 shrink-0 rounded-[5px] object-cover"
             loading="lazy"
           />
         ) : (
-          <div className="grid size-16 shrink-0 place-items-center bg-secondary text-muted-foreground">
+          <div className="grid size-16 shrink-0 place-items-center rounded-[5px] bg-secondary text-muted-foreground">
             <Eye className="size-5" />
           </div>
         )}
@@ -523,7 +523,7 @@ function HeroCarousel({ slides }: { slides: Post[] }) {
 
   return (
     <div
-      className="relative overflow-hidden bg-neutral-950"
+      className="relative overflow-hidden rounded-[5px] bg-neutral-950"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -539,7 +539,7 @@ function HeroCarousel({ slides }: { slides: Post[] }) {
               aria-hidden={!active}
             >
               <Link to="/posts/$id" params={{ id: post.id }} className="block size-full">
-                <div className="relative size-full overflow-hidden bg-neutral-950">
+                <div className="relative size-full overflow-hidden rounded-[5px] bg-neutral-950">
                   {/* Fundo desfocado com a mesma imagem — preenche laterais sem recortar. */}
                   <img
                     src={post.imagem ?? heroImg}
@@ -632,7 +632,11 @@ function SidebarItem({ post, rank }: { post: Post; rank: number }) {
   const views = "views" in post && typeof post.views === "number" ? post.views : 0;
 
   return (
-    <Link to="/posts/$id" params={{ id: post.id }} className="group flex gap-4">
+    <Link
+      to="/posts/$id"
+      params={{ id: post.id }}
+      className="group flex gap-4 rounded-[5px] border border-border bg-card p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+    >
       <span className="font-display text-5xl leading-none text-accent/70 transition-colors group-hover:text-accent">
         {String(rank).padStart(2, "0")}
       </span>
@@ -665,9 +669,9 @@ function GridArticle({ post }: { post: Post }) {
     <Link
       to="/posts/$id"
       params={{ id: post.id }}
-      className="group flex flex-col outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="group flex flex-col overflow-hidden rounded-[5px] border border-border bg-card p-3 shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
-      <div className="relative mb-4 aspect-[16/9] overflow-hidden bg-secondary border border-black/5 shadow-[0_6px_18px_-8px_rgb(0_0_0_/_0.18)] ring-1 ring-black/5 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_18px_36px_-12px_rgb(0_0_0_/_0.28)] dark:border-white/10 dark:ring-white/10 dark:bg-card dark:shadow-[0_6px_18px_-8px_rgb(0_0_0_/_0.55)] dark:group-hover:shadow-[0_20px_40px_-12px_rgb(0_0_0_/_0.75)]">
+      <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-[5px] border border-black/5 bg-secondary shadow-[0_6px_18px_-8px_rgb(0_0_0_/_0.18)] ring-1 ring-black/5 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_18px_36px_-12px_rgb(0_0_0_/_0.28)] dark:border-white/10 dark:bg-card dark:ring-white/10 dark:shadow-[0_6px_18px_-8px_rgb(0_0_0_/_0.55)] dark:group-hover:shadow-[0_20px_40px_-12px_rgb(0_0_0_/_0.75)]">
         <img
           src={post.imagem ?? heroImg}
           alt={post.titulo}
@@ -730,7 +734,7 @@ function OpinionCard() {
   const label = entry.type === "citacao" ? "Citação" : "Opinião";
 
   return (
-    <div className="relative h-full overflow-hidden bg-[image:var(--gradient-primary)] p-8 text-white">
+    <div className="relative h-full overflow-hidden rounded-[5px] bg-[image:var(--gradient-primary)] p-8 text-white">
       <span className="absolute right-4 top-2 font-display text-[8rem] leading-none text-gold/30">
         "
       </span>
@@ -755,7 +759,7 @@ function OpinionCard() {
 
 function EmptyHero() {
   return (
-    <div className="flex aspect-[16/9] items-center justify-center border border-dashed border-border bg-secondary text-center">
+    <div className="flex aspect-[16/9] items-center justify-center rounded-[5px] border border-dashed border-border bg-secondary text-center">
       <div>
         <p className="font-display text-2xl font-bold text-primary">Nenhuma publicação ainda</p>
         <p className="mt-2 text-sm text-muted-foreground">
@@ -884,7 +888,7 @@ function SchoolHighlights() {
           <Link
             key={c.titulo}
             to={c.to}
-            className="group relative flex flex-col overflow-hidden border border-accent/25 bg-[image:var(--gradient-primary)] p-6 text-white shadow-elegant ring-1 ring-black/5 transition-all hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-2xl"
+            className="group relative flex flex-col overflow-hidden rounded-[5px] border border-accent/25 bg-[image:var(--gradient-primary)] p-6 text-white shadow-elegant ring-1 ring-black/5 transition-all hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-2xl"
           >
             <span
               aria-hidden
@@ -908,7 +912,7 @@ function SchoolHighlights() {
           </Link>
         ))}
 
-        <div className="relative flex flex-col overflow-hidden border-2 border-destructive/40 bg-card p-6 shadow-md ring-1 ring-destructive/10">
+        <div className="relative flex flex-col overflow-hidden rounded-[5px] border-2 border-destructive/40 bg-card p-6 shadow-md ring-1 ring-destructive/10">
           <span className="absolute inset-x-0 top-0 h-1 bg-destructive" />
           <div className="mb-4 inline-flex size-12 items-center justify-center bg-destructive/10 text-destructive">
             <AlertTriangle className="size-6" />

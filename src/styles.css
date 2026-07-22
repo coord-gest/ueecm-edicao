@@ -22,15 +22,14 @@ body[data-admin="true"] *::after {
 }
 
 @theme inline {
-  /* Cards e superfícies: cantos retos em todo o sistema.
-     Botões, inputs e menus mantêm arredondamento sutil via rounded-sm/md. */
-  --radius-sm: 15px;
-  --radius-md: 15px;
-  --radius-lg: 15px;
-  --radius-xl: 15px;
-  --radius-2xl: 15px;
-  --radius-3xl: 15px;
-  --radius-4xl: 15px;
+  /* Cards, seções, botões, inputs e menus: arredondamento padrão de 5px. */
+  --radius-sm: 5px;
+  --radius-md: 5px;
+  --radius-lg: 5px;
+  --radius-xl: 5px;
+  --radius-2xl: 5px;
+  --radius-3xl: 5px;
+  --radius-4xl: 5px;
 
   --font-sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-display: "Space Grotesk", "DM Sans", ui-sans-serif, system-ui, sans-serif;
@@ -95,7 +94,7 @@ body[data-admin="true"] *::after {
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 5px;
 
   /* "Azul & Menta" — Blue #2563eb + Mint Green #34d399.
      Base clara arejada, tipografia em navy suave para conforto. */

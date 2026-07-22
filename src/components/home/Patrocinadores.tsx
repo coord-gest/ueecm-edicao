@@ -144,7 +144,7 @@ export function Patrocinadores() {
                         className="block h-full w-full text-left"
                         aria-label={`Ver detalhes de ${p.nome}`}
                       >
-                        <div className="group flex aspect-[4/5] h-full flex-col overflow-hidden border border-border bg-card transition-all hover:-translate-y-0.5 hover:border-accent hover:shadow-md">
+                        <div className="group flex aspect-[4/5] h-full flex-col overflow-hidden rounded-[5px] border border-border bg-card transition-all hover:-translate-y-0.5 hover:border-accent hover:shadow-md">
                           <div className="relative flex min-h-0 flex-[3] items-center justify-center bg-secondary/30 p-3">
                             {p.logo_url ? (
                               <img
@@ -262,7 +262,7 @@ export function Patrocinadores() {
                     </a>
                   </Button>
                 ) : (
-                  <p className="bg-muted/50 p-3 text-center text-xs text-muted-foreground">
+                  <p className="rounded-[5px] bg-muted/50 p-3 text-center text-xs text-muted-foreground">
                     Este patrocinador ainda não informou um contato público.
                   </p>
                 )}
