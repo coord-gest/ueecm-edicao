@@ -3,6 +3,7 @@ import { MapPin, Calendar, Target, Heart, Sparkles, GraduationCap, Users } from 
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import heroImg from "@/assets/hero-school.jpg";
+import trajetoriaImg from "@/assets/trajetoria-escola.jpg";
 
 export const Route = createFileRoute("/sobre")({
   head: () => ({
@@ -156,7 +157,8 @@ function SobrePage() {
         {/* História */}
         <section className="mb-14 rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-10">
           <h2 className="font-display text-2xl text-primary sm:text-3xl">Nossa trajetória</h2>
-          <div className="mt-5 space-y-4 text-base leading-relaxed text-muted-foreground">
+          <div className="mt-5 grid gap-8 lg:grid-cols-[1fr_18rem] lg:items-start">
+          <div className="space-y-4 text-base leading-relaxed text-muted-foreground">
             <p>
               Segundo relatos preservados pela comunidade, a{" "}
               <strong className="text-foreground">Unidade Escolar Evaristo Campelo de Matos</strong>{" "}
@@ -198,6 +200,30 @@ function SobrePage() {
               Hoje, a UEECM é mais que uma escola: é patrimônio afetivo de gerações que construíram,
               dentro dela, memórias, sonhos e caminhos.
             </p>
+          </div>
+          <figure className="lg:sticky lg:top-6">
+            <div className="overflow-hidden rounded-2xl border border-border shadow-sm">
+              <img
+                src={trajetoriaImg}
+                alt="Ilustração histórica da U.E. Evaristo Campelo de Matos"
+                width={1024}
+                height={1024}
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <figcaption className="mt-3 rounded-xl border border-border/70 bg-background/60 p-3 text-center">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
+                Autoria do texto
+              </p>
+              <p className="mt-1 font-display text-sm font-semibold text-foreground">
+                Maria Augusta Lima
+              </p>
+              <p className="mt-0.5 text-xs italic text-muted-foreground">
+                Extraído do livro de sua autoria
+              </p>
+            </figcaption>
+          </figure>
           </div>
         </section>
 
