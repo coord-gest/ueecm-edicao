@@ -3,7 +3,7 @@ import { MapPin, Calendar, Target, Heart, Sparkles, GraduationCap, Users } from 
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import heroImg from "@/assets/hero-school.jpg";
-import livroCapa from "@/assets/livro-memorias-povo.jpeg.asset.json";
+import livroCapa from "@/assets/livro-memorias-povo.jpg.asset.json";
 
 export const Route = createFileRoute("/sobre")({
   head: () => ({
