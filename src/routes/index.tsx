@@ -111,8 +111,14 @@ function Home() {
   const { data: patrosData } = useQuery(
     patrocinadoresQueryOptions(() => listPatrocinadoresPublicos()),
   );
+  // Só considera após hidratação para evitar mismatch SSR/cliente quando o
+ // prefetch resolve no servidor mas o cache do cliente ainda está vazio.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
   const hasPatrocinadores =
-    (patrosData?.eventos?.length ?? 0) > 0 && (patrosData?.patrocinadores?.length ?? 0) > 0;
+    hydrated &&
+    (patrosData?.eventos?.length ?? 0) > 0 &&
+    (patrosData?.patrocinadores?.length ?? 0) > 0;
   const { data: posts, isLoading } = useQuery({
     queryKey: ["posts-publicos"],
     queryFn: async () => {
