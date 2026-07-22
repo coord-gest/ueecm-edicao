@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getInitials } from "@/lib/profissionais";
+import { CARGO_LABEL, type Cargo } from "@/lib/profissionais";
 import { useReveal } from "@/hooks/use-reveal";
 
 type ProfPublico = {
@@ -62,7 +63,8 @@ export function TeamHighlight() {
 
 function TeamCard({ p }: { p: ProfPublico }) {
   const disciplinas = (p.disciplinas ?? []).filter(Boolean).slice(0, 2).join(" · ");
-  const subtitle = p.cargo_descricao || disciplinas || p.cargo || "";
+  const cargoLabel = p.cargo ? (CARGO_LABEL[p.cargo as Cargo] ?? p.cargo) : "";
+  const subtitle = p.cargo_descricao || disciplinas || cargoLabel;
   return (
     <Link
       to="/equipe"
