@@ -10,11 +10,15 @@ export function SobreEscola() {
       <div className="relative overflow-hidden rounded-[5px] border border-accent/25 bg-[image:var(--gradient-primary)] text-white shadow-elegant">
         <span
           aria-hidden
-          className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-gold/30 blur-3xl"
+          className="pointer-events-none absolute -top-24 -right-24 size-[22rem] rounded-full bg-gold/35 blur-3xl"
         />
         <span
           aria-hidden
-          className="pointer-events-none absolute -bottom-32 -left-20 size-80 rounded-full bg-accent/40 blur-3xl"
+          className="pointer-events-none absolute -bottom-32 -left-20 size-[24rem] rounded-full bg-accent/45 blur-3xl"
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.18),transparent_55%)]"
         />
         <span
           aria-hidden
