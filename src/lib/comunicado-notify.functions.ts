@@ -16,7 +16,16 @@ export const notifyComunicadoCreated = createServerFn({ method: "POST" })
       .parse(data),
   )
   .middleware([requireSupabaseAuth])
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    // Somente professores/staff podem disparar push school-wide.
+    const { data: allowed, error: roleErr } = await context.supabase.rpc(
+      "is_professor_or_staff",
+      { _user_id: context.userId },
+    );
+    if (roleErr) throw roleErr;
+    if (!allowed) {
+      throw new Response("Forbidden", { status: 403 });
+    }
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const body =
       data.count > 1

@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /**
  * Diagnóstico de variáveis de ambiente do runtime do servidor.
@@ -85,8 +86,21 @@ export type EnvVarStatus = {
   resolvedFrom: string | null;
 };
 
-export const checkRuntimeEnv = createServerFn({ method: "GET" }).handler(async () => {
-  const status: EnvVarStatus[] = REQUIRED.map((r) => {
+export const checkRuntimeEnv = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    // Restringe a Desenvolvedor/Admin — evita reconhecimento por qualquer usuário logado.
+    const { data: allowed, error: roleErr } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .in("role", ["desenvolvedor", "developer", "admin"])
+      .maybeSingle();
+    if (roleErr) throw roleErr;
+    if (!allowed) {
+      throw new Response("Forbidden", { status: 403 });
+    }
+    const status: EnvVarStatus[] = REQUIRED.map((r) => {
     const candidates = [r.name, ...r.aliases];
     const resolvedFrom = candidates.find((n) => Boolean(process.env[n])) ?? null;
     return {
