@@ -212,13 +212,13 @@ function SobrePage() {
             </div>
             <figcaption className="mt-3 rounded-xl border border-border/70 bg-background/60 p-3 text-center">
               <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
-                Autoria do texto
+                Capa do livro
               </p>
               <p className="mt-1 font-display text-sm font-semibold text-foreground">
-                Maria Augusta Lima
+                "Assunção do Piauí — Memórias de um Povo"
               </p>
               <p className="mt-0.5 text-xs italic text-muted-foreground">
-                Extraído do livro "Assunção do Piauí: Memórias de um Povo"
+                Obra de autoria de Maria Augusta Lima
               </p>
             </figcaption>
           </figure>
