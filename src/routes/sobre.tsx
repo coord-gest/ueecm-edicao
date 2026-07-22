@@ -3,7 +3,7 @@ import { MapPin, Calendar, Target, Heart, Sparkles, GraduationCap, Users } from 
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import heroImg from "@/assets/hero-school.jpg";
-import trajetoriaImg from "@/assets/trajetoria-escola.jpg";
+import livroCapa from "@/assets/livro-memorias-povo.jpeg.asset.json";
 
 export const Route = createFileRoute("/sobre")({
   head: () => ({
@@ -204,10 +204,8 @@ function SobrePage() {
           <figure className="lg:sticky lg:top-6">
             <div className="overflow-hidden rounded-2xl border border-border shadow-sm">
               <img
-                src={trajetoriaImg}
-                alt="Ilustração histórica da U.E. Evaristo Campelo de Matos"
-                width={1024}
-                height={1024}
+                src={livroCapa.url}
+                alt="Capa do livro Assunção do Piauí: Memórias de um Povo, de Maria Augusta Lima"
                 loading="lazy"
                 className="h-full w-full object-cover"
               />
@@ -220,7 +218,7 @@ function SobrePage() {
                 Maria Augusta Lima
               </p>
               <p className="mt-0.5 text-xs italic text-muted-foreground">
-                Extraído do livro de sua autoria
+                Extraído do livro "Assunção do Piauí: Memórias de um Povo"
               </p>
             </figcaption>
           </figure>
