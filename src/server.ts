@@ -83,8 +83,9 @@ const CSP_DIRECTIVES = [
   "worker-src 'self' blob:",
   "manifest-src 'self'",
   "frame-ancestors 'none'",
-  // Turnstile renderiza um iframe embutido em challenges.cloudflare.com.
-  "frame-src https://challenges.cloudflare.com",
+  // Turnstile (challenges.cloudflare.com) + embeds de vídeo do YouTube e Vimeo
+  // usados no PostContent (carrossel de vídeos e iframes soltos no conteúdo).
+  "frame-src https://challenges.cloudflare.com https://www.youtube.com https://www.youtube-nocookie.com https://youtube.com https://youtube-nocookie.com https://player.vimeo.com",
   "base-uri 'self'",
   "form-action 'self'",
   "object-src 'none'",
