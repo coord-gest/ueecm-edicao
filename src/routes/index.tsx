@@ -634,30 +634,49 @@ function HeroCarousel({ slides }: { slides: Post[] }) {
 
 function SidebarItem({ post, rank }: { post: Post; rank: number }) {
   const views = "views" in post && typeof post.views === "number" ? post.views : 0;
+  const dataFmt = new Date(post.data).toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "short",
+  });
 
   return (
     <Link
       to="/posts/$id"
       params={{ id: post.id }}
-      className="group flex gap-4 rounded-[5px] border border-border bg-card p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      className="group flex h-full flex-col overflow-hidden rounded-[5px] border border-border bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
-      <span className="font-display text-5xl leading-none text-accent/70 transition-colors group-hover:text-accent">
-        {String(rank).padStart(2, "0")}
-      </span>
-      <div className="space-y-2">
+      <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
+        <img
+          src={post.imagem ?? heroImg}
+          alt={post.titulo}
+          loading="lazy"
+          className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+        />
+        <span
+          aria-hidden="true"
+          className="absolute left-3 top-3 grid size-10 place-items-center rounded-[5px] bg-primary font-display text-lg font-bold text-primary-foreground shadow-md ring-2 ring-white/80"
+        >
+          {String(rank).padStart(2, "0")}
+        </span>
         {post.disciplina && (
-          <span className="text-[10px] font-semibold uppercase tracking-widest text-accent">
+          <span className="absolute bottom-3 left-3 rounded-[5px] bg-accent/95 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-accent-foreground shadow-sm">
             {post.disciplina}
           </span>
         )}
-        <h3 className="font-display text-lg leading-tight text-primary transition-colors group-hover:text-accent sm:text-xl">
+      </div>
+      <div className="flex flex-1 flex-col gap-3 p-4">
+        <h3 className="line-clamp-2 font-display text-base leading-snug text-primary transition-colors group-hover:text-accent sm:text-lg">
           {post.titulo}
         </h3>
-        <p className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground">
-          <Eye className="size-3.5" aria-hidden="true" />
-          <span className="tabular-nums">{views.toLocaleString("pt-BR")}</span>
-          <span>visualizações</span>
-        </p>
+        <div className="mt-auto flex items-center justify-between border-t border-border/60 pt-3 text-xs text-muted-foreground">
+          <span className="inline-flex items-center gap-1 font-medium">
+            <Eye className="size-3.5" aria-hidden="true" />
+            <span className="tabular-nums text-foreground/80">
+              {views.toLocaleString("pt-BR")}
+            </span>
+          </span>
+          <time className="font-semibold uppercase tracking-wider">{dataFmt}</time>
+        </div>
       </div>
     </Link>
   );
