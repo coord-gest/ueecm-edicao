@@ -163,10 +163,12 @@ body[data-admin="true"] *::after {
 
   /* Gradientes Azul → Menta */
   --gradient-primary: linear-gradient(
-    135deg,
-    oklch(0.48 0.19 258) 0%,
-    oklch(0.72 0.15 195) 55%,
-    oklch(0.82 0.14 165) 100%
+    130deg,
+    oklch(0.38 0.19 265) 0%,
+    oklch(0.52 0.19 245) 28%,
+    oklch(0.66 0.16 210) 58%,
+    oklch(0.78 0.15 180) 82%,
+    oklch(0.86 0.14 165) 100%
   );
   --gradient-subtle: linear-gradient(180deg, oklch(1 0 0) 0%, oklch(0.97 0.02 190) 100%);
   --gradient-gold: linear-gradient(
@@ -181,10 +183,11 @@ body[data-admin="true"] *::after {
     transparent 90%
   );
   --gradient-hero: linear-gradient(
-    135deg,
-    oklch(0.5 0.18 258) 0%,
-    oklch(0.65 0.16 215) 50%,
-    oklch(0.82 0.14 160) 100%
+    130deg,
+    oklch(0.4 0.19 265) 0%,
+    oklch(0.55 0.18 240) 30%,
+    oklch(0.7 0.16 205) 62%,
+    oklch(0.84 0.14 165) 100%
   );
   --gradient-surface: linear-gradient(
     160deg,
@@ -264,10 +267,12 @@ body[data-admin="true"] *::after {
     0 0 0 1px oklch(0.74 0.15 235 / 0.32), 0 10px 30px -12px oklch(0.74 0.15 235 / 0.35);
 
   --gradient-primary: linear-gradient(
-    135deg,
-    oklch(0.4 0.14 258) 0%,
-    oklch(0.58 0.15 210) 55%,
-    oklch(0.72 0.14 170) 100%
+    130deg,
+    oklch(0.28 0.13 265) 0%,
+    oklch(0.4 0.16 250) 28%,
+    oklch(0.54 0.16 215) 58%,
+    oklch(0.66 0.15 185) 82%,
+    oklch(0.74 0.14 168) 100%
   );
   --gradient-subtle: linear-gradient(180deg, oklch(0.235 0.035 255) 0%, oklch(0.19 0.03 255) 100%);
   --gradient-gold: linear-gradient(135deg, oklch(0.86 0.14 160) 0%, oklch(0.74 0.14 175) 100%);
@@ -278,10 +283,11 @@ body[data-admin="true"] *::after {
     transparent 90%
   );
   --gradient-hero: linear-gradient(
-    135deg,
-    oklch(0.3 0.1 258) 0%,
-    oklch(0.5 0.15 215) 55%,
-    oklch(0.7 0.14 165) 100%
+    130deg,
+    oklch(0.25 0.12 265) 0%,
+    oklch(0.38 0.15 245) 30%,
+    oklch(0.55 0.16 210) 62%,
+    oklch(0.7 0.14 168) 100%
   );
   --gradient-surface: linear-gradient(160deg, oklch(0.19 0.03 255) 0%, oklch(0.27 0.05 220) 100%);
   --shadow-gold: 0 8px 24px -10px oklch(0.82 0.15 165 / 0.35), 0 2px 6px oklch(0.82 0.15 165 / 0.2);
