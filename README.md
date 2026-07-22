@@ -150,14 +150,15 @@ Suíte com Vitest + Testing Library cobrindo:
 
 ## Status
 
-Sistema **APROVADO PARA PRODUÇÃO** — Nota **9.7/10**. Última análise técnica consolidada: **19/07/2026 (v12 — Final)** — **0 críticos · 0 altos · 1 médio · 2 baixos**. Testes: **133+ passando**. Typecheck: **0 erros**. Deploy Cloudflare estável com `bun@1.2.15`. Turnstile v2 ativo em produção (com fallback runtime). Notificações FCM funcionais em Android 13/16+ e iOS (tela bloqueada). Alertas Globais com trigger de push corrigido. PWA/TWA com ícone do app em notificações. SEO com sitemap dinâmico + JSON-LD.
+Sistema **APROVADO PARA PRODUÇÃO** — Nota **9.7/10**. Última análise técnica consolidada: **22/07/2026 (v14 — Consolidada)** — **0 críticos · 0 altos · 1 médio · 2 baixos**. Testes: **152+ passando**. Typecheck: **0 erros**. Deploy Cloudflare estável com `bun@1.2.15`. Turnstile v2 ativo em produção (com fallback runtime). Notificações FCM funcionais em Android 13/16+ e iOS (tela bloqueada). Alertas Globais v2 com rajadas agendadas (`pg_cron`) e auditoria imutável. PWA/TWA com ícone do app em notificações. SEO com sitemap dinâmico + JSON-LD. Chat IA em **Gemini 2.0 Flash** (com fallbacks) e planejamentos pedagógicos assistidos por IA.
 
 ## Relatórios Técnicos
 
 Todos os relatórios de auditoria ficam versionados em [`docs/relatorios/`](./docs/relatorios/).
 
-- **Relatório atual:** [Análise Técnica Completa — 19/07/2026 v12 (Markdown)](./docs/relatorios/Analise_Tecnica_Completa_2026-07-19-v12-Final.md)
-- **Apresentação do sistema:** [Apresentação Executiva (PPTX · 42 slides)](./docs/relatorios/Apresentacao_Sistema_UEECM_v2.pptx)
+- **Relatório atual:** [Análise Técnica Completa — 22/07/2026 v14 (Markdown)](./docs/relatorios/Analise_Tecnica_Completa_2026-07-22-v14-Final.md)
+- **Relatório de funcionalidades por perfil:** [Relatorio_Funcionalidades_por_Perfil.docx](./docs/relatorios/Relatorio_Funcionalidades_por_Perfil.docx) (quando disponível em `/mnt/documents`)
+- **Apresentação do sistema:** [Apresentação Executiva (PPTX · 44 slides)](./docs/relatorios/Apresentacao_Sistema_UEECM_v3.pptx)
 - **Veredito atual:** ✅ APROVADO PARA PRODUÇÃO
 - **Framework aplicado:** Prompt Mestre v2 — Análise Técnica Completa (Código · Segurança · SEO · PWA · LGPD · Validação Final)
 
@@ -176,6 +177,12 @@ Todos os relatórios de auditoria ficam versionados em [`docs/relatorios/`](./do
 - ✅ Reatach de token FCM ao `user_id` no login (`reattachPushTokenToUser`).
 - ✅ Documentação LGPD: `docs/DPIA-ROPA.md` + `docs/RUNBOOK.md`.
 - ✅ CI/CD com gate de Typecheck no PR.
+- ✅ **Unir Escola & Comunidade**: Diário de Bordo, Radar do Filho, Méritos & Ocorrências, Alerta de Evasão, Contrato Digital, Selo de Presença Parental, Mural da Comunidade, Comunicados com Confirmação, Chat Pai↔Professor moderado, Rede de Apoio + Vaquinha Digital.
+- ✅ **Acadêmico**: Atividades e Trabalhos (professor divulga por turma, marca Fez/Não fez; pai acompanha; ranking com drill-down + export CSV/PDF), Planejamentos Pedagógicos (semanal/quinzenal/mensal/semestral) assistidos por Gemini.
+- ✅ **Agendamentos**: segmentação por role/usuário no push + consulta pública por protocolo em `/consultar-agendamento`.
+- ✅ **Design System**: tema "Azul & Menta" com gradientes ricos em light/dark; padronização global de `border-radius: 5px` (cards/botões/inputs/tabs) e scoping `data-admin` para painéis sem arredondamento.
+- ✅ **Observabilidade**: Sentry (browser) + `system_errors` + FinOps dashboard (`/painel-finops`).
+- ✅ **Segurança**: `xlsx` substituído por `exceljs` (CVE Prototype Pollution); SBOM CycloneDX no CI.
 - 🟡 Pendente (Dashboard): **Enable Leaked Password Protection** em Supabase Auth.
 
 ---
