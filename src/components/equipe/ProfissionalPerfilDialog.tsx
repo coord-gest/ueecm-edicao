@@ -70,7 +70,7 @@ function PerfilSkeleton() {
           Buscando informações do profissional…
         </DialogDescription>
       </DialogHeader>
-      <Skeleton className="h-32 w-full rounded-none sm:h-40" />
+      <Skeleton className="h-32 w-full rounded-[5px] sm:h-40" />
       <div className="-mt-14 flex flex-col items-center gap-2 px-5 pb-4 sm:-mt-16 sm:px-8">
         <Skeleton className="size-28 rounded-full ring-4 ring-background sm:size-32" />
         <Skeleton className="mt-2 h-6 w-48" />

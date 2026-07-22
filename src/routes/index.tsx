@@ -769,9 +769,9 @@ function EmptyHero() {
 function HeroSkeleton() {
   return (
     <div className="flex flex-col gap-6">
-      <Skeleton className="aspect-[16/9] w-full rounded-none" />
-      <Skeleton className="h-12 w-4/5 rounded-none" />
-      <Skeleton className="h-6 w-3/5 rounded-none" />
+      <Skeleton className="aspect-[16/9] w-full rounded-[5px]" />
+      <Skeleton className="h-12 w-4/5 rounded-[5px]" />
+      <Skeleton className="h-6 w-3/5 rounded-[5px]" />
     </div>
   );
 }
@@ -779,11 +779,11 @@ function HeroSkeleton() {
 function SidebarSkeleton() {
   return (
     <div className="flex gap-4 border-b border-border pb-6">
-      <Skeleton className="h-10 w-10 rounded-none" />
+      <Skeleton className="h-10 w-10 rounded-[5px]" />
       <div className="flex-1 space-y-2">
-        <Skeleton className="h-3 w-16 rounded-none" />
-        <Skeleton className="h-5 w-full rounded-none" />
-        <Skeleton className="h-5 w-4/5 rounded-none" />
+        <Skeleton className="h-3 w-16 rounded-[5px]" />
+        <Skeleton className="h-5 w-full rounded-[5px]" />
+        <Skeleton className="h-5 w-4/5 rounded-[5px]" />
       </div>
     </div>
   );
@@ -792,10 +792,10 @@ function SidebarSkeleton() {
 function GridSkeleton() {
   return (
     <div className="space-y-3">
-      <Skeleton className="aspect-[4/3] w-full rounded-none" />
-      <Skeleton className="h-4 w-20 rounded-none" />
-      <Skeleton className="h-6 w-full rounded-none" />
-      <Skeleton className="h-4 w-3/4 rounded-none" />
+      <Skeleton className="aspect-[4/3] w-full rounded-[5px]" />
+      <Skeleton className="h-4 w-20 rounded-[5px]" />
+      <Skeleton className="h-6 w-full rounded-[5px]" />
+      <Skeleton className="h-4 w-3/4 rounded-[5px]" />
     </div>
   );
 }
