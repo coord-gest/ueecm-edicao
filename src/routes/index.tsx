@@ -111,14 +111,12 @@ function Home() {
   const { data: patrosData } = useQuery(
     patrocinadoresQueryOptions(() => listPatrocinadoresPublicos()),
   );
-  // Só considera após hidratação para evitar mismatch SSR/cliente quando o
- // prefetch resolve no servidor mas o cache do cliente ainda está vazio.
+  // Só libera partes dependentes do cache/browser após hidratação. A estrutura
+  // externa das seções permanece fixa para evitar mismatch SSR/cliente no PWA.
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
   const hasPatrocinadores =
-    hydrated &&
-    (patrosData?.eventos?.length ?? 0) > 0 &&
-    (patrosData?.patrocinadores?.length ?? 0) > 0;
+    (patrosData?.eventos?.length ?? 0) > 0 && (patrosData?.patrocinadores?.length ?? 0) > 0;
   const { data: posts, isLoading } = useQuery({
     queryKey: ["posts-publicos"],
     queryFn: async () => {
@@ -395,14 +393,14 @@ function Home() {
           <MomentsGallery />
         </RevealSection>
 
-        {/* Nossos Patrocinadores (visível quando um evento estiver ativo) */}
-        {hasPatrocinadores && (
-          <RevealSection className="mt-10 md:mt-24" delay={120}>
+        {/* Nossos Patrocinadores (conteúdo liberado só após hidratação) */}
+        <RevealSection className="mt-10 md:mt-24" delay={120}>
+          {hydrated && hasPatrocinadores ? (
             <Suspense fallback={null}>
               <Patrocinadores />
             </Suspense>
-          </RevealSection>
-        )}
+          ) : null}
+        </RevealSection>
 
         {/* Equipe em destaque */}
         <RevealSection delay={80}>
