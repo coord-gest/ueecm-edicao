@@ -1495,26 +1495,32 @@ export const Route = createFileRoute("/api/chat")({
           });
           if (userMessageError) throw userMessageError;
 
-          // Busca histórico (últimas 20 mensagens) para contexto
+          // Busca as últimas 10 mensagens (desc) e reordena cronologicamente
           const { data: history, error: historyError } = await supabaseAdmin
             .from("chat_messages")
-            .select("role, content")
+            .select("role, content, created_at")
             .eq("conversation_id", conversationId)
-            .order("created_at", { ascending: true })
+            .order("created_at", { ascending: false })
             .limit(10);
           if (historyError) throw historyError;
 
           let contents: ChatMessage[] = (
             (history ?? []) as Array<{ role: string; content: string }>
           )
+            .slice()
+            .reverse()
             .filter((m) => m.role === "user" || m.role === "assistant")
             .map((m) => ({
               role: m.role === "assistant" ? "assistant" : "user",
               content: m.content,
             }));
 
-          if (contents.length === 0) {
-            contents = [{ role: "user", content: message }];
+          // Gemini exige que a última parte seja de "user". Se o histórico
+          // truncado terminar em assistant (ou vier vazio), garante que a
+          // mensagem atual do usuário seja o último item enviado.
+          const last = contents[contents.length - 1];
+          if (!last || last.role !== "user") {
+            contents.push({ role: "user", content: message });
           }
 
           async function callGeminiWithRetry(): Promise<string> {
