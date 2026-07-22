@@ -6,7 +6,7 @@ export function QuickContact() {
 
   return (
     <section ref={ref} className="reveal mb-10 md:mb-16">
-      <div className="relative grid grid-cols-1 gap-6 overflow-hidden border border-border bg-[image:var(--gradient-primary)] p-6 text-white shadow-lg sm:p-8 lg:grid-cols-4">
+      <div className="relative grid grid-cols-1 gap-6 overflow-hidden rounded-[5px] border border-border bg-[image:var(--gradient-primary)] p-6 text-white shadow-lg sm:p-8 lg:grid-cols-4">
         <span className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-linear-to-r from-gold via-gold/70 to-transparent" />
         <span className="pointer-events-none absolute -right-20 -top-20 size-64 rounded-full bg-gold/20 blur-3xl" />
         <span className="pointer-events-none absolute -bottom-20 -left-16 size-64 rounded-full bg-accent/40 blur-3xl" />
@@ -14,7 +14,7 @@ export function QuickContact() {
           href="https://wa.me/5500000000000"
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative flex items-start gap-3 border border-white/10 bg-white/5 p-3 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-gold/50 hover:bg-white/10"
+          className="group relative flex items-start gap-3 rounded-[5px] border border-white/10 bg-white/5 p-3 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-gold/50 hover:bg-white/10"
         >
           <div className="grid size-11 shrink-0 place-items-center rounded-full bg-gold text-gold-foreground shadow-md">
             <MessageCircle className="size-5" />
@@ -31,7 +31,7 @@ export function QuickContact() {
 
         <a
           href="tel:+5500000000000"
-          className="group relative flex items-start gap-3 border border-white/10 bg-white/5 p-3 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-gold/50 hover:bg-white/10"
+          className="group relative flex items-start gap-3 rounded-[5px] border border-white/10 bg-white/5 p-3 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-gold/50 hover:bg-white/10"
         >
           <div className="grid size-11 shrink-0 place-items-center rounded-full bg-gold text-gold-foreground shadow-md">
             <Phone className="size-5" />
@@ -48,7 +48,7 @@ export function QuickContact() {
 
         <a
           href="mailto:contato@conectaueecm.com"
-          className="group relative flex items-start gap-3 border border-white/10 bg-white/5 p-3 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-gold/50 hover:bg-white/10"
+          className="group relative flex items-start gap-3 rounded-[5px] border border-white/10 bg-white/5 p-3 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-gold/50 hover:bg-white/10"
         >
           <div className="grid size-11 shrink-0 place-items-center rounded-full bg-gold text-gold-foreground shadow-md">
             <Mail className="size-5" />
@@ -68,7 +68,7 @@ export function QuickContact() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Abrir endereço no Google Maps"
-          className="group relative flex items-start gap-3 border border-white/10 bg-white/5 p-3 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-gold/50 hover:bg-white/10"
+          className="group relative flex items-start gap-3 rounded-[5px] border border-white/10 bg-white/5 p-3 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-gold/50 hover:bg-white/10"
         >
           <div className="grid size-11 shrink-0 place-items-center rounded-full bg-gold text-gold-foreground shadow-md">
             <MapPin className="size-5" />
