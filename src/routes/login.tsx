@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/login")({
+  ssr: false,
   head: () => ({
     meta: [{ title: "Entrar — Painel Administrativo | U.E. - Evaristo Campelo de Matos" }],
   }),
