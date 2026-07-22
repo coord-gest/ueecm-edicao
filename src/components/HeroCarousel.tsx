@@ -38,7 +38,7 @@ export function HeroCarousel({ posts }: { posts: Post[] }) {
         <CarouselContent>
           {posts.map((p) => (
             <CarouselItem key={p.id}>
-              <div className="relative h-[70vh] max-h-[560px] min-h-[440px] bg-black sm:h-[520px] sm:min-h-0 sm:max-h-none">
+              <div className="relative h-[85vh] max-h-[720px] min-h-[560px] bg-black sm:h-[520px] sm:min-h-0 sm:max-h-none">
                 {/* Fundo desfocado com a mesma imagem para preencher as laterais */}
                 <img
                   src={p.imagem ?? heroImg}
@@ -52,7 +52,7 @@ export function HeroCarousel({ posts }: { posts: Post[] }) {
                   alt={p.titulo}
                   className="ken-burns absolute inset-0 size-full object-cover sm:object-contain"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/10 sm:h-2/3 sm:top-auto sm:bg-gradient-to-t sm:from-black/85 sm:via-black/45 sm:to-transparent" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 top-1/2 bg-gradient-to-t from-black/90 via-black/60 to-transparent sm:top-auto sm:h-2/3 sm:from-black/85 sm:via-black/45 sm:to-transparent" />
 
                 <div className="relative mx-auto flex h-full max-w-6xl flex-col justify-end px-4 pb-16 sm:px-6 sm:pb-16">
                   <Badge className="animate-float mb-3 w-fit rounded-full bg-gold/90 text-gold-foreground shadow-elegant hover:bg-gold sm:mb-4">
