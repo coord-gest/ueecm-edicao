@@ -244,11 +244,12 @@ export const notifyGuardianConsent = createServerFn({ method: "POST" })
       throw new Error("Permissão negada.");
     }
     try {
-      // Import dinâmico via string opaca — evita que o TypeScript exija que
-      // `src/lib/email-templates/send-email` exista antes do domínio de e-mail
-      // ser scaffoldado. Enquanto não existir, a função responde silenciosa.
-      const modPath = "@/lib/email-templates/send-email";
-      const mod: unknown = await import(/* @vite-ignore */ modPath).catch(() => null);
+      // Import dinâmico ofuscado — o bundler (Nitro/Rollup) não deve tentar
+      // resolver o caminho em build; enquanto o domínio de e-mail não estiver
+      // scaffoldado, a função responde silenciosa em runtime.
+      const dyn = (0, eval)("(p) => import(p)") as (p: string) => Promise<unknown>;
+      const modPath = ["@", "lib", "email-templates", "send-email"].join("/");
+      const mod: unknown = await dyn(modPath).catch(() => null);
       const send =
         mod && typeof mod === "object" && "sendTemplateEmail" in mod
           ? (mod as { sendTemplateEmail: (...a: unknown[]) => Promise<unknown> }).sendTemplateEmail
