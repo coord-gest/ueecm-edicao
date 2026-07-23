@@ -248,10 +248,44 @@ export function FamiliasSubmitDialog({
           </div>
 
           <DialogFooter>
+            <div className="sr-only" />
+          </DialogFooter>
+          <div className="space-y-3 rounded-md border border-border/60 bg-muted/40 p-3">
+            <div className="flex items-start gap-2">
+              <Checkbox
+                id="fd-consent"
+                checked={consentimento}
+                onCheckedChange={(v) => setConsentimento(v === true)}
+                aria-required
+              />
+              <Label htmlFor="fd-consent" className="text-xs font-normal leading-snug">
+                Li e concordo com a{" "}
+                <Link to="/privacidade" target="_blank" className="underline hover:text-primary">
+                  Política de Privacidade
+                </Link>{" "}
+                e autorizo, nos termos da LGPD (Lei 13.709/2018), o tratamento e a possível
+                publicação deste depoimento pela U.E. Evaristo Campelo de Matos. Registramos
+                data, hora e IP (com hash) do envio para fins de auditoria.
+              </Label>
+            </div>
+            <div className="flex items-start gap-2">
+              <Checkbox
+                id="fd-idade"
+                checked={maiorIdade}
+                onCheckedChange={(v) => setMaiorIdade(v === true)}
+                aria-required
+              />
+              <Label htmlFor="fd-idade" className="text-xs font-normal leading-snug">
+                Declaro ser maior de 18 anos <em>ou</em> responsável legal pelo autor do
+                depoimento (Art. 14 da LGPD — proteção de crianças e adolescentes).
+              </Label>
+            </div>
+          </div>
+          <DialogFooter>
             <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
               Cancelar
             </Button>
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading || !consentimento || !maiorIdade}>
               {loading ? (
                 <>
                   <Loader2 className="mr-2 size-4 animate-spin" /> Enviando...
