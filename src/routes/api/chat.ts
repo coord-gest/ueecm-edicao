@@ -1645,6 +1645,8 @@ export const Route = createFileRoute("/api/chat")({
           );
         } catch (err) {
           return fallbackChatResponse(supabaseAdmin, conversationId, "Erro interno no chat", err);
+        } finally {
+          if (slotAcquired) releaseSlot(clientIp);
         }
       },
     },
