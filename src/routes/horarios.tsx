@@ -368,7 +368,7 @@ function HorariosPage() {
                           dimmed && "opacity-30",
                         )}
                       >
-                        <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-xl bg-gradient-to-b from-muted/80 to-muted/40 px-1 py-2 text-center text-[11px] font-semibold leading-tight text-muted-foreground">
+                        <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-xl bg-muted/60 px-1 py-2 text-center text-[11px] font-semibold leading-tight text-muted-foreground">
                           {isTime ? (
                             <>
                               <span className="tabular-nums">{ini.slice(0, 5)}</span>
@@ -383,7 +383,7 @@ function HorariosPage() {
                           <div
                             className="relative flex min-w-0 flex-1 flex-col justify-center overflow-hidden rounded-xl border p-3 pl-4 shadow-sm"
                             style={{
-                              backgroundImage: `linear-gradient(135deg, ${color.accent} 0%, ${color.accent} 60%, ${color.border} 100%)`,
+                              backgroundColor: color.accent,
                               borderColor: color.accent,
                             }}
                           >
@@ -437,7 +437,7 @@ function HorariosPage() {
               <div className="mt-4 hidden overflow-x-auto rounded-2xl border border-border/70 bg-card shadow-md md:block">
                 <table className="w-full min-w-[680px] border-collapse">
                   <thead>
-                    <tr className="bg-gradient-to-b from-muted/70 to-muted/30">
+                    <tr className="bg-muted/50">
                       <th className="sticky left-0 z-10 w-24 border-b border-r border-border/70 bg-muted/60 p-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground lg:w-32">
                         Horário
                       </th>
@@ -461,7 +461,7 @@ function HorariosPage() {
                       return (
                         <tr key={slot} className={rowIdx % 2 === 1 ? "bg-muted/10" : undefined}>
                           <td className="sticky left-0 z-10 border-b border-r border-border/60 bg-card p-2 align-middle">
-                            <div className="mx-auto flex w-fit min-w-[68px] flex-col items-center justify-center gap-0.5 rounded-lg bg-gradient-to-b from-muted/70 to-muted/30 px-2 py-1.5 text-[11px] font-semibold leading-tight text-muted-foreground shadow-inner">
+                            <div className="mx-auto flex w-fit min-w-[68px] flex-col items-center justify-center gap-0.5 rounded-lg bg-muted/50 px-2 py-1.5 text-[11px] font-semibold leading-tight text-muted-foreground shadow-inner">
                               {isTime ? (
                                 <>
                                   <span className="tabular-nums text-foreground/80">
@@ -498,7 +498,7 @@ function HorariosPage() {
                                           dimmed && "opacity-25",
                                         )}
                                         style={{
-                                          backgroundImage: `linear-gradient(135deg, ${color.accent} 0%, ${color.accent} 55%, ${color.border} 100%)`,
+                                          backgroundColor: color.accent,
                                           borderColor: color.accent,
                                         }}
                                       >
