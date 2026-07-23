@@ -27,7 +27,7 @@ describe("Design system — cantos retos + paleta Navy Trust", () => {
     expect(css).toMatch(/\[data-tito-widget\],\s*\n\s*\[data-tito-widget\] \*/);
     // Ao menos um token de raio > 0 dentro do escopo do Tito.
     const titoBlock = css.match(
-      /\[data-tito-widget\][\s\S]*?\{([\s\S]*?)\}/,
+      /\[data-tito-widget\],\s*\n\s*\[data-tito-widget\] \*\s*\{([\s\S]*?)\n\}/,
     );
     expect(titoBlock).not.toBeNull();
     expect(titoBlock![1]).toMatch(/--radius(?:-\w+)?:\s*\d+px/);
