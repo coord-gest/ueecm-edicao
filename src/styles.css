@@ -161,9 +161,10 @@ body[data-admin="true"] *::after {
   --shadow-gold:
     0 8px 24px -10px oklch(0.78 0.14 165 / 0.45), 0 2px 6px oklch(0.78 0.14 165 / 0.28);
 
-  /* Cor sólida #885ce9 (violeta) — substitui os antigos gradientes */
-  --gradient-primary: #885ce9;
-  --gradient-hero: #885ce9;
+  /* Cor sólida #885ce9 (violeta) — substitui os antigos gradientes.
+     Escrito como linear-gradient para permanecer válido em background-image. */
+  --gradient-primary: linear-gradient(#885ce9, #885ce9);
+  --gradient-hero: linear-gradient(#885ce9, #885ce9);
   --gradient-subtle: linear-gradient(180deg, oklch(1 0 0) 0%, oklch(0.97 0.02 190) 100%);
   --gradient-gold: linear-gradient(
     135deg,
@@ -253,8 +254,8 @@ body[data-admin="true"] *::after {
   --shadow-ring-primary:
     0 0 0 1px oklch(0.74 0.15 235 / 0.32), 0 10px 30px -12px oklch(0.74 0.15 235 / 0.35);
 
-  --gradient-primary: #885ce9;
-  --gradient-hero: #885ce9;
+  --gradient-primary: linear-gradient(#885ce9, #885ce9);
+  --gradient-hero: linear-gradient(#885ce9, #885ce9);
   --gradient-subtle: linear-gradient(180deg, oklch(0.235 0.035 255) 0%, oklch(0.19 0.03 255) 100%);
   --gradient-gold: linear-gradient(135deg, oklch(0.86 0.14 160) 0%, oklch(0.74 0.14 175) 100%);
   --gradient-sheen: linear-gradient(
