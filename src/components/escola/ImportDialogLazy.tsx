@@ -1,22 +1,23 @@
 import { lazy, Suspense } from "react";
 import { ClientOnly } from "@tanstack/react-router";
-import type { ComponentProps } from "react";
+import type { ComponentType } from "react";
 import type { ZodTypeAny } from "zod";
+import type { ImportDialog as ImportDialogType } from "./ImportDialog";
 
 // Lazy-load ImportDialog so PapaParse/ExcelJS (browser-only parsers)
 // never enter the SSR bundle for Cloudflare Workers.
 const ImportDialogInner = lazy(() =>
-  import("./ImportDialog").then((m) => ({ default: m.ImportDialog })),
+  import("./ImportDialog").then((m) => ({ default: m.ImportDialog as ComponentType<unknown> })),
 );
 
-type Props<S extends ZodTypeAny> = ComponentProps<typeof import("./ImportDialog").ImportDialog<S>>;
+type Props<S extends ZodTypeAny> = Parameters<typeof ImportDialogType<S>>[0];
 
 export function ImportDialog<S extends ZodTypeAny>(props: Props<S>) {
+  const Inner = ImportDialogInner as unknown as ComponentType<Props<S>>;
   return (
     <ClientOnly fallback={null}>
       <Suspense fallback={null}>
-        {/* @ts-expect-error generic forwarding through lazy boundary */}
-        <ImportDialogInner {...props} />
+        <Inner {...props} />
       </Suspense>
     </ClientOnly>
   );
