@@ -485,6 +485,66 @@ function IndicarDialog({ onCreated, isAdmin }: { onCreated: () => void; isAdmin:
               <FotoUploader fotoUrl={fotoUrl} onChange={setFotoUrl} />
             </div>
           )}
+
+          {/* LGPD Art. 14 — Consentimento parental (obrigatório) */}
+          <div className="grid gap-3 rounded-lg border-2 border-primary/40 bg-primary/5 p-3">
+            <div>
+              <p className="text-sm font-semibold text-foreground">
+                Consentimento do responsável legal (LGPD Art. 14) *
+              </p>
+              <p className="mt-1 text-[11px] text-muted-foreground">
+                O tratamento de dados de crianças e adolescentes exige consentimento específico e
+                em destaque do responsável legal. Registre abaixo quem autorizou.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-1.5">
+                <Label className="text-xs">
+                  Nome do responsável <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  value={respNome}
+                  onChange={(e) => setRespNome(e.target.value)}
+                  placeholder="Ex.: Maria Silva"
+                  maxLength={120}
+                />
+              </div>
+              <div className="grid gap-1.5">
+                <Label className="text-xs">
+                  Vínculo <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  value={respVinculo}
+                  onChange={(e) => setRespVinculo(e.target.value)}
+                  placeholder="mãe, pai, tutor legal..."
+                  maxLength={60}
+                />
+              </div>
+            </div>
+            <label className="flex items-start gap-2 text-xs text-foreground">
+              <input
+                type="checkbox"
+                className="mt-0.5 size-4 rounded border-input"
+                checked={consent}
+                onChange={(e) => setConsent(e.target.checked)}
+              />
+              <span>
+                Declaro que o responsável legal identificado acima autorizou expressamente a
+                publicação do nome{exibirFoto ? " e da imagem" : ""} do aluno como destaque, nos
+                termos do <strong>Art. 14 da LGPD</strong>. Estou ciente de que a autorização
+                pode ser revogada a qualquer momento pelo canal{" "}
+                <a
+                  href="/solicitar-dados"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline"
+                >
+                  /solicitar-dados
+                </a>
+                .
+              </span>
+            </label>
+          </div>
         </div>
 
         <DialogFooter>
