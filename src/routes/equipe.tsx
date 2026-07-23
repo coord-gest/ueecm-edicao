@@ -137,7 +137,7 @@ function EquipePage() {
     <div className="min-h-dvh bg-background">
       <SiteHeader />
 
-      <section className="relative overflow-hidden border-b border-border/60 bg-gradient-to-br from-primary via-primary/90 to-primary/70 py-10 text-primary-foreground sm:py-16">
+      <section className="relative overflow-hidden border-b border-border/60 bg-primary py-10 text-primary-foreground sm:py-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <Badge className="mb-3 rounded-full bg-gold/90 text-gold-foreground hover:bg-gold sm:mb-4">
             <GraduationCap className="size-3.5" /> Nossa equipe
@@ -279,11 +279,9 @@ function ProfissionalCard({
 
   return (
     <article className="group relative isolate flex flex-col overflow-hidden rounded-[5px] border border-border/60 bg-card shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.08)] transition-all duration-500 hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_20px_60px_-20px_rgba(15,23,42,0.25)]">
-      {/* Cover: gradient + soft radial glow + gold thread */}
-      <div className="relative h-32 overflow-hidden bg-gradient-to-br from-primary via-primary/85 to-primary/60">
-        <div className="absolute -left-10 -top-10 size-40 rounded-full bg-gold/25 blur-3xl" />
-        <div className="absolute -right-6 top-4 size-32 rounded-full bg-primary-foreground/10 blur-2xl" />
-        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+      {/* Cover */}
+      <div className="relative h-32 overflow-hidden bg-primary">
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gold/60" />
 
         {p.destaque && (
           <Badge className="absolute right-4 top-4 z-10 rounded-full border border-gold-foreground/20 bg-gold/95 px-2.5 text-[10px] font-semibold uppercase tracking-wider text-gold-foreground shadow-md hover:bg-gold">
@@ -300,7 +298,7 @@ function ProfissionalCard({
       >
         {/* Photo with layered ring */}
         <div className="relative">
-          <div className="absolute inset-0 -m-1 rounded-full bg-gradient-to-br from-gold via-gold/40 to-primary opacity-0 blur-md transition-opacity duration-500 group-hover:opacity-70" />
+          <div className="absolute inset-0 -m-1 rounded-full bg-gold/40 opacity-0 blur-md transition-opacity duration-500 group-hover:opacity-70" />
           {p.foto_url ? (
             <img
               src={p.foto_url}
@@ -311,7 +309,7 @@ function ProfissionalCard({
               className="relative size-24 rounded-full object-cover ring-[6px] ring-card shadow-xl transition-transform duration-500 group-hover:scale-[1.03] sm:size-28 md:size-32"
             />
           ) : (
-            <div className="relative flex size-24 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/60 font-display text-2xl font-semibold text-primary-foreground ring-[6px] ring-card shadow-xl transition-transform duration-500 group-hover:scale-[1.03] sm:size-28 sm:text-3xl md:size-32">
+            <div className="relative flex size-24 items-center justify-center rounded-full bg-primary font-display text-2xl font-semibold text-primary-foreground ring-[6px] ring-card shadow-xl transition-transform duration-500 group-hover:scale-[1.03] sm:size-28 sm:text-3xl md:size-32">
               {getInitials(p.nome)}
             </div>
           )}
@@ -325,9 +323,9 @@ function ProfissionalCard({
         </p>
 
         <div className="my-4 flex items-center gap-2 self-stretch sm:my-5">
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent to-border" />
+          <div className="h-px flex-1 bg-border" />
           <div className="size-1.5 rounded-full bg-gold" />
-          <div className="h-px flex-1 bg-gradient-to-l from-transparent to-border" />
+          <div className="h-px flex-1 bg-border" />
         </div>
 
         <ul className="w-full space-y-3 text-sm">
