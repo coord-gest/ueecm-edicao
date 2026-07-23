@@ -32,6 +32,11 @@ const enviarSchema = z.object({
   autor_idade: z.number().int().min(3).max(120).optional().nullable(),
   turma_ano: z.string().trim().max(60).optional().nullable(),
   email_contato: z.string().trim().email().max(180).optional().nullable().or(z.literal("")),
+  consentimento_lgpd: z.literal(true, {
+    errorMap: () => ({ message: "Consentimento LGPD é obrigatório." }),
+  }),
+  autor_maior_idade: z.boolean().default(false),
+  consentimento_versao: z.string().trim().max(40).optional().nullable(),
 });
 
 export const enviarDepoimento = createServerFn({ method: "POST" })
@@ -49,6 +54,10 @@ export const enviarDepoimento = createServerFn({ method: "POST" })
       turma_ano: sanitize(data.turma_ano ?? null, 60),
       email_contato: data.email_contato ? sanitize(data.email_contato, 180) : null,
       ip_hash: ipHash,
+      consentimento_lgpd: true,
+      consentimento_em: new Date().toISOString(),
+      consentimento_versao: sanitize(data.consentimento_versao ?? "v1", 40),
+      autor_maior_idade: data.autor_maior_idade === true,
     };
 
     const { error } = await supabase.from("familias_depoimentos").insert(payload as never);

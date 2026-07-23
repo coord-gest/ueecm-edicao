@@ -1889,7 +1889,11 @@ export type Database = {
       familias_depoimentos: {
         Row: {
           autor_idade: number | null
+          autor_maior_idade: boolean
           autor_nome: string | null
+          consentimento_em: string | null
+          consentimento_lgpd: boolean
+          consentimento_versao: string | null
           created_at: string
           email_contato: string | null
           id: string
@@ -1907,7 +1911,11 @@ export type Database = {
         }
         Insert: {
           autor_idade?: number | null
+          autor_maior_idade?: boolean
           autor_nome?: string | null
+          consentimento_em?: string | null
+          consentimento_lgpd?: boolean
+          consentimento_versao?: string | null
           created_at?: string
           email_contato?: string | null
           id?: string
@@ -1925,7 +1933,11 @@ export type Database = {
         }
         Update: {
           autor_idade?: number | null
+          autor_maior_idade?: boolean
           autor_nome?: string | null
+          consentimento_em?: string | null
+          consentimento_lgpd?: boolean
+          consentimento_versao?: string | null
           created_at?: string
           email_contato?: string | null
           id?: string
