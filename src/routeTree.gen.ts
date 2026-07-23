@@ -115,6 +115,7 @@ import { Route as EscolaTurmasRouteImport } from './routes/escola.turmas'
 import { Route as GaleriaIdRouteImport } from './routes/galeria.$id'
 import { Route as MeusFilhosIdRouteImport } from './routes/meus-filhos.$id'
 import { Route as MinhasTurmasTurmaIdRouteImport } from './routes/minhas-turmas.$turmaId'
+import { Route as PainelApresentacoesIndexRouteImport } from './routes/painel-apresentacoes.index'
 import { Route as PainelArquivosIndexRouteImport } from './routes/painel-arquivos.index'
 import { Route as PainelArquivosTemplateIdRouteImport } from './routes/painel-arquivos.$templateId'
 import { Route as PainelArquivosPlanejamentosRouteImport } from './routes/painel-arquivos.planejamentos'
@@ -677,6 +678,12 @@ const MinhasTurmasTurmaIdRoute = MinhasTurmasTurmaIdRouteImport.update({
   path: '/$turmaId',
   getParentRoute: () => MinhasTurmasRoute,
 } as any)
+const PainelApresentacoesIndexRoute =
+  PainelApresentacoesIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => PainelApresentacoesRoute,
+  } as any)
 const PainelArquivosIndexRoute = PainelArquivosIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -861,7 +868,7 @@ export interface FileRoutesByFullPath {
   '/painel-alertas-evasao': typeof PainelAlertasEvasaoRoute
   '/painel-analytics': typeof PainelAnalyticsRoute
   '/painel-anotacoes': typeof PainelAnotacoesRoute
-  '/painel-apresentacoes': typeof PainelApresentacoesRoute
+  '/painel-apresentacoes': typeof PainelApresentacoesRouteWithChildren
   '/painel-aprovacao': typeof PainelAprovacaoRoute
   '/painel-arquivos': typeof PainelArquivosRouteWithChildren
   '/painel-atividades': typeof PainelAtividadesRouteWithChildren
@@ -943,6 +950,7 @@ export interface FileRoutesByFullPath {
   '/seguranca/incidentes': typeof SegurancaIncidentesRoute
   '/vaquinhas/$id': typeof VaquinhasIdRoute
   '/escola/': typeof EscolaIndexRoute
+  '/painel-apresentacoes/': typeof PainelApresentacoesIndexRoute
   '/painel-arquivos/': typeof PainelArquivosIndexRoute
   '/painel-posts/': typeof PainelPostsIndexRoute
   '/posts/': typeof PostsIndexRoute
@@ -997,7 +1005,6 @@ export interface FileRoutesByTo {
   '/painel-alertas-evasao': typeof PainelAlertasEvasaoRoute
   '/painel-analytics': typeof PainelAnalyticsRoute
   '/painel-anotacoes': typeof PainelAnotacoesRoute
-  '/painel-apresentacoes': typeof PainelApresentacoesRoute
   '/painel-aprovacao': typeof PainelAprovacaoRoute
   '/painel-atividades': typeof PainelAtividadesRouteWithChildren
   '/painel-atividades-filhos': typeof PainelAtividadesFilhosRoute
@@ -1078,6 +1085,7 @@ export interface FileRoutesByTo {
   '/seguranca/incidentes': typeof SegurancaIncidentesRoute
   '/vaquinhas/$id': typeof VaquinhasIdRoute
   '/escola': typeof EscolaIndexRoute
+  '/painel-apresentacoes': typeof PainelApresentacoesIndexRoute
   '/painel-arquivos': typeof PainelArquivosIndexRoute
   '/painel-posts': typeof PainelPostsIndexRoute
   '/posts': typeof PostsIndexRoute
@@ -1133,7 +1141,7 @@ export interface FileRoutesById {
   '/painel-alertas-evasao': typeof PainelAlertasEvasaoRoute
   '/painel-analytics': typeof PainelAnalyticsRoute
   '/painel-anotacoes': typeof PainelAnotacoesRoute
-  '/painel-apresentacoes': typeof PainelApresentacoesRoute
+  '/painel-apresentacoes': typeof PainelApresentacoesRouteWithChildren
   '/painel-aprovacao': typeof PainelAprovacaoRoute
   '/painel-arquivos': typeof PainelArquivosRouteWithChildren
   '/painel-atividades': typeof PainelAtividadesRouteWithChildren
@@ -1215,6 +1223,7 @@ export interface FileRoutesById {
   '/seguranca/incidentes': typeof SegurancaIncidentesRoute
   '/vaquinhas/$id': typeof VaquinhasIdRoute
   '/escola/': typeof EscolaIndexRoute
+  '/painel-apresentacoes/': typeof PainelApresentacoesIndexRoute
   '/painel-arquivos/': typeof PainelArquivosIndexRoute
   '/painel-posts/': typeof PainelPostsIndexRoute
   '/posts/': typeof PostsIndexRoute
@@ -1353,6 +1362,7 @@ export interface FileRouteTypes {
     | '/seguranca/incidentes'
     | '/vaquinhas/$id'
     | '/escola/'
+    | '/painel-apresentacoes/'
     | '/painel-arquivos/'
     | '/painel-posts/'
     | '/posts/'
@@ -1407,7 +1417,6 @@ export interface FileRouteTypes {
     | '/painel-alertas-evasao'
     | '/painel-analytics'
     | '/painel-anotacoes'
-    | '/painel-apresentacoes'
     | '/painel-aprovacao'
     | '/painel-atividades'
     | '/painel-atividades-filhos'
@@ -1488,6 +1497,7 @@ export interface FileRouteTypes {
     | '/seguranca/incidentes'
     | '/vaquinhas/$id'
     | '/escola'
+    | '/painel-apresentacoes'
     | '/painel-arquivos'
     | '/painel-posts'
     | '/posts'
@@ -1624,6 +1634,7 @@ export interface FileRouteTypes {
     | '/seguranca/incidentes'
     | '/vaquinhas/$id'
     | '/escola/'
+    | '/painel-apresentacoes/'
     | '/painel-arquivos/'
     | '/painel-posts/'
     | '/posts/'
@@ -1679,7 +1690,7 @@ export interface RootRouteChildren {
   PainelAlertasEvasaoRoute: typeof PainelAlertasEvasaoRoute
   PainelAnalyticsRoute: typeof PainelAnalyticsRoute
   PainelAnotacoesRoute: typeof PainelAnotacoesRoute
-  PainelApresentacoesRoute: typeof PainelApresentacoesRoute
+  PainelApresentacoesRoute: typeof PainelApresentacoesRouteWithChildren
   PainelAprovacaoRoute: typeof PainelAprovacaoRoute
   PainelArquivosRoute: typeof PainelArquivosRouteWithChildren
   PainelAtividadesRoute: typeof PainelAtividadesRouteWithChildren
@@ -2514,6 +2525,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MinhasTurmasTurmaIdRouteImport
       parentRoute: typeof MinhasTurmasRoute
     }
+    '/painel-apresentacoes/': {
+      id: '/painel-apresentacoes/'
+      path: '/'
+      fullPath: '/painel-apresentacoes/'
+      preLoaderRoute: typeof PainelApresentacoesIndexRouteImport
+      parentRoute: typeof PainelApresentacoesRoute
+    }
     '/painel-arquivos/': {
       id: '/painel-arquivos/'
       path: '/'
@@ -2783,6 +2801,17 @@ const MinhasTurmasRouteWithChildren = MinhasTurmasRoute._addFileChildren(
   MinhasTurmasRouteChildren,
 )
 
+interface PainelApresentacoesRouteChildren {
+  PainelApresentacoesIndexRoute: typeof PainelApresentacoesIndexRoute
+}
+
+const PainelApresentacoesRouteChildren: PainelApresentacoesRouteChildren = {
+  PainelApresentacoesIndexRoute: PainelApresentacoesIndexRoute,
+}
+
+const PainelApresentacoesRouteWithChildren =
+  PainelApresentacoesRoute._addFileChildren(PainelApresentacoesRouteChildren)
+
 interface PainelArquivosRouteChildren {
   PainelArquivosTemplateIdRoute: typeof PainelArquivosTemplateIdRoute
   PainelArquivosPlanejamentosRoute: typeof PainelArquivosPlanejamentosRoute
@@ -2870,7 +2899,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelAlertasEvasaoRoute: PainelAlertasEvasaoRoute,
   PainelAnalyticsRoute: PainelAnalyticsRoute,
   PainelAnotacoesRoute: PainelAnotacoesRoute,
-  PainelApresentacoesRoute: PainelApresentacoesRoute,
+  PainelApresentacoesRoute: PainelApresentacoesRouteWithChildren,
   PainelAprovacaoRoute: PainelAprovacaoRoute,
   PainelArquivosRoute: PainelArquivosRouteWithChildren,
   PainelAtividadesRoute: PainelAtividadesRouteWithChildren,
