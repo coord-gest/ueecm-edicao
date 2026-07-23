@@ -692,9 +692,9 @@ function GridArticle({ post }: { post: Post }) {
     <Link
       to="/posts/$id"
       params={{ id: post.id }}
-      className="group flex flex-col overflow-hidden rounded-[5px] border border-border bg-card p-3 shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="group flex flex-col overflow-hidden rounded-[5px] bg-card p-3 shadow-[0_1px_3px_-1px_rgb(0_0_0_/_0.06)] transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_10px_-4px_rgb(0_0_0_/_0.1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
-      <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-[5px] border border-black/5 bg-secondary shadow-[0_6px_18px_-8px_rgb(0_0_0_/_0.18)] ring-1 ring-black/5 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_18px_36px_-12px_rgb(0_0_0_/_0.28)] dark:border-white/10 dark:bg-card dark:ring-white/10 dark:shadow-[0_6px_18px_-8px_rgb(0_0_0_/_0.55)] dark:group-hover:shadow-[0_20px_40px_-12px_rgb(0_0_0_/_0.75)]">
+      <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-[5px] bg-secondary transition-all duration-300 group-hover:-translate-y-1">
         <img
           src={post.imagem ?? heroImg}
           alt={post.titulo}
