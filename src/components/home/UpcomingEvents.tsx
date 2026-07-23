@@ -97,7 +97,7 @@ function EventoCard({ ev }: { ev: Evento }) {
   return (
     <Link
       to="/calendario"
-      className="group relative flex overflow-hidden rounded-[5px] border-2 border-border bg-[image:var(--gradient-hero)] text-white shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:border-gold hover:shadow-xl"
+      className="group relative flex overflow-hidden border border-border bg-primary text-white transition-colors hover:border-gold"
     >
       <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-gold via-gold/70 to-transparent" />
       <span className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-gold/20 blur-2xl transition-transform group-hover:scale-125" />
