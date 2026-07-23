@@ -68,10 +68,9 @@ function TeamCard({ p }: { p: ProfPublico }) {
   return (
     <Link
       to="/equipe"
-      className="group relative flex w-56 shrink-0 flex-col items-center overflow-hidden rounded-[5px] border border-border bg-[image:var(--gradient-primary)] p-5 text-center text-white shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:border-gold hover:shadow-xl sm:w-auto"
+      className="group relative flex w-56 shrink-0 flex-col items-center overflow-hidden rounded-[5px] border border-border bg-primary p-5 text-center text-white shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:border-gold hover:shadow-xl sm:w-auto"
     >
-      <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-gold via-gold/70 to-transparent" />
-      <span className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-gold/20 blur-2xl transition-transform group-hover:scale-125" />
+      <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gold" />
       <div className="relative mb-3 size-20 overflow-hidden rounded-full bg-white/10 ring-2 ring-gold/40 transition-all group-hover:ring-gold">
         {p.foto_url ? (
           <img src={p.foto_url} alt={p.nome} className="size-full object-cover" loading="lazy" />
