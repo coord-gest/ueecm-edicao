@@ -202,12 +202,12 @@ export function Patrocinadores() {
         <DialogContent className="max-w-lg overflow-hidden p-0">
           {selected && (
             <>
-              <div className="relative flex h-72 items-center justify-center bg-gradient-to-br from-primary/10 via-secondary/30 to-accent/10 p-4 sm:h-80">
+              <div className="relative flex h-72 items-center justify-center bg-secondary p-4 sm:h-80">
                 {selected.logo_url ? (
                   <img
                     src={selected.logo_url}
                     alt={selected.nome}
-                    className="h-full w-full object-contain drop-shadow-lg"
+                    className="h-full w-full object-contain"
                   />
                 ) : (
                   <div className="grid size-40 place-items-center bg-card text-6xl font-bold text-primary shadow-md">
