@@ -29,7 +29,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
-import type { Post } from "@/data/mock";
+import type { Post } from "@/data/posts-utils";
 import heroImg from "@/assets/hero-school.jpg";
 
 export const Route = createFileRoute("/posts/")({

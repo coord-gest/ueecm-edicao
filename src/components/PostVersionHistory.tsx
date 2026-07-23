@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { History, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
-import { formatarDataHora } from "@/data/mock";
+import { formatarDataHora } from "@/data/posts-utils";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 type AuditRow = {

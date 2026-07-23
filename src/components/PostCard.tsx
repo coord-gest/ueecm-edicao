@@ -1,7 +1,7 @@
 import { CalendarDays, User } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Badge } from "@/components/ui/badge";
-import { type Post, formatarDataHora } from "@/data/mock";
+import { type Post, formatarDataHora } from "@/data/posts-utils";
 
 export function PostCard({ post }: { post: Post }) {
   return (

@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarDays } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { formatarDataHora } from "@/data/mock";
+import { formatarDataHora } from "@/data/posts-utils";
 import { Badge } from "@/components/ui/badge";
 
 interface Props {

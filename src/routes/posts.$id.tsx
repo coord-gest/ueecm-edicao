@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { formatarDataHora } from "@/data/mock";
+import { formatarDataHora } from "@/data/posts-utils";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { PostShare } from "@/components/PostShare";
 import { PostComentarios } from "@/components/PostComentarios";
