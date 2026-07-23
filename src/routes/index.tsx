@@ -633,12 +633,6 @@ function HeroCarousel({ slides }: { slides: Post[] }) {
 }
 
 function SidebarItem({ post, rank }: { post: Post; rank: number }) {
-  const views = "views" in post && typeof post.views === "number" ? post.views : 0;
-  const dataFmt = new Date(post.data).toLocaleDateString("pt-BR", {
-    day: "2-digit",
-    month: "short",
-  });
-
   return (
     <Link
       to="/posts/$id"
@@ -668,15 +662,11 @@ function SidebarItem({ post, rank }: { post: Post; rank: number }) {
         <h3 className="line-clamp-2 font-display text-base leading-snug text-primary transition-colors group-hover:text-accent sm:text-lg">
           {post.titulo}
         </h3>
-        <div className="mt-auto flex items-center justify-between pt-3 text-xs text-muted-foreground">
-          <span className="inline-flex items-center gap-1 font-medium">
-            <Eye className="size-3.5" aria-hidden="true" />
-            <span className="tabular-nums text-foreground/80">
-              {views.toLocaleString("pt-BR")}
-            </span>
-          </span>
-          <time className="font-semibold uppercase tracking-wider">{dataFmt}</time>
-        </div>
+        {post.resumo && (
+          <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+            {post.resumo}
+          </p>
+        )}
       </div>
     </Link>
   );
