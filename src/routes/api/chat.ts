@@ -47,13 +47,44 @@ const AI_MODEL_FALLBACK = "gemini-flash-latest";
 // - Por (IP+session): 12/min → uso legítimo.
 // - Global por IP:    30/min → freio contra rotação de sessionId para burlar o limite.
 // - Global por IP:   200/hora → cap de custo diário mesmo em ataque distribuído lento.
-const RATE_LIMIT_MAX = 12;
+const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
-const IP_MINUTE_MAX = 30;
+const IP_MINUTE_MAX = 10;
 const IP_MINUTE_WINDOW_MS = 60_000;
 const IP_HOUR_MAX = 200;
 const IP_HOUR_WINDOW_MS = 60 * 60_000;
 const rateBuckets = new Map<string, { count: number; resetAt: number }>();
+
+// Fila de concorrência: no máx. 5 requisições em processamento simultâneo.
+// Acima disso, o cliente recebe posição na fila e deve tentar novamente.
+const MAX_CONCURRENT = 5;
+const ACTIVE_TTL_MS = 45_000; // libera slot travado após 45s (proteção contra vazamento)
+const activeRequests = new Map<string, number>(); // ip -> startedAt
+
+function reapActive() {
+  const now = Date.now();
+  for (const [ip, startedAt] of activeRequests) {
+    if (now - startedAt > ACTIVE_TTL_MS) activeRequests.delete(ip);
+  }
+}
+
+function tryAcquireSlot(ip: string): { ok: boolean; position: number; active: number } {
+  reapActive();
+  const active = activeRequests.size;
+  if (activeRequests.has(ip)) {
+    // mesma pessoa já com requisição em voo — considera ok (não duplica slot)
+    return { ok: true, position: 0, active };
+  }
+  if (active >= MAX_CONCURRENT) {
+    return { ok: false, position: active - MAX_CONCURRENT + 1, active };
+  }
+  activeRequests.set(ip, Date.now());
+  return { ok: true, position: 0, active: active + 1 };
+}
+
+function releaseSlot(ip: string) {
+  activeRequests.delete(ip);
+}
 
 function hitBucket(
   key: string,
@@ -1345,6 +1376,8 @@ export const Route = createFileRoute("/api/chat")({
         let supabaseAdmin: any | null = null;
         let conversationId: string | null | undefined = null;
 
+        const clientIp = getClientIp(request);
+        let slotAcquired = false;
         try {
           // Validação de variáveis de ambiente obrigatórias no servidor
           const requiredEnv = {
@@ -1397,7 +1430,7 @@ export const Route = createFileRoute("/api/chat")({
           }
 
           // Rate limit em dois níveis: (IP+sessão) + global por IP (minuto/hora)
-          const rl = checkRateLimit(getClientKey(request, sessionId), getClientIp(request));
+          const rl = checkRateLimit(getClientKey(request, sessionId), clientIp);
           if (!rl.ok) {
             return jsonResponse(
               {
@@ -1409,6 +1442,23 @@ export const Route = createFileRoute("/api/chat")({
               { status: 429, headers: { "Retry-After": String(rl.retryAfter) } },
             );
           }
+
+          // Fila de concorrência: só 5 conversas simultâneas em processamento.
+          const slot = tryAcquireSlot(clientIp);
+          if (!slot.ok) {
+            return jsonResponse(
+              {
+                conversationId,
+                reply: `O assistente está atendendo ${slot.active} pessoas agora. Você é o ${slot.position}º na fila — aguarde alguns segundos e tente novamente.`,
+                fallback: true,
+                error: "queued",
+                queuePosition: slot.position,
+                activeUsers: slot.active,
+              },
+              { status: 429, headers: { "Retry-After": "10" } },
+            );
+          }
+          slotAcquired = true;
 
           // Limite de tamanho da mensagem para evitar abuso
           if (message.length > 4000) {
@@ -1595,6 +1645,8 @@ export const Route = createFileRoute("/api/chat")({
           );
         } catch (err) {
           return fallbackChatResponse(supabaseAdmin, conversationId, "Erro interno no chat", err);
+        } finally {
+          if (slotAcquired) releaseSlot(clientIp);
         }
       },
     },
