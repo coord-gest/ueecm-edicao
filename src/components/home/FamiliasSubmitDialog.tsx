@@ -15,6 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Link } from "@tanstack/react-router";
 import {
   Select,
   SelectContent,
@@ -65,6 +67,8 @@ export function FamiliasSubmitDialog({
   const [autorIdade, setAutorIdade] = useState("");
   const [turmaAno, setTurmaAno] = useState("");
   const [email, setEmail] = useState("");
+  const [consentimento, setConsentimento] = useState(false);
+  const [maiorIdade, setMaiorIdade] = useState(false);
 
   function reset() {
     setTipo("elogio");
@@ -74,12 +78,24 @@ export function FamiliasSubmitDialog({
     setAutorIdade("");
     setTurmaAno("");
     setEmail("");
+    setConsentimento(false);
+    setMaiorIdade(false);
   }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (mensagem.trim().length < 20) {
       toast.error("Escreva ao menos 20 caracteres na mensagem.");
+      return;
+    }
+    if (!consentimento) {
+      toast.error("É necessário marcar o consentimento LGPD para enviar.");
+      return;
+    }
+    if (!maiorIdade) {
+      toast.error(
+        "Confirme ser maior de 18 anos ou responsável legal pelo autor do depoimento.",
+      );
       return;
     }
     setLoading(true);
@@ -97,6 +113,9 @@ export function FamiliasSubmitDialog({
               : null,
           turma_ano: turmaAno.trim() || null,
           email_contato: email.trim() || null,
+          consentimento_lgpd: true,
+          autor_maior_idade: true,
+          consentimento_versao: "v1",
         },
       });
       toast.success("Recebido! Em análise.", {
