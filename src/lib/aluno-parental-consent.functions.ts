@@ -244,29 +244,13 @@ export const notifyGuardianConsent = createServerFn({ method: "POST" })
       throw new Error("Permissão negada.");
     }
     try {
-      // Import dinâmico via string opaca — evita que o TypeScript exija que
-      // `src/lib/email-templates/send-email` exista antes do domínio de e-mail
-      // ser scaffoldado. Enquanto não existir, a função responde silenciosa.
-      const modPath = "@/lib/email-templates/send-email";
-      const mod: unknown = await import(/* @vite-ignore */ modPath).catch(() => null);
-      const send =
-        mod && typeof mod === "object" && "sendTemplateEmail" in mod
-          ? (mod as { sendTemplateEmail: (...a: unknown[]) => Promise<unknown> }).sendTemplateEmail
-          : null;
-      if (!send) {
-        logger.warn(
-          "[notifyGuardianConsent] domínio de e-mail não configurado — notificação pulada",
-        );
-        return { sent: false as const, reason: "no_email_domain" as const };
-      }
-      await send("parental-consent-confirmation", data.guardian_email, {
-        templateData: {
-          guardianName: data.guardian_name,
-          minorName: data.minor_name,
-          termVersion: data.term_version,
-        },
-      });
-      return { sent: true as const };
+      // Domínio de e-mail ainda não scaffoldado; a notificação é um no-op
+      // controlado até o módulo `src/lib/email-templates/send-email` existir.
+      logger.warn(
+        "[notifyGuardianConsent] domínio de e-mail não configurado — notificação pulada",
+        { guardian: data.guardian_email, minor: data.minor_name, term: data.term_version },
+      );
+      return { sent: false as const, reason: "no_email_domain" as const };
     } catch (err) {
       logger.error("[notifyGuardianConsent] falha ao enviar", safeError(err));
       return { sent: false as const, reason: "send_failed" as const };
