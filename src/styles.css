@@ -812,3 +812,24 @@ iframe[src*="lovable.dev/badge"] {
   height: 0 !important;
 }
 /* NEXUS-PRO:WATERMARK-HIDE:END */
+
+/* ============================================================
+   Slide typography (Modo Apresentação — canvas fixo 1920×1080)
+   ============================================================ */
+.apresentacao-slide {
+  --slide-title-lg: 128px;
+  --slide-title:    96px;
+  --slide-subtitle: 56px;
+  --slide-body-lg:  44px;
+  --slide-body:     36px;
+  --slide-caption:  28px;
+  --slide-kicker:   26px;
+}
+.apresentacao-slide .slide-title-lg { font-size: var(--slide-title-lg); line-height: 1.0;  letter-spacing: -0.05em; }
+.apresentacao-slide .slide-title    { font-size: var(--slide-title);    line-height: 1.05; letter-spacing: -0.04em; }
+.apresentacao-slide .slide-subtitle { font-size: var(--slide-subtitle); line-height: 1.15; letter-spacing: -0.025em; }
+.apresentacao-slide .slide-body-lg  { font-size: var(--slide-body-lg);  line-height: 1.25; }
+.apresentacao-slide .slide-body     { font-size: var(--slide-body);     line-height: 1.3;  }
+.apresentacao-slide .slide-caption  { font-size: var(--slide-caption);  line-height: 1.3;  }
+.apresentacao-slide .slide-kicker   { font-size: var(--slide-kicker);   line-height: 1.1;
+  letter-spacing: 0.14em; text-transform: uppercase; }

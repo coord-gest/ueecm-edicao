@@ -14,6 +14,8 @@ import {
   GraduationCap,
   Sparkles,
   Heart,
+  Tv,
+  Presentation,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
@@ -160,6 +162,24 @@ function PainelDiretor() {
             label: "Anotações & Lembretes",
             to: "/painel-anotacoes",
             icon: <Sparkles className="size-4" />,
+          },
+        ]}
+      />
+
+      <ShortcutSection
+        title="Telas & Apresentações"
+        description="Painel rotativo da TV e slides para reuniões e comunicados."
+        icon={<Presentation className="size-5 text-primary" />}
+        items={[
+          {
+            label: "Modo TV (painel rotativo)",
+            to: "/tv",
+            icon: <Tv className="size-4" />,
+          },
+          {
+            label: "Apresentações (slides)",
+            to: "/painel-apresentacoes",
+            icon: <Presentation className="size-4" />,
           },
         ]}
       />

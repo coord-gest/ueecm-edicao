@@ -639,6 +639,42 @@ export type Database = {
         }
         Relationships: []
       }
+      apresentacoes: {
+        Row: {
+          created_at: string
+          descricao: string | null
+          id: string
+          owner_id: string
+          slides: Json
+          tema: string
+          titulo: string
+          updated_at: string
+          visibilidade: string
+        }
+        Insert: {
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          owner_id?: string
+          slides?: Json
+          tema?: string
+          titulo?: string
+          updated_at?: string
+          visibilidade?: string
+        }
+        Update: {
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          owner_id?: string
+          slides?: Json
+          tema?: string
+          titulo?: string
+          updated_at?: string
+          visibilidade?: string
+        }
+        Relationships: []
+      }
       arquivo_preenchimentos: {
         Row: {
           atualizado_por: string | null
