@@ -172,19 +172,12 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
-                <Link to="/solicitar-dados" className="hover:text-gold">
-                  Solicitar meus dados (LGPD)
+                <Link to="/central-lgpd" className="hover:text-gold">
+                  Central de Privacidade (LGPD)
                 </Link>
-              </li>
-              <li>
-                <Link to="/seguranca/incidentes" className="hover:text-gold">
-                  Segurança e Incidentes (LGPD Art. 48)
-                </Link>
-              </li>
-              <li>
-                <Link to="/uso-de-imagem" className="hover:text-gold">
-                  Uso de Imagem de Alunos
-                </Link>
+                <span className="ml-1 text-xs text-primary-foreground/60">
+                  · Dados · Incidentes · Uso de Imagem
+                </span>
               </li>
               <li>
                 <Link to="/termos-de-uso" className="hover:text-gold">
