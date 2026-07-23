@@ -391,6 +391,10 @@ export type Database = {
           aluno_id: string
           aprovado_em: string | null
           aprovado_por: string | null
+          consentimento_em: string | null
+          consentimento_ip_hash: string | null
+          consentimento_responsavel: boolean
+          consentimento_versao: string | null
           created_at: string
           disciplina_id: string | null
           exibir_foto: boolean
@@ -401,6 +405,8 @@ export type Database = {
           motivo: string
           motivo_rejeicao: string | null
           posicao: number
+          responsavel_nome: string | null
+          responsavel_vinculo: string | null
           status: Database["public"]["Enums"]["aluno_destaque_status"]
           turma_id: string
           updated_at: string
@@ -409,6 +415,10 @@ export type Database = {
           aluno_id: string
           aprovado_em?: string | null
           aprovado_por?: string | null
+          consentimento_em?: string | null
+          consentimento_ip_hash?: string | null
+          consentimento_responsavel?: boolean
+          consentimento_versao?: string | null
           created_at?: string
           disciplina_id?: string | null
           exibir_foto?: boolean
@@ -419,6 +429,8 @@ export type Database = {
           motivo: string
           motivo_rejeicao?: string | null
           posicao: number
+          responsavel_nome?: string | null
+          responsavel_vinculo?: string | null
           status?: Database["public"]["Enums"]["aluno_destaque_status"]
           turma_id: string
           updated_at?: string
@@ -427,6 +439,10 @@ export type Database = {
           aluno_id?: string
           aprovado_em?: string | null
           aprovado_por?: string | null
+          consentimento_em?: string | null
+          consentimento_ip_hash?: string | null
+          consentimento_responsavel?: boolean
+          consentimento_versao?: string | null
           created_at?: string
           disciplina_id?: string | null
           exibir_foto?: boolean
@@ -437,6 +453,8 @@ export type Database = {
           motivo?: string
           motivo_rejeicao?: string | null
           posicao?: number
+          responsavel_nome?: string | null
+          responsavel_vinculo?: string | null
           status?: Database["public"]["Enums"]["aluno_destaque_status"]
           turma_id?: string
           updated_at?: string

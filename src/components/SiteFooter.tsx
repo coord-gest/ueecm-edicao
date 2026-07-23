@@ -177,6 +177,11 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link to="/seguranca/incidentes" className="hover:text-gold">
+                  Segurança e Incidentes (LGPD Art. 48)
+                </Link>
+              </li>
+              <li>
                 <Link to="/uso-de-imagem" className="hover:text-gold">
                   Uso de Imagem de Alunos
                 </Link>

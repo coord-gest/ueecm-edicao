@@ -277,6 +277,20 @@ const indicarSchema = z.object({
     .max(5, { message: "Posição deve estar entre 1 e 5" }),
   exibir_foto: z.boolean().default(false),
   foto_url: z.string().url().optional().nullable(),
+  // LGPD Art. 14 — consentimento parental
+  consentimento_responsavel: z.literal(true, {
+    message: "É necessário o consentimento do responsável legal (Art. 14 da LGPD).",
+  }),
+  responsavel_nome: z
+    .string()
+    .trim()
+    .min(3, { message: "Informe o nome do responsável legal." })
+    .max(120),
+  responsavel_vinculo: z
+    .string()
+    .trim()
+    .min(2, { message: "Informe o vínculo (mãe, pai, tutor...)." })
+    .max(60),
 });
 
 export const indicarDestaque = createServerFn({ method: "POST" })
@@ -298,6 +312,11 @@ export const indicarDestaque = createServerFn({ method: "POST" })
       foto_url: data.exibir_foto && data.foto_url ? data.foto_url : null,
       indicado_por: ctx.userId,
       status: "indicado" as const,
+      consentimento_responsavel: true,
+      consentimento_versao: "v1",
+      consentimento_em: new Date().toISOString(),
+      responsavel_nome: data.responsavel_nome,
+      responsavel_vinculo: data.responsavel_vinculo,
     };
     const { data: inserted, error } = await ctx.supabase
       .from("alunos_destaque")

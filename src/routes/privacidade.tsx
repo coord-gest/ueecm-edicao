@@ -237,6 +237,13 @@ function PrivacyPage() {
             cabeçalhos de segurança (CSP, HSTS, X-Frame-Options), autenticação, controle de acesso
             por papéis, políticas de linha (RLS) no banco de dados e registros de auditoria.
           </p>
+          <p>
+            Em caso de incidente envolvendo dados pessoais, seguimos o{" "}
+            <Link to="/seguranca/incidentes" className="text-primary hover:underline">
+              Plano de Resposta a Incidentes (Art. 48 da LGPD)
+            </Link>
+            , com comunicação à ANPD e aos titulares em prazo razoável.
+          </p>
 
           <h2>8. Cookies e tecnologias similares</h2>
           <p>

@@ -123,6 +123,7 @@ import { Route as PainelPostsIdRouteImport } from './routes/painel-posts.$id'
 import { Route as PainelPostsNovoRouteImport } from './routes/painel-posts.novo'
 import { Route as PostsIndexRouteImport } from './routes/posts.index'
 import { Route as PostsIdRouteImport } from './routes/posts.$id'
+import { Route as SegurancaIncidentesRouteImport } from './routes/seguranca.incidentes'
 import { Route as VaquinhasIdRouteImport } from './routes/vaquinhas.$id'
 import { Route as ApiDebugFcmDiagnosticsRouteImport } from './routes/api/debug/fcm-diagnostics'
 import { Route as ApiPublicAgendamentosLembretesRouteImport } from './routes/api/public/agendamentos-lembretes'
@@ -717,6 +718,11 @@ const PostsIdRoute = PostsIdRouteImport.update({
   path: '/posts/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SegurancaIncidentesRoute = SegurancaIncidentesRouteImport.update({
+  id: '/seguranca/incidentes',
+  path: '/seguranca/incidentes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VaquinhasIdRoute = VaquinhasIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -920,6 +926,7 @@ export interface FileRoutesByFullPath {
   '/painel-posts/$id': typeof PainelPostsIdRoute
   '/painel-posts/novo': typeof PainelPostsNovoRoute
   '/posts/$id': typeof PostsIdRoute
+  '/seguranca/incidentes': typeof SegurancaIncidentesRoute
   '/vaquinhas/$id': typeof VaquinhasIdRoute
   '/escola/': typeof EscolaIndexRoute
   '/painel-arquivos/': typeof PainelArquivosIndexRoute
@@ -1052,6 +1059,7 @@ export interface FileRoutesByTo {
   '/painel-posts/$id': typeof PainelPostsIdRoute
   '/painel-posts/novo': typeof PainelPostsNovoRoute
   '/posts/$id': typeof PostsIdRoute
+  '/seguranca/incidentes': typeof SegurancaIncidentesRoute
   '/vaquinhas/$id': typeof VaquinhasIdRoute
   '/escola': typeof EscolaIndexRoute
   '/painel-arquivos': typeof PainelArquivosIndexRoute
@@ -1186,6 +1194,7 @@ export interface FileRoutesById {
   '/painel-posts/$id': typeof PainelPostsIdRoute
   '/painel-posts/novo': typeof PainelPostsNovoRoute
   '/posts/$id': typeof PostsIdRoute
+  '/seguranca/incidentes': typeof SegurancaIncidentesRoute
   '/vaquinhas/$id': typeof VaquinhasIdRoute
   '/escola/': typeof EscolaIndexRoute
   '/painel-arquivos/': typeof PainelArquivosIndexRoute
@@ -1321,6 +1330,7 @@ export interface FileRouteTypes {
     | '/painel-posts/$id'
     | '/painel-posts/novo'
     | '/posts/$id'
+    | '/seguranca/incidentes'
     | '/vaquinhas/$id'
     | '/escola/'
     | '/painel-arquivos/'
@@ -1453,6 +1463,7 @@ export interface FileRouteTypes {
     | '/painel-posts/$id'
     | '/painel-posts/novo'
     | '/posts/$id'
+    | '/seguranca/incidentes'
     | '/vaquinhas/$id'
     | '/escola'
     | '/painel-arquivos'
@@ -1586,6 +1597,7 @@ export interface FileRouteTypes {
     | '/painel-posts/$id'
     | '/painel-posts/novo'
     | '/posts/$id'
+    | '/seguranca/incidentes'
     | '/vaquinhas/$id'
     | '/escola/'
     | '/painel-arquivos/'
@@ -1710,6 +1722,7 @@ export interface RootRouteChildren {
   PainelPostsIdRoute: typeof PainelPostsIdRoute
   PainelPostsNovoRoute: typeof PainelPostsNovoRoute
   PostsIdRoute: typeof PostsIdRoute
+  SegurancaIncidentesRoute: typeof SegurancaIncidentesRoute
   EscolaIndexRoute: typeof EscolaIndexRoute
   PainelPostsIndexRoute: typeof PainelPostsIndexRoute
   PostsIndexRoute: typeof PostsIndexRoute
@@ -2531,6 +2544,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PostsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/seguranca/incidentes': {
+      id: '/seguranca/incidentes'
+      path: '/seguranca/incidentes'
+      fullPath: '/seguranca/incidentes'
+      preLoaderRoute: typeof SegurancaIncidentesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/vaquinhas/$id': {
       id: '/vaquinhas/$id'
       path: '/$id'
@@ -2877,6 +2897,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelPostsIdRoute: PainelPostsIdRoute,
   PainelPostsNovoRoute: PainelPostsNovoRoute,
   PostsIdRoute: PostsIdRoute,
+  SegurancaIncidentesRoute: SegurancaIncidentesRoute,
   EscolaIndexRoute: EscolaIndexRoute,
   PainelPostsIndexRoute: PainelPostsIndexRoute,
   PostsIndexRoute: PostsIndexRoute,
