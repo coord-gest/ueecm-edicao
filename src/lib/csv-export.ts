@@ -3,7 +3,10 @@
 
 function escapeCell(value: unknown): string {
   if (value === null || value === undefined) return "";
-  const s = String(value);
+  let s = String(value);
+  // CSV/formula injection: neutralize leading =, +, -, @, tab, CR so Excel/Sheets
+  // treat the value as text instead of evaluating it as a formula.
+  if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
   if (/[",\n;]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
   return s;
 }
