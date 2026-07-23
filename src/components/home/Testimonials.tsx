@@ -95,21 +95,21 @@ export function Testimonials() {
         </div>
       </div>
 
-      <div className="relative overflow-hidden rounded-[5px] border border-tint-blue-foreground/15 bg-tint-blue p-8 text-tint-blue-foreground shadow-elegant sm:p-12">
+      <div className="relative overflow-hidden border border-border bg-secondary p-8 text-secondary-foreground shadow-elegant sm:p-12">
         <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-primary" />
         <Quote
           className="absolute -top-2 left-4 size-20 text-primary/20 sm:-top-4 sm:left-8 sm:size-32"
           strokeWidth={1.5}
         />
         <div key={ativo} className="relative animate-fade-in">
-          <blockquote className="font-display text-xl leading-relaxed text-tint-blue-foreground sm:text-2xl lg:text-3xl">
+          <blockquote className="font-display text-xl leading-relaxed text-secondary-foreground sm:text-2xl lg:text-3xl">
             “{atual.quote}”
           </blockquote>
           <div className="mt-6 flex items-center gap-3">
-            <div className="h-px flex-1 bg-tint-blue-foreground/20" />
+            <div className="h-px flex-1 bg-primary/20" />
             <div className="text-right">
               <div className="text-sm font-semibold text-primary">{atual.autor}</div>
-              <div className="text-xs uppercase tracking-widest text-tint-blue-foreground/70">
+              <div className="text-xs uppercase tracking-widest text-muted-foreground">
                 {atual.papel}
               </div>
             </div>
@@ -124,8 +124,8 @@ export function Testimonials() {
                 type="button"
                 onClick={() => setAtivo(i)}
                 aria-label={`Depoimento ${i + 1}`}
-                className={`h-1.5 rounded-full transition-all ${
-                  i === ativo ? "w-8 bg-primary" : "w-1.5 bg-tint-blue-foreground/25"
+                className={`h-1.5 transition-all ${
+                  i === ativo ? "w-8 bg-primary" : "w-1.5 bg-primary/25"
                 }`}
               />
             ))}
