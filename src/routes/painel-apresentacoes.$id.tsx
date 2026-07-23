@@ -392,7 +392,7 @@ function SlideInspector({
       setUploading(true);
       try {
         const res = await uploadImage(f, "apresentacoes");
-        if (!res.ok) throw new Error(res.error);
+        if (!res.ok) throw new Error(`${res.error.title}: ${res.error.description}`);
         cb(res.url);
       } catch (e) {
         toast.error(e instanceof Error ? e.message : "Falha no upload");
