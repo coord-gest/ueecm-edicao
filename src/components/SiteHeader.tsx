@@ -45,7 +45,7 @@ export function SiteHeader() {
             />
             <span
               aria-hidden="true"
-              className="h-9 w-px shrink-0 bg-gradient-to-b from-transparent via-primary/70 to-transparent sm:h-10 xl:h-12"
+              className="h-9 w-px shrink-0 bg-border sm:h-10 xl:h-12"
             />
             <span className="truncate font-display text-xs font-bold tracking-tight text-primary sm:text-sm xl:text-base 2xl:whitespace-nowrap 2xl:text-xl dark:text-foreground">
               U.E. Evaristo Campelo de Matos

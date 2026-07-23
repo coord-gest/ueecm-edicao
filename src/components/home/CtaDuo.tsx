@@ -8,9 +8,8 @@ export function CtaDuo() {
     <div ref={ref} className="reveal mb-10 md:mb-16 grid gap-4 md:grid-cols-2">
       <Link
         to="/agendar"
-        className="group relative overflow-hidden rounded-[5px] border-2 border-border bg-[image:var(--gradient-hero)] p-6 text-white shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:shadow-xl sm:p-8"
+        className="group relative overflow-hidden border border-border bg-primary p-6 text-white transition-colors hover:bg-primary/90 sm:p-8"
       >
-        <span className="absolute -right-6 -top-6 size-32 rounded-full bg-gold/20 blur-2xl transition-transform group-hover:scale-125" />
         <div className="relative flex items-start gap-4">
           <div className="inline-flex size-12 shrink-0 items-center justify-center bg-gold text-gold-foreground">
             <CalendarClock className="size-6" aria-hidden />
@@ -35,9 +34,8 @@ export function CtaDuo() {
 
       <Link
         to="/login"
-        className="group relative overflow-hidden rounded-[5px] border-2 border-border bg-card p-6 text-foreground shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:border-accent hover:shadow-xl sm:p-8"
+        className="group relative overflow-hidden border border-border bg-card p-6 text-foreground transition-colors hover:border-accent sm:p-8"
       >
-        <span className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-accent to-gold" />
         <div className="flex items-start gap-4">
           <div className="inline-flex size-12 shrink-0 items-center justify-center bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
             <LogIn className="size-6" aria-hidden />

@@ -22,7 +22,7 @@ export function SobreEscola() {
         />
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-gold via-accent to-gold"
+          className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gold"
         />
         <div className="relative grid gap-8 p-6 sm:p-10 lg:grid-cols-5 lg:items-center">
           <div className="lg:col-span-3">

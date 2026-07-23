@@ -36,7 +36,7 @@ export function TitinhoCta() {
           <button
             type="button"
             onClick={openChat}
-            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-gold px-5 py-3 text-sm font-semibold text-gold-foreground shadow-md transition-all hover:scale-105 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+            className="inline-flex shrink-0 items-center gap-2 bg-gold px-5 py-3 text-sm font-semibold text-gold-foreground transition-colors hover:bg-gold/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           >
             <MessageCircle className="size-4" aria-hidden />
             Conversar agora

@@ -115,7 +115,7 @@ export function AlunosDestaque() {
           {destaques.slice(0, 10).map((d) => (
             <article
               key={d.id}
-              className="group relative overflow-hidden rounded-[5px] border border-border bg-[image:var(--gradient-primary)] p-4 text-white shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:border-gold hover:shadow-xl"
+              className="group relative overflow-hidden border border-border bg-primary p-4 text-white transition-colors hover:border-gold"
             >
               <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-gold via-gold/70 to-transparent" />
               <span className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-gold/20 blur-2xl transition-transform group-hover:scale-125" />
