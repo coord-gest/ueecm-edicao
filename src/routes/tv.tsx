@@ -299,12 +299,12 @@ function BirthdaySlide({ people }: { people: { primeiro_nome: string; turma_nome
 }
 
 type HighlightRow = {
-  id: string;
+  id: string | null;
   motivo: string | null;
   foto_url: string | null;
   exibir_foto: boolean | null;
-  aluno: { nome_completo: string } | null;
-  turma: { nome: string } | null;
+  aluno_nome: string | null;
+  turma_nome: string | null;
 };
 
 function HighlightSlide({ items }: { items: HighlightRow[] }) {
@@ -328,12 +328,12 @@ function HighlightSlide({ items }: { items: HighlightRow[] }) {
               />
             ) : (
               <div className="grid size-36 place-items-center rounded-full bg-white/20 text-5xl font-bold">
-                {h.aluno?.nome_completo?.[0] ?? "★"}
+                {h.aluno_nome?.[0] ?? "★"}
               </div>
             )}
             <div>
-              <div className="text-2xl font-bold">{h.aluno?.nome_completo}</div>
-              {h.turma?.nome ? <div className="text-base text-white/70">{h.turma.nome}</div> : null}
+              <div className="text-2xl font-bold">{h.aluno_nome}</div>
+              {h.turma_nome ? <div className="text-base text-white/70">{h.turma_nome}</div> : null}
             </div>
             {h.motivo ? <p className="text-lg text-white/85 line-clamp-4">{h.motivo}</p> : null}
           </div>
