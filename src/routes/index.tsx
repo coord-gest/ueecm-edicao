@@ -643,7 +643,7 @@ function SidebarItem({ post, rank }: { post: Post; rank: number }) {
     <Link
       to="/posts/$id"
       params={{ id: post.id }}
-      className="group flex h-full flex-col overflow-hidden rounded-[5px] border border-border bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      className="group flex h-full flex-col overflow-hidden rounded-[5px] bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
         <img
@@ -668,7 +668,7 @@ function SidebarItem({ post, rank }: { post: Post; rank: number }) {
         <h3 className="line-clamp-2 font-display text-base leading-snug text-primary transition-colors group-hover:text-accent sm:text-lg">
           {post.titulo}
         </h3>
-        <div className="mt-auto flex items-center justify-between border-t border-border/60 pt-3 text-xs text-muted-foreground">
+        <div className="mt-auto flex items-center justify-between pt-3 text-xs text-muted-foreground">
           <span className="inline-flex items-center gap-1 font-medium">
             <Eye className="size-3.5" aria-hidden="true" />
             <span className="tabular-nums text-foreground/80">
