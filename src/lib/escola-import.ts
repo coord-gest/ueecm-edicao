@@ -1,11 +1,15 @@
-import Papa from "papaparse";
 import { z } from "zod";
+
+// PapaParse é carregado sob demanda (dynamic import) para evitar que o Rollup
+// tente parsear seu bundle no SSR do Cloudflare Workers — o código do Papa
+// usa detecção de contexto browser/global que quebra o build do Nitro.
 
 export type ParsedRow = Record<string, string | number | null | undefined>;
 
 export async function parseFile(file: File): Promise<ParsedRow[]> {
   const name = file.name.toLowerCase();
   if (name.endsWith(".csv") || name.endsWith(".txt") || file.type === "text/csv") {
+    const Papa = (await import("papaparse")).default;
     return new Promise<ParsedRow[]>((resolve, reject) => {
       Papa.parse<ParsedRow>(file, {
         header: true,
@@ -187,7 +191,12 @@ export function validateRows<T>(
 
 // ----------- Templates -----------
 
-export function downloadCsvTemplate(filename: string, headers: string[], example: string[][]) {
+export async function downloadCsvTemplate(
+  filename: string,
+  headers: string[],
+  example: string[][],
+) {
+  const Papa = (await import("papaparse")).default;
   const csv = Papa.unparse([headers, ...example]);
   const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
