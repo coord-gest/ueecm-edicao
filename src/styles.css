@@ -253,14 +253,8 @@ body[data-admin="true"] *::after {
   --shadow-ring-primary:
     0 0 0 1px oklch(0.74 0.15 235 / 0.32), 0 10px 30px -12px oklch(0.74 0.15 235 / 0.35);
 
-  --gradient-primary: linear-gradient(
-    130deg,
-    oklch(0.28 0.13 265) 0%,
-    oklch(0.4 0.16 250) 28%,
-    oklch(0.54 0.16 215) 58%,
-    oklch(0.66 0.15 185) 82%,
-    oklch(0.74 0.14 168) 100%
-  );
+  --gradient-primary: #885ce9;
+  --gradient-hero: #885ce9;
   --gradient-subtle: linear-gradient(180deg, oklch(0.235 0.035 255) 0%, oklch(0.19 0.03 255) 100%);
   --gradient-gold: linear-gradient(135deg, oklch(0.86 0.14 160) 0%, oklch(0.74 0.14 175) 100%);
   --gradient-sheen: linear-gradient(
@@ -268,13 +262,6 @@ body[data-admin="true"] *::after {
     transparent 0%,
     oklch(1 0 0 / 0.1) 45%,
     transparent 90%
-  );
-  --gradient-hero: linear-gradient(
-    130deg,
-    oklch(0.25 0.12 265) 0%,
-    oklch(0.38 0.15 245) 30%,
-    oklch(0.55 0.16 210) 62%,
-    oklch(0.7 0.14 168) 100%
   );
   --gradient-surface: linear-gradient(160deg, oklch(0.19 0.03 255) 0%, oklch(0.27 0.05 220) 100%);
   --shadow-gold: 0 8px 24px -10px oklch(0.82 0.15 165 / 0.35), 0 2px 6px oklch(0.82 0.15 165 / 0.2);
