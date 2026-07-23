@@ -116,6 +116,7 @@ import { Route as GaleriaIdRouteImport } from './routes/galeria.$id'
 import { Route as MeusFilhosIdRouteImport } from './routes/meus-filhos.$id'
 import { Route as MinhasTurmasTurmaIdRouteImport } from './routes/minhas-turmas.$turmaId'
 import { Route as PainelApresentacoesIndexRouteImport } from './routes/painel-apresentacoes.index'
+import { Route as PainelApresentacoesIdRouteImport } from './routes/painel-apresentacoes.$id'
 import { Route as PainelArquivosIndexRouteImport } from './routes/painel-arquivos.index'
 import { Route as PainelArquivosTemplateIdRouteImport } from './routes/painel-arquivos.$templateId'
 import { Route as PainelArquivosPlanejamentosRouteImport } from './routes/painel-arquivos.planejamentos'
@@ -684,6 +685,11 @@ const PainelApresentacoesIndexRoute =
     path: '/',
     getParentRoute: () => PainelApresentacoesRoute,
   } as any)
+const PainelApresentacoesIdRoute = PainelApresentacoesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => PainelApresentacoesRoute,
+} as any)
 const PainelArquivosIndexRoute = PainelArquivosIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -940,6 +946,7 @@ export interface FileRoutesByFullPath {
   '/galeria/$id': typeof GaleriaIdRoute
   '/meus-filhos/$id': typeof MeusFilhosIdRoute
   '/minhas-turmas/$turmaId': typeof MinhasTurmasTurmaIdRoute
+  '/painel-apresentacoes/$id': typeof PainelApresentacoesIdRoute
   '/painel-arquivos/$templateId': typeof PainelArquivosTemplateIdRoute
   '/painel-arquivos/planejamentos': typeof PainelArquivosPlanejamentosRoute
   '/painel-atividades-ranking/$alunoId': typeof PainelAtividadesRankingAlunoIdRoute
@@ -1075,6 +1082,7 @@ export interface FileRoutesByTo {
   '/galeria/$id': typeof GaleriaIdRoute
   '/meus-filhos/$id': typeof MeusFilhosIdRoute
   '/minhas-turmas/$turmaId': typeof MinhasTurmasTurmaIdRoute
+  '/painel-apresentacoes/$id': typeof PainelApresentacoesIdRoute
   '/painel-arquivos/$templateId': typeof PainelArquivosTemplateIdRoute
   '/painel-arquivos/planejamentos': typeof PainelArquivosPlanejamentosRoute
   '/painel-atividades-ranking/$alunoId': typeof PainelAtividadesRankingAlunoIdRoute
@@ -1213,6 +1221,7 @@ export interface FileRoutesById {
   '/galeria/$id': typeof GaleriaIdRoute
   '/meus-filhos/$id': typeof MeusFilhosIdRoute
   '/minhas-turmas/$turmaId': typeof MinhasTurmasTurmaIdRoute
+  '/painel-apresentacoes/$id': typeof PainelApresentacoesIdRoute
   '/painel-arquivos/$templateId': typeof PainelArquivosTemplateIdRoute
   '/painel-arquivos/planejamentos': typeof PainelArquivosPlanejamentosRoute
   '/painel-atividades-ranking/$alunoId': typeof PainelAtividadesRankingAlunoIdRoute
@@ -1352,6 +1361,7 @@ export interface FileRouteTypes {
     | '/galeria/$id'
     | '/meus-filhos/$id'
     | '/minhas-turmas/$turmaId'
+    | '/painel-apresentacoes/$id'
     | '/painel-arquivos/$templateId'
     | '/painel-arquivos/planejamentos'
     | '/painel-atividades-ranking/$alunoId'
@@ -1487,6 +1497,7 @@ export interface FileRouteTypes {
     | '/galeria/$id'
     | '/meus-filhos/$id'
     | '/minhas-turmas/$turmaId'
+    | '/painel-apresentacoes/$id'
     | '/painel-arquivos/$templateId'
     | '/painel-arquivos/planejamentos'
     | '/painel-atividades-ranking/$alunoId'
@@ -1624,6 +1635,7 @@ export interface FileRouteTypes {
     | '/galeria/$id'
     | '/meus-filhos/$id'
     | '/minhas-turmas/$turmaId'
+    | '/painel-apresentacoes/$id'
     | '/painel-arquivos/$templateId'
     | '/painel-arquivos/planejamentos'
     | '/painel-atividades-ranking/$alunoId'
@@ -2532,6 +2544,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PainelApresentacoesIndexRouteImport
       parentRoute: typeof PainelApresentacoesRoute
     }
+    '/painel-apresentacoes/$id': {
+      id: '/painel-apresentacoes/$id'
+      path: '/$id'
+      fullPath: '/painel-apresentacoes/$id'
+      preLoaderRoute: typeof PainelApresentacoesIdRouteImport
+      parentRoute: typeof PainelApresentacoesRoute
+    }
     '/painel-arquivos/': {
       id: '/painel-arquivos/'
       path: '/'
@@ -2802,10 +2821,12 @@ const MinhasTurmasRouteWithChildren = MinhasTurmasRoute._addFileChildren(
 )
 
 interface PainelApresentacoesRouteChildren {
+  PainelApresentacoesIdRoute: typeof PainelApresentacoesIdRoute
   PainelApresentacoesIndexRoute: typeof PainelApresentacoesIndexRoute
 }
 
 const PainelApresentacoesRouteChildren: PainelApresentacoesRouteChildren = {
+  PainelApresentacoesIdRoute: PainelApresentacoesIdRoute,
   PainelApresentacoesIndexRoute: PainelApresentacoesIndexRoute,
 }
 
