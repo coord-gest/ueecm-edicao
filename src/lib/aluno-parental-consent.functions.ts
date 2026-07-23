@@ -219,8 +219,8 @@ export type ConsentBadge = {
  * não estiver, a função responde `{ sent: false, reason: 'no_email_domain' }`
  * de forma silenciosa (não interrompe o fluxo de cadastro).
  *
- * Quando o domínio estiver ativo, chame `sendTemplateEmail` do helper
- * `@/lib/email-templates/send-email` com um template dedicado.
+ * Quando o domínio estiver ativo, chame `sendTemplateEmail` de um helper
+ * dedicado de e-mail transacional com um template próprio.
  */
 export const notifyGuardianConsent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -245,7 +245,7 @@ export const notifyGuardianConsent = createServerFn({ method: "POST" })
     }
     try {
       // Domínio de e-mail ainda não scaffoldado; a notificação é um no-op
-      // controlado até o módulo `src/lib/email-templates/send-email` existir.
+      // controlado até o módulo de envio transacional existir.
       logger.warn(
         "[notifyGuardianConsent] domínio de e-mail não configurado — notificação pulada",
         { guardian: data.guardian_email, minor: data.minor_name, term: data.term_version },
