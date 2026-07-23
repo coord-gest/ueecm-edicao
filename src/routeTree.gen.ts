@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AgendarRouteImport } from './routes/agendar'
 import { Route as AlunosDestaqueRouteImport } from './routes/alunos-destaque'
 import { Route as CalendarioRouteImport } from './routes/calendario'
+import { Route as CentralLgpdRouteImport } from './routes/central-lgpd'
 import { Route as ChatAlunoRouteImport } from './routes/chat-aluno'
 import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
 import { Route as ConsultarAgendamentoRouteImport } from './routes/consultar-agendamento'
@@ -160,6 +161,11 @@ const AlunosDestaqueRoute = AlunosDestaqueRouteImport.update({
 const CalendarioRoute = CalendarioRouteImport.update({
   id: '/calendario',
   path: '/calendario',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CentralLgpdRoute = CentralLgpdRouteImport.update({
+  id: '/central-lgpd',
+  path: '/central-lgpd',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChatAlunoRoute = ChatAlunoRouteImport.update({
@@ -820,6 +826,7 @@ export interface FileRoutesByFullPath {
   '/agendar': typeof AgendarRoute
   '/alunos-destaque': typeof AlunosDestaqueRoute
   '/calendario': typeof CalendarioRoute
+  '/central-lgpd': typeof CentralLgpdRoute
   '/chat-aluno': typeof ChatAlunoRouteWithChildren
   '/configuracoes': typeof ConfiguracoesRoute
   '/consultar-agendamento': typeof ConsultarAgendamentoRoute
@@ -954,6 +961,7 @@ export interface FileRoutesByTo {
   '/agendar': typeof AgendarRoute
   '/alunos-destaque': typeof AlunosDestaqueRoute
   '/calendario': typeof CalendarioRoute
+  '/central-lgpd': typeof CentralLgpdRoute
   '/chat-aluno': typeof ChatAlunoRouteWithChildren
   '/configuracoes': typeof ConfiguracoesRoute
   '/consultar-agendamento': typeof ConsultarAgendamentoRoute
@@ -1088,6 +1096,7 @@ export interface FileRoutesById {
   '/agendar': typeof AgendarRoute
   '/alunos-destaque': typeof AlunosDestaqueRoute
   '/calendario': typeof CalendarioRoute
+  '/central-lgpd': typeof CentralLgpdRoute
   '/chat-aluno': typeof ChatAlunoRouteWithChildren
   '/configuracoes': typeof ConfiguracoesRoute
   '/consultar-agendamento': typeof ConsultarAgendamentoRoute
@@ -1224,6 +1233,7 @@ export interface FileRouteTypes {
     | '/agendar'
     | '/alunos-destaque'
     | '/calendario'
+    | '/central-lgpd'
     | '/chat-aluno'
     | '/configuracoes'
     | '/consultar-agendamento'
@@ -1358,6 +1368,7 @@ export interface FileRouteTypes {
     | '/agendar'
     | '/alunos-destaque'
     | '/calendario'
+    | '/central-lgpd'
     | '/chat-aluno'
     | '/configuracoes'
     | '/consultar-agendamento'
@@ -1491,6 +1502,7 @@ export interface FileRouteTypes {
     | '/agendar'
     | '/alunos-destaque'
     | '/calendario'
+    | '/central-lgpd'
     | '/chat-aluno'
     | '/configuracoes'
     | '/consultar-agendamento'
@@ -1626,6 +1638,7 @@ export interface RootRouteChildren {
   AgendarRoute: typeof AgendarRoute
   AlunosDestaqueRoute: typeof AlunosDestaqueRoute
   CalendarioRoute: typeof CalendarioRoute
+  CentralLgpdRoute: typeof CentralLgpdRoute
   ChatAlunoRoute: typeof ChatAlunoRouteWithChildren
   ConfiguracoesRoute: typeof ConfiguracoesRoute
   ConsultarAgendamentoRoute: typeof ConsultarAgendamentoRoute
@@ -1772,6 +1785,13 @@ declare module '@tanstack/react-router' {
       path: '/calendario'
       fullPath: '/calendario'
       preLoaderRoute: typeof CalendarioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/central-lgpd': {
+      id: '/central-lgpd'
+      path: '/central-lgpd'
+      fullPath: '/central-lgpd'
+      preLoaderRoute: typeof CentralLgpdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chat-aluno': {
@@ -2801,6 +2821,7 @@ const rootRouteChildren: RootRouteChildren = {
   AgendarRoute: AgendarRoute,
   AlunosDestaqueRoute: AlunosDestaqueRoute,
   CalendarioRoute: CalendarioRoute,
+  CentralLgpdRoute: CentralLgpdRoute,
   ChatAlunoRoute: ChatAlunoRouteWithChildren,
   ConfiguracoesRoute: ConfiguracoesRoute,
   ConsultarAgendamentoRoute: ConsultarAgendamentoRoute,
