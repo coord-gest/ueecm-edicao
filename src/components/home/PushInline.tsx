@@ -45,10 +45,10 @@ export function PushInline() {
     <section className="mb-10 md:mb-16">
       <div
         ref={ref}
-        className="reveal flex flex-col items-start gap-5 rounded-[5px] border border-accent/20 bg-linear-to-br from-accent/10 via-card to-card p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-8"
+        className="reveal flex flex-col items-start gap-5 border border-border bg-secondary p-6 text-secondary-foreground sm:flex-row sm:items-center sm:justify-between sm:p-8"
       >
         <div className="flex items-center gap-4">
-          <div className="grid size-12 shrink-0 place-items-center rounded-full bg-accent/15 text-accent">
+          <div className="grid size-12 shrink-0 place-items-center bg-primary text-primary-foreground">
             {ativo ? <BellOff className="size-6" /> : <Bell className="size-6" />}
           </div>
           <div>
@@ -57,7 +57,7 @@ export function PushInline() {
                 ? "Notificações ativas neste dispositivo"
                 : "Receba avisos da escola no seu celular"}
             </p>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-sm text-secondary-foreground/80">
               {ativo
                 ? "Você já vai receber comunicados urgentes e eventos importantes."
                 : "Comunicados urgentes, eventos e novidades diretamente para você."}
