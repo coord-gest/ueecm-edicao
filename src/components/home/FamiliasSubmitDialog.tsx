@@ -247,9 +247,6 @@ export function FamiliasSubmitDialog({
             </div>
           </div>
 
-          <DialogFooter>
-            <div className="sr-only" />
-          </DialogFooter>
           <div className="space-y-3 rounded-md border border-border/60 bg-muted/40 p-3">
             <div className="flex items-start gap-2">
               <Checkbox
