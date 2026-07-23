@@ -236,6 +236,10 @@ function IndicarDialog({ onCreated, isAdmin }: { onCreated: () => void; isAdmin:
   const [motivo, setMotivo] = useState("");
   const [exibirFoto, setExibirFoto] = useState(false);
   const [fotoUrl, setFotoUrl] = useState("");
+  // LGPD Art. 14 — consentimento parental
+  const [respNome, setRespNome] = useState("");
+  const [respVinculo, setRespVinculo] = useState("");
+  const [consent, setConsent] = useState(false);
 
   const indicar = useServerFn(indicarDestaque);
 
@@ -294,6 +298,9 @@ function IndicarDialog({ onCreated, isAdmin }: { onCreated: () => void; isAdmin:
           posicao: Number(posicao),
           exibir_foto: exibirFoto,
           foto_url: exibirFoto && fotoUrl ? fotoUrl : null,
+          consentimento_responsavel: true as const,
+          responsavel_nome: respNome.trim(),
+          responsavel_vinculo: respVinculo.trim(),
         },
       });
     },
@@ -310,6 +317,9 @@ function IndicarDialog({ onCreated, isAdmin }: { onCreated: () => void; isAdmin:
       setDisciplinaId("");
       setExibirFoto(false);
       setFotoUrl("");
+      setRespNome("");
+      setRespVinculo("");
+      setConsent(false);
       onCreated();
     },
     onError: (e: Error) => toast.error("Erro ao indicar", { description: e.message }),
@@ -326,7 +336,10 @@ function IndicarDialog({ onCreated, isAdmin }: { onCreated: () => void; isAdmin:
     !!disciplinaId &&
     motivo.trim().length >= 5 &&
     Number(posicao) >= 1 &&
-    Number(posicao) <= 5;
+    Number(posicao) <= 5 &&
+    respNome.trim().length >= 3 &&
+    respVinculo.trim().length >= 2 &&
+    consent;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
