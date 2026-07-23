@@ -300,17 +300,6 @@ export function SiteFooter() {
       <div className="border-t border-primary-foreground/15">
         <div className="mx-auto max-w-6xl px-4 py-4 text-xs text-primary-foreground/80 sm:px-6">
           <p className="text-center md:text-left">
-            <span className="font-semibold uppercase tracking-wide text-gold">
-              Encarregado de Dados (DPO) — LGPD Art. 41:
-            </span>{" "}
-            Francisco Douglas ·{" "}
-            <a
-              href="mailto:franciscodouglas.dev@outlook.com?subject=LGPD%20-%20Encarregado%20(DPO)"
-              className="underline hover:text-gold"
-            >
-              franciscodouglas.dev@outlook.com
-            </a>{" "}
-            ·{" "}
             <Link to="/privacidade" className="underline hover:text-gold">
               Política de Privacidade
             </Link>{" "}
