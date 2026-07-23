@@ -302,6 +302,29 @@ a[href*="lovable.dev"][target="_blank"] {
     letter-spacing: -0.015em;
     font-weight: 600;
   }
+
+  /* Foco padronizado em Navy Trust — usa o token --ring do tema para
+     manter contraste AA em light e dark, sem introduzir novas cores.
+     Aplica-se a todo elemento interativo fora do widget do Tito
+     (que gerencia seus próprios estados). */
+  a:not([data-tito-widget] *):focus-visible,
+  button:not([data-tito-widget] *):focus-visible,
+  [role="button"]:not([data-tito-widget] *):focus-visible,
+  summary:not([data-tito-widget] *):focus-visible,
+  input:not([data-tito-widget] *):focus-visible,
+  select:not([data-tito-widget] *):focus-visible,
+  textarea:not([data-tito-widget] *):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* Estado ativo consistente para links e botões (fora do Tito) —
+     escurece levemente sobre a paleta Navy Trust. */
+  a:not([data-tito-widget] *):active,
+  button:not([data-tito-widget] *):active,
+  [role="button"]:not([data-tito-widget] *):active {
+    filter: brightness(0.92);
+  }
 }
 
 /* PWA / Mobile: leave room for fixed bottom navigation bar */
