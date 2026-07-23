@@ -13,23 +13,37 @@ a[href*="lovable.dev"][target="_blank"] {
 
 @custom-variant dark (&:is(.dark *));
 
-/* Painel administrativo: cantos retos em todos os cards/superfícies/controles.
-   Ativado via body[data-admin="true"] (definido em __root.tsx conforme rota). */
-body[data-admin="true"] *,
-body[data-admin="true"] *::before,
-body[data-admin="true"] *::after {
+/* Cantos retos em TODO o sistema — exceto o widget do Tito Assistente
+   (marcado com [data-tito-widget]), que preserva seu arredondamento próprio
+   (rounded-full, rounded-2xl etc.). */
+*:not([data-tito-widget]):not([data-tito-widget] *),
+*:not([data-tito-widget]):not([data-tito-widget] *)::before,
+*:not([data-tito-widget]):not([data-tito-widget] *)::after {
   border-radius: 0 !important;
+}
+/* Restaura os tokens de radius dentro do widget do Tito para que utilitários
+   como rounded-lg / rounded-2xl continuem funcionando lá dentro. */
+[data-tito-widget],
+[data-tito-widget] * {
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 22px;
+  --radius-3xl: 26px;
+  --radius-4xl: 30px;
+  --radius: 14px;
 }
 
 @theme inline {
-  /* Cards, seções, botões, inputs e menus: arredondamento padrão de 5px. */
-  --radius-sm: 5px;
-  --radius-md: 5px;
-  --radius-lg: 5px;
-  --radius-xl: 5px;
-  --radius-2xl: 5px;
-  --radius-3xl: 5px;
-  --radius-4xl: 5px;
+  /* Sistema 100% quadrado — nada de cantos arredondados no chrome geral. */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-4xl: 0px;
 
   --font-sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-display: "Space Grotesk", "DM Sans", ui-sans-serif, system-ui, sans-serif;
