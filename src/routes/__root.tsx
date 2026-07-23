@@ -301,7 +301,9 @@ function RootComponent() {
             <CommandMenu />
             <InstallPrompt />
             <PermissionsOnboarding />
-            <ChatWidget />
+            <div data-tito-widget>
+              <ChatWidget />
+            </div>
             <ThemeEffectsOverlay />
           </Suspense>
           <CookieConsentBanner />
