@@ -71,11 +71,11 @@ function TeamCard({ p }: { p: ProfPublico }) {
       className="group relative flex w-56 shrink-0 flex-col items-center overflow-hidden border border-border bg-primary p-5 text-center text-white transition-colors hover:border-gold sm:w-auto"
     >
       <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gold" />
-      <div className="relative mb-3 size-20 overflow-hidden rounded-full bg-white/10 ring-2 ring-gold/40 transition-all group-hover:ring-gold">
+      <div className="relative mb-3 size-20 overflow-hidden rounded-full bg-[#0f1b3d] ring-2 ring-gold/40 transition-all group-hover:ring-gold">
         {p.foto_url ? (
           <img src={p.foto_url} alt={p.nome} className="size-full object-cover" loading="lazy" />
         ) : (
-          <div className="grid size-full place-items-center font-display text-2xl text-gold">
+          <div className="grid size-full place-items-center font-display text-2xl text-white">
             {getInitials(p.nome)}
           </div>
         )}
