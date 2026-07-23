@@ -102,6 +102,7 @@ import { Route as UsuariosRouteImport } from './routes/usuarios'
 import { Route as VaquinhasRouteImport } from './routes/vaquinhas'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as ApresentarIdRouteImport } from './routes/apresentar.$id'
 import { Route as ChatAlunoIdRouteImport } from './routes/chat-aluno.$id'
 import { Route as EnquetesIdRouteImport } from './routes/enquetes.$id'
 import { Route as EquipeIdRouteImport } from './routes/equipe.$id'
@@ -614,6 +615,11 @@ const ApiHealthRoute = ApiHealthRouteImport.update({
   path: '/api/health',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApresentarIdRoute = ApresentarIdRouteImport.update({
+  id: '/apresentar/$id',
+  path: '/apresentar/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChatAlunoIdRoute = ChatAlunoIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -934,6 +940,7 @@ export interface FileRoutesByFullPath {
   '/vaquinhas': typeof VaquinhasRouteWithChildren
   '/api/chat': typeof ApiChatRoute
   '/api/health': typeof ApiHealthRoute
+  '/apresentar/$id': typeof ApresentarIdRoute
   '/chat-aluno/$id': typeof ChatAlunoIdRoute
   '/enquetes/$id': typeof EnquetesIdRoute
   '/equipe/$id': typeof EquipeIdRoute
@@ -1070,6 +1077,7 @@ export interface FileRoutesByTo {
   '/vaquinhas': typeof VaquinhasRouteWithChildren
   '/api/chat': typeof ApiChatRoute
   '/api/health': typeof ApiHealthRoute
+  '/apresentar/$id': typeof ApresentarIdRoute
   '/chat-aluno/$id': typeof ChatAlunoIdRoute
   '/enquetes/$id': typeof EnquetesIdRoute
   '/equipe/$id': typeof EquipeIdRoute
@@ -1209,6 +1217,7 @@ export interface FileRoutesById {
   '/vaquinhas': typeof VaquinhasRouteWithChildren
   '/api/chat': typeof ApiChatRoute
   '/api/health': typeof ApiHealthRoute
+  '/apresentar/$id': typeof ApresentarIdRoute
   '/chat-aluno/$id': typeof ChatAlunoIdRoute
   '/enquetes/$id': typeof EnquetesIdRoute
   '/equipe/$id': typeof EquipeIdRoute
@@ -1349,6 +1358,7 @@ export interface FileRouteTypes {
     | '/vaquinhas'
     | '/api/chat'
     | '/api/health'
+    | '/apresentar/$id'
     | '/chat-aluno/$id'
     | '/enquetes/$id'
     | '/equipe/$id'
@@ -1485,6 +1495,7 @@ export interface FileRouteTypes {
     | '/vaquinhas'
     | '/api/chat'
     | '/api/health'
+    | '/apresentar/$id'
     | '/chat-aluno/$id'
     | '/enquetes/$id'
     | '/equipe/$id'
@@ -1623,6 +1634,7 @@ export interface FileRouteTypes {
     | '/vaquinhas'
     | '/api/chat'
     | '/api/health'
+    | '/apresentar/$id'
     | '/chat-aluno/$id'
     | '/enquetes/$id'
     | '/equipe/$id'
@@ -1762,6 +1774,7 @@ export interface RootRouteChildren {
   VaquinhasRoute: typeof VaquinhasRouteWithChildren
   ApiChatRoute: typeof ApiChatRoute
   ApiHealthRoute: typeof ApiHealthRoute
+  ApresentarIdRoute: typeof ApresentarIdRoute
   EscolaAlunosRoute: typeof EscolaAlunosRoute
   EscolaAlunosImportarRoute: typeof EscolaAlunosImportarRoute
   EscolaDashboardRoute: typeof EscolaDashboardRoute
@@ -2446,6 +2459,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/apresentar/$id': {
+      id: '/apresentar/$id'
+      path: '/apresentar/$id'
+      fullPath: '/apresentar/$id'
+      preLoaderRoute: typeof ApresentarIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/chat-aluno/$id': {
       id: '/chat-aluno/$id'
       path: '/$id'
@@ -2980,6 +3000,7 @@ const rootRouteChildren: RootRouteChildren = {
   VaquinhasRoute: VaquinhasRouteWithChildren,
   ApiChatRoute: ApiChatRoute,
   ApiHealthRoute: ApiHealthRoute,
+  ApresentarIdRoute: ApresentarIdRoute,
   EscolaAlunosRoute: EscolaAlunosRoute,
   EscolaAlunosImportarRoute: EscolaAlunosImportarRoute,
   EscolaDashboardRoute: EscolaDashboardRoute,
