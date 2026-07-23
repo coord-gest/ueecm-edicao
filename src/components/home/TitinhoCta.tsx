@@ -18,7 +18,7 @@ export function TitinhoCta() {
           <img
             src={titoAvatar}
             alt="Titinho, assistente da escola"
-            className="size-24 shrink-0 rounded-full bg-background/10 ring-4 ring-gold/40 sm:size-28"
+            className="size-24 shrink-0 rounded-full bg-background/10 sm:size-28"
             loading="lazy"
           />
           <div className="flex-1 text-center sm:text-left">
