@@ -34,7 +34,7 @@ const Patrocinadores = lazy(() =>
 );
 import { SobreEscola } from "@/components/home/SobreEscola";
 import { LayoutGrid, List } from "lucide-react";
-import type { Post } from "@/data/mock";
+import type { Post } from "@/data/posts-utils";
 import { OPINIONS } from "@/data/opinions";
 import heroImg from "@/assets/hero-school.jpg";
 

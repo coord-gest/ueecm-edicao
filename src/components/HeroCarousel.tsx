@@ -12,7 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Star } from "lucide-react";
-import type { Post } from "@/data/mock";
+import type { Post } from "@/data/posts-utils";
 import heroImg from "@/assets/hero-school.jpg";
 
 export function HeroCarousel({ posts }: { posts: Post[] }) {
