@@ -1376,6 +1376,8 @@ export const Route = createFileRoute("/api/chat")({
         let supabaseAdmin: any | null = null;
         let conversationId: string | null | undefined = null;
 
+        const clientIp = getClientIp(request);
+        let slotAcquired = false;
         try {
           // Validação de variáveis de ambiente obrigatórias no servidor
           const requiredEnv = {
@@ -1428,7 +1430,7 @@ export const Route = createFileRoute("/api/chat")({
           }
 
           // Rate limit em dois níveis: (IP+sessão) + global por IP (minuto/hora)
-          const rl = checkRateLimit(getClientKey(request, sessionId), getClientIp(request));
+          const rl = checkRateLimit(getClientKey(request, sessionId), clientIp);
           if (!rl.ok) {
             return jsonResponse(
               {
@@ -1440,6 +1442,23 @@ export const Route = createFileRoute("/api/chat")({
               { status: 429, headers: { "Retry-After": String(rl.retryAfter) } },
             );
           }
+
+          // Fila de concorrência: só 5 conversas simultâneas em processamento.
+          const slot = tryAcquireSlot(clientIp);
+          if (!slot.ok) {
+            return jsonResponse(
+              {
+                conversationId,
+                reply: `O assistente está atendendo ${slot.active} pessoas agora. Você é o ${slot.position}º na fila — aguarde alguns segundos e tente novamente.`,
+                fallback: true,
+                error: "queued",
+                queuePosition: slot.position,
+                activeUsers: slot.active,
+              },
+              { status: 429, headers: { "Retry-After": "10" } },
+            );
+          }
+          slotAcquired = true;
 
           // Limite de tamanho da mensagem para evitar abuso
           if (message.length > 4000) {
