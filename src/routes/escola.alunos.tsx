@@ -50,7 +50,7 @@ import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
 import { AccessDenied, EscolaShell, useIsSchoolAdmin } from "@/components/escola/EscolaShell";
-import { ImportDialog } from "@/components/escola/ImportDialog";
+import { ImportDialog } from "@/components/escola/ImportDialogLazy";
 import { EmptyState } from "@/components/EmptyState";
 import { TableRowsSkeleton } from "@/components/TableRowsSkeleton";
 import { alunoRowSchema, ALUNO_TEMPLATE, type AlunoRow } from "@/lib/escola-import";

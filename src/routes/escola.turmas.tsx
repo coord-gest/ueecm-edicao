@@ -38,7 +38,7 @@ import { useAuth } from "@/lib/use-auth";
 import { AccessDenied, EscolaShell, useIsSchoolAdmin } from "@/components/escola/EscolaShell";
 import { EmptyState } from "@/components/EmptyState";
 import { TableRowsSkeleton } from "@/components/TableRowsSkeleton";
-import { ImportDialog } from "@/components/escola/ImportDialog";
+import { ImportDialog } from "@/components/escola/ImportDialogLazy";
 import { turmaRowSchema, TURMA_TEMPLATE, type TurmaRow } from "@/lib/escola-import";
 import { listTeacherProfiles } from "@/lib/school-access.functions";
 
