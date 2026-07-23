@@ -95,7 +95,7 @@ export function Testimonials() {
         </div>
       </div>
 
-      <div className="relative overflow-hidden border border-border bg-secondary p-8 text-secondary-foreground shadow-elegant sm:p-12">
+      <div className="relative overflow-hidden border border-border bg-secondary p-8 text-secondary-foreground sm:p-12">
         <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-primary" />
         <Quote
           className="absolute -top-2 left-4 size-20 text-primary/20 sm:-top-4 sm:left-8 sm:size-32"
