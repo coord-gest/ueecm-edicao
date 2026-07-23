@@ -41,6 +41,30 @@ function IncidentPage() {
             orientações da <strong>Autoridade Nacional de Proteção de Dados (ANPD)</strong>.
           </p>
 
+          <div className="not-prose my-6 rounded-lg border-2 border-primary/30 bg-primary/5 p-5">
+            <h2 className="text-base font-semibold text-foreground">
+              Encarregado de Dados (DPO) — LGPD Art. 41
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              O Encarregado é o canal de comunicação entre a escola, os titulares de dados e a
+              ANPD para assuntos relacionados à proteção de dados pessoais.
+            </p>
+            <ul className="mt-3 space-y-1 text-sm">
+              <li>
+                <strong>Nome:</strong> Francisco Douglas
+              </li>
+              <li>
+                <strong>E-mail:</strong>{" "}
+                <a
+                  className="text-primary hover:underline"
+                  href="mailto:franciscodouglas.dev@outlook.com?subject=LGPD%20-%20Encarregado%20(DPO)"
+                >
+                  franciscodouglas.dev@outlook.com
+                </a>
+              </li>
+            </ul>
+          </div>
+
           <div className="not-prose my-6 rounded-lg border-2 border-destructive/40 bg-destructive/5 p-5">
             <h2 className="text-base font-semibold text-foreground">
               Canal exclusivo para reporte de incidentes
