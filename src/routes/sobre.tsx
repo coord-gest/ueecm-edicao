@@ -285,8 +285,8 @@ function PillarCard({
   text: string;
 }) {
   return (
-    <div className="rounded-2xl border border-border bg-gradient-to-b from-card to-background p-6 shadow-sm">
-      <div className="grid size-11 place-items-center rounded-full bg-primary text-primary-foreground">
+    <div className="border border-border bg-card p-6">
+      <div className="grid size-11 place-items-center bg-primary text-primary-foreground">
         <Icon className="size-5" />
       </div>
       <h3 className="mt-4 font-display text-xl text-primary">{title}</h3>
