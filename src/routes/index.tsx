@@ -911,17 +911,9 @@ function SchoolHighlights() {
           <Link
             key={c.titulo}
             to={c.to}
-            className="group relative flex flex-col overflow-hidden rounded-[5px] border border-accent/25 bg-[image:var(--gradient-primary)] p-6 text-white shadow-elegant ring-1 ring-black/5 transition-all hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-2xl"
+            className="group relative flex flex-col overflow-hidden rounded-[5px] border border-accent/25 bg-primary p-6 text-white shadow-elegant ring-1 ring-black/5 transition-all hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-2xl"
           >
-            <span
-              aria-hidden
-              className="pointer-events-none absolute -top-16 -right-16 size-40 rounded-full bg-gold/25 blur-3xl transition-transform group-hover:scale-125"
-            />
-            <span
-              aria-hidden
-              className="pointer-events-none absolute -bottom-20 -left-14 size-48 rounded-full bg-accent/40 blur-3xl"
-            />
-            <span className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-gold via-accent to-gold" />
+            <span className="absolute inset-x-0 top-0 h-1 bg-gold" />
             <div className="relative mb-4 inline-flex size-12 items-center justify-center bg-gold text-gold-foreground shadow-gold transition-transform group-hover:scale-110">
               <c.icon className="size-6" />
             </div>
