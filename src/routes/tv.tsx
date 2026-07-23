@@ -59,11 +59,8 @@ function TvMode() {
       first.setDate(1);
       first.setHours(0, 0, 0, 0);
       const { data, error } = await supabase
-        .from("alunos_destaque")
-        .select(
-          "id, motivo, foto_url, exibir_foto, posicao, aluno:alunos(nome_completo), turma:turmas_escolares(nome)",
-        )
-        .eq("status", "aprovado")
+        .from("alunos_destaque_publicos")
+        .select("id, motivo, foto_url, exibir_foto, posicao, aluno_nome, turma_nome, mes")
         .gte("mes", first.toISOString().slice(0, 10))
         .order("posicao", { ascending: true })
         .limit(12);
