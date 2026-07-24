@@ -23,8 +23,11 @@ export function AutoPresentationMode({
     // Aguarda um frame para o DOM da rota estar montado.
     const raf = requestAnimationFrame(() => {
       let nodes = Array.from(document.querySelectorAll<HTMLElement>(selector));
-      // Fallback: se a rota não usa <section>, quebra por filhos diretos de <main>
-      // que contenham um heading.
+      // Fallback 1: rotas sem <main> — usa <section> em qualquer lugar.
+      if (nodes.length < 2) {
+        nodes = Array.from(document.querySelectorAll<HTMLElement>("section"));
+      }
+      // Fallback 2: quebra por filhos diretos de <main> que contenham heading.
       if (nodes.length < 2) {
         const mains = Array.from(document.querySelectorAll<HTMLElement>("main"));
         const collected: HTMLElement[] = [];
