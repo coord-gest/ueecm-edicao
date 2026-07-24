@@ -89,7 +89,10 @@ export function CodeOfEthicsGate({ children }: { children: React.ReactNode }) {
     }
   };
 
-  if (status !== "needs_acceptance" && status !== "checking") {
+  // Só bloqueia quando temos certeza de que falta aceitar. Durante "idle"
+  // e "checking" renderizamos o conteúdo normalmente para evitar o flash
+  // do modal logo após o login (quando o aceite já existe).
+  if (status !== "needs_acceptance") {
     return <>{children}</>;
   }
 
@@ -118,12 +121,7 @@ export function CodeOfEthicsGate({ children }: { children: React.ReactNode }) {
             </div>
           </header>
 
-          {status === "checking" ? (
-            <div className="flex flex-1 items-center justify-center px-6 py-16 text-sm text-muted-foreground">
-              <Loader2 className="mr-2 size-4 animate-spin" /> Verificando aceite…
-            </div>
-          ) : (
-            <>
+          <>
               <div className="flex-1 overflow-hidden">
                 <div
                   ref={scrollRef}
@@ -189,8 +187,7 @@ export function CodeOfEthicsGate({ children }: { children: React.ReactNode }) {
                   </Button>
                 </div>
               </footer>
-            </>
-          )}
+          </>
         </div>
       </div>
     </>
