@@ -8,6 +8,7 @@
 import { loadFcmConfig } from "@/integrations/firebase/client";
 
 const SW_URL = "/sw.js";
+const FCM_SW_VERSION = "10-android-6-16";
 
 /** Guarda o Service Worker que está aguardando para ser ativado. */
 let pendingUpdateSW: ServiceWorker | null = null;
@@ -54,6 +55,7 @@ async function getServiceWorkerUrl(): Promise<string> {
       projectId: cfg.projectId,
       senderId: cfg.messagingSenderId,
       appId: cfg.appId,
+      v: FCM_SW_VERSION,
     }).toString()}`;
   } catch {
     return SW_URL;
@@ -142,6 +144,21 @@ export async function registerServiceWorker() {
       scope: "/",
       updateViaCache: "none",
     });
+    void loadFcmConfig()
+      .then((cfg) => {
+        const payload = {
+          type: "INIT_FCM",
+          config: {
+            apiKey: cfg.apiKey,
+            projectId: cfg.projectId,
+            senderId: cfg.messagingSenderId,
+            appId: cfg.appId,
+          },
+        };
+        reg.active?.postMessage(payload);
+        navigator.serviceWorker.controller?.postMessage(payload);
+      })
+      .catch(() => undefined);
     setupUpdateFlow(reg, hadControllerOnRegister);
 
     // Verifica atualizações a cada 1 hora (útil para PWAs que ficam abertos)

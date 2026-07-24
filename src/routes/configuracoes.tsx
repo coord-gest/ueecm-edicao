@@ -100,11 +100,13 @@ async function collectDiagnostics(): Promise<Diag> {
     diag.permission = Notification.permission;
   }
   if (diag.serviceWorkerApi) {
-    // O SW do FCM registra em /firebase-cloud-messaging-push-scope, não em /.
-    // Buscamos todas as registrations e preferimos a do FCM.
+    // FCM e PWA usam o mesmo SW raiz (/sw.js). Mantemos fallback para
+    // registros antigos enquanto todos os celulares migram.
     const regs = await navigator.serviceWorker.getRegistrations().catch(() => []);
     const fcmReg =
-      regs.find((r) => r.scope.includes("firebase-cloud-messaging-push-scope")) ?? regs[0];
+      regs.find((r) => new URL(r.scope).pathname === "/") ??
+      regs.find((r) => r.scope.includes("firebase-cloud-messaging-push-scope")) ??
+      regs[0];
     if (fcmReg) {
       diag.swScope = fcmReg.scope;
       const sw = fcmReg.active ?? fcmReg.waiting ?? fcmReg.installing;

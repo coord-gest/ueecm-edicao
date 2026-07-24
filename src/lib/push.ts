@@ -12,6 +12,10 @@ import { getFirebaseMessaging, loadFcmConfig } from "@/integrations/firebase/cli
 import { getToken, deleteToken, onMessage } from "firebase/messaging";
 import { logFcmDiagnostic } from "@/lib/fcm-diagnostics.functions";
 
+const ROOT_SW_SCOPE = "/";
+const LEGACY_FCM_SW_SCOPE = "/firebase-cloud-messaging-push-scope";
+const FCM_SW_VERSION = "10-android-6-16";
+
 export function isPushSupported(): boolean {
   if (typeof window === "undefined") return false;
   return "serviceWorker" in navigator && "Notification" in window && "PushManager" in window;
@@ -70,37 +74,33 @@ function reportFcmFailure(code: string, message: string): void {
 }
 
 /**
- * Registra o Service Worker do FCM, passando a config pública via query params.
- * O SW usa esses params para inicializar o Firebase — evita hardcode no arquivo.
+ * Usa o Service Worker raiz (/sw.js) para PWA + FCM.
+ * Isso evita dois SWs competindo no Android/PWA e mantém o push estável em
+ * versões antigas e novas do Android. A config pública vai por query params e
+ * também por postMessage, cobrindo SWs já instalados sem query antiga.
  */
 async function registerFcmServiceWorker(): Promise<ServiceWorkerRegistration | null> {
   if (!("serviceWorker" in navigator)) return null;
   const cfg = await loadFcmConfig();
   const swUrl =
-    "/firebase-messaging-sw.js?" +
+    "/sw.js?" +
     new URLSearchParams({
       apiKey: cfg.apiKey,
       projectId: cfg.projectId,
       senderId: cfg.messagingSenderId,
       appId: cfg.appId,
-      // Cache-bust: bump quando mudar a lógica do SW para forçar
-      // reinstalação em dispositivos que já tinham o SW antigo.
-      v: "3",
+      // Cache-bust: bump quando mudar a lógica do SW para forçar reinstalação
+      // em celulares que já tinham o SW antigo.
+      v: FCM_SW_VERSION,
     }).toString();
 
   try {
     const reg = await navigator.serviceWorker.register(swUrl, {
-      scope: "/firebase-cloud-messaging-push-scope",
+      scope: ROOT_SW_SCOPE,
+      updateViaCache: "none",
     });
-    if (reg.installing) {
-      await new Promise<void>((resolve) => {
-        const sw = reg.installing!;
-        sw.addEventListener("statechange", () => {
-          if (sw.state === "activated") resolve();
-        });
-        setTimeout(resolve, 10_000);
-      });
-    }
+    await waitForUsableServiceWorker(reg);
+    sendFcmConfigToServiceWorker(reg, cfg);
     return reg;
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
@@ -108,6 +108,59 @@ async function registerFcmServiceWorker(): Promise<ServiceWorkerRegistration | n
     reportFcmFailure("sw-register", msg);
     return null;
   }
+}
+
+async function waitForUsableServiceWorker(reg: ServiceWorkerRegistration): Promise<void> {
+  const installingOrWaiting = reg.installing ?? reg.waiting;
+  if (!installingOrWaiting) return;
+
+  if (reg.waiting) {
+    reg.waiting.postMessage({ type: "SKIP_WAITING" });
+  }
+
+  await new Promise<void>((resolve) => {
+    const sw = installingOrWaiting;
+    if (sw.state === "activated") {
+      resolve();
+      return;
+    }
+    const done = () => {
+      if (sw.state === "activated" || sw.state === "redundant") resolve();
+    };
+    sw.addEventListener("statechange", done);
+    setTimeout(resolve, 10_000);
+  });
+}
+
+function sendFcmConfigToServiceWorker(
+  reg: ServiceWorkerRegistration,
+  cfg: Awaited<ReturnType<typeof loadFcmConfig>>,
+): void {
+  const payload = {
+    type: "INIT_FCM",
+    config: {
+      apiKey: cfg.apiKey,
+      projectId: cfg.projectId,
+      senderId: cfg.messagingSenderId,
+      appId: cfg.appId,
+    },
+  };
+  reg.active?.postMessage(payload);
+  navigator.serviceWorker.controller?.postMessage(payload);
+}
+
+async function cleanupLegacyFcmRegistrations(): Promise<void> {
+  if (!("serviceWorker" in navigator)) return;
+  const regs = await navigator.serviceWorker.getRegistrations().catch(() => []);
+  await Promise.all(
+    regs
+      .filter((reg) => reg.scope.includes(LEGACY_FCM_SW_SCOPE))
+      .map(async (reg) => {
+        const sub = await reg.pushManager.getSubscription().catch(() => null);
+        await sub?.unsubscribe().catch(() => undefined);
+        await reg.unregister().catch(() => undefined);
+      }),
+  );
 }
 
 /** Devolve o token FCM atual (se existir) — sem pedir permissão. */
@@ -234,6 +287,8 @@ export async function subscribeToPush(): Promise<{ ok: true } | { ok: false; rea
     return { ok: false, reason };
   }
 
+  await cleanupLegacyFcmRegistrations().catch(() => undefined);
+
   return { ok: true };
 }
 
@@ -246,9 +301,7 @@ export async function unsubscribeFromPush(): Promise<void> {
     let token: string | null = null;
     try {
       const cfg = await loadFcmConfig();
-      const reg = await navigator.serviceWorker.getRegistration(
-        "/firebase-cloud-messaging-push-scope",
-      );
+      const reg = await navigator.serviceWorker.getRegistration(ROOT_SW_SCOPE);
       if (reg) {
         token = await getToken(messaging, {
           vapidKey: cfg.vapidKey,
@@ -288,9 +341,7 @@ export async function reattachPushTokenToUser(): Promise<void> {
     if (!messaging) return;
 
     const cfg = await loadFcmConfig();
-    const reg = await navigator.serviceWorker.getRegistration(
-      "/firebase-cloud-messaging-push-scope",
-    );
+    const reg = await navigator.serviceWorker.getRegistration(ROOT_SW_SCOPE);
     if (!reg) return;
 
     const token = await getToken(messaging, {

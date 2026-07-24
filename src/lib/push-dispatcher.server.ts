@@ -152,6 +152,11 @@ async function getGoogleAccessToken(creds: FcmCredentials): Promise<string> {
 
 type SendResult = { ok: boolean; dead: boolean; status: number; error?: string };
 
+function createNotificationTag(): string {
+  const randomPart = crypto.randomUUID?.() ?? Math.random().toString(36).slice(2, 12);
+  return `ecm-${Date.now()}-${randomPart}`;
+}
+
 async function sendToToken(
   accessToken: string,
   projectId: string,
@@ -159,6 +164,8 @@ async function sendToToken(
   notif: { title: string; body: string; url: string },
 ): Promise<SendResult> {
   const url = `https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`;
+  const tag = createNotificationTag();
+  const sentAt = new Date().toISOString();
   const payload = {
     message: {
       token,
@@ -174,6 +181,8 @@ async function sendToToken(
         title: notif.title,
         body: notif.body,
         url: notif.url,
+        tag,
+        sentAt,
       },
       android: {
         priority: "HIGH" as const,
@@ -213,6 +222,13 @@ async function sendToToken(
       },
       webpush: {
         headers: { Urgency: "high", TTL: "3600" },
+        data: {
+          title: notif.title,
+          body: notif.body,
+          url: notif.url,
+          tag,
+          sentAt,
+        },
         // FALLBACK CRÍTICO para Chrome Android/desktop: quando o SW
         // está morto/atualizando/em Doze, o Chrome usa este payload
         // como notificação automática. Sem isso, o push é aceito pelo
@@ -229,7 +245,11 @@ async function sendToToken(
           body: notif.body,
           icon: "/icon-192.png",
           badge: "/badge-96.png",
+          tag,
+          renotify: true,
+          vibrate: [200, 100, 200],
           requireInteraction: true,
+          data: { url: notif.url, tag },
         },
         fcm_options: { link: notif.url },
       },
