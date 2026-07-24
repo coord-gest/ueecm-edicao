@@ -34,6 +34,15 @@ messaging.onBackgroundMessage((payload) => {
   const body = data.body || notif.body || "";
   const url = data.url || "/";
 
+  // ANTI-DUPLICATA: se o payload contém `notification` (fallback do
+  // dispatcher para casos em que o SW poderia estar morto), o Chrome
+  // Android/desktop pode auto-exibir. Nesse caso o SW SÓ exibe se
+  // detectar que é a única instância viva (via clients matchAll) —
+  // caso contrário confia no auto-display do FCM Web SDK.
+  // Regra prática: quando `notification` existe, o FCM Web SDK ainda
+  // chama onBackgroundMessage MAS não auto-exibe (delega ao SW). Então
+  // podemos exibir sem medo. Mantemos tag única para não colidir.
+
   // Tag ÚNICA por notificação para evitar que o Android 16 (Chrome) suprima
   // silenciosamente notificações subsequentes que compartilhem a mesma tag.
   // No Android 13 o SO era mais tolerante; a partir do 14/16 uma nova

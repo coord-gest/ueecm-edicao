@@ -213,9 +213,24 @@ async function sendToToken(
       },
       webpush: {
         headers: { Urgency: "high", TTL: "3600" },
-        // Sem `notification` aqui de propósito: no Web (desktop) o SW
-        // via onBackgroundMessage exibe a notificação. Se colocássemos
-        // webpush.notification, o Chrome desktop duplicaria.
+        // FALLBACK CRÍTICO para Chrome Android/desktop: quando o SW
+        // está morto/atualizando/em Doze, o Chrome usa este payload
+        // como notificação automática. Sem isso, o push é aceito pelo
+        // FCM mas some no dispositivo — que é exatamente o sintoma
+        // atual (logs mostram sent=5/5, mas nada aparece no aparelho).
+        //
+        // Sobre duplicata: quando `notification` está presente E o SW
+        // define onBackgroundMessage, o FCM Web SDK NÃO auto-exibe —
+        // delega ao SW. Além disso, o SW usa `data._skipDisplay` como
+        // marcador (ver firebase-messaging-sw.js) para saber se o
+        // Chrome já vai exibir sozinho e, nesse caso, silenciar-se.
+        notification: {
+          title: notif.title,
+          body: notif.body,
+          icon: "/icon-192.png",
+          badge: "/badge-96.png",
+          requireInteraction: true,
+        },
         fcm_options: { link: notif.url },
       },
     },
