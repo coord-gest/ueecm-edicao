@@ -22,7 +22,20 @@ export function AutoPresentationMode({
   useEffect(() => {
     // Aguarda um frame para o DOM da rota estar montado.
     const raf = requestAnimationFrame(() => {
-      const nodes = Array.from(document.querySelectorAll<HTMLElement>(selector));
+      let nodes = Array.from(document.querySelectorAll<HTMLElement>(selector));
+      // Fallback: se a rota não usa <section>, quebra por filhos diretos de <main>
+      // que contenham um heading.
+      if (nodes.length < 2) {
+        const mains = Array.from(document.querySelectorAll<HTMLElement>("main"));
+        const collected: HTMLElement[] = [];
+        mains.forEach((m) => {
+          Array.from(m.children).forEach((child) => {
+            const el = child as HTMLElement;
+            if (el.querySelector("h1, h2, h3")) collected.push(el);
+          });
+        });
+        if (collected.length >= 2) nodes = collected;
+      }
       const found: PresentationSection[] = [];
       nodes.forEach((el, idx) => {
         // Ignora elementos escondidos.
