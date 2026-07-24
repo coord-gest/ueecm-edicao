@@ -7,6 +7,7 @@ import {
   useIsInsideSidebarProvider,
 } from "@/components/ui/sidebar";
 import { PainelSidebar } from "@/components/PainelSidebar";
+import { CodeOfEthicsGate } from "@/components/CodeOfEthicsGate";
 
 /**
  * Wrapper that keeps the painel sidebar persistent across all painel-* routes.
@@ -86,5 +87,9 @@ function AuthGatedPainelLayout({ children }: { children: ReactNode }) {
   // public layout without the painel sidebar. The sidebar is only for
   // authenticated users navigating the painel area.
   if (loading || !user) return <>{children}</>;
-  return <PainelLayout>{children}</PainelLayout>;
+  return (
+    <CodeOfEthicsGate>
+      <PainelLayout>{children}</PainelLayout>
+    </CodeOfEthicsGate>
+  );
 }
