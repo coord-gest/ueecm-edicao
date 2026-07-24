@@ -150,17 +150,25 @@ Suíte com Vitest + Testing Library cobrindo:
 
 ## Status
 
-Sistema **APROVADO PARA PRODUÇÃO** — Nota **9.7/10**. Última análise técnica consolidada: **22/07/2026 (v14 — Consolidada)** — **0 críticos · 0 altos · 1 médio · 2 baixos**. Testes: **152+ passando**. Typecheck: **0 erros**. Deploy Cloudflare estável com `bun@1.2.15`. Turnstile v2 ativo em produção (com fallback runtime). Notificações FCM funcionais em Android 13/16+ e iOS (tela bloqueada). Alertas Globais v2 com rajadas agendadas (`pg_cron`) e auditoria imutável. PWA/TWA com ícone do app em notificações. SEO com sitemap dinâmico + JSON-LD. Chat IA em **Gemini 2.0 Flash** (com fallbacks) e planejamentos pedagógicos assistidos por IA.
+Sistema **APROVADO PARA PRODUÇÃO** — Nota **9.7/10** (Prompt Mestre 2 v2 · 24/07/2026).
+
+- **Riscos abertos:** 0 críticos · 0 altos · 1 médio (Leaked Password Protection pendente no Supabase) · 2 baixos.
+- **Métricas:** 395 arquivos TS/TSX · 121 rotas · 170 migrações · 62 deps runtime / 25 dev · 152+ testes verdes.
+- **Higiene:** typecheck 0 erros · 0 `console.log` em `src/` · 0 uso de `any`/`as any`.
+- **Design system:** paleta **Navy Trust** consolidada + cantos quadrados globais (Tito preservado, invariante testada).
+- **Últimos avanços (v2):** limpeza de dead-code (26 arquivos + 15 deps · –18 shadcn não usados) · Modo Apresentação com slides · Central LGPD unificada · CSP com `frame-src` YouTube/Vimeo · fila de concorrência no chat IA (>5 usuários → 429).
+- Deploy Cloudflare estável com `bun@1.2.15`. Turnstile v2 ativo (com fallback runtime). Notificações FCM funcionais em Android 13/16+ e iOS (tela bloqueada). Alertas Globais v2 com rajadas agendadas (`pg_cron`). PWA/TWA com ícone circular "UEECM". Chat IA em **Gemini 2.0 Flash**.
 
 ## Relatórios Técnicos
 
 Todos os relatórios de auditoria ficam versionados em [`docs/relatorios/`](./docs/relatorios/).
 
-- **Relatório atual:** [Análise Técnica Completa — 22/07/2026 v14 (Markdown)](./docs/relatorios/Analise_Tecnica_Completa_2026-07-22-v14-Final.md)
-- **Relatório de funcionalidades por perfil:** [Relatorio_Funcionalidades_por_Perfil.docx](./docs/relatorios/Relatorio_Funcionalidades_por_Perfil.docx) (quando disponível em `/mnt/documents`)
+- **Relatório atual (v2):** [Análise Técnica — Prompt Mestre 2 v2 — 24/07/2026](./docs/relatorios/Analise_Tecnica_PromptMestre2_v2.md)
+- **Relatório anterior (v1):** [Análise Técnica — Prompt Mestre 2 v1 — 22/07/2026](./docs/relatorios/Analise_Tecnica_PromptMestre2_v1.md)
+- **Relatório consolidado histórico:** [Análise Técnica Completa v14 — 22/07/2026](./docs/relatorios/Analise_Tecnica_Completa_2026-07-22-v14-Final.md)
 - **Apresentação do sistema:** [Apresentação Executiva (PPTX · 44 slides)](./docs/relatorios/Apresentacao_Sistema_UEECM_v3.pptx)
 - **Veredito atual:** ✅ APROVADO PARA PRODUÇÃO
-- **Framework aplicado:** Prompt Mestre v2 — Análise Técnica Completa (Código · Segurança · SEO · PWA · LGPD · Validação Final)
+- **Framework aplicado:** Prompt Mestre 2 — Análise Técnica Completa (Código · Segurança · Validação Final)
 
 ## Roadmap Concluído (Consolidado)
 
@@ -180,9 +188,12 @@ Todos os relatórios de auditoria ficam versionados em [`docs/relatorios/`](./do
 - ✅ **Unir Escola & Comunidade**: Diário de Bordo, Radar do Filho, Méritos & Ocorrências, Alerta de Evasão, Contrato Digital, Selo de Presença Parental, Mural da Comunidade, Comunicados com Confirmação, Chat Pai↔Professor moderado, Rede de Apoio + Vaquinha Digital.
 - ✅ **Acadêmico**: Atividades e Trabalhos (professor divulga por turma, marca Fez/Não fez; pai acompanha; ranking com drill-down + export CSV/PDF), Planejamentos Pedagógicos (semanal/quinzenal/mensal/semestral) assistidos por Gemini.
 - ✅ **Agendamentos**: segmentação por role/usuário no push + consulta pública por protocolo em `/consultar-agendamento`.
-- ✅ **Design System**: tema "Azul & Menta" com gradientes ricos em light/dark; padronização global de `border-radius: 5px` (cards/botões/inputs/tabs) e scoping `data-admin` para painéis sem arredondamento.
+- ✅ **Design System**: paleta **Navy Trust** (`#0f1b3d · #1e3a5f · #3b6fa0 · #e8edf3`), cantos **quadrados globais** (exceção do Tito), invariantes visuais garantidas por teste (`src/test/theme-invariants.test.ts`). Redução drástica de gradientes/bordas/rings na Home, Team, Testimonials, PushInline, CtaDuo.
 - ✅ **Observabilidade**: Sentry (browser) + `system_errors` + FinOps dashboard (`/painel-finops`).
-- ✅ **Segurança**: `xlsx` substituído por `exceljs` (CVE Prototype Pollution); SBOM CycloneDX no CI.
+- ✅ **Segurança**: `xlsx` substituído por `exceljs` (CVE Prototype Pollution); SBOM CycloneDX no CI; CSV Injection sanitizada; mocks removidos de produção.
+- ✅ **Modo Apresentação & Modo TV**: gerenciador de slides em `/painel-apresentacoes`, player em `/apresentar/$id`, atalho fullscreen no painel; dashboard TV público em `/tv`.
+- ✅ **Central LGPD unificada** em `/central-lgpd` (Solicitação de dados + Segurança/Incidentes + Uso de imagem) — DPO Francisco Douglas (Art. 41).
+- ✅ **Limpeza v2 (24/07/2026)**: –26 arquivos órfãos · –18 componentes shadcn não usados · –15 dependências não usadas. Typecheck permanece verde.
 - 🟡 Pendente (Dashboard): **Enable Leaked Password Protection** em Supabase Auth.
 
 ---
