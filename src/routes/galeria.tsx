@@ -4,6 +4,7 @@ import { Images, Camera } from "lucide-react";
 import { listAlbunsPublicos } from "@/lib/galeria.functions";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { AutoPresentationMode } from "@/components/AutoPresentationMode";
 
 export const Route = createFileRoute("/galeria")({
   head: () => ({
@@ -99,6 +100,7 @@ function GaleriaIndex() {
           </div>
         )}
       </main>
+      <AutoPresentationMode />
       <SiteFooter />
     </>
   );

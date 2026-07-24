@@ -14,6 +14,7 @@ import { toast } from "sonner";
 
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { AutoPresentationMode } from "@/components/AutoPresentationMode";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -505,7 +506,8 @@ function CalendarioPage() {
           defaultDate={selectedDate ?? todayStr}
           turmas={(turmas ?? []).map((t) => t.nome)}
         />
-        <SiteFooter />
+        <AutoPresentationMode />
+      <SiteFooter />
       </div>
     </PainelLayout>
   );

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { AutoPresentationMode } from "@/components/AutoPresentationMode";
 import { Button } from "@/components/ui/button";
 import { clearConsent } from "@/lib/cookie-consent";
 
@@ -330,6 +331,7 @@ function PrivacyPage() {
           </p>
         </article>
       </main>
+      <AutoPresentationMode />
       <SiteFooter />
     </div>
   );

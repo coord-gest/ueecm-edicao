@@ -4,6 +4,7 @@ import { Download, Smartphone, Apple, Monitor, Check, Share, ArrowLeft } from "l
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { ApkDownloadCard } from "@/components/ApkDownloadCard";
+import { AutoPresentationMode } from "@/components/AutoPresentationMode";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -261,6 +262,7 @@ function InstalarPage() {
           </div>
         </div>
       </section>
-    </div>
+    <AutoPresentationMode />
+      </div>
   );
 }

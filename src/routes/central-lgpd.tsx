@@ -4,6 +4,7 @@ import { ShieldCheck, ShieldAlert, Camera, ArrowRight } from "lucide-react";
 
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { AutoPresentationMode } from "@/components/AutoPresentationMode";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 
@@ -118,6 +119,7 @@ function CentralLgpdPage() {
           </Tabs>
         </div>
       </main>
+      <AutoPresentationMode />
       <SiteFooter />
     </div>
   );

@@ -24,6 +24,7 @@ import { useAuth } from "@/lib/use-auth";
 import { logParentalConsent, PARENTAL_TERM_VERSION } from "@/lib/parental-consent.functions";
 import { calcularIdade, formatCpf } from "@/lib/parental-consent";
 import { logger } from "@/lib/logger";
+import { AutoPresentationMode } from "@/components/AutoPresentationMode";
 
 export const Route = createFileRoute("/agendar")({
   head: () => ({
@@ -642,6 +643,7 @@ function AgendarPage() {
           </Button>
         </CardContent>
       </Card>
-    </div>
+    <AutoPresentationMode />
+      </div>
   );
 }

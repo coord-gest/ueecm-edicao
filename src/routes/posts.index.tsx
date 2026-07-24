@@ -15,6 +15,7 @@ import {
 import { PhotoLightbox } from "@/components/PhotoLightbox";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { AutoPresentationMode } from "@/components/AutoPresentationMode";
 import { PostCard } from "@/components/PostCard";
 import { PostFilters } from "@/components/PostFilters";
 import { Button } from "@/components/ui/button";
@@ -513,6 +514,7 @@ function PostsListagem() {
         )}
       </main>
 
+      <AutoPresentationMode />
       <SiteFooter />
     </div>
   );

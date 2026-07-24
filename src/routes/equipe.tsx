@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GraduationCap, Briefcase, Star, Search } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { AutoPresentationMode } from "@/components/AutoPresentationMode";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -262,6 +263,7 @@ function EquipePage() {
         }}
       />
 
+      <AutoPresentationMode />
       <SiteFooter />
     </div>
   );
