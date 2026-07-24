@@ -83,6 +83,9 @@ async function registerFcmServiceWorker(): Promise<ServiceWorkerRegistration | n
       projectId: cfg.projectId,
       senderId: cfg.messagingSenderId,
       appId: cfg.appId,
+      // Cache-bust: bump quando mudar a lógica do SW para forçar
+      // reinstalação em dispositivos que já tinham o SW antigo.
+      v: "3",
     }).toString();
 
   try {

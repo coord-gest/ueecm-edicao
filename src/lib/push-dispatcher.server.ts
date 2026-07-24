@@ -162,13 +162,14 @@ async function sendToToken(
   const payload = {
     message: {
       token,
-      // DATA-ONLY: sem `notification` no topo e sem `webpush.notification`,
-      // para evitar DUPLICATA. Com `notification` presente, o FCM Web SDK
-      // exibe automaticamente E ainda chama onBackgroundMessage do SW,
-      // resultando em 2 notificações no Android. Mantemos priority HIGH +
-      // PRIORITY_MAX para furar o Doze e acordar a tela mesmo bloqueada.
-      // O SW (public/firebase-messaging-sw.js) é a única autoridade que
-      // exibe a notificação via showNotification.
+      // HÍBRIDO POR PLATAFORMA — cada plataforma tem UMA e apenas uma via
+      // de exibição, evitando duplicata:
+      //   • Android → android.notification (auto-display nativo do FCM,
+      //     funciona mesmo se o SW estiver morto/dormindo — Doze safe).
+      //   • iOS     → apns.payload.aps.alert (auto-display APNS).
+      //   • Web     → data-only + SW (public/firebase-messaging-sw.js).
+      // NÃO setamos `notification` no topo nem `webpush.notification`,
+      // porque isso faria o Chrome desktop duplicar (auto + SW).
       data: {
         title: notif.title,
         body: notif.body,
@@ -177,9 +178,20 @@ async function sendToToken(
       android: {
         priority: "HIGH" as const,
         ttl: "3600s",
-        // Sem bloco `notification` aqui: se presente, o FCM cria uma
-        // "notification message" que também dispara auto-display no
-        // Android nativo. Mantemos apenas priority + TTL para atravessar Doze.
+        // notification NATIVO do Android: o Chrome/FCM exibe direto pelo
+        // sistema, sem precisar que o SW esteja ativo. Essa é a chave para
+        // entrega confiável em Android 14+/16 com Doze / bateria otimizada.
+        // Como Chrome Android NÃO chama onBackgroundMessage quando
+        // android.notification está presente, não há duplicata.
+        notification: {
+          title: notif.title,
+          body: notif.body,
+          icon: "/icon-192.png",
+          click_action: notif.url,
+          notification_priority: "PRIORITY_MAX" as const,
+          default_sound: true,
+          default_vibrate_timings: true,
+        },
       },
       apns: {
         // apns-push-type=alert + apns-priority=10 é OBRIGATÓRIO para
@@ -201,8 +213,24 @@ async function sendToToken(
       },
       webpush: {
         headers: { Urgency: "high", TTL: "3600" },
-        // Sem `notification` aqui pelo mesmo motivo (auto-display no Chrome
-        // desktop). O SW cuida da exibição com ícone/badge/click.
+        // FALLBACK CRÍTICO para Chrome Android/desktop: quando o SW
+        // está morto/atualizando/em Doze, o Chrome usa este payload
+        // como notificação automática. Sem isso, o push é aceito pelo
+        // FCM mas some no dispositivo — que é exatamente o sintoma
+        // atual (logs mostram sent=5/5, mas nada aparece no aparelho).
+        //
+        // Sobre duplicata: quando `notification` está presente E o SW
+        // define onBackgroundMessage, o FCM Web SDK NÃO auto-exibe —
+        // delega ao SW. Além disso, o SW usa `data._skipDisplay` como
+        // marcador (ver firebase-messaging-sw.js) para saber se o
+        // Chrome já vai exibir sozinho e, nesse caso, silenciar-se.
+        notification: {
+          title: notif.title,
+          body: notif.body,
+          icon: "/icon-192.png",
+          badge: "/badge-96.png",
+          requireInteraction: true,
+        },
         fcm_options: { link: notif.url },
       },
     },
