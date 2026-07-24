@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/table";
 import { CODE_OF_ETHICS_VERSION } from "@/lib/code-of-ethics";
 import { listEthicsAcceptances, type EthicsAcceptanceRow } from "@/lib/ethics-acceptances.functions";
-import { toCsv, downloadCsv } from "@/lib/csv-export";
+import { exportRowsAsCsv } from "@/lib/csv-export";
 import { roleLabels, normalizeRole } from "@/lib/roles";
 
 export const Route = createFileRoute("/painel-etica")({
@@ -101,9 +101,10 @@ function PainelEticaPage() {
       aceito_em: new Date(r.accepted_at).toLocaleString("pt-BR"),
       ip: r.ip ?? "",
     }));
-    downloadCsv(
+    exportRowsAsCsv(
       `codigo-etica-aceites-${new Date().toISOString().slice(0, 10)}.csv`,
-      toCsv(rows, ["nome", "email", "cargo", "papeis", "versao", "aceito_em", "ip"]),
+      rows,
+      ["nome", "email", "cargo", "papeis", "versao", "aceito_em", "ip"],
     );
   }
 
