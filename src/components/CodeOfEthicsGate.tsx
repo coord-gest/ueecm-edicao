@@ -3,7 +3,6 @@ import { Loader2, ShieldCheck, ScrollText } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
 import {
@@ -125,7 +124,7 @@ export function CodeOfEthicsGate({ children }: { children: React.ReactNode }) {
             </div>
           ) : (
             <>
-              <ScrollArea className="flex-1">
+              <div className="flex-1 overflow-hidden">
                 <div
                   ref={scrollRef}
                   onScroll={handleScroll}
@@ -151,7 +150,7 @@ export function CodeOfEthicsGate({ children }: { children: React.ReactNode }) {
                     Role até o fim do documento para habilitar o aceite.
                   </p>
                 </div>
-              </ScrollArea>
+              </div>
 
               <footer className="border-t border-border bg-muted/30 px-6 py-4">
                 <label className="flex items-start gap-3 text-sm text-foreground">
