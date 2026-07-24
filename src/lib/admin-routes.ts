@@ -66,6 +66,10 @@ export const ADMIN_ROUTE_PERMISSIONS: Record<string, AdminRoutePermission> = {
   "/painel-runtime": { area: "Runtime & diagnóstico", roles: [] },
   "/painel-tema": { area: "Animações do tema", roles: ["diretor", "coordenador"] },
   "/painel-lgpd": { area: "Solicitações LGPD", roles: ["diretor", "coordenador", "secretario"] },
+  "/painel-etica": {
+    area: "Código de Ética (aceites)",
+    roles: ["diretor", "coordenador"],
+  },
   "/painel-desenvolvedor": {
     area: "FAQ do desenvolvedor",
     roles: ["diretor", "coordenador", "secretario", "professor"],
