@@ -131,6 +131,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Analytics", url: "/painel-analytics", icon: BarChart3 },
         { title: "Auditoria", url: "/painel-auditoria", icon: History },
         { title: "Acessos administrativos", url: "/painel-acessos", icon: Shield },
+        { title: "Código de Ética (aceites)", url: "/painel-etica", icon: ScrollText },
         { title: "Painel de erros", url: "/painel-erros", icon: AlertTriangle },
         { title: "Runtime & diagnóstico", url: "/painel-runtime", icon: Activity },
         { title: "Animações do tema", url: "/painel-tema", icon: Sparkles },
@@ -225,6 +226,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Analytics", url: "/painel-analytics", icon: BarChart3 },
         { title: "Animações do tema", url: "/painel-tema", icon: Sparkles },
         { title: "Solicitações LGPD", url: "/painel-lgpd", icon: ScrollText },
+        { title: "Código de Ética (aceites)", url: "/painel-etica", icon: ScrollText },
         { title: "Manutenção", url: "/painel-manutencao", icon: Wrench },
         { title: "Google Drive", url: "/painel-google-drive", icon: FolderOpen },
         { title: "Enviar p/ o Drive", url: "/painel-enviar-drive", icon: FolderOpen },
@@ -315,6 +317,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Analytics", url: "/painel-analytics", icon: BarChart3 },
         { title: "Animações do tema", url: "/painel-tema", icon: Sparkles },
         { title: "Solicitações LGPD", url: "/painel-lgpd", icon: ScrollText },
+        { title: "Código de Ética (aceites)", url: "/painel-etica", icon: ScrollText },
       ],
     },
     {

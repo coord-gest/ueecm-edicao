@@ -65,6 +65,7 @@ import { Route as PainelDiretorRouteImport } from './routes/painel-diretor'
 import { Route as PainelEnquetesRouteImport } from './routes/painel-enquetes'
 import { Route as PainelEnviarDriveRouteImport } from './routes/painel-enviar-drive'
 import { Route as PainelErrosRouteImport } from './routes/painel-erros'
+import { Route as PainelEticaRouteImport } from './routes/painel-etica'
 import { Route as PainelFamiliasRouteImport } from './routes/painel-familias'
 import { Route as PainelFinopsRouteImport } from './routes/painel-finops'
 import { Route as PainelGaleriaRouteImport } from './routes/painel-galeria'
@@ -428,6 +429,11 @@ const PainelEnviarDriveRoute = PainelEnviarDriveRouteImport.update({
 const PainelErrosRoute = PainelErrosRouteImport.update({
   id: '/painel-erros',
   path: '/painel-erros',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelEticaRoute = PainelEticaRouteImport.update({
+  id: '/painel-etica',
+  path: '/painel-etica',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelFamiliasRoute = PainelFamiliasRouteImport.update({
@@ -903,6 +909,7 @@ export interface FileRoutesByFullPath {
   '/painel-enquetes': typeof PainelEnquetesRoute
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
   '/painel-erros': typeof PainelErrosRoute
+  '/painel-etica': typeof PainelEticaRoute
   '/painel-familias': typeof PainelFamiliasRoute
   '/painel-finops': typeof PainelFinopsRoute
   '/painel-galeria': typeof PainelGaleriaRoute
@@ -1040,6 +1047,7 @@ export interface FileRoutesByTo {
   '/painel-enquetes': typeof PainelEnquetesRoute
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
   '/painel-erros': typeof PainelErrosRoute
+  '/painel-etica': typeof PainelEticaRoute
   '/painel-familias': typeof PainelFamiliasRoute
   '/painel-finops': typeof PainelFinopsRoute
   '/painel-galeria': typeof PainelGaleriaRoute
@@ -1180,6 +1188,7 @@ export interface FileRoutesById {
   '/painel-enquetes': typeof PainelEnquetesRoute
   '/painel-enviar-drive': typeof PainelEnviarDriveRoute
   '/painel-erros': typeof PainelErrosRoute
+  '/painel-etica': typeof PainelEticaRoute
   '/painel-familias': typeof PainelFamiliasRoute
   '/painel-finops': typeof PainelFinopsRoute
   '/painel-galeria': typeof PainelGaleriaRoute
@@ -1321,6 +1330,7 @@ export interface FileRouteTypes {
     | '/painel-enquetes'
     | '/painel-enviar-drive'
     | '/painel-erros'
+    | '/painel-etica'
     | '/painel-familias'
     | '/painel-finops'
     | '/painel-galeria'
@@ -1458,6 +1468,7 @@ export interface FileRouteTypes {
     | '/painel-enquetes'
     | '/painel-enviar-drive'
     | '/painel-erros'
+    | '/painel-etica'
     | '/painel-familias'
     | '/painel-finops'
     | '/painel-galeria'
@@ -1597,6 +1608,7 @@ export interface FileRouteTypes {
     | '/painel-enquetes'
     | '/painel-enviar-drive'
     | '/painel-erros'
+    | '/painel-etica'
     | '/painel-familias'
     | '/painel-finops'
     | '/painel-galeria'
@@ -1737,6 +1749,7 @@ export interface RootRouteChildren {
   PainelEnquetesRoute: typeof PainelEnquetesRoute
   PainelEnviarDriveRoute: typeof PainelEnviarDriveRoute
   PainelErrosRoute: typeof PainelErrosRoute
+  PainelEticaRoute: typeof PainelEticaRoute
   PainelFamiliasRoute: typeof PainelFamiliasRoute
   PainelFinopsRoute: typeof PainelFinopsRoute
   PainelGaleriaRoute: typeof PainelGaleriaRoute
@@ -2200,6 +2213,13 @@ declare module '@tanstack/react-router' {
       path: '/painel-erros'
       fullPath: '/painel-erros'
       preLoaderRoute: typeof PainelErrosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel-etica': {
+      id: '/painel-etica'
+      path: '/painel-etica'
+      fullPath: '/painel-etica'
+      preLoaderRoute: typeof PainelEticaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-familias': {
@@ -2942,6 +2962,7 @@ const rootRouteChildren: RootRouteChildren = {
   PainelEnquetesRoute: PainelEnquetesRoute,
   PainelEnviarDriveRoute: PainelEnviarDriveRoute,
   PainelErrosRoute: PainelErrosRoute,
+  PainelEticaRoute: PainelEticaRoute,
   PainelFamiliasRoute: PainelFamiliasRoute,
   PainelFinopsRoute: PainelFinopsRoute,
   PainelGaleriaRoute: PainelGaleriaRoute,
