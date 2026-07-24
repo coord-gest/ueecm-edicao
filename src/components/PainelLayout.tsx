@@ -52,6 +52,11 @@ export const PAINEL_PATH_PREFIXES = [
   "/meus-comunicados",
   "/minhas-turmas",
   "/escola",
+  "/mural",
+  "/rede-apoio",
+  "/chat-aluno",
+  "/mensagens-coordenacao",
+  "/notificacoes",
 ];
 
 export function isPainelPath(pathname: string): boolean {
