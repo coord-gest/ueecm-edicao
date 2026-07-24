@@ -29,6 +29,7 @@ import { QuickContact } from "@/components/home/QuickContact";
 import { MomentsGallery } from "@/components/home/MomentsGallery";
 import { patrocinadoresQueryOptions } from "@/components/home/Patrocinadores";
 import { listPatrocinadoresPublicos } from "@/lib/patrocinadores.functions";
+import { PresentationMode } from "@/components/PresentationMode";
 const Patrocinadores = lazy(() =>
   import("@/components/home/Patrocinadores").then((m) => ({ default: m.Patrocinadores })),
 );
@@ -225,6 +226,7 @@ function Home() {
       <section
         className="mx-auto mb-10 w-full max-w-7xl px-4 pt-4 sm:px-6 sm:pt-6 md:mb-16 lg:px-8"
         aria-label="Notícias em destaque"
+        id="hero"
       >
         {isLoading ? (
           <HeroSkeleton />
@@ -241,27 +243,27 @@ function Home() {
         </h1>
 
         {/* Sobre a escola (resumo) */}
-        <RevealSection>
+        <RevealSection id="sobre">
           <SobreEscola />
         </RevealSection>
 
         {/* Faixa de estatísticas */}
-        <RevealSection delay={80}>
+        <RevealSection id="stats" delay={80}>
           <StatsBar />
         </RevealSection>
 
         {/* CTA duplo: agendar + portal */}
-        <RevealSection delay={160}>
+        <RevealSection id="cta" delay={160}>
           <CtaDuo />
         </RevealSection>
 
         {/* Próximos eventos */}
-        <RevealSection delay={80}>
+        <RevealSection id="eventos" delay={80}>
           <UpcomingEvents />
         </RevealSection>
 
         {/* Faixa: Mais lidas + Opinião */}
-        <RevealSection className="mb-10 grid grid-cols-1 gap-8 md:mb-16 md:gap-10 lg:grid-cols-12">
+        <RevealSection id="mais-lidas" className="mb-10 grid grid-cols-1 gap-8 md:mb-16 md:gap-10 lg:grid-cols-12">
           <div className="lg:col-span-8">
             <SectionHeader title="Mais Lidas" />
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-3">
@@ -277,7 +279,7 @@ function Home() {
 
         {/* Grid uniforme — últimas notícias, com chips de categoria */}
         {(gridFiltrado.length > 0 || isLoading) && (
-          <RevealSection>
+          <RevealSection id="ultimas">
             <div className="mb-6 flex items-end justify-between border-b-2 border-primary pb-3">
               <h2 className="font-display text-2xl text-primary sm:text-3xl lg:text-4xl">
                 Últimas Notícias
@@ -374,27 +376,27 @@ function Home() {
         )}
 
         {/* Push inline */}
-        <RevealSection className="mt-10 md:mt-16">
+        <RevealSection id="notificacoes" className="mt-10 md:mt-16">
           <PushInline />
         </RevealSection>
 
         {/* Depoimentos */}
-        <RevealSection delay={80}>
+        <RevealSection id="depoimentos" delay={80}>
           <Testimonials />
         </RevealSection>
 
         {/* Alunos de Destaque do Mês */}
-        <RevealSection delay={80}>
+        <RevealSection id="destaques" delay={80}>
           <AlunosDestaque />
         </RevealSection>
 
         {/* Galeria de momentos */}
-        <RevealSection delay={80}>
+        <RevealSection id="galeria" delay={80}>
           <MomentsGallery />
         </RevealSection>
 
         {/* Nossos Patrocinadores (conteúdo liberado só após hidratação) */}
-        <RevealSection className="mt-10 md:mt-24" delay={120}>
+        <RevealSection id="patrocinadores" className="mt-10 md:mt-24" delay={120}>
           {hydrated && hasPatrocinadores ? (
             <Suspense fallback={null}>
               <Patrocinadores />
@@ -403,27 +405,47 @@ function Home() {
         </RevealSection>
 
         {/* Equipe em destaque */}
-        <RevealSection delay={80}>
+        <RevealSection id="equipe" delay={80}>
           <TeamHighlight />
         </RevealSection>
 
         {/* Resumos institucionais */}
-        <RevealSection delay={80}>
+        <RevealSection id="institucional" delay={80}>
           <SchoolHighlights />
         </RevealSection>
 
         {/* Contato rápido */}
-        <RevealSection delay={80}>
+        <RevealSection id="contato" delay={80}>
           <QuickContact />
         </RevealSection>
 
         {/* CTA Titinho */}
-        <RevealSection delay={120}>
+        <RevealSection id="tito" delay={120}>
           <TitinhoCta />
         </RevealSection>
       </div>
 
       <SiteFooter />
+      <PresentationMode
+        sections={[
+          { id: "hero", label: "Notícias em destaque" },
+          { id: "sobre", label: "Sobre a escola" },
+          { id: "stats", label: "A escola em números" },
+          { id: "cta", label: "Agende sua visita" },
+          { id: "eventos", label: "Próximos eventos" },
+          { id: "mais-lidas", label: "Mais lidas & Opinião" },
+          { id: "ultimas", label: "Últimas notícias" },
+          { id: "notificacoes", label: "Ative as notificações" },
+          { id: "depoimentos", label: "Depoimentos" },
+          { id: "destaques", label: "Alunos em destaque" },
+          { id: "galeria", label: "Galeria de momentos" },
+          { id: "patrocinadores", label: "Patrocinadores" },
+          { id: "equipe", label: "Nossa equipe" },
+          { id: "institucional", label: "Resumos institucionais" },
+          { id: "contato", label: "Fale conosco" },
+          { id: "tito", label: "Assistente Tito" },
+        ]}
+      />
     </div>
   );
 }
@@ -483,14 +505,16 @@ function RevealSection({
   children,
   className = "",
   delay = 0,
+  id,
 }: {
   children: React.ReactNode;
   className?: string;
   delay?: number;
+  id?: string;
 }) {
   const ref = useReveal<HTMLElement>({ delay });
   return (
-    <section ref={ref} className={`reveal ${className}`}>
+    <section ref={ref} id={id} className={`reveal ${className}`}>
       {children}
     </section>
   );
