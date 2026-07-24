@@ -9,7 +9,17 @@ type BeforeInstallPromptEvent = Event & {
 };
 
 const DISMISS_KEY = "pwa-install-dismissed-at";
-const DISMISS_DAYS = 14;
+const DISMISS_DAYS = 3;
+const FALLBACK_DELAY_MS = 4000;
+
+function detectPlatform(): "ios" | "android" | "desktop" | "other" {
+  if (typeof navigator === "undefined") return "other";
+  const ua = navigator.userAgent || "";
+  if (/iPhone|iPad|iPod/i.test(ua)) return "ios";
+  if (/Android/i.test(ua)) return "android";
+  if (/Windows|Mac|Linux/i.test(ua)) return "desktop";
+  return "other";
+}
 
 function wasRecentlyDismissed(): boolean {
   const v = safeLocalStorage.getItem(DISMISS_KEY);
@@ -22,6 +32,7 @@ function wasRecentlyDismissed(): boolean {
 export function InstallPrompt() {
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
   const [visible, setVisible] = useState(false);
+  const [platform, setPlatform] = useState<"ios" | "android" | "desktop" | "other">("other");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -32,6 +43,9 @@ export function InstallPrompt() {
       (window.navigator as unknown as { standalone?: boolean }).standalone === true;
     if (standalone) return;
     if (wasRecentlyDismissed()) return;
+
+    const plat = detectPlatform();
+    setPlatform(plat);
 
     const onPrompt = (e: Event) => {
       e.preventDefault();
@@ -44,9 +58,18 @@ export function InstallPrompt() {
     };
     window.addEventListener("beforeinstallprompt", onPrompt);
     window.addEventListener("appinstalled", onInstalled);
+
+    // Fallback: navegadores que não disparam beforeinstallprompt (iOS Safari,
+    // Firefox, ou Chrome quando os heuristics de engajamento ainda não
+    // permitiram) ainda mostram o banner com instruções manuais.
+    const fallbackTimer = window.setTimeout(() => {
+      setVisible((v) => v || true);
+    }, FALLBACK_DELAY_MS);
+
     return () => {
       window.removeEventListener("beforeinstallprompt", onPrompt);
       window.removeEventListener("appinstalled", onInstalled);
+      window.clearTimeout(fallbackTimer);
     };
   }, []);
 
@@ -56,7 +79,11 @@ export function InstallPrompt() {
   };
 
   const install = async () => {
-    if (!deferred) return;
+    if (!deferred) {
+      // Sem prompt nativo: manda para a página com instruções por plataforma.
+      window.location.href = "/instalar";
+      return;
+    }
     try {
       await deferred.prompt();
       const { outcome } = await deferred.userChoice;
@@ -73,6 +100,15 @@ export function InstallPrompt() {
 
   if (!visible) return null;
 
+  const subtitle = deferred
+    ? "Acesso rápido offline na tela inicial"
+    : platform === "ios"
+      ? "Toque em Compartilhar › Adicionar à Tela de Início"
+      : platform === "android"
+        ? "Menu ⋮ do navegador › Instalar aplicativo"
+        : "Veja como instalar em qualquer dispositivo";
+  const ctaLabel = deferred ? "Instalar" : "Como instalar";
+
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-20 z-[60] flex justify-center px-4 sm:bottom-6">
       <div className="pointer-events-auto flex w-full max-w-md items-center gap-3 rounded-xl border border-border/70 bg-card/95 p-3 shadow-xl backdrop-blur-md">
@@ -83,12 +119,10 @@ export function InstallPrompt() {
           <p className="truncate font-display text-sm font-semibold text-foreground">
             Instalar aplicativo
           </p>
-          <p className="truncate text-xs text-muted-foreground">
-            Acesso rápido offline na tela inicial
-          </p>
+          <p className="truncate text-xs text-muted-foreground">{subtitle}</p>
         </div>
         <Button size="sm" onClick={install} className="rounded-lg">
-          Instalar
+          {ctaLabel}
         </Button>
         <button
           onClick={dismiss}
