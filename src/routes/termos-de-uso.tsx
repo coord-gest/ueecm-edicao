@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { AutoPresentationMode } from "@/components/AutoPresentationMode";
 
 export const Route = createFileRoute("/termos-de-uso")({
   head: () => ({
@@ -247,6 +248,7 @@ function TermsPage() {
           </p>
         </article>
       </main>
+      <AutoPresentationMode />
       <SiteFooter />
     </div>
   );

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { MapPin, Calendar, Target, Heart, Sparkles, GraduationCap, Users } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { AutoPresentationMode } from "@/components/AutoPresentationMode";
 import heroImg from "@/assets/hero-school.jpg";
 import livroCapa from "@/assets/livro-memorias-povo.jpg";
 
@@ -250,6 +251,7 @@ function SobrePage() {
         </section>
       </main>
 
+      <AutoPresentationMode />
       <SiteFooter />
     </div>
   );
