@@ -174,9 +174,9 @@ async function sendToToken(
       //   • Android → android.notification (auto-display nativo do FCM,
       //     funciona mesmo se o SW estiver morto/dormindo — Doze safe).
       //   • iOS     → apns.payload.aps.alert (auto-display APNS).
-      //   • Web     → data-only + SW (public/firebase-messaging-sw.js).
-      // NÃO setamos `notification` no topo nem `webpush.notification`,
-      // porque isso faria o Chrome desktop duplicar (auto + SW).
+      //   • Web     → webpush.notification + data no SW raiz (/sw.js).
+      // NÃO setamos `notification` no topo para evitar auto-display genérico
+      // duplicando com o Service Worker do Firebase.
       data: {
         title: notif.title,
         body: notif.body,
@@ -235,11 +235,9 @@ async function sendToToken(
         // FCM mas some no dispositivo — que é exatamente o sintoma
         // atual (logs mostram sent=5/5, mas nada aparece no aparelho).
         //
-        // Sobre duplicata: quando `notification` está presente E o SW
-        // define onBackgroundMessage, o FCM Web SDK NÃO auto-exibe —
-        // delega ao SW. Além disso, o SW usa `data._skipDisplay` como
-        // marcador (ver firebase-messaging-sw.js) para saber se o
-        // Chrome já vai exibir sozinho e, nesse caso, silenciar-se.
+        // Sobre duplicata: o SW raiz (/sw.js) gera tag única + renotify.
+        // Em Android 14/16 isso evita substituição silenciosa quando várias
+        // notificações chegam com a mesma tag.
         notification: {
           title: notif.title,
           body: notif.body,

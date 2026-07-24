@@ -41,6 +41,7 @@ const PRECACHE = [
 
 let messaging = null;
 let runtimeFcmConfig = null;
+let backgroundMessageHandlerAttached = false;
 
 function readFcmConfigFromUrl() {
   const params = new URL(self.location.href).searchParams;
@@ -84,6 +85,14 @@ function initFirebaseMessaging() {
   } catch (_) {
     return null;
   }
+}
+
+function ensureFirebaseMessagingHandler() {
+  const instance = initFirebaseMessaging();
+  if (!instance || backgroundMessageHandlerAttached) return instance;
+  backgroundMessageHandlerAttached = true;
+  instance.onBackgroundMessage((payload) => showPushNotification(payload));
+  return instance;
 }
 
 self.addEventListener("install", (event) => {
@@ -221,7 +230,7 @@ self.addEventListener("message", (event) => {
 
   if (event.data && event.data.type === "INIT_FCM") {
     runtimeFcmConfig = normalizeFcmConfig(event.data.config);
-    initFirebaseMessaging();
+    ensureFirebaseMessagingHandler();
   }
 
   if (event.data && event.data.type === "FLUSH_QUEUE") {
@@ -367,15 +376,10 @@ function showPushNotification(rawPayload) {
   return self.registration.showNotification(title, options);
 }
 
-const firebaseMessaging = initFirebaseMessaging();
-if (firebaseMessaging) {
-  firebaseMessaging.onBackgroundMessage((payload) => {
-    return showPushNotification(payload);
-  });
-}
+ensureFirebaseMessagingHandler();
 
 self.addEventListener("push", (event) => {
-  if (firebaseMessaging) return;
+  if (messaging) return;
 
   let rawPayload = null;
 

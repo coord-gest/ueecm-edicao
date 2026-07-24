@@ -252,7 +252,9 @@ export async function subscribeToPush(): Promise<{ ok: true } | { ok: false; rea
         body,
         icon: "/icon-192.png",
         badge: "/badge-96.png",
-        tag: data.tag ?? "ecm-fcm",
+        tag: data.tag ?? `ecm-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        renotify: true,
+        requireInteraction: true,
         data: { url: data.url ?? "/" },
       });
     } catch {
