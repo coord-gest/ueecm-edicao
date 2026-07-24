@@ -248,7 +248,7 @@ export async function subscribeToPush(): Promise<{ ok: true } | { ok: false; rea
     const title = data.title ?? payload.notification?.title ?? "Nova notificação";
     const body = data.body ?? payload.notification?.body ?? "";
     try {
-      reg.showNotification(title, {
+      const options: NotificationOptions & { renotify?: boolean } = {
         body,
         icon: "/icon-192.png",
         badge: "/badge-96.png",
@@ -256,7 +256,8 @@ export async function subscribeToPush(): Promise<{ ok: true } | { ok: false; rea
         renotify: true,
         requireInteraction: true,
         data: { url: data.url ?? "/" },
-      });
+      };
+      reg.showNotification(title, options);
     } catch {
       /* best-effort */
     }
