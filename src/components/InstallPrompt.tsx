@@ -10,7 +10,7 @@ type BeforeInstallPromptEvent = Event & {
 
 const DISMISS_KEY = "pwa-install-dismissed-at";
 const DISMISS_DAYS = 3;
-const FALLBACK_DELAY_MS = 4000;
+const FALLBACK_DELAY_MS = 12000;
 
 function detectPlatform(): "ios" | "android" | "desktop" | "other" {
   if (typeof navigator === "undefined") return "other";
@@ -59,9 +59,10 @@ export function InstallPrompt() {
     window.addEventListener("beforeinstallprompt", onPrompt);
     window.addEventListener("appinstalled", onInstalled);
 
-    // Fallback: navegadores que não disparam beforeinstallprompt (iOS Safari,
-    // Firefox, ou Chrome quando os heuristics de engajamento ainda não
-    // permitiram) ainda mostram o banner com instruções manuais.
+    // Fallback: se o navegador ainda não disparou beforeinstallprompt
+    // (iOS Safari, Firefox, ou Chrome antes dos heuristics), esperamos
+    // um tempo maior para dar chance do evento nativo chegar primeiro
+    // (assim o botão aparece como "Instalar" e não "Como instalar").
     const fallbackTimer = window.setTimeout(() => {
       setVisible((v) => v || true);
     }, FALLBACK_DELAY_MS);
