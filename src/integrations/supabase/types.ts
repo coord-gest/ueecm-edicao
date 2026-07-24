@@ -1418,7 +1418,14 @@ export type Database = {
             foreignKeyName: "contratos_compromisso_turma_id_fkey"
             columns: ["turma_id"]
             isOneToOne: false
-            referencedRelation: "turmas"
+            referencedRelation: "alunos_destaque_publicos"
+            referencedColumns: ["turma_id"]
+          },
+          {
+            foreignKeyName: "contratos_compromisso_turma_id_fkey"
+            columns: ["turma_id"]
+            isOneToOne: false
+            referencedRelation: "turmas_escolares"
             referencedColumns: ["id"]
           },
         ]

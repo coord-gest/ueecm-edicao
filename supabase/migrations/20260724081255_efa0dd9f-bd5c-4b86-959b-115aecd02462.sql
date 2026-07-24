@@ -1,0 +1,2 @@
+ALTER TABLE public.contratos_compromisso DROP CONSTRAINT IF EXISTS contratos_compromisso_turma_id_fkey;
+ALTER TABLE public.contratos_compromisso ADD CONSTRAINT contratos_compromisso_turma_id_fkey FOREIGN KEY (turma_id) REFERENCES public.turmas_escolares(id) ON DELETE SET NULL;
