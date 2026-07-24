@@ -400,10 +400,10 @@ function PainelRuntime() {
           senderId,
         }).toString();
         const reg =
-          (await navigator.serviceWorker.getRegistration("/firebase-cloud-messaging-push-scope")) ??
           (await navigator.serviceWorker.getRegistration("/")) ??
-          (await navigator.serviceWorker.register(`/firebase-messaging-sw.js?${swQs}`, {
+          (await navigator.serviceWorker.register(`/sw.js?${swQs}&v=10-android-6-16`, {
             scope: "/",
+            updateViaCache: "none",
           }));
         await navigator.serviceWorker.ready;
         const existing = await reg.pushManager.getSubscription();

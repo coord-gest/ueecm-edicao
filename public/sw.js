@@ -10,7 +10,7 @@
 importScripts("https://www.gstatic.com/firebasejs/12.15.0/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/12.15.0/firebase-messaging-compat.js");
 
-const VERSION = "v9-realtime-fix";
+const VERSION = "v10-android-6-16-fcm";
 const STATIC_CACHE = `static-${VERSION}`;
 const PAGES_CACHE = `pages-${VERSION}`;
 const IMG_CACHE = `images-${VERSION}`;
@@ -41,6 +41,7 @@ const PRECACHE = [
 
 let messaging = null;
 let runtimeFcmConfig = null;
+let backgroundMessageHandlerAttached = false;
 
 function readFcmConfigFromUrl() {
   const params = new URL(self.location.href).searchParams;
@@ -86,14 +87,22 @@ function initFirebaseMessaging() {
   }
 }
 
+function ensureFirebaseMessagingHandler() {
+  const instance = initFirebaseMessaging();
+  if (!instance || backgroundMessageHandlerAttached) return instance;
+  backgroundMessageHandlerAttached = true;
+  instance.onBackgroundMessage((payload) => showPushNotification(payload));
+  return instance;
+}
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(STATIC_CACHE)
       .then((cache) => cache.addAll(PRECACHE).catch(() => undefined))
-      // Não chamamos skipWaiting automaticamente: isso causava recarregamentos
-      // no primeiro acesso. Atualizações só assumem após ação do usuário.
-      .then(() => undefined),
+      // Esta versão corrige entrega FCM em Android 14/16. Ativamos sem esperar
+      // fechamento de abas para que celulares com SW antigo passem a receber.
+      .then(() => self.skipWaiting()),
   );
 });
 
@@ -221,7 +230,7 @@ self.addEventListener("message", (event) => {
 
   if (event.data && event.data.type === "INIT_FCM") {
     runtimeFcmConfig = normalizeFcmConfig(event.data.config);
-    initFirebaseMessaging();
+    ensureFirebaseMessagingHandler();
   }
 
   if (event.data && event.data.type === "FLUSH_QUEUE") {
@@ -310,7 +319,7 @@ function normalizePushPayload(rawPayload) {
     title: "U.E. Evaristo",
     body: "Você tem uma nova notificação.",
     url: "/",
-    tag: "ecm-default",
+    tag: "",
   };
 
   if (!rawPayload || typeof rawPayload !== "object") return fallback;
@@ -329,24 +338,34 @@ function normalizePushPayload(rawPayload) {
     ...data,
     ...notification,
     url: data.url || rawPayload.url || fcmOptions.link || fallback.url,
-    tag: data.tag || rawPayload.tag || fallback.tag,
+    tag: data.tag || notification.tag || rawPayload.tag || fallback.tag,
   };
+}
+
+function createNotificationTag(value) {
+  if (typeof value === "string" && value.trim().length > 0 && value !== "ecm-default") {
+    return value.trim();
+  }
+  const randomPart = Math.random().toString(36).slice(2, 8);
+  return `ecm-${Date.now()}-${randomPart}`;
 }
 
 function showPushNotification(rawPayload) {
   const payload = normalizePushPayload(rawPayload);
-  const { title, body, url, tag } = payload;
+  const { title, body, url } = payload;
+  const tag = createNotificationTag(payload.tag);
 
   const options = {
     body,
-    tag: tag || "ecm-default",
+    tag,
     icon: payload.icon || NOTIFICATION_ICON,
     badge: payload.badge || NOTIFICATION_BADGE,
     image: payload.image,
     vibrate: [200, 100, 200],
     silent: false,
-    requireInteraction: false,
-    data: { url: toSameOriginUrl(url) },
+    requireInteraction: true,
+    timestamp: Date.now(),
+    data: { url: toSameOriginUrl(url), tag },
     renotify: true,
   };
 
@@ -357,8 +376,10 @@ function showPushNotification(rawPayload) {
   return self.registration.showNotification(title, options);
 }
 
+ensureFirebaseMessagingHandler();
+
 self.addEventListener("push", (event) => {
-  if (firebaseMessaging) return;
+  if (messaging) return;
 
   let rawPayload = null;
 
@@ -376,13 +397,6 @@ self.addEventListener("push", (event) => {
 
   event.waitUntil(showPushNotification(rawPayload));
 });
-
-const firebaseMessaging = initFirebaseMessaging();
-if (firebaseMessaging) {
-  firebaseMessaging.onBackgroundMessage((payload) => {
-    return showPushNotification(payload);
-  });
-}
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();

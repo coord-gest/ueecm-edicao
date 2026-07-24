@@ -25,6 +25,9 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
+self.addEventListener("install", () => self.skipWaiting());
+self.addEventListener("activate", (event) => event.waitUntil(self.clients.claim()));
+
 // Handler de mensagens em BACKGROUND (app fechado ou em outra aba).
 // Mensagens em foreground são tratadas no client (getFirebaseMessaging + onMessage).
 messaging.onBackgroundMessage((payload) => {
@@ -74,7 +77,7 @@ messaging.onBackgroundMessage((payload) => {
     // Android 16 pode auto-dismissar em segundos quando o app está fechado.
     requireInteraction: true,
     timestamp: Date.now(),
-    data: { url },
+    data: { url, tag },
   });
 });
 
