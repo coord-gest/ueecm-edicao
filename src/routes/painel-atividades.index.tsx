@@ -62,7 +62,7 @@ import {
   type AtividadeComResumo,
 } from "@/lib/atividades.functions";
 
-export const Route = createFileRoute("/painel-atividades")({
+export const Route = createFileRoute("/painel-atividades/")({
   ssr: false,
   head: () => ({
     meta: [{ title: "Atividades e Trabalhos | Painel do Professor" }],

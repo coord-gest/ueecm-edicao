@@ -132,12 +132,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         )
         .catch(() => undefined);
       if (nextSession?.user) {
-        // Adia a chamada ao Supabase para evitar deadlock dentro do callback
-        setLoading(true);
+        // Só reseta loading em eventos que realmente trocam de usuário.
+        // TOKEN_REFRESHED dispara ao voltar o foco na aba — se resetássemos
+        // loading aqui, componentes que fazem `if (loading) return null`
+        // desmontariam formulários em edição.
+        const isUserChange = event === "SIGNED_IN" || event === "USER_UPDATED";
+        if (isUserChange) setLoading(true);
         setTimeout(async () => {
           if (!isMounted) return;
           await refreshRoles(event === "SIGNED_IN");
-          if (isMounted) setLoading(false);
+          if (isMounted && isUserChange) setLoading(false);
           // Re-vincula o token FCM existente ao user_id atual, se o usuário
           // já concedeu permissão em uma sessão anterior. Silencioso.
           if (event === "SIGNED_IN") {
