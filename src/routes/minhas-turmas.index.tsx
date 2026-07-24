@@ -9,7 +9,7 @@ import { EscolaShell } from "@/components/escola/EscolaShell";
 
 import { PainelLayout } from "@/components/PainelLayout";
 
-export const Route = createFileRoute("/minhas-turmas")({
+export const Route = createFileRoute("/minhas-turmas/")({
   ssr: false,
   head: () => ({ meta: [{ title: "Minhas Turmas | Escola" }] }),
   beforeLoad: async () => {

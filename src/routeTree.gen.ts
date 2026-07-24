@@ -29,7 +29,6 @@ import { Route as MensagensCoordenacaoRouteImport } from './routes/mensagens-coo
 import { Route as MeusAgendamentosRouteImport } from './routes/meus-agendamentos'
 import { Route as MeusComunicadosRouteImport } from './routes/meus-comunicados'
 import { Route as MeusFilhosRouteImport } from './routes/meus-filhos'
-import { Route as MinhasTurmasRouteImport } from './routes/minhas-turmas'
 import { Route as MomentosRouteImport } from './routes/momentos'
 import { Route as MuralRouteImport } from './routes/mural'
 import { Route as NotificacoesRouteImport } from './routes/notificacoes'
@@ -45,7 +44,6 @@ import { Route as PainelAnotacoesRouteImport } from './routes/painel-anotacoes'
 import { Route as PainelApresentacoesRouteImport } from './routes/painel-apresentacoes'
 import { Route as PainelAprovacaoRouteImport } from './routes/painel-aprovacao'
 import { Route as PainelArquivosRouteImport } from './routes/painel-arquivos'
-import { Route as PainelAtividadesRouteImport } from './routes/painel-atividades'
 import { Route as PainelAtividadesFilhosRouteImport } from './routes/painel-atividades-filhos'
 import { Route as PainelAtividadesRankingRouteImport } from './routes/painel-atividades-ranking'
 import { Route as PainelAuditoriaRouteImport } from './routes/painel-auditoria'
@@ -115,6 +113,7 @@ import { Route as EscolaResponsaveisRouteImport } from './routes/escola.responsa
 import { Route as EscolaTurmasRouteImport } from './routes/escola.turmas'
 import { Route as GaleriaIdRouteImport } from './routes/galeria.$id'
 import { Route as MeusFilhosIdRouteImport } from './routes/meus-filhos.$id'
+import { Route as MinhasTurmasIndexRouteImport } from './routes/minhas-turmas.index'
 import { Route as MinhasTurmasTurmaIdRouteImport } from './routes/minhas-turmas.$turmaId'
 import { Route as PainelApresentacoesIndexRouteImport } from './routes/painel-apresentacoes.index'
 import { Route as PainelApresentacoesIdRouteImport } from './routes/painel-apresentacoes.$id'
@@ -122,6 +121,7 @@ import { Route as PainelArquivosIndexRouteImport } from './routes/painel-arquivo
 import { Route as PainelArquivosTemplateIdRouteImport } from './routes/painel-arquivos.$templateId'
 import { Route as PainelArquivosPlanejamentosRouteImport } from './routes/painel-arquivos.planejamentos'
 import { Route as PainelAtividadesRankingAlunoIdRouteImport } from './routes/painel-atividades-ranking.$alunoId'
+import { Route as PainelAtividadesIndexRouteImport } from './routes/painel-atividades.index'
 import { Route as PainelAtividadesIdRouteImport } from './routes/painel-atividades.$id'
 import { Route as PainelPostsIndexRouteImport } from './routes/painel-posts.index'
 import { Route as PainelPostsIdRouteImport } from './routes/painel-posts.$id'
@@ -248,11 +248,6 @@ const MeusFilhosRoute = MeusFilhosRouteImport.update({
   path: '/meus-filhos',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MinhasTurmasRoute = MinhasTurmasRouteImport.update({
-  id: '/minhas-turmas',
-  path: '/minhas-turmas',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const MomentosRoute = MomentosRouteImport.update({
   id: '/momentos',
   path: '/momentos',
@@ -326,11 +321,6 @@ const PainelAprovacaoRoute = PainelAprovacaoRouteImport.update({
 const PainelArquivosRoute = PainelArquivosRouteImport.update({
   id: '/painel-arquivos',
   path: '/painel-arquivos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PainelAtividadesRoute = PainelAtividadesRouteImport.update({
-  id: '/painel-atividades',
-  path: '/painel-atividades',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PainelAtividadesFilhosRoute = PainelAtividadesFilhosRouteImport.update({
@@ -680,10 +670,15 @@ const MeusFilhosIdRoute = MeusFilhosIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => MeusFilhosRoute,
 } as any)
+const MinhasTurmasIndexRoute = MinhasTurmasIndexRouteImport.update({
+  id: '/minhas-turmas/',
+  path: '/minhas-turmas/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MinhasTurmasTurmaIdRoute = MinhasTurmasTurmaIdRouteImport.update({
-  id: '/$turmaId',
-  path: '/$turmaId',
-  getParentRoute: () => MinhasTurmasRoute,
+  id: '/minhas-turmas/$turmaId',
+  path: '/minhas-turmas/$turmaId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const PainelApresentacoesIndexRoute =
   PainelApresentacoesIndexRouteImport.update({
@@ -719,10 +714,15 @@ const PainelAtividadesRankingAlunoIdRoute =
     path: '/$alunoId',
     getParentRoute: () => PainelAtividadesRankingRoute,
   } as any)
+const PainelAtividadesIndexRoute = PainelAtividadesIndexRouteImport.update({
+  id: '/painel-atividades/',
+  path: '/painel-atividades/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PainelAtividadesIdRoute = PainelAtividadesIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => PainelAtividadesRoute,
+  id: '/painel-atividades/$id',
+  path: '/painel-atividades/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const PainelPostsIndexRoute = PainelPostsIndexRouteImport.update({
   id: '/painel-posts/',
@@ -867,7 +867,6 @@ export interface FileRoutesByFullPath {
   '/meus-agendamentos': typeof MeusAgendamentosRoute
   '/meus-comunicados': typeof MeusComunicadosRoute
   '/meus-filhos': typeof MeusFilhosRouteWithChildren
-  '/minhas-turmas': typeof MinhasTurmasRouteWithChildren
   '/momentos': typeof MomentosRoute
   '/mural': typeof MuralRoute
   '/notificacoes': typeof NotificacoesRoute
@@ -883,7 +882,6 @@ export interface FileRoutesByFullPath {
   '/painel-apresentacoes': typeof PainelApresentacoesRouteWithChildren
   '/painel-aprovacao': typeof PainelAprovacaoRoute
   '/painel-arquivos': typeof PainelArquivosRouteWithChildren
-  '/painel-atividades': typeof PainelAtividadesRouteWithChildren
   '/painel-atividades-filhos': typeof PainelAtividadesFilhosRoute
   '/painel-atividades-ranking': typeof PainelAtividadesRankingRouteWithChildren
   '/painel-auditoria': typeof PainelAuditoriaRoute
@@ -964,8 +962,10 @@ export interface FileRoutesByFullPath {
   '/seguranca/incidentes': typeof SegurancaIncidentesRoute
   '/vaquinhas/$id': typeof VaquinhasIdRoute
   '/escola/': typeof EscolaIndexRoute
+  '/minhas-turmas/': typeof MinhasTurmasIndexRoute
   '/painel-apresentacoes/': typeof PainelApresentacoesIndexRoute
   '/painel-arquivos/': typeof PainelArquivosIndexRoute
+  '/painel-atividades/': typeof PainelAtividadesIndexRoute
   '/painel-posts/': typeof PainelPostsIndexRoute
   '/posts/': typeof PostsIndexRoute
   '/api/debug/fcm-diagnostics': typeof ApiDebugFcmDiagnosticsRoute
@@ -1006,7 +1006,6 @@ export interface FileRoutesByTo {
   '/meus-agendamentos': typeof MeusAgendamentosRoute
   '/meus-comunicados': typeof MeusComunicadosRoute
   '/meus-filhos': typeof MeusFilhosRouteWithChildren
-  '/minhas-turmas': typeof MinhasTurmasRouteWithChildren
   '/momentos': typeof MomentosRoute
   '/mural': typeof MuralRoute
   '/notificacoes': typeof NotificacoesRoute
@@ -1020,7 +1019,6 @@ export interface FileRoutesByTo {
   '/painel-analytics': typeof PainelAnalyticsRoute
   '/painel-anotacoes': typeof PainelAnotacoesRoute
   '/painel-aprovacao': typeof PainelAprovacaoRoute
-  '/painel-atividades': typeof PainelAtividadesRouteWithChildren
   '/painel-atividades-filhos': typeof PainelAtividadesFilhosRoute
   '/painel-atividades-ranking': typeof PainelAtividadesRankingRouteWithChildren
   '/painel-auditoria': typeof PainelAuditoriaRoute
@@ -1101,8 +1099,10 @@ export interface FileRoutesByTo {
   '/seguranca/incidentes': typeof SegurancaIncidentesRoute
   '/vaquinhas/$id': typeof VaquinhasIdRoute
   '/escola': typeof EscolaIndexRoute
+  '/minhas-turmas': typeof MinhasTurmasIndexRoute
   '/painel-apresentacoes': typeof PainelApresentacoesIndexRoute
   '/painel-arquivos': typeof PainelArquivosIndexRoute
+  '/painel-atividades': typeof PainelAtividadesIndexRoute
   '/painel-posts': typeof PainelPostsIndexRoute
   '/posts': typeof PostsIndexRoute
   '/api/debug/fcm-diagnostics': typeof ApiDebugFcmDiagnosticsRoute
@@ -1144,7 +1144,6 @@ export interface FileRoutesById {
   '/meus-agendamentos': typeof MeusAgendamentosRoute
   '/meus-comunicados': typeof MeusComunicadosRoute
   '/meus-filhos': typeof MeusFilhosRouteWithChildren
-  '/minhas-turmas': typeof MinhasTurmasRouteWithChildren
   '/momentos': typeof MomentosRoute
   '/mural': typeof MuralRoute
   '/notificacoes': typeof NotificacoesRoute
@@ -1160,7 +1159,6 @@ export interface FileRoutesById {
   '/painel-apresentacoes': typeof PainelApresentacoesRouteWithChildren
   '/painel-aprovacao': typeof PainelAprovacaoRoute
   '/painel-arquivos': typeof PainelArquivosRouteWithChildren
-  '/painel-atividades': typeof PainelAtividadesRouteWithChildren
   '/painel-atividades-filhos': typeof PainelAtividadesFilhosRoute
   '/painel-atividades-ranking': typeof PainelAtividadesRankingRouteWithChildren
   '/painel-auditoria': typeof PainelAuditoriaRoute
@@ -1241,8 +1239,10 @@ export interface FileRoutesById {
   '/seguranca/incidentes': typeof SegurancaIncidentesRoute
   '/vaquinhas/$id': typeof VaquinhasIdRoute
   '/escola/': typeof EscolaIndexRoute
+  '/minhas-turmas/': typeof MinhasTurmasIndexRoute
   '/painel-apresentacoes/': typeof PainelApresentacoesIndexRoute
   '/painel-arquivos/': typeof PainelArquivosIndexRoute
+  '/painel-atividades/': typeof PainelAtividadesIndexRoute
   '/painel-posts/': typeof PainelPostsIndexRoute
   '/posts/': typeof PostsIndexRoute
   '/api/debug/fcm-diagnostics': typeof ApiDebugFcmDiagnosticsRoute
@@ -1285,7 +1285,6 @@ export interface FileRouteTypes {
     | '/meus-agendamentos'
     | '/meus-comunicados'
     | '/meus-filhos'
-    | '/minhas-turmas'
     | '/momentos'
     | '/mural'
     | '/notificacoes'
@@ -1301,7 +1300,6 @@ export interface FileRouteTypes {
     | '/painel-apresentacoes'
     | '/painel-aprovacao'
     | '/painel-arquivos'
-    | '/painel-atividades'
     | '/painel-atividades-filhos'
     | '/painel-atividades-ranking'
     | '/painel-auditoria'
@@ -1382,8 +1380,10 @@ export interface FileRouteTypes {
     | '/seguranca/incidentes'
     | '/vaquinhas/$id'
     | '/escola/'
+    | '/minhas-turmas/'
     | '/painel-apresentacoes/'
     | '/painel-arquivos/'
+    | '/painel-atividades/'
     | '/painel-posts/'
     | '/posts/'
     | '/api/debug/fcm-diagnostics'
@@ -1424,7 +1424,6 @@ export interface FileRouteTypes {
     | '/meus-agendamentos'
     | '/meus-comunicados'
     | '/meus-filhos'
-    | '/minhas-turmas'
     | '/momentos'
     | '/mural'
     | '/notificacoes'
@@ -1438,7 +1437,6 @@ export interface FileRouteTypes {
     | '/painel-analytics'
     | '/painel-anotacoes'
     | '/painel-aprovacao'
-    | '/painel-atividades'
     | '/painel-atividades-filhos'
     | '/painel-atividades-ranking'
     | '/painel-auditoria'
@@ -1519,8 +1517,10 @@ export interface FileRouteTypes {
     | '/seguranca/incidentes'
     | '/vaquinhas/$id'
     | '/escola'
+    | '/minhas-turmas'
     | '/painel-apresentacoes'
     | '/painel-arquivos'
+    | '/painel-atividades'
     | '/painel-posts'
     | '/posts'
     | '/api/debug/fcm-diagnostics'
@@ -1561,7 +1561,6 @@ export interface FileRouteTypes {
     | '/meus-agendamentos'
     | '/meus-comunicados'
     | '/meus-filhos'
-    | '/minhas-turmas'
     | '/momentos'
     | '/mural'
     | '/notificacoes'
@@ -1577,7 +1576,6 @@ export interface FileRouteTypes {
     | '/painel-apresentacoes'
     | '/painel-aprovacao'
     | '/painel-arquivos'
-    | '/painel-atividades'
     | '/painel-atividades-filhos'
     | '/painel-atividades-ranking'
     | '/painel-auditoria'
@@ -1658,8 +1656,10 @@ export interface FileRouteTypes {
     | '/seguranca/incidentes'
     | '/vaquinhas/$id'
     | '/escola/'
+    | '/minhas-turmas/'
     | '/painel-apresentacoes/'
     | '/painel-arquivos/'
+    | '/painel-atividades/'
     | '/painel-posts/'
     | '/posts/'
     | '/api/debug/fcm-diagnostics'
@@ -1701,7 +1701,6 @@ export interface RootRouteChildren {
   MeusAgendamentosRoute: typeof MeusAgendamentosRoute
   MeusComunicadosRoute: typeof MeusComunicadosRoute
   MeusFilhosRoute: typeof MeusFilhosRouteWithChildren
-  MinhasTurmasRoute: typeof MinhasTurmasRouteWithChildren
   MomentosRoute: typeof MomentosRoute
   MuralRoute: typeof MuralRoute
   NotificacoesRoute: typeof NotificacoesRoute
@@ -1717,7 +1716,6 @@ export interface RootRouteChildren {
   PainelApresentacoesRoute: typeof PainelApresentacoesRouteWithChildren
   PainelAprovacaoRoute: typeof PainelAprovacaoRoute
   PainelArquivosRoute: typeof PainelArquivosRouteWithChildren
-  PainelAtividadesRoute: typeof PainelAtividadesRouteWithChildren
   PainelAtividadesFilhosRoute: typeof PainelAtividadesFilhosRoute
   PainelAtividadesRankingRoute: typeof PainelAtividadesRankingRouteWithChildren
   PainelAuditoriaRoute: typeof PainelAuditoriaRoute
@@ -1781,11 +1779,15 @@ export interface RootRouteChildren {
   EscolaProfessoresRoute: typeof EscolaProfessoresRoute
   EscolaResponsaveisRoute: typeof EscolaResponsaveisRoute
   EscolaTurmasRoute: typeof EscolaTurmasRoute
+  MinhasTurmasTurmaIdRoute: typeof MinhasTurmasTurmaIdRoute
+  PainelAtividadesIdRoute: typeof PainelAtividadesIdRoute
   PainelPostsIdRoute: typeof PainelPostsIdRoute
   PainelPostsNovoRoute: typeof PainelPostsNovoRoute
   PostsIdRoute: typeof PostsIdRoute
   SegurancaIncidentesRoute: typeof SegurancaIncidentesRoute
   EscolaIndexRoute: typeof EscolaIndexRoute
+  MinhasTurmasIndexRoute: typeof MinhasTurmasIndexRoute
+  PainelAtividadesIndexRoute: typeof PainelAtividadesIndexRoute
   PainelPostsIndexRoute: typeof PainelPostsIndexRoute
   PostsIndexRoute: typeof PostsIndexRoute
   ApiDebugFcmDiagnosticsRoute: typeof ApiDebugFcmDiagnosticsRoute
@@ -1948,13 +1950,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeusFilhosRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/minhas-turmas': {
-      id: '/minhas-turmas'
-      path: '/minhas-turmas'
-      fullPath: '/minhas-turmas'
-      preLoaderRoute: typeof MinhasTurmasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/momentos': {
       id: '/momentos'
       path: '/momentos'
@@ -2058,13 +2053,6 @@ declare module '@tanstack/react-router' {
       path: '/painel-arquivos'
       fullPath: '/painel-arquivos'
       preLoaderRoute: typeof PainelArquivosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/painel-atividades': {
-      id: '/painel-atividades'
-      path: '/painel-atividades'
-      fullPath: '/painel-atividades'
-      preLoaderRoute: typeof PainelAtividadesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/painel-atividades-filhos': {
@@ -2550,12 +2538,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeusFilhosIdRouteImport
       parentRoute: typeof MeusFilhosRoute
     }
+    '/minhas-turmas/': {
+      id: '/minhas-turmas/'
+      path: '/minhas-turmas'
+      fullPath: '/minhas-turmas/'
+      preLoaderRoute: typeof MinhasTurmasIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/minhas-turmas/$turmaId': {
       id: '/minhas-turmas/$turmaId'
-      path: '/$turmaId'
+      path: '/minhas-turmas/$turmaId'
       fullPath: '/minhas-turmas/$turmaId'
       preLoaderRoute: typeof MinhasTurmasTurmaIdRouteImport
-      parentRoute: typeof MinhasTurmasRoute
+      parentRoute: typeof rootRouteImport
     }
     '/painel-apresentacoes/': {
       id: '/painel-apresentacoes/'
@@ -2599,12 +2594,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PainelAtividadesRankingAlunoIdRouteImport
       parentRoute: typeof PainelAtividadesRankingRoute
     }
+    '/painel-atividades/': {
+      id: '/painel-atividades/'
+      path: '/painel-atividades'
+      fullPath: '/painel-atividades/'
+      preLoaderRoute: typeof PainelAtividadesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/painel-atividades/$id': {
       id: '/painel-atividades/$id'
-      path: '/$id'
+      path: '/painel-atividades/$id'
       fullPath: '/painel-atividades/$id'
       preLoaderRoute: typeof PainelAtividadesIdRouteImport
-      parentRoute: typeof PainelAtividadesRoute
+      parentRoute: typeof rootRouteImport
     }
     '/painel-posts/': {
       id: '/painel-posts/'
@@ -2828,18 +2830,6 @@ const MeusFilhosRouteWithChildren = MeusFilhosRoute._addFileChildren(
   MeusFilhosRouteChildren,
 )
 
-interface MinhasTurmasRouteChildren {
-  MinhasTurmasTurmaIdRoute: typeof MinhasTurmasTurmaIdRoute
-}
-
-const MinhasTurmasRouteChildren: MinhasTurmasRouteChildren = {
-  MinhasTurmasTurmaIdRoute: MinhasTurmasTurmaIdRoute,
-}
-
-const MinhasTurmasRouteWithChildren = MinhasTurmasRoute._addFileChildren(
-  MinhasTurmasRouteChildren,
-)
-
 interface PainelApresentacoesRouteChildren {
   PainelApresentacoesIdRoute: typeof PainelApresentacoesIdRoute
   PainelApresentacoesIndexRoute: typeof PainelApresentacoesIndexRoute
@@ -2868,17 +2858,6 @@ const PainelArquivosRouteChildren: PainelArquivosRouteChildren = {
 const PainelArquivosRouteWithChildren = PainelArquivosRoute._addFileChildren(
   PainelArquivosRouteChildren,
 )
-
-interface PainelAtividadesRouteChildren {
-  PainelAtividadesIdRoute: typeof PainelAtividadesIdRoute
-}
-
-const PainelAtividadesRouteChildren: PainelAtividadesRouteChildren = {
-  PainelAtividadesIdRoute: PainelAtividadesIdRoute,
-}
-
-const PainelAtividadesRouteWithChildren =
-  PainelAtividadesRoute._addFileChildren(PainelAtividadesRouteChildren)
 
 interface PainelAtividadesRankingRouteChildren {
   PainelAtividadesRankingAlunoIdRoute: typeof PainelAtividadesRankingAlunoIdRoute
@@ -2927,7 +2906,6 @@ const rootRouteChildren: RootRouteChildren = {
   MeusAgendamentosRoute: MeusAgendamentosRoute,
   MeusComunicadosRoute: MeusComunicadosRoute,
   MeusFilhosRoute: MeusFilhosRouteWithChildren,
-  MinhasTurmasRoute: MinhasTurmasRouteWithChildren,
   MomentosRoute: MomentosRoute,
   MuralRoute: MuralRoute,
   NotificacoesRoute: NotificacoesRoute,
@@ -2943,7 +2921,6 @@ const rootRouteChildren: RootRouteChildren = {
   PainelApresentacoesRoute: PainelApresentacoesRouteWithChildren,
   PainelAprovacaoRoute: PainelAprovacaoRoute,
   PainelArquivosRoute: PainelArquivosRouteWithChildren,
-  PainelAtividadesRoute: PainelAtividadesRouteWithChildren,
   PainelAtividadesFilhosRoute: PainelAtividadesFilhosRoute,
   PainelAtividadesRankingRoute: PainelAtividadesRankingRouteWithChildren,
   PainelAuditoriaRoute: PainelAuditoriaRoute,
@@ -3007,11 +2984,15 @@ const rootRouteChildren: RootRouteChildren = {
   EscolaProfessoresRoute: EscolaProfessoresRoute,
   EscolaResponsaveisRoute: EscolaResponsaveisRoute,
   EscolaTurmasRoute: EscolaTurmasRoute,
+  MinhasTurmasTurmaIdRoute: MinhasTurmasTurmaIdRoute,
+  PainelAtividadesIdRoute: PainelAtividadesIdRoute,
   PainelPostsIdRoute: PainelPostsIdRoute,
   PainelPostsNovoRoute: PainelPostsNovoRoute,
   PostsIdRoute: PostsIdRoute,
   SegurancaIncidentesRoute: SegurancaIncidentesRoute,
   EscolaIndexRoute: EscolaIndexRoute,
+  MinhasTurmasIndexRoute: MinhasTurmasIndexRoute,
+  PainelAtividadesIndexRoute: PainelAtividadesIndexRoute,
   PainelPostsIndexRoute: PainelPostsIndexRoute,
   PostsIndexRoute: PostsIndexRoute,
   ApiDebugFcmDiagnosticsRoute: ApiDebugFcmDiagnosticsRoute,
