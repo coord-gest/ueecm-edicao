@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
-import { FileSignature, PenSquare } from "lucide-react";
+import { FileSignature, PenSquare, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +14,7 @@ import {
   rotuloStatus,
   type Contrato,
 } from "@/lib/contratos.functions";
+import { ContratoView } from "@/components/ContratoView";
 
 export const Route = createFileRoute("/painel-contratos-filhos")({
   ssr: false,
@@ -39,6 +40,7 @@ function PainelContratosFilhos() {
   const assinar = useServerFn(assinarContratoResponsavel);
   const query = useQuery({ queryKey: ["contratos-responsavel"], queryFn: () => listar() });
   const [busy, setBusy] = useState<string | null>(null);
+  const [viewContrato, setViewContrato] = useState<Contrato | null>(null);
 
   const contratos = (query.data ?? []) as Contrato[];
 
@@ -56,16 +58,25 @@ function PainelContratosFilhos() {
   };
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <div className="container mx-auto px-4 py-6 space-y-6 sm:px-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-          <FileSignature className="h-8 w-8 text-primary" />
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight flex items-center gap-2">
+          <FileSignature className="h-7 w-7 sm:h-8 sm:w-8 text-primary shrink-0" />
           Contratos de Compromisso
         </h1>
-        <p className="text-muted-foreground mt-1 max-w-2xl">
+        <p className="text-sm sm:text-base text-muted-foreground mt-1 max-w-2xl">
           Aqui você acompanha e assina os acordos combinados entre a escola, seu filho e você. Assinar
           significa que a família está comprometida em apoiar as metas em casa.
         </p>
+      </div>
+
+      <div className="rounded-md border border-primary/30 bg-primary/5 p-4 text-sm">
+        <p className="font-semibold text-primary">O que você deve fazer 👇</p>
+        <ol className="mt-2 list-decimal space-y-1 pl-5">
+          <li>Toque em <strong>Ver contrato</strong> para ler o termo completo.</li>
+          <li>Se concordar, toque em <strong>Assinar como responsável</strong>.</li>
+          <li>Se preferir imprimir e assinar à mão, use <strong>Baixar / Imprimir PDF</strong> dentro da visualização.</li>
+        </ol>
       </div>
 
       <Card>
@@ -81,8 +92,8 @@ function PainelContratosFilhos() {
             </p>
           ) : (
             contratos.map((c) => (
-              <div key={c.id} className="border rounded-md p-4 space-y-3">
-                <div className="flex flex-wrap items-start justify-between gap-2">
+              <div key={c.id} className="border rounded-md p-3 sm:p-4 space-y-3">
+                <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-semibold">{c.titulo}</h3>
@@ -108,15 +119,22 @@ function PainelContratosFilhos() {
                   </div>
                 )}
 
-                <div className="flex flex-wrap items-center gap-2 pt-1 border-t">
+                <div className="flex flex-col gap-2 pt-2 border-t sm:flex-row sm:flex-wrap sm:items-center">
                   <span className="text-xs text-muted-foreground">
                     Prof.: {c.assinado_professor_em ? "assinado ✓" : "pendente"} · Família:{" "}
                     {c.assinado_responsavel_em ? "assinado ✓" : "pendente"}
                   </span>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="sm:ml-auto"
+                    onClick={() => setViewContrato(c)}
+                  >
+                    <Eye className="mr-1 h-4 w-4" /> Ver contrato
+                  </Button>
                   {!c.assinado_responsavel_em && c.status !== "cancelado" && c.status !== "concluido" && (
                     <Button
                       size="sm"
-                      className="ml-auto"
                       onClick={() => doAssinar(c.id)}
                       disabled={busy === c.id}
                     >
@@ -130,6 +148,13 @@ function PainelContratosFilhos() {
           )}
         </CardContent>
       </Card>
+
+      <ContratoView
+        contrato={viewContrato}
+        open={!!viewContrato}
+        onOpenChange={(o) => !o && setViewContrato(null)}
+        viewer="responsavel"
+      />
     </div>
   );
 }

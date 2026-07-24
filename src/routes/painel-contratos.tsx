@@ -4,6 +4,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
 import { FileSignature, Plus, X, PenSquare, CheckCircle2, XCircle } from "lucide-react";
+import { Eye } from "lucide-react";
+import { ContratoView } from "@/components/ContratoView";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,25 +56,26 @@ function PainelContratos() {
   const listar = useServerFn(listarContratosProfessor);
   const query = useQuery({ queryKey: ["contratos-professor"], queryFn: () => listar() });
   const [open, setOpen] = useState(false);
+  const [viewContrato, setViewContrato] = useState<Contrato | null>(null);
 
   const contratos = (query.data ?? []) as Contrato[];
   const ativos = contratos.filter((c) => c.status === "ativo").length;
   const aguardando = contratos.filter((c) => c.status === "aguardando_assinaturas").length;
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
+    <div className="container mx-auto px-4 py-6 space-y-6 sm:px-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-            <FileSignature className="h-8 w-8 text-primary" />
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight flex items-center gap-2">
+            <FileSignature className="h-7 w-7 sm:h-8 sm:w-8 text-primary shrink-0" />
             Contratos de Compromisso
           </h1>
-          <p className="text-muted-foreground mt-1 max-w-2xl">
+          <p className="text-sm sm:text-base text-muted-foreground mt-1 max-w-2xl">
             Combine metas claras com o aluno e a família. Após as três assinaturas o contrato fica ativo
             e vocês acompanham juntos pelos checkpoints semanais.
           </p>
         </div>
-        <Button onClick={() => setOpen(true)}>
+        <Button onClick={() => setOpen(true)} className="w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" /> Novo contrato
         </Button>
       </div>
@@ -96,7 +99,12 @@ function PainelContratos() {
             </p>
           ) : (
             contratos.map((c) => (
-              <ContratoRow key={c.id} contrato={c} onChanged={() => qc.invalidateQueries({ queryKey: ["contratos-professor"] })} />
+              <ContratoRow
+                key={c.id}
+                contrato={c}
+                onView={() => setViewContrato(c)}
+                onChanged={() => qc.invalidateQueries({ queryKey: ["contratos-professor"] })}
+              />
             ))
           )}
         </CardContent>
@@ -106,6 +114,13 @@ function PainelContratos() {
         open={open}
         onOpenChange={setOpen}
         onCreated={() => qc.invalidateQueries({ queryKey: ["contratos-professor"] })}
+      />
+
+      <ContratoView
+        contrato={viewContrato}
+        open={!!viewContrato}
+        onOpenChange={(o) => !o && setViewContrato(null)}
+        viewer="professor"
       />
     </div>
   );
@@ -122,7 +137,15 @@ function MiniCard({ label, value }: { label: string; value: number }) {
   );
 }
 
-function ContratoRow({ contrato, onChanged }: { contrato: Contrato; onChanged: () => void }) {
+function ContratoRow({
+  contrato,
+  onChanged,
+  onView,
+}: {
+  contrato: Contrato;
+  onChanged: () => void;
+  onView: () => void;
+}) {
   const assinar = useServerFn(assinarContratoProfessor);
   const encerrar = useServerFn(encerrarContrato);
   const check = useServerFn(addCheckpoint);
@@ -197,6 +220,9 @@ function ContratoRow({ contrato, onChanged }: { contrato: Contrato; onChanged: (
 
       {(contrato.status === "ativo" || contrato.status === "aguardando_assinaturas") && (
         <div className="flex flex-wrap gap-2 pt-1 border-t">
+          <Button size="sm" variant="outline" onClick={onView}>
+            <Eye className="mr-1 h-3 w-3" /> Ver contrato
+          </Button>
           {!contrato.assinado_professor_em && (
             <Button size="sm" variant="outline" onClick={doAssinar} disabled={busy}>
               <PenSquare className="mr-1 h-3 w-3" /> Assinar como professor
