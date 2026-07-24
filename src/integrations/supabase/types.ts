@@ -1131,6 +1131,33 @@ export type Database = {
           },
         ]
       }
+      code_of_ethics_acceptances: {
+        Row: {
+          accepted_at: string
+          id: string
+          ip: string | null
+          user_agent: string | null
+          user_id: string
+          version: number
+        }
+        Insert: {
+          accepted_at?: string
+          id?: string
+          ip?: string | null
+          user_agent?: string | null
+          user_id: string
+          version?: number
+        }
+        Update: {
+          accepted_at?: string
+          id?: string
+          ip?: string | null
+          user_agent?: string | null
+          user_id?: string
+          version?: number
+        }
+        Relationships: []
+      }
       comunicado_leituras: {
         Row: {
           comunicado_id: string
