@@ -263,17 +263,43 @@ export function ContratoView({
         <style>{`
           @media print {
             @page { size: A4; margin: 16mm; }
-            html, body { background: #fff !important; }
-            body * { visibility: hidden !important; }
-            #contrato-print-area, #contrato-print-area * {
-              visibility: visible !important;
-              color: #000 !important;
+            html, body {
+              background: #fff !important;
+              height: auto !important;
+              overflow: visible !important;
+              margin: 0 !important;
+              padding: 0 !important;
             }
+            /* Esconde tudo que não é ancestral da área imprimível */
+            body > *:not(:has(#contrato-print-area)) { display: none !important; }
+            /* Neutraliza o overlay e o container do Radix Dialog */
+            [data-radix-dialog-overlay],
+            [data-radix-portal] > [data-state] > [data-radix-dialog-overlay] {
+              display: none !important;
+            }
+            [role="dialog"] {
+              position: static !important;
+              transform: none !important;
+              inset: auto !important;
+              top: auto !important;
+              left: auto !important;
+              max-width: none !important;
+              max-height: none !important;
+              width: auto !important;
+              height: auto !important;
+              padding: 0 !important;
+              margin: 0 !important;
+              box-shadow: none !important;
+              border: 0 !important;
+              overflow: visible !important;
+              background: transparent !important;
+              display: block !important;
+            }
+            .print\\:hidden { display: none !important; }
+            #contrato-print-area, #contrato-print-area * { color: #000 !important; }
             #contrato-print-area {
-              position: absolute;
-              left: 0;
-              top: 0;
-              width: 100%;
+              position: static !important;
+              width: 100% !important;
               max-width: none !important;
               padding: 0 !important;
               margin: 0 !important;
