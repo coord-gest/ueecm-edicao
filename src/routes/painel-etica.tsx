@@ -104,7 +104,15 @@ function PainelEticaPage() {
     exportRowsAsCsv(
       `codigo-etica-aceites-${new Date().toISOString().slice(0, 10)}.csv`,
       rows,
-      ["nome", "email", "cargo", "papeis", "versao", "aceito_em", "ip"],
+      [
+        { key: "nome", label: "Nome" },
+        { key: "email", label: "E-mail" },
+        { key: "cargo", label: "Cargo" },
+        { key: "papeis", label: "Papéis" },
+        { key: "versao", label: "Versão" },
+        { key: "aceito_em", label: "Aceito em" },
+        { key: "ip", label: "IP" },
+      ],
     );
   }
 
