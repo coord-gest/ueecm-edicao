@@ -131,6 +131,7 @@ export const SIDEBAR_CONFIG: Partial<Record<AppRole, SidebarSection[]>> = {
         { title: "Analytics", url: "/painel-analytics", icon: BarChart3 },
         { title: "Auditoria", url: "/painel-auditoria", icon: History },
         { title: "Acessos administrativos", url: "/painel-acessos", icon: Shield },
+        { title: "Código de Ética (aceites)", url: "/painel-etica", icon: ScrollText },
         { title: "Painel de erros", url: "/painel-erros", icon: AlertTriangle },
         { title: "Runtime & diagnóstico", url: "/painel-runtime", icon: Activity },
         { title: "Animações do tema", url: "/painel-tema", icon: Sparkles },
