@@ -220,10 +220,11 @@ export function ContratoView({
           <section className="mt-6 space-y-2">
             <h2 className="text-base font-semibold">5. Nossa Comunicação</h2>
             <p className="text-sm leading-relaxed text-foreground/90">
-              O canal principal de mensagens será o aplicativo{" "}
+              Nossos canais oficiais de mensagens serão o aplicativo{" "}
               <strong>Conecta UEECM</strong> (chat com o(a) professor(a) e mural
-              de recados). Para reuniões, combinaremos previamente um horário que
-              seja bom para todos.
+              de recados) e o <strong>WhatsApp</strong> da turma para avisos
+              rápidos do dia a dia. Para reuniões, combinaremos previamente um
+              horário que seja bom para todos.
             </p>
           </section>
 
@@ -261,10 +262,48 @@ export function ContratoView({
         {/* Print CSS — isola a área do contrato ao imprimir */}
         <style>{`
           @media print {
+            @page { size: A4; margin: 16mm; }
+            html, body { background: #fff !important; }
             body * { visibility: hidden !important; }
-            #contrato-print-area, #contrato-print-area * { visibility: visible !important; }
-            #contrato-print-area { position: absolute; left: 0; top: 0; width: 100%; }
-            @page { margin: 18mm; }
+            #contrato-print-area, #contrato-print-area * {
+              visibility: visible !important;
+              color: #000 !important;
+            }
+            #contrato-print-area {
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 100%;
+              max-width: none !important;
+              padding: 0 !important;
+              margin: 0 !important;
+              box-shadow: none !important;
+              background: #fff !important;
+              font-size: 11pt;
+              line-height: 1.45;
+            }
+            #contrato-print-area h1 { font-size: 16pt; }
+            #contrato-print-area h2 { font-size: 12.5pt; margin-top: 14pt; }
+            #contrato-print-area h3 { font-size: 11.5pt; }
+            #contrato-print-area header { border-color: #000 !important; }
+            #contrato-print-area section,
+            #contrato-print-area blockquote,
+            #contrato-print-area dl,
+            #contrato-print-area .rounded-md {
+              page-break-inside: avoid;
+              break-inside: avoid;
+            }
+            #contrato-print-area img { max-height: 22mm; width: auto; }
+            #contrato-print-area .border,
+            #contrato-print-area .border-b,
+            #contrato-print-area .border-t,
+            #contrato-print-area .border-l-4 {
+              border-color: #000 !important;
+            }
+            #contrato-print-area .bg-primary\\/5,
+            #contrato-print-area .bg-muted\\/40 {
+              background: #f3f3f3 !important;
+            }
           }
         `}</style>
       </DialogContent>
